@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /blog-post.html
+
+Sitemap: __SRDP_BASE__/sitemap.xml
