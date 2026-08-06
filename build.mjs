@@ -791,7 +791,7 @@ function buildPrivacy() {
         <li>Improving our website, services, and customer experience</li>
       </ul>
       <h2>3. Payments</h2>
-      <p>Payments are processed through our billing provider (WHMCS) using bank-level encryption. We do not store full payment card details on our servers.</p>
+      <p>Payments are processed through our secure billing provider using bank-level encryption. We do not store full payment card details on our servers.</p>
       <h2>4. Data sharing</h2>
       <p>We do not sell your personal data. We share information only with service providers who help us operate our business (payment processing, infrastructure, support tools) and only to the extent necessary to provide our services or as required by law.</p>
       <h2>5. Data retention &amp; security</h2>

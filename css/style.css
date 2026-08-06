@@ -586,7 +586,7 @@ code, .mono { font-family: var(--font-mono); }
 .section-head { margin-bottom: 42px; }
 .plans-preview .section-head { margin-bottom: 34px; }
 .plans-preview .all-link { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
-.plans-preview .all-link::after { content: "USA + EU locations · WHMCS checkout"; color: var(--text-dim); font: 11px var(--font-mono); }
+.plans-preview .all-link::after { content: "USA + EU locations · Secure checkout"; color: var(--text-dim); font: 11px var(--font-mono); }
 .plan-card .p-desc { min-height: 42px; }
 .plan-card.popular { box-shadow: 0 0 0 1px rgba(245,185,59,.22), 0 18px 48px rgba(245,185,59,.11); }
 
