@@ -109,7 +109,7 @@ test("AI-readable guide exists and source templates stay free of raw infrastruct
   assert.ok(llms.startsWith("# StealthRDP"), "llms.txt heading");
   assert.ok(llms.includes("__SRDP_BASE__/plans.html"), "llms.txt links to plans");
   assert.ok(llms.includes("__SRDP_BASE__/faq.html"), "llms.txt links to FAQ");
-  assert.ok(llms.includes("10,877+ customers"), "llms.txt preserves approved customer claim");
+  assert.ok(llms.includes("10,877 customers"), "llms.txt preserves approved customer claim");
   assert.ok(llms.includes("25,000+ servers"), "llms.txt preserves approved server claim");
   assert.doesNotMatch(HTML("build.mjs"), /\b(?:\d{1,3}\.){3}\d{1,3}\b/, "build template has no raw IPv4 address");
   for (const route of ROUTES) {
