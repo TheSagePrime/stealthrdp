@@ -100,13 +100,18 @@
       .then(function (r) { if (!r.ok) throw new Error("bad status"); return r.json(); })
       .then(function (d) {
         var monitors = (d && d.monitors) || [];
-        var up = monitors.filter(function (m) { return m.status === 2; }).length;
+        var up = monitors.filter(function (m) { return m.status === "up"; }).length;
         var total = monitors.length;
         var msg = total ? "All systems operational — " + up + "/" + total + " nodes online" : "Status unavailable";
         var tickerStatus = $("#tickerStatus");
         if (tickerStatus) tickerStatus.textContent = msg;
         var footerStatus = $("#footerStatus");
         if (footerStatus) footerStatus.textContent = msg;
+        var heroNodeStatus = $("#heroNodeStatus");
+        if (heroNodeStatus) {
+          heroNodeStatus.innerHTML = '<span class="live"></span> ' + up + "/" + total + " nodes operational";
+          heroNodeStatus.style.color = total && up === total ? "var(--green)" : "var(--accent)";
+        }
         renderStatusPage(d);
       })
       .catch(function () {
@@ -123,7 +128,7 @@
     var summary = $("#statusSummary");
     if (!nodeList && !summary) return;
     var monitors = (d && d.monitors) || [];
-    var up = monitors.filter(function (m) { return m.status === 2; }).length;
+    var up = monitors.filter(function (m) { return m.status === "up"; }).length;
     if (summary) {
       summary.innerHTML =
         '<div class="ss-card"><div class="ss-num ' + (up === monitors.length ? "good" : "warn") + '">' + up + "/" + monitors.length + '</div><div class="ss-lbl">Nodes online</div></div>' +
@@ -132,16 +137,14 @@
     }
     if (nodeList) {
       nodeList.innerHTML = monitors.map(function (m) {
-        var ratios = m.custom_uptime_ranges ? m.custom_uptime_ranges.split("-") : [];
-        var last = ratios.length ? parseFloat(ratios[ratios.length - 1]) : null;
-        var upNow = m.status === 2;
+        var upNow = m.status === "up";
         return (
           '<div class="node-card">' +
             '<div class="n-left"><span class="n-dot ' + (upNow ? "up" : "down") + '"></span>' +
-            "<div><div class=\\\"n-name\\\">" + esc(m.friendly_name) + "</div>" +
-            '<div class="n-target">' + esc(m.url || "") + (m.port ? ":" + m.port : "") + "</div></div></div>" +
+            "<div><div class=\"n-name\">" + esc(m.label || "Production node") + "</div>" +
+            '<div class="n-target">' + esc(m.region || "Protected infrastructure") + "</div></div></div>" +
             '<div class="n-right"><div class="n-uptime">' +
-              '<div class="u-val ' + (upNow ? "good" : "") + '">' + (last != null ? last.toFixed(2) : "—") + '%</div>' +
+              '<div class="u-val ' + (upNow ? "good" : "") + '">' + (m.uptimeRatio != null ? Number(m.uptimeRatio).toFixed(2) : "—") + '%</div>' +
               '<div class="u-lbl">90-day uptime</div></div>' +
             "</div></div>"
           );

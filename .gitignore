@@ -2,3 +2,9 @@ node_modules/
 *.log
 .DS_Store
 /tmp/
+/backups/
+/shared/
+/logs/
+.env
+.env.*
+!.env.example
