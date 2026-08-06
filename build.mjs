@@ -273,14 +273,22 @@ function blogCardHtml(p) {
 /* ---------- JSON-LD ---------- */
 const ORG = {
   "@type": "Organization",
+  "@id": "__SRDP_BASE__/#organization",
   name: "StealthRDP",
   url: "__SRDP_BASE__/",
   logo: "__SRDP_BASE__/assets/favicon.svg",
+  description: "Windows and Linux remote desktop infrastructure and VPS hosting with DDoS protection, full administrative access, live status monitoring, and a 99.9% uptime SLA.",
   sameAs: SOCIAL.map((s) => s.href),
 };
 
 function websiteLd() {
-  return { "@type": "WebSite", name: "StealthRDP", url: "__SRDP_BASE__/" };
+  return {
+    "@type": "WebSite",
+    "@id": "__SRDP_BASE__/#website",
+    name: "StealthRDP",
+    url: "__SRDP_BASE__/",
+    publisher: { "@id": "__SRDP_BASE__/#organization" },
+  };
 }
 
 function breadcrumbLd(name, crumbs) {
@@ -376,7 +384,7 @@ function buildIndex() {
             <div class="console-line"><span class="ok">▸</span> configuring admin access <span class="ok">ok</span></div>
             <div class="console-progress"><div class="bar" id="deployBar"></div></div>
             <div class="console-line"><span class="pct" id="deployPct">0%</span></div>
-            <div class="console-line" id="consoleOnline" style="visibility:hidden"><span class="ok">✓ server online</span> <span class="dim">—</span> <span class="console-ip" id="consoleIp"><span class="live"></span>104.36.20.161</span></div>
+            <div class="console-line" id="consoleOnline" style="visibility:hidden"><span class="ok">✓ server online</span> <span class="dim">—</span> <span class="console-ip" id="consoleIp"><span class="live"></span>protected node</span></div>
           </div>
           <div class="console-foot"><span class="chip">2 <b>vCPU</b></span><span class="chip">4 <b>GB RAM</b></span><span class="chip">60 <b>GB NVMe</b></span><span class="chip">1 <b>Gbps</b></span></div>
         </div>
