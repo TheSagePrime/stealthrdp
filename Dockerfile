@@ -1,4 +1,9 @@
-FROM node:20-alpine
+# StealthRDP v2 — zero-dependency static+proxy server
+# Base image matches the proven fleet pattern (FinancialControl uses
+# node:22-bookworm-slim on this host).
+FROM node:22-bookworm-slim
+
+ENV NODE_ENV=production PORT=8080
 
 WORKDIR /app
 
@@ -6,8 +11,5 @@ WORKDIR /app
 COPY . .
 
 EXPOSE 8080
-
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget -qO- http://127.0.0.1:8080/healthz || exit 1
 
 CMD ["node", "server.js"]
