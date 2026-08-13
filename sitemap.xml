@@ -41,6 +41,11 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>__SRDP_BASE__/docs.html</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>__SRDP_BASE__/blog/designing-automated-high-availability-vps.html</loc>
     <lastmod>2026-08-06</lastmod>
     <changefreq>monthly</changefreq>
@@ -93,6 +98,116 @@
   <url>
     <loc>__SRDP_BASE__/blog/5-ways-to-optimize-your-rdp-performance-for-remote-work.html</loc>
     <lastmod>2026-08-06</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1737944563-how-to-re_activate-and-extend-your-180_day-windows-trial.html</loc>
+    <lastmod>2025-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1737946054-how-to-setup-your-vpn-on-linux-server-using-outline.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1737946569-install-fast-panel-in-linux-good-web-hosting-free-panel.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1737944013-use-of-service.html</loc>
+    <lastmod>2025-02-11</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1737946470-how-to-install-centos-web-panel-cwp-free-web-panel.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1737946390-setup-tun-tap-for-open_vpn.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1737943955-introduction.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1737944110-termination-of-service.html</loc>
+    <lastmod>2025-05-05</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1737944184-payment-terms.html</loc>
+    <lastmod>2025-03-13</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1737944204-user-responsibilities.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1737944952-server-stops-randomly.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1737945157-how-do-i-log-into-windows.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1737945947-how-to-force-https-using-htaccess.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1737945988-why-you-should-redirect-all-http-traffic-to-https.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1737946010-10-ways-to-optimize-your-word_press-website-for-speed.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1737946490-how-to-install-direct-admin-in-a-linux-server.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1737946509-install-cpanel-and-whm-in-linux-you-need-a-license.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1737946534-install-cyber-panel-with-open_lite_speed-in-linux.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1737948398-frequently-asked-questions-fa_qs.html</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1740916941-how-to-rebuild-a-server.html</loc>
+    <lastmod>2025-03-13</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1740917234-how-to-reset-server-change-or-reset-client-area-password.html</loc>
+    <lastmod>2025-03-13</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>__SRDP_BASE__/docs/1742181117-step_by_step-guide-to-fix-win_rm-and-install-net-framework.html</loc>
+    <lastmod>2025-03-17</lastmod>
     <changefreq>monthly</changefreq>
   </url>
 </urlset>

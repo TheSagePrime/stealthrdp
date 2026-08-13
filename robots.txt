@@ -4,4 +4,3 @@ Disallow: /api/
 Disallow: /blog-post.html
 
 Sitemap: __SRDP_BASE__/sitemap.xml
-# AI-readable site guide: __SRDP_BASE__/llms.txt

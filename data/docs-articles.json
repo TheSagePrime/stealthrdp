@@ -1,0 +1,400 @@
+[
+  {
+    "slug": "1737944563-how-to-re_activate-and-extend-your-180_day-windows-trial",
+    "title": "How to Re-activate and Extend Your 180-Day Windows Trial",
+    "category": "Windows",
+    "date": "Jan 28, 2025",
+    "sourceTitle": "How to Re-activate and Extend Your 180-Day Windows Trial",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1737944563-how-to-re_activate-and-extend-your-180_day-windows-trial",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "Step 1: Open PowerShell as Administrator",
+    "relatedSlugs": [],
+    "content": "How to Re-activate and Extend Your 180-Day Windows Trial\n\nHow to Re-activate and Extend Your 180-Day Windows Trial\n========================================================\n\nLast updated on Jan 28, 2025\n\n### Step 1: Open PowerShell as Administrator\n\nTo begin, you need to run commands with administrator privileges. Here's how:\n\n1.  Press the **Windows key**, type **PowerShell**, and when it appears, right-click on it.\n    \n2.  Select **Run as administrator** from the context menu.\n    \n\n### Step 2: Run the Re-arm Command\n\nOnce PowerShell is open with administrative privileges, enter the following command to re-arm your trial:\n\n    slmgr -rearm\n    \n\nThis command resets the 180-day trial counter and allows you to extend your trial period.\n\n### Step 3: Reboot Your System\n\nTo complete the process, reboot your computer for the changes to take effect. A restart is necessary for the re-arm to be fully implemented.\n\n### Step 4: Check Your Current License Information\n\nAfter rebooting, you can check the status of your Windows license, remaining trial period, and rearm count by using the following command in PowerShell:\n\n    slmgr -dlv\n    \n\nThis command will display detailed information about your current license, including the number of re-arms remaining and how much time is left on your trial.\n\n### Step 5: Activate Windows\n\nIf you're ready to activate your copy of Windows or just want to ensure your system is properly activated, you can use the following command:\n\n    slmgr -ato\n    \n\nThis command will trigger the activation process using your license key, if available.\n\n* * *\n\nBy following these steps, you can easily reset your Windows trial period and extend your use of the operating system. If you have any issues or need further assistance, don't hesitate to reach out to our support team.\n\n* * *"
+  },
+  {
+    "slug": "1737946054-how-to-setup-your-vpn-on-linux-server-using-outline",
+    "title": "How to Setup your VPN on Linux Server using outline?",
+    "category": "VPN and networking",
+    "date": "Jan 27, 2025",
+    "sourceTitle": "How to Setup your VPN on Linux Server using outline?",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1737946054-how-to-setup-your-vpn-on-linux-server-using-outline",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "Outline VPN is a new open-source VPN that promises an incredibly easy-to-install VPN experience—far easier than existing options, like OpenVPN. Via Outline, Jigsaw is trying to make VPNs not only secure but also incre…",
+    "relatedSlugs": [],
+    "content": "How to Setup your VPN on Linux Server using outline?\n\nHow to Setup your VPN on Linux Server using outline?\n====================================================\n\nLast updated on Jan 27, 2025\n\nOutline VPN is a new open-source VPN that promises an incredibly easy-to-install VPN experience—far easier than existing options, like OpenVPN. Via Outline, Jigsaw is trying to make VPNs not only secure but also incredibly easy to set up—especially for those who don’t happen to be sysadmins. The target demographic for the Outline VPN is journalists and news organizations, but anyone can take advantage of their hard work. For example, Journalists need safe access to information to research issues, communicate with sources, and report the news. Outline makes it easy for news organizations to set up a virtual private network (VPN) on their server. This gives news organizations the power to provide anyone in their organization with safer access to the internet and keep their communications private.\n\n**Prerequisites:**\n\nA VPS running any of our OS options A working Docker installation A non-root, sudo-enabled user A local computer running Windows or Linux\n\n**Step 1. Install Docker (if not installed already)**\n\nThe Outline + Docker combination is what makes this VPN solution so easy to install. So, if you don’t have Docker installed on your server yet, take a moment to perform this one-command installation: $ sudo curl -sS https://get.docker.com/ | sh The script will update your system as needed, add the appropriate Docker repositories, and install the correct Docker packages. You may then need to start the Docker service. $ sudo systemctl start docker $ sudo systemctl enable docker\n\n**Finally, verify that the Docker service is running:**\n\n$ sudo sudo systemctl status docker ● docker.service - Docker Application Container Engine Loaded: loaded (/usr/lib/systemd/system/docker.service; disabled; vendor preset: disabled) Drop-In: /etc/systemd/system/docker.service.d └─firewalld.conf Active: active (running) since Mon 2018-03-26 14:36:26 EDT; 4s ago Docs: https://docs.docker.com Main PID: 31232 (dockerd)\n\n**Step 2. Installing the Outline VPN server**\n\nWith Docker installed, you can run the Outline server installation script: $ sudo wget -qO- https://raw.githubusercontent.com/Jigsaw-Code/outline-server/master/src/server\\_manager/install\\_scripts/install\\_server.sh | bash You will see lots of output from the script: first, it checks for the necessary programs (Docker), creates secret keys, and then downloads and starts two Docker containers: a shadowbox server and a watchtower server to update shadowbox as needed.\n\n**When the Outline VPN server installation script finishes, you’ll see some output similar to the following:**\n\n{ \"apiUrl\": \"https://[redacted example endpoint]:12345/xxxxxxxxxxxxxxxxxxxxxxx\", \"certSha256\": \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\" }\n\n**Step 3. Keep that information safe, as you’ll need it in the next step. For now, rejoice: You have successfully installed a VPN server!** **Step 4. Using Outline Manager to set up your VPN**\n\nJigsaw has created a desktop app called Outline Manager to help users configure their Outline VPN servers. You can download the server manager from the following link:\n\n**https://getoutline.org/get-started/#step-1** **Once you open the Outline Manager app, scroll down to Set up Outline anywhere and click on the Get started button.**\n\nYou’ll see two steps to follow. You’ve already done the first one, and for the second step, all you need to do is copy the bracketed text from Step 3 into the field and click Done Once you’re connected, you will see that you already have a key called My access key. Click on the Get connected button, which will give you a walkthrough on how to install and configure the appropriate VPN client for your platform. For every user, it’s recommended that you create a new key and give it to the user.\n\n**STAY SAFE ONLINE WITH OUTLINE VPN!**"
+  },
+  {
+    "slug": "1737946569-install-fast-panel-in-linux-good-web-hosting-free-panel",
+    "title": "Install Fast Panel in Linux (Good Web Hosting Free Panel)",
+    "category": "Web panels",
+    "date": "Jan 27, 2025",
+    "sourceTitle": "Install Fast Panel in Linux (Good Web Hosting Free Panel)",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1737946569-install-fast-panel-in-linux-good-web-hosting-free-panel",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "Introduction",
+    "relatedSlugs": [],
+    "content": "Install Fast Panel in Linux (Good Web Hosting Free Panel)\n\nInstall Fast Panel in Linux (Good Web Hosting Free Panel)\n=========================================================\n\nLast updated on Jan 27, 2025\n\nIntroduction\n------------\n\nFASTPANEL is a simple and powerful server management panel that allows you to create sites in a few clicks, manage mail, databases, backups, plan tasks, and analyze traffic. Set and configure access rights as you like - each site can be assigned to a single user. To improve the security of your account, connect two-factor authentication.\n\n**More information can be found on an official web page: You will have to buy the free license from their website and enter your server IP address and it will be activated. https://fastpanel.direct/** **Demo version can be tried here: https://fastpanel.direct/demo** **Installation Requirements:**\n\nPlease note that the panel can only be installed on a freshly installed operating system (only Debian 8, Debian 9, Debian 10, Ubuntu 18.04, Ubuntu 20.04 and CentOS 7 are supported). Installation on the configured server is impossible!\n\n**Step 1**\n\n. Connect to your server via SSH using your root-password\n\n**Step 2. If wget utility is not installed on your server, execute the following commands in order to get it: Debian/Ubuntu:**\n\napt-get update; apt-get install wget\n\n**CentOS:**\n\nyum makecache; yum install wget\n\n**Step 3.**\n\nInitiate FASTPANEL® installation by running the following command:\n\nwget http://repo.fastpanel.direct/install\\_fastpanel.sh -O - | bash -\n\n**Step 4.**\n\nAfter successful installation of FASTPANEL® you will get a message with the access data\n\n**Installation Done**\n\nCongratulations! FASTPANEL® successfully installed and available now for you at FASTPANEL uses 8888 port, so to connect to the control panel on your internet browser enter: https://ip\\_of\\_your\\_server:8888 On your first login, the Panel will ask you for a license. In order to get one, simply enter your email address. The license data will be sent to your email address. Log in details for the first attempt to log in are: Username: fastuser The password for the \"fastuser\" user matches the \"root\" user password of the server"
+  },
+  {
+    "slug": "1737944013-use-of-service",
+    "title": "Use of service",
+    "category": "Terms and policies",
+    "date": "Feb 11, 2025",
+    "sourceTitle": "Use of service",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1737944013-use-of-service",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "1. General Use:",
+    "relatedSlugs": [],
+    "content": "Use of service\n\nUse of service\n==============\n\nLast updated on Feb 11, 2025\n\n1.  General Use:\n\nCustomers are permitted to use StealthRDP's services, including Remote Desktop Protocols (RDPs), Virtual Private Servers (VPS), and web hosting solutions, for lawful purposes as intended under these Terms and Conditions. The services are to be used in a manner that is consistent with the intended purpose and should not interfere with the use and enjoyment of others.\n\n2.  Permitted Activities:\n\nYou may use our services to conduct business, personal, and organizational activities provided they are legal, ethical, and in accordance with these terms.\n\n3.  Prohibited Activities:\n\nAs part of our commitment to providing a high-quality and lawful service environment, StealthRDP enforces a strict policy against the following activities:\n\n~ Engaging in behaviors that could lead to a Spamhaus listing.\n\n~ Establishing or operating phishing or scam sites, including but not limited to impersonation of entities such as eBay, PayPal, or any schemes involving credit card or password fraud.\n\n~ Carding, fraud, or any other financial crime activities.\n\n~ Conducting network scanning or port scanning activities.\n\n~ Hosting, distributing, or running malicious scripts intended for hacking, initiating DDoS attacks, or any other unlawful intrusion activities.\n\n~ Participating in or facilitating DDoS/DoS attacks.\n\n~ Engaging in the dissemination, hosting, or promotion of child pornography or similar exploitative content.\n\n~ Operating botnets, Remote Administration Tools (RATs), or any related malicious activities.\n\n~ Consequences of Violation:\n\n~ Any breach of these terms will lead to immediate service suspension without backups. Depending on the severity of the breach, StealthRDP reserves the right to close your customer account and terminate all associated active services.\n\n4.  Abuse Notifications:\n\nStealthRDP retains the right to suspend or terminate your services without prior notice upon receipt of abuse complaints. Our decision will be based on the nature of the complaint and the evidence provided.\n\n5.  Bandwidth Usage Policy\n\n~ Allocated Bandwidth: Usage is confined to the limits specified on the product page.\n\n~ Fair Share Policy: We operate a fair share policy to ensure service quality for all users. Excessive use of bandwidth that affects others is not permitted.\n\n~ Usage Monitoring: We monitor usage to prevent network congestion and maintain service quality.\n\n~ Consequences of Excessive Use: Excessive usage may result in bandwidth throttling, service suspension, or mandatory upgrades at additional costs.\n\n~ Remedial Actions: Repeated overuse after warnings may lead to service termination.\n\n~ Bandwidth Reports: Customers can request bandwidth usage reports from our support team.\n\n~ Compliance with this policy is mandatory for continued use of StealthRDP services.\n\nBy using StealthRDP's services, you agree to adhere to the above usage policy. Any misuse of the service will be addressed promptly and may result in immediate termination of services and legal action where necessary."
+  },
+  {
+    "slug": "1737946470-how-to-install-centos-web-panel-cwp-free-web-panel",
+    "title": "How to install Centos Web Panel (CWP) (Free Web Panel)",
+    "category": "Web panels",
+    "date": "Jan 27, 2025",
+    "sourceTitle": "How to install Centos Web Panel (CWP) (Free Web Panel)",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1737946470-how-to-install-centos-web-panel-cwp-free-web-panel",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "In this tutorial, we will be installing CWP on a Linux Centos server and I will try to make the tutorial as easy as possible, we are going to use the free plan which offers:",
+    "relatedSlugs": [],
+    "content": "How to install Centos Web Panel (CWP) (Free Web Panel)\n\nHow to install Centos Web Panel (CWP) (Free Web Panel)\n======================================================\n\nLast updated on Jan 27, 2025\n\nIn this tutorial, we will be installing CWP on a Linux Centos server and I will try to make the tutorial as easy as possible, we are going to use the free plan which offers:\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n**(However, some features are not available to free users, you may need to buy CWP Pro in order to enjoy the full services, its cheap!)**\n\n– Apache Web Server (Mod Security + Automatic updated rules optional) – PHP 5.6 (suPHP, SuExec + PHP version switcher) – MySQL/MariaDB + phpMyAdmin – Postfix + Dovecot + roundcube webmail (Antivirus, Spamassassin optional) – CSF Firewall – File System Lock (no more website hacking, all your files are locked from changes) – Backups (optional) – AutoFixer for server configuration – CloudLinux + CageFS + PHP Selector – Softaculous – Script Installer (Free and Premium) – LiteSpeed Enterprise (Web Server) – Setups Server for Web Hosting (websites like WordPress…) – API for easier account management, and whmcs billing api – NAT-ed version, support for NAT-ed IPs\n\n**Notes:**\n\nThere is no uninstaller for CWP After you install CWP, you must reinstall the server to remove it. It only supports static IP addresses. It do not support dynamic, sticky, or internal IP addresses. Only install CWP on a freshly installed operating system without any configuration changes For best performance We suggest you order a VPS or Dedicated servers from eFlame.\n\n**System Requirements**\n\nMake sure that you complete the following tasks before you start the installation process:\n\n**1\\. Setup Hostname:**\n\nhostname srv1.example.com\n\n**2\\. Software Requirements**\n\nYou must have a clean/fresh installation of supported operating systems:\n\n**CentOS 6, RedHat 6 or CloudLinux 6, MINIMAL installation and English version only!**\n\nNOT Recommended for the new installations as we don’t develop new features for it\n\n**CentOS 7 minimal is recommended version. (RECOMMENDED)**\n\nThe best version to be used with CWP as it provides the most features and CWP Secure Kernel.\n\n**CentOS 8 (Stream) is also supported.**\n\nWe have our custom repositories making CentOS 8 Stream a stable version.\n\n**3\\. Hardware Requirements**\n\n64 bit operating systems require a minimum of 1024 MB RAM (recommended).\n\n**Recommended System: 4 GB+ RAM so you would have the full functionality such as Anti-virus scan of emails** **1\\. Preparing Server:** **yum -y install wget** **(For CentOS 8:) may need to install the EPEL repository to be able to install tools like wget:**\n\nyum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm dnf install wget -y\n\n**2\\. Server Update:**\n\nyum -y update\n\n**3\\. Reboot Server:**\n\nReboot\n\n**Installation**\n\nNow you are ready to start CWP Installation CWP installer can run more than 30 minutes because it needs to compile apache and php from source.\n\n**CentOS 6: New Installer with MARIA-DB 10-latest (NOT recommended)**\n\ncd /usr/local/src wget http://centos-webpanel.com/cwp-latest sh cwp-latest\n\n**CentOS 7: Installer for CentOS 7 (recommended)**\n\ncd /usr/local/src wget http://centos-webpanel.com/cwp-el7-latest sh cwp-el7-latest\n\n**CentOS 8: Installer for CentOS 8**\n\ncd /usr/local/src wget http://centos-webpanel.com/cwp-el8-latest sh cwp-el8-latest\n\n**Optionals**\n\nAvailable long name arguments –restart yes (for automatic restart after successfull install) –phpfpm \\[5.3|5.4|5.5|5.6|7.0|7.1|7.2|7.3|7.4\\] (you can use only one) –softaculous yes (install softaculous – script installer)\n\n**Available short name arguments**\n\n\\-r yes (for automatic restart after successfull install) -p \\[5.3|5.4|5.5|5.6|7.0|7.1|7.2|7.3|7.4\\] (you can use only one) -s yes (install softaculous – script installer)\n\n**Example for centos 7 (you can combine short and long name arguments)**\n\nsh cwp-el7-latest -r yes --phpfpm 7.3 --softaculous yes Any of this additionals can be also installed later from cwp gui.\n\n**Reboot Server Reboot your server so that all updates can take effect and CWP gets started.**\n\nReboot\n\n**Cloud Linux Optional (You need a license to use it)**\n\nwget //repo.cloudlinux.com/cloudlinux/sources/cln/cldeploy # sh cldeploy -k YOUR-KEY # cd /usr/local/src/ # wget //dl1.centos-webpanel.com/files/c\\_scripts/cloudlinux.sh # sh cloudlinux.sh\n============================================================================================================================================================================================\n\n**After CloudLinux installer is done it will automatically reboot the server! After reboot, you need to build CageFS and enable it**\n\n/usr/sbin/cagefsctl --init cagefsctl --enable-all\n\n**Configuration**\n\nLog in to your CWP server using the link provided by the installer on your server. Control WebPanel Admin GUI at http://SERVER-IP:2030/ Username: root Password: YOUR\\_ROOT\\_PASSWORD Setup root email Setup at least one hosting package Or edit default package. Setup shared IP Must be your public IP address.\n\n**Setup nameservers** **And now you are ready to host domains.**"
+  },
+  {
+    "slug": "1737946390-setup-tun-tap-for-open_vpn",
+    "title": "Setup Tun/Tap For OpenVPN",
+    "category": "VPN and networking",
+    "date": "Jan 27, 2025",
+    "sourceTitle": "Setup Tun/Tap For OpenVPN",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1737946390-setup-tun-tap-for-open_vpn",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "Please follow the steps below to fix the error: tun needs to be installed",
+    "relatedSlugs": [],
+    "content": "Setup Tun/Tap For OpenVPN\n\nSetup Tun/Tap For OpenVPN\n=========================\n\nLast updated on Jan 27, 2025\n\nPlease follow the steps below to fix the error: tun needs to be installed\n-------------------------------------------------------------------------\n\n1.  SSH into your vps!\n    \n2.  Run sudo apt-get update&&sudo apt-get upgrade -y\n    \n\n**3\\. Run The Following Commands**\n\nmkdir /dev/net\n\nmknod /dev/net/tun c 10 200\n\nchmod 666 /dev/net/tun\n\n**After Running those commands install your OpenVPN as normal**"
+  },
+  {
+    "slug": "1737943955-introduction",
+    "title": "Introduction",
+    "category": "Terms and policies",
+    "date": "Jan 27, 2025",
+    "sourceTitle": "Introduction",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1737943955-introduction",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "Welcome to StealthRDP, where robust Remote Desktop Protocols (RDPs), cutting-edge Virtual Private Servers (VPS), and comprehensive web hosting solutions converge to fulfill the evolving cloud-based needs of modern ent…",
+    "relatedSlugs": [],
+    "content": "Introduction\n\nIntroduction\n============\n\nLast updated on Jan 27, 2025\n\nWelcome to StealthRDP, where robust Remote Desktop Protocols (RDPs), cutting-edge Virtual Private Servers (VPS), and comprehensive web hosting solutions converge to fulfill the evolving cloud-based needs of modern enterprises. Our services are meticulously crafted to deliver a seamless, secure, and superior performance digital experience.\n\nBy accessing and using our services at StealthRDP, you affirm that you have read, comprehended, and consented to adhere to these Terms and Conditions. This agreement lays the foundation for our mutual commitment to excellence, outlining your rights and responsibilities, as well as our dedication to maintaining a high standard of service.\n\nOur servers are engineered with precision, focusing on reliability and security to facilitate a digital environment where your business can flourish without interruption. At StealthRDP, customer-centric service is not just a phrase—it's our promise. Our dedicated support team is poised to offer swift and effective assistance, ensuring that your business operations are sustained with utmost efficiency around the clock.\n\nWe invite you to explore our array of cloud solutions on [StealthRDP.com](https://stealthrdp.com/)\n. Partner with us and take your online presence to new heights, confident in the knowledge that you are supported by a team that is as invested in your success as you are.\n\nPlease be advised that we reserve the right to modify these Terms and Conditions at any time. It is your responsibility to review them periodically. Continued use of StealthRDP's services after such changes shall constitute your consent to such changes.\n\nThank you for choosing StealthRDP as your trusted partner in navigating the digital landscape."
+  },
+  {
+    "slug": "1737944110-termination-of-service",
+    "title": "Termination of Service",
+    "category": "Terms and policies",
+    "date": "May 05, 2025",
+    "sourceTitle": "Termination of Service",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1737944110-termination-of-service",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "1. Right to Terminate: StealthRDP reserves the right to suspend or terminate your service with immediate effect for any breach of these Terms and Conditions, including, but not limited to, non-payment of fees, violati…",
+    "relatedSlugs": [],
+    "content": "Termination of Service\n\nTermination of Service\n======================\n\nLast updated on May 05, 2025\n\n1.  **Right to Terminate:** StealthRDP reserves the right to suspend or terminate your service with immediate effect for any breach of these Terms and Conditions, including, but not limited to, non-payment of fees, violation of the Acceptable Use Policy, or any illegal activities.\n    \n2.  **User-Initiated Termination:** You may terminate your service with StealthRDP at any time. However, please be aware that according to our non-refundable policy, you may not be eligible for a refund upon termination.\n    \n3.  **Notification of Termination:** In the event of termination by StealthRDP, we will endeavor to provide you with prior notice. However, in cases of serious violations, termination may be immediate and without notice.\n    \n4.  **Data Retention Post-Termination:** Upon termination, your data may be retained or deleted in accordance with our data retention policy. It is the responsibility of the user to ensure that their data is appropriately backed up.\n    \n5.  **Outstanding Payments:** Any outstanding balances owed to StealthRDP must be settled upon termination of service. Failure to do so may result in legal action.\n    \n6.  **Effect of Termination:** Termination will result in the immediate cessation of access to the service and the forfeiture of any data stored on StealthRDP servers.\n    \n7.  **Reinstatement:** Reinstatement of terminated services is at the discretion of StealthRDP and may require the settlement of outstanding balances and a commitment to correct previous violations.\n    \n8.  **Eligibility for Refund:** If an issue originates from our end and remains unresolved despite our efforts, customers are eligible for a refund. This is calculated based on the remaining service days from the date of our last communication acknowledging the inability to resolve the issue. However, refunds or replacements are not granted if the customer is unable to integrate the solution provided by our support team. The service remains active until the end of the current billing period in such cases.\n    \n9.  **Illegal Activities and Repeated Abuse:** Any involvement in illegal activities will result in the immediate suspension of the server. If abuse is received a second time, the customer's account, including all associated servers, will be permanently terminated. Repeated abuse or violations of our Terms and Conditions will lead to the permanent closure of the customer's account. Such termination will be final, with no possibility of reinstatement.\n    \n\nBy using StealthRDP’s services, you acknowledge and agree to these termination terms."
+  },
+  {
+    "slug": "1737944184-payment-terms",
+    "title": "Payment Terms",
+    "category": "Terms and policies",
+    "date": "Mar 13, 2025",
+    "sourceTitle": "Payment Terms",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1737944184-payment-terms",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "1. Accepted Payment Method: StealthRDP accepts only cryptocurrency and Card Payment as a form of payment for all services.",
+    "relatedSlugs": [],
+    "content": "Payment Terms\n\nPayment Terms\n=============\n\nLast updated on Mar 13, 2025\n\n1.  Accepted Payment Method: StealthRDP accepts only cryptocurrency and Card Payment as a form of payment for all services.\n    \n2.  Cryptocurrency Transactions: Customers are responsible for transaction fees and sending the correct amount. Transactions must be completed within the invoice timeframe.\n    \n3.  Future Payment Methods: Should additional payment methods be introduced, they will adhere to these terms unless otherwise specified.\n    \n4.  Payment Obligations: Full upfront payment is required. Delayed payment may lead to service suspension or termination.\n    \n5.  Non-Refundable: Payments to StealthRDP are non-refundable. In exceptional cases of internal issues leading to service downtime, compensations or refunds may be issued equitably, but these do not cover personal damages. Services are to be provided within 24 hours of payment; should service delivery exceed this timeframe, customers are eligible to request a refund. This refund option is invalidated once the service is utilized. Refunds are granted only once per service and are not applicable after 24 hours of service usage or for dissatisfaction-related cancellations. Importantly, any refunds processed will be credited back exclusively to the customer's site wallet with StealthRDP. Direct cryptocurrency refunds are strictly prohibited and will not be provided under any circumstances.\n    \n6.  Transaction Confirmations: Service activation follows the minimum required confirmations for the respective cryptocurrency, which can vary in time. StealthRDP is not responsible for blockchain delays.\n    \n7.  Crypto Gateway Payment Terms: All payments processed through our site are handled via our designated crypto gateway, coinPayment. When making a payment, please note that all associated fees are the responsibility of the payer. You must send the exact amount—or a slightly higher amount—as displayed on the payment page; sending any lower amount than specified will be considered an incomplete payment, requiring the client to complete the payment again or request a refund through the gateway. The coinPayment gateway reserves the right to deduct any applicable fees, and StealthRDP is not responsible for refunds or fee adjustments made by the gateway. If you experience any issues with your payment, please contact the coinPayment support team directly using the email provided in your transaction confirmation.\n    \n8.  Changes to Payment Terms: StealthRDP may revise these terms with immediate effect, communicated in advance to customers.\n    \n\nBy making a payment, you accept these terms."
+  },
+  {
+    "slug": "1737944204-user-responsibilities",
+    "title": "User Responsibilities",
+    "category": "Terms and policies",
+    "date": "Jan 27, 2025",
+    "sourceTitle": "User Responsibilities",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1737944204-user-responsibilities",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "1. Account Security: Users are responsible for maintaining the security and confidentiality of their account credentials. Any activities under the account are the user's responsibility. Promptly inform StealthRDP of a…",
+    "relatedSlugs": [],
+    "content": "User Responsibilities\n\nUser Responsibilities\n=====================\n\nLast updated on Jan 27, 2025\n\n1.  Account Security: Users are responsible for maintaining the security and confidentiality of their account credentials. Any activities under the account are the user's responsibility. Promptly inform StealthRDP of any unauthorized use of your account.\n    \n2.  Compliance with Laws: Users must comply with all applicable laws, regulations, and these Terms and Conditions when using StealthRDP services. This includes, but is not limited to, adhering to copyright, data protection, and anti-abuse laws.\n    \n3.  Acceptable Use: Adhere to the acceptable use policy as outlined in the 'Use of Service' section. Any misuse or unethical behavior may result in suspension or termination of services.\n    \n4.  Data Management: Users are responsible for backing up their data. StealthRDP is not liable for any data loss or corruption.\n    \n5.  Service Usage: Use the services provided for lawful, intended purposes. Any illegal or unauthorized use of the services is strictly prohibited.\n    \n6.  Communication: Maintain respectful and professional communication with StealthRDP staff and other users. Abusive or disrespectful behavior will not be tolerated.\n    \n7.  Reporting Issues: Report any service-related issues or vulnerabilities to StealthRDP promptly to allow for timely resolutions.\n    \n8.  Resource Usage: Use the provided resources (like bandwidth and storage) responsibly, ensuring fair usage as per the terms outlined in the 'Bandwidth Usage Policy'.\n    \n9.  Updates and Notifications: Keep your contact information up to date and respond to notifications or inquiries from StealthRDP in a timely manner.\n    \n10.  We have Weekly Backups for Disaster Recovery But Please DO NOT use your server as a storage server for really important data. There is always a chance of servers being unresponsive or having hardware issues. Do regularly backups, this is really important. We are not able to restore files, if for example, the server has any hardware issues. It's your job to keep your data alive.\n    \n\nBy creating an account and using StealthRDP’s services, you accept these responsibilities and agree to adhere to them as part of our service agreement."
+  },
+  {
+    "slug": "1737944952-server-stops-randomly",
+    "title": "Server stops randomly",
+    "category": "Windows",
+    "date": "Jan 27, 2025",
+    "sourceTitle": "Server stops randomly",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1737944952-server-stops-randomly",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "A common issue many customers experience is when their server seem to automatically just stop multiple times for no reason. In most cases your windows license expired which is the main cause for server stops.",
+    "relatedSlugs": [
+      "1737944563-how-to-re_activate-and-extend-your-180_day-windows-trial"
+    ],
+    "content": "Server stops randomly\n\nServer stops randomly\n=====================\n\nLast updated on Jan 27, 2025\n\nA common issue many customers experience is when their server seem to automatically just stop multiple times for no reason. In most cases your **windows license expired** which is the main cause for server stops.\n\nWindows licenses are basically windows trial licenses (windows server evaluation) that are only valid for **180 days**. After license expiration you need to either purchase a windows server license by yourself or extend your trial license.\n\nPlease follow this tutorial: [Tutorial](/docs/1737944563-how-to-re_activate-and-extend-your-180_day-windows-trial.html)\n\nAfter extending or purchasing a license, your server wont suddenly stop again.\n\nNote: The expiration time of your current license is placed on the bottom right corner in your server."
+  },
+  {
+    "slug": "1737945157-how-do-i-log-into-windows",
+    "title": "How do I log into Windows RDP?",
+    "category": "Windows",
+    "date": "Jan 27, 2025",
+    "sourceTitle": "How do I log into Windows RDP?",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1737945157-how-do-i-log-into-windows",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "1. Open \"Remote Desktop Connection Manager\" on windows. Your windows version should have that application already preinstalled.",
+    "relatedSlugs": [],
+    "content": "How do I log into Windows RDP?\n\nHow do I log into Windows RDP?\n==============================\n\nLast updated on Jan 27, 2025\n\n1.  Open \"Remote Desktop Connection Manager\" on windows. Your windows version should have that application already preinstalled.\n    \n2.  Type in the IP of your server that we provided you in an e-mail\n    \n3.  Now type in your Username (Administrator) and the password provided from your RDP. That's it! If you see a message popping up (which is common on the first start) just press \"Yes\"."
+  },
+  {
+    "slug": "1737945947-how-to-force-https-using-htaccess",
+    "title": "How to Force HTTPS using .htaccess",
+    "category": "Web panels",
+    "date": "Jan 27, 2025",
+    "sourceTitle": "How to Force HTTPS using .htaccess",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1737945947-how-to-force-https-using-htaccess",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "What is an SSL and why do you need it?",
+    "relatedSlugs": [],
+    "content": "How to Force HTTPS using .htaccess\n\nHow to Force HTTPS using .htaccess\n==================================\n\nLast updated on Jan 27, 2025\n\nWhat is an SSL and why do you need it?\n--------------------------------------\n\nSSL stands for Secure Sockets Layer, a security protocol that creates an encrypted link between a web server and a web browser. Companies and organizations need to add SSL certificates to their websites to secure online transactions and keep customer information private and secure\n\nAfter installing an SSL certificate, your website is available over HTTP and HTTPS. However, it’s better to use only the latter because it encrypts and secures your website’s data\n\nForcing HTTPS on All Traffic\n----------------------------\n\n**1**\n\nGo to **File Manager** in your hosting panel and open .htaccess inside the **public\\_html** folder. If you can’t locate it, make sure to create or unhide it\n\n**2**\n\nScroll down to find **RewriteEngine** On and insert the following lines of code below it:\n\n**RewriteEngine On** **RewriteCond %{HTTPS} off** **RewriteRule ^(.\\*)$ https://%{HTTP\\_HOST}%{REQUEST\\_URI} \\[L,R=301\\]** **3**\n\nSave the **changes**\n\nForcing HTTPS on a Specific Domain\n----------------------------------\n\nLet’s say that you have two domains: **http://yourdomain1.com** and **http://yourdomain2.com** Both domains access the same website, but you only want the first one to be redirected to the HTTPS version. In this case, you need to use the following code:\n\n**RewriteEngine On** **RewriteCond %{HTTP\\_HOST} ^yourdomain1.com \\[NC\\]** **RewriteCond %{HTTPS} off** **RewriteRule ^(.\\*)$ https://%{HTTP\\_HOST}%{REQUEST\\_URI} \\[R=301,L\\]**\n\nMake sure to replace **yourdomain1** with the actual domain you’re trying to force HTTPS on.\n\nForcing HTTPS on a Specific Folder\n----------------------------------\n\nThe **.htaccess** file can also be used to force HTTPS on specific folders. However, the file should be placed in the folder that will have the HTTPS connection\n\n**RewriteEngine On** **RewriteCond %{HTTPS} off** **RewriteRule ^(folder1|folder2|folder3) https://%{HTTP\\_HOST}%{REQUEST\\_URI} \\[R=301,L\\]** **Make sure to change the folder references to the actual directory names.**\n\nAfter making the changes, clear your browser’s cache and try to connect to your site via HTTP. If everything was added correctly, the browser will redirect you to the HTTPS version."
+  },
+  {
+    "slug": "1737945988-why-you-should-redirect-all-http-traffic-to-https",
+    "title": "Why you should redirect all HTTP traffic to HTTPS",
+    "category": "Web panels",
+    "date": "Jan 27, 2025",
+    "sourceTitle": "Why you should redirect all HTTP traffic to HTTPS",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1737945988-why-you-should-redirect-all-http-traffic-to-https",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "If you’re thinking about switching to the HTTPS protocol but aren’t exactly sure how it will affect your website, this article will guide you through the process.",
+    "relatedSlugs": [],
+    "content": "Why you should redirect all HTTP traffic to HTTPS\n\nWhy you should redirect all HTTP traffic to HTTPS\n=================================================\n\nLast updated on Jan 27, 2025\n\nIf you’re thinking about switching to the HTTPS protocol but aren’t exactly sure how it will affect your website, this article will guide you through the process.\n------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n**We will explain the difference between HTTP and HTTPS in terms of security, performance, and search engine optimization (SEO) benefits**\n\nAlso, we’ll explore how the HTTP vs HTTPS protocols transport data via the internet and the significant role of SSL certificates.\n\nAside from that, we’ll discuss the pros and cons of each protocol to help you decide whether to make the switch.\n\nDifferences Between HTTP vs HTTPS\n---------------------------------\n\n**HTTP** stands for **Hypertext Transfer Protocol**. It is the protocol that enables communication between different systems, transferring information and data over a network.\n\nOn the other hand, **HTTPS** stands for **Hypertext Transfer Protocol Secure**. Although it functions similarly to **HTTP**, **HTTPS** works to protect communication between web servers and browsers when transporting data\n\nHTTPS secures connections with a digital security protocol that uses cryptographic keys to encrypt and validate data. The most common way for websites to use HTTPS and have a secure domain is by obtaining a Secure Sockets Layer (SSL) or Transport Layer Security (TLS) certificate.\n\nKeep in mind that although TLS is widely becoming the standard for HTTPS, most SSL certificates support both **SSL/TLS** protocols\n\nHow HTTP Works\n--------------\n\nIn practice, HTTP is an application layer protocol that web browsers and web servers use to communicate via the internet.\n\nWhen a web user wants to load or interact with a web page, their web browser sends an **HTTP** request to the origin server that hosts the website’s files. These requests are essentially lines of text that are sent via the internet. A connection is then established between the browser and server, after which the server processes the request and sends back an **HTTP** response. This makes web pages accessible to site visitors.\n\nHTTP vs HTTPS: Which One Is Better for My Site?\n-----------------------------------------------\n\n**Technically, there is no correct answer**\n\nIt all depends on the type of site you run and the data you manage. For example, a simple portfolio website and an eCommerce site with membership features and digital payment systems have different security requirements.\n\nHowever, it doesn’t matter whether your site handles sensitive information – HTTPS is becoming the standard for all websites. Not only that, there are numerous benefits to having an SSL certificate enabled on your site.\n\nConsider the following factors when deciding between **HTTP vs HTTPS**\n\nSecurity\n--------\n\nHaving strong security measures and providing a secure browsing experience on your website is crucial. A GlobalSign survey found that 77% of visitors have concerns about unauthorized parties misusing or intercepting user data.\n\nIn regards to HTTP vs HTTPS, the latter outperforms in terms of security.\n\nA standard HTTP protocol does not encrypt connections. That means the lines of text in an HTTP request or response are visible to anyone monitoring the connection, including cybercriminals.\n\nUsing a standard HTTP generally poses minimal issues if the text only contains general information, such as to load a public web page.\n\nHowever, if it contains sensitive data like usernames, passwords, or credit card details, using unencrypted HTTP can pose serious security risks. Since this information is visible to anyone, data breaches, hacks, and identity theft become serious concerns.\n\nUsers can see if they are browsing HTTP sites by checking two elements. First, the icon before a website’s **URL** (Uniform Resource Locator) may show a ! symbol or say “**Not secure**.”\n\nThe warning may also advise users not to enter sensitive or confidential information on the website. Second, the site’s URL will start with **http://**\n\n**HTTPS = HTTP + SSL**\n\nTo protect potentially sensitive information from being leaked, websites use SSL certificates to create a secure connection between web servers and browsers, protecting the transmission of HTTP requests and responses.\n\nThe use of an SSL certificate is the key difference between HTTP and HTTPS.\n\nHTTPS encrypts the transport of data so it’s not visible to hackers or others monitoring the connection. This ensures data integrity and prevents information from being modified, corrupted, or stolen during transmission.\n\nSSL/TLS protocols also authenticate users to secure information and ensure it won’t be revealed to unauthorized users\n\nUsers can easily check if a website uses SSL/TLS. First, a padlock icon should be visible on the left-hand side of a website’s URL, signifying that the connection is secure. Second, the website’s URL will start with **https://.**\n\nSEO Advantages\n--------------\n\nNot only does Google recommend that all websites use HTTPS for higher security, but it also rewards these sites with a minor ranking boost on the search engine results pages (SERPs).\n\nIn fact, a study by Rank Ranger found that by 2018, 70% of Google’s first page results were sites that use HTTPS.\n\nLet’s consider this in practical terms. For example, a competitor’s site may be similar to yours in many aspects, such as content, speed, and backlinks. However, the competitor site uses HTTPS while you don’t.\n\nAdd the fact that HTTPS sites receive higher browsing times, which is beneficial for SEO, and the winner is clear. Considering Google’s algorithm, your competitor will most likely rank higher than your site, which will lead them to receive higher traffic volumes and other SEO benefits.\n\nSpeed and Performance\n---------------------\n\nAnother benefit of using **HTTPS** compared to **HTTP** is that websites will load relatively faster with it, especially if used with a server that supports **HTTP/2**.\n\nHTTP/2 supports HTTPS encryption and complements its security protocols. Among other functions, HTTP/2 reduces latency by having low resource consumption and maximizing bandwidth efficiency.\n\nThis results in faster site speeds and smoother performance compared to using the standard HTTP protocol.\n\nHTTPS is also a better option when loading websites on mobile devices, especially when using Accelerated Mobile Pages (AMP). AMP is a Google-made web component framework that, among other functions, creates a more streamlined user experience for mobile users by loading the website content much faster.\n\nA secure encrypted connection is required for a website’s AMP version to show up on search engines. Considering that by the end of 2019, 61% of Google search queries came from mobile devices, the performance benefits of using HTTPS outweigh HTTP"
+  },
+  {
+    "slug": "1737946010-10-ways-to-optimize-your-word_press-website-for-speed",
+    "title": "10 Ways to Optimize Your WordPress Website for Speed",
+    "category": "Web panels",
+    "date": "Jan 27, 2025",
+    "sourceTitle": "10 Ways to Optimize Your WordPress Website for Speed",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1737946010-10-ways-to-optimize-your-word_press-website-for-speed",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "Why Having a Fast Website Is Crucial",
+    "relatedSlugs": [],
+    "content": "10 Ways to Optimize Your WordPress Website for Speed\n\n10 Ways to Optimize Your WordPress Website for Speed\n====================================================\n\nLast updated on Jan 27, 2025\n\nWhy Having a Fast Website Is Crucial\n------------------------------------\n\nThe biggest issue with having a slow website is that your users will often lose patience and leave. This negatively affects your bounce rate, which reflects the number of visitors who click away after only seeing one page. Nearly half of users expect sites to load in two seconds or less, and 40% will leave a site if it hasn’t loaded within three seconds. In addition, a delay of just one second can lead to a 7% reduction in conversions\n\nWhat Causes Your Site to Slow Down?\n-----------------------------------\n\nIf your server is slow or experiences frequent downtimes, so will your site. We’ll discuss how hosts and plans affect your site in more detail soon, but it’s worth repeating that picking a quality host is a necessity. We also recommend that you consider robust hosting, which ensures that your site is fast, responsive, and reliable.\n\nHow to Test Your Site’s Current Speed\n-------------------------------------\n\nWe recommend that you give gtmetrix.com a try. This is a free speed-checking tool that can be incredibly useful. It also provides more in-depth metrics and even offers optimization suggestions based on your results.\n\nWhat are 10 Ways to Optimize Your WordPress Website for Speed?\n--------------------------------------------------------------\n\n**Lets find out**\n\n1\n-\n\n**Choose a Quality Hosting Plan**\n\nPicking the right hosting plan is one of the first and most important choices you’ll make for your website. Since your web host is where your site lives, it will do a lot to determine your site’s speed, performance, and how well it can cope with high traffic.\n\n2\n-\n\n**Always Keep Your Plugins, Themes, and WordPress Software Updated**\n\nIt’s essential not to ignore updates when they become available, whether they’re core updates for your WordPress installation or new versions of your WordPress theme or plugins. The most important reason for this is security as new updates will ensure that your site is safe against the latest threats.\n\n3\n-\n\n**Implement Caching to Reduce the Number of Requests Your Site Handles**\n\nCaching may sound pretty technical, but it’s actually easy to implement on a WordPress site. There are several plugins you can use to do this. WP Super Cache is by far the most popular caching plugin; it’s both entirely free and very simple to configure.\n\nLink:\n\n**https://wordpress.org/plugins/wp-super-cache/**\n\n4\n-\n\n**Use Image Optimization to Make Your Media Files Smaller**\n\nImage optimization is a process that compresses the size of an image file without noticeably affecting its quality. This is easy to implement, and you can even automate the process entirely. The first method you can use is to optimize your images before you even upload them to your site. We recommend TinyPNG because it’s free and very easy to use.\n\nLink:\n\n**https://tinypng.com/**\n\n5\n-\n\n**Minify and Compress Your Website’s Files**\n\nfor a WordPress site, the best option is usually a plugin. You have plenty of options at your disposal, but one of our favorites is Fast Velocity Minify. This is a free, open-source, and very user-friendly tool\n\nLink:\n\n**https://wordpress.org/plugins/fast-velocity-minify/**\n\n6\n-\n\n**Use a Content Delivery Network to Deliver Your Site’s Large Files**\n\nWe recommend Stackpath, DDoS Guard and eFlame Anycast DDoS Mitigation & Cache\n\n7\n-\n\n**Only Use High-Quality Themes and Plugins**\n\nEven WordPress themes can affect your site’s speed. Many themes may sell themselves as “optimized” or “fast loading” without being either. Some themes include unneeded functionality or require more files than usual to function, which can also cause your site’s performance to suffer.\n\nChoosing well-coded themes and high-quality plugins comes down to careful research. Make sure to check out user reviews and ratings, look at the developer’s update history, and make sure that each tool is tested to work with your version of WordPress. Adhering to these simple criteria will help ensure that you don’t install anything on your site that might slow it down\n\n8\n-\n\n**Delete Unused Themes and Plugins**\n\nThis a site maintenance task you should perform regularly. Even if a theme or plugin isn’t active on your site, it will still take up space on your server and cause unnecessary strain. Plus, keeping unnecessary content around can get confusing for administrators\n\n9\n-\n\n**Clean Up Your Media Library and Post Revisions (Delete unused files)**\n\nWe recommend that you use the Media Cleaner plugin Link:\n\n**https://wordpress.org/plugins/media-cleaner/**\n\n10\n--\n\n**Optimize Your Databases**\n\nThis task is technical and requires knowledge about databases. but There’s a plugin for almost anything, after all, and this task is no exception. Even if you’re a complete newbie, you can use the WP-DBManager plugin to manage your databases. This plugin will optimize, repair, and delete unused databases for you\n\nLink:\n\n**https://wordpress.org/plugins/wp-dbmanager/**"
+  },
+  {
+    "slug": "1737946490-how-to-install-direct-admin-in-a-linux-server",
+    "title": "How to install Direct admin in a Linux server?",
+    "category": "Web panels",
+    "date": "Jan 27, 2025",
+    "sourceTitle": "How to install Direct admin in a Linux server?",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1737946490-how-to-install-direct-admin-in-a-linux-server",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "Do you want to install direct admin on your Linux server? Well, I am here to demonstrate how you can install direct admin.",
+    "relatedSlugs": [],
+    "content": "How to install Direct admin in a Linux server?\n\nHow to install Direct admin in a Linux server?\n==============================================\n\nLast updated on Jan 27, 2025\n\nDo you want to install direct admin on your Linux server? Well, I am here to demonstrate how you can install direct admin.\n\n**Step1: Do you meet the system requirements? Clean OS installs At least one external IP address.** **Supported OS and versions:** **CloudLinux:**\n\n6.x 64-bit, 7.x 64-bit, 8.x 64-bit\n\n**AlmaLinux / RHEL / CentOS:**\n\n7.x 64-bit, 8.x 64-bit\n\n**Debian:**\n\n8.x 64-bit, 9.x 64-bit, 10.x 64-bit, 11.x 64-bit ALPHA\n\n**Ubuntu:**\n\n16.04 64-bit, 18.04 64-bit, 20.04 64-bit\n\n**FreeBSD:**\n\n11.x 64-bit, 12.x 64-bit\n\n**Step2: Make sure your license information is correct**\n\nSign in to your client account and click the \"view\" link next to your license here: https://www.directadmin.com/clients/\n\nVerify that the server IP address and operating system is correct. Also make sure that the license is Active and Verified (if it isn't, then our billing system hasn't processed your order yet).\n\n**Step3: Begin the installation!**\n\nLog in as root to your server, download the installation script, and run it:\n\nbash <(curl -Ss https://www.directadmin.com/setup.sh || wget -O - https://www.directadmin.com/setup.sh) auto The auto method will be best for most people. It automatically installs everything for you, including the CSF firewall. It can also be called without the'auto' option, which requires input but allows for customization. Important: The hostname should not be the same as the primary domain name. e.g. gary.com is not a good hostname, where server.gary.com is. Having the same host/main domain name will cause e-mail and FTP problems. Also, please make sure the hostname resolves once you set up DNS.\n==============================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================\n\n**Accessing the Control Panel**\n\nDirectAdmin can be accessed at http://server.ip.address:2222. Use the Admin username/password from the output information provided by setup.sh (the same information is specified in the /usr/local/directadmin/scripts/setup.txt file)"
+  },
+  {
+    "slug": "1737946509-install-cpanel-and-whm-in-linux-you-need-a-license",
+    "title": "Install Cpanel and WHM in Linux (You need a license)",
+    "category": "Web panels",
+    "date": "Jan 27, 2025",
+    "sourceTitle": "Install Cpanel and WHM in Linux (You need a license)",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1737946509-install-cpanel-and-whm-in-linux-you-need-a-license",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "In this tutorial, we will be installing a Cpanel and WHM in a Linux server and I will try to make the tutorial as easy as possible, You will have to buy the Cpanel license from their website.",
+    "relatedSlugs": [],
+    "content": "Install Cpanel and WHM in Linux (You need a license)\n\nInstall Cpanel and WHM in Linux (You need a license)\n====================================================\n\nLast updated on Jan 27, 2025\n\nIn this tutorial, we will be installing a Cpanel and WHM in a Linux server and I will try to make the tutorial as easy as possible, You will have to buy the Cpanel license from their website.\n\n**Important Note:**\n\ncPanel, L.L.C. designs software for commercial hosting. Therefore, we only license publicly visible, static IP addresses. We do not license dynamic, reserved, sticky, or internal IP addresses. We do not provide an uninstaller. If you wish to remove our software, you must reformat the server. Only install cPanel & WHM on a freshly installed operating system. You must log in to the server as the root user in order to install cPanel & WHM. If you do not possess root-level access, contact your system administrator or hosting provider for assistance. We recommend that you use the cPanel & WHM installer, which installs all of the services that it requires. If you install services before you install cPanel & WHM, you will encounter compatibility issues. New installations of cPanel & WHM default to the fast installation mode. To disable the fast installation mode, use the steps in our Customize Your Installation documentation. Installation Guide - System Requirements\n\n**Before you install cPanel & WHM or cPanel DNSOnly®, make certain that your system meets all of our minimum requirements for new installations. Minimum requirements differ depending on what operating system your server uses:** **System Requirements for AlmaLinux:**\n\nhttps://docs.cpanel.net/installation-guide/system-requirements-almalinux\n\n**System Requirements for CentOS:**\n\nhttps://docs.cpanel.net/installation-guide/system-requirements-centos\n\n**System Requirements for CloudLinux™:**\n\nhttps://docs.cpanel.net/installation-guide/system-requirements-cloudlinux\n\n**Installation Guide - Installation**\n\nTo install cPanel & WHM on your server, run the following command: cd /home && curl -o latest -L https://securedownloads.cpanel.net/latest && sh latest"
+  },
+  {
+    "slug": "1737946534-install-cyber-panel-with-open_lite_speed-in-linux",
+    "title": "Install Cyber Panel With OpenLiteSpeed in Linux",
+    "category": "Web panels",
+    "date": "Jan 27, 2025",
+    "sourceTitle": "Install Cyber Panel With OpenLiteSpeed in Linux",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1737946534-install-cyber-panel-with-open_lite_speed-in-linux",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "In this tutorial, we will be installing a cyber panel in a Linux server and I will try to make the tutorial as easy as possible, we are going to use the free plan which offers: Unlimited Domains Unlimited Subdomains U…",
+    "relatedSlugs": [],
+    "content": "Install Cyber Panel With OpenLiteSpeed in Linux\n\nInstall Cyber Panel With OpenLiteSpeed in Linux\n===============================================\n\nLast updated on Jan 27, 2025\n\nIn this tutorial, we will be installing a cyber panel in a Linux server and I will try to make the tutorial as easy as possible, we are going to use the free plan which offers: Unlimited Domains Unlimited Subdomains Unlimited Databases Multiple PHP Lets Encrypt SSL LSCache for WordPress Community Support OpenLiteSpeed Server Make sure you have Python installed cmd-\n\n**Step 1: Update and Refresh Repository Lists**\n\nOpen a terminal window, and enter the following: sudo apt update\n\n**Step 2: Install Supporting Software**\n\nThe software-properties-common package gives you better control over your package manager by letting you add PPA (Personal Package Archive) repositories. Install the supporting software with the command: sudo apt install software-properties-common\n\n**Step 3: Add Deadsnakes PPA**\n\nDeadsnakes is a PPA with newer releases than the default Ubuntu repositories. Add the PPA by entering the following: sudo add-apt-repository ppa:deadsnakes/ppa\n\n**The system will prompt you to press enter to continue. Do so, and allow it to finish. Refresh the package lists again:**\n\nsudo apt update\n\n**Step 4: Install Python 3**\n\nNow you can start the installation of Python 3.8 with the command: sudo apt install python3.8\n\n**Allow the process to complete and verify the Python version was installed successfully:**\n\npython ––version\n\nWe are ready to install the cyber Panel now. You Just need to enter a single command and then follow the procedure step by step Command- sh <(curl https://cyberpanel.net/install.sh || wget -O - https://cyberpanel.net/install.sh) (If you don’t know to troubleshoot SQL errors) Install it without remote SQL to avoid getting technical errors in future.\n\n**Access**\n\nAfter the successful installation, you can access CyberPanel using the details below (Until you have specified login credentials on installation) (make sure to change): Visit: https::8090 Username: admin Password: 1234567\n\n**503 Error After Install**\n\nIf you get a 503 error after installing CyberPanel, you can do one of the following things. 1. Check LSCPD Status: systemctl status lscpd If LSCPD is not running, start LSCPD using: systemctl start lscpd 2. Manually set up virtualevn with the following commands: #1 source /usr/local/CyberCP/bin/activate #2 pip install --ignore-installed -r /usr/local/CyberCP/requirments.txt #3 Deactivate #4 virtualenv --system-site-packages /usr/local/CyberCP #5 systemctl restart lscpd 3. Install Logs If after this you are still having issues, you can try to find errors in the install logs, they are located at: /var/log/installLogs.txt"
+  },
+  {
+    "slug": "1737948398-frequently-asked-questions-fa_qs",
+    "title": "Frequently Asked Questions (FAQs)",
+    "category": "Account and billing",
+    "date": "Jan 27, 2025",
+    "sourceTitle": "Frequently Asked Questions (FAQs)",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1737948398-frequently-asked-questions-fa_qs",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "1. What services does StealthRDP offer?",
+    "relatedSlugs": [],
+    "content": "Frequently Asked Questions (FAQs)\n\nFrequently Asked Questions (FAQs)\n=================================\n\nLast updated on Jan 27, 2025\n\n1.  What services does StealthRDP offer?\n\nStealthRDP specializes in providing robust Remote Desktop Protocols (RDPs), Virtual Private Servers (VPS), and web hosting solutions tailored to meet a variety of cloud-based needs.\n\n2.  How do I sign up for StealthRDP services?\n\nYou can sign up through our website, StealthRDP.com. Simply choose your desired service, complete the payment process, and follow the instructions to set up your account.\n\n3.  What payment methods are accepted by StealthRDP?\n\nWe currently accept Cards and cryptocurrency as a form of payment. Keep an eye on our website for any updates regarding additional payment methods.\n\n4.  Is there a trial period for your services?\n\nStealthRDP does not offer a trial period. However, we ensure the high quality and reliability of our services from the onset.\n\n5.  Can I upgrade or downgrade my service plan?\n\nYes, service plan modifications can be made. Please contact our support team for assistance with upgrading or downgrading your plan.\n\n6.  What should I do if I experience technical issues?\n\nPlease contact our support team immediately, We are available around the clock until 5:30 PM MST. Rest assured that we strive to respond to your ticket within a quick timeframe of 10-30 minutes from the moment it is raised.\n\n7.  How is my data protected with StealthRDP?\n\nWe prioritize data security. Our services include robust security measures to protect your data, though we also recommend that customers regularly back up their data.\n\n8.  Can I cancel my service at any time?\n\nYes, you can cancel your service at any time. Please refer to our Termination of Service policy for details regarding cancellations.\n\n9.  What happens if I violate the Terms of Service?\n\nViolating the Terms of Service can result in suspension or termination of your services. We enforce our policies to ensure fair and legal use of our services.\n\n10.  How can I get a refund?\n\nOur services are generally non-refundable, except in specific cases of service downtime due to internal issues. Refund requests under these circumstances are subject to review and approval.\n\n11.  How and when will I receive my service credentials?\n\nYour service credentials are delivered via email within 5-10 minutes, depending on the OS installation process. Ensure that you check your email, including the spam folder, for these details."
+  },
+  {
+    "slug": "1740916941-how-to-rebuild-a-server",
+    "title": "How to Rebuild a Server",
+    "category": "Server management",
+    "date": "Mar 13, 2025",
+    "sourceTitle": "How to Rebuild a Server",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1740916941-how-to-rebuild-a-server",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "Follow these steps to rebuild your StealthRDP server efficiently:",
+    "relatedSlugs": [],
+    "content": "How to Rebuild a Server\n\nHow to Rebuild a Server\n=======================\n\nLast updated on Mar 13, 2025\n\nFollow these steps to **rebuild your StealthRDP server** efficiently:\n\n1.  **Access your Client Area** _(Skip this step if you're already in the Control Panel)._\n    \n2.  **Open your Server's Dashboard.**\n    \n3.  **Click on \"Rebuild\".**\n    \n4.  **Set a Name** _(You can enter your preferred name or generate a random one)._\n    \n5.  **Fill in Hostname / Timezone** _(Optional)._\n    \n6.  **Select Any Listed OS of Your Preference.**\n    \n\n### **OS Selection & Connection**\n\n*   If you **select Windows OS**, it will be installed as **RDP**, and you can connect via **Remote Desktop Client**.\n    \n*   For **all other OS options** except Windows, connect using an **SSH client**.\n    \n\n### **Installation Process & Wait Time**\n\n*   Wait **3-5 minutes** for the installation to complete.\n    \n*   **Do not restart or rebuild** until the process finishes.\n    \n*   Once done, you will receive an email notification:\n    \n    *   **\"Your Windows Server is Nearly Ready!\"** _(For Windows OS)_\n        \n    *   **\"Your Server is Nearly Ready!\"** _(For other Linux-based distros)_"
+  },
+  {
+    "slug": "1740917234-how-to-reset-server-change-or-reset-client-area-password",
+    "title": "How to Reset Server / Change or Reset Client Area Password",
+    "category": "Server management",
+    "date": "Mar 13, 2025",
+    "sourceTitle": "How to Reset Server / Change or Reset Client Area Password",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1740917234-how-to-reset-server-change-or-reset-client-area-password",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "Reset Server Password",
+    "relatedSlugs": [],
+    "content": "How to Reset Server / Change or Reset Client Area Password\n\nHow to Reset Server / Change or Reset Client Area Password\n==========================================================\n\nLast updated on Mar 13, 2025\n\n### **Reset Server Password**\n\nFollow these steps to reset your **server password**:\n\n1.  **Access your Client Area** _(Skip this step if you're already in the Control Panel)._\n    \n2.  **Open your Server's Dashboard.**\n    \n3.  **Select your Server** and click **Manage.**\n    \n4.  **Navigate to the Options Menu** and scroll down to find the **Root/Administrator Password** section.\n    \n5.  **Click on \"Reset Password\".**\n    \n\n#### **OS-Specific Instructions:**\n\n*   **For Linux & Ubuntu-based distros:** Select **Root User.**\n    \n*   **For Windows-based OS:** Select **Administrator.**\n    \n\n🔹 **After resetting**, you will receive the **new password via email.**\n\n* * *\n\n### **Change / Reset Client Area Password**\n\n#### **To Change Your Password:**\n\n1.  Visit [**Change Password Page**](https://stealthrdp.com/dash/index.php/user/password)\n    \n2.  Enter your **existing password** and **new password**\n    \n3.  Click **Save Changes** to update your credentials.\n    \n\n#### **To Reset Your Password:**\n\n1.  **Log out** of your **Client Area.**\n    \n2.  Visit [**Password Reset Page**](https://stealthrdp.com/dash/index.php?rp=/password/reset)\n    \n3.  Enter your **email address**\n    \n4.  Click **Submit**, and a **password reset link** will be sent to your email.\n    \n\n📩 **Check your email and follow the instructions to reset your password.**"
+  },
+  {
+    "slug": "1742181117-step_by_step-guide-to-fix-win_rm-and-install-net-framework",
+    "title": "Step-by-Step Guide to Fix WinRM and Install .NET Framework",
+    "category": "Server management",
+    "date": "Mar 17, 2025",
+    "sourceTitle": "Step-by-Step Guide to Fix WinRM and Install .NET Framework",
+    "sourceUrl": "https://docs.stealthrdp.com/hc/stealth-rdp-docs/articles/1742181117-step_by_step-guide-to-fix-win_rm-and-install-net-framework",
+    "migration": {
+      "source": "Verified StealthRDP documentation snapshot",
+      "date": "2026-08-13",
+      "redactions": [
+        "example endpoint placeholder redacted"
+      ]
+    },
+    "summary": "Follow these steps to configure WinRM and resolve the .NET Framework installation issue:",
+    "relatedSlugs": [],
+    "content": "Step-by-Step Guide to Fix WinRM and Install .NET Framework\n\nStep-by-Step Guide to Fix WinRM and Install .NET Framework\n==========================================================\n\nLast updated on Mar 17, 2025\n\n### **Step-by-Step Guide to Fix WinRM and Install .NET Framework**\n\nFollow these steps to configure WinRM and resolve the .NET Framework installation issue:\n\n#### **Step 1: Open Command Prompt as Administrator**\n\n1.  Press `Windows + X` and select **Command Prompt (Admin)** or **Windows PowerShell (Admin)** from the menu.\n    \n2.  If prompted by User Account Control (UAC), click **Yes** to proceed.\n    \n\n#### **Step 2: Check the Current WinRM Configuration**\n\n1.  In the Command Prompt window, type the following command and press **Enter**:\n    \n    Copy\n    \n        winrm get winrm/config\n        \n    \n2.  This command will display the current configuration of WinRM. Look for any errors or misconfigurations in the output.\n    \n\n#### **Step 3: Configure WinRM (Recommended)**\n\nIf the output indicates that WinRM isn’t configured properly, you can quickly configure it by running the following command:\n\nCopy\n\n    winrm quickconfig\n    \n\n*   This command will set up WinRM with default settings, including enabling the WinRM service and creating a firewall exception.\n    \n*   Follow the on-screen prompts to complete the configuration.\n    \n\n#### **Step 4: Verify WinRM is Running**\n\n1.  After configuring WinRM, verify that it’s running by executing the following command:\n    \n    Copy\n    \n        winrm enumerate winrm/config/listener\n        \n    \n2.  This command should return details about the WinRM listener. If it doesn’t, there may still be an issue with the configuration.\n    \n\n#### **Step 5: Retry the .NET Framework Installation**\n\n1.  Once WinRM is configured correctly, retry installing the .NET Framework.\n    \n2.  The installation should now proceed without any issues related to WinRM.\n    \n\n* * *\n\nRegards - [StealthRDP](https://stealthrdp.com/)\n Team 💙"
+  }
+]

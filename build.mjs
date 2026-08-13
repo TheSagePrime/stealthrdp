@@ -26,10 +26,15 @@ const FAQS = DATA("faqs.json");
 const TESTIMONIALS = DATA("testimonials.json");
 const UPTIME = DATA("uptime.json");
 const BLOG = require(path.join(ROOT, "js", "blog-data.js")).SRDP_BLOG;
+const DOCS = DATA("docs-articles.json");
 
 const MONITORS = (UPTIME && UPTIME.monitors) || [];
-const UP = MONITORS.filter((m) => m.status === 2).length;
+const isUp = (monitor) => monitor && (monitor.status === 2 || monitor.status === "2" || monitor.status === "up");
+const UP = MONITORS.filter(isUp).length;
 const TOTAL = MONITORS.length;
+const ALL_UP = TOTAL > 0 && UP === TOTAL;
+const DOC_BY_SLUG = new Map(DOCS.map((article) => [article.slug, article]));
+const TERMS_URL = `/docs/${(DOCS.find((article) => article.slug === "1737944013-use-of-service") || DOCS.find((article) => /terms|service/i.test(article.category)) || DOCS[0]).slug}.html`;
 
 /* ---------- helpers ---------- */
 const esc = (s) =>
@@ -106,14 +111,14 @@ const LOGO_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
 function tickerHtml() {
   return `<div class="ticker"><div class="ticker-inner">
     <span class="left"><span class="dot" id="tickerDot"></span><span id="tickerStatus">Checking live status…</span></span>
-    <span class="right"><span>Use code <span class="code">POWER30</span></span><span class="countdown" id="countdown" aria-label="Offer countdown">--d --:--:--</span></span>
+    <span class="right"><span class="promotion-note">Pricing and availability shown at checkout</span></span>
   </div></div>`;
 }
 
 function navHtml(active) {
   const items = [
     ["home", "/", "Home"], ["plans", "/plans.html", "Plans"], ["features", "/features.html", "Features"],
-    ["status", "/status.html", "Server Status"], ["blog", "/blog.html", "Blog"], ["faq", "/faq.html", "FAQ"],
+    ["status", "/status.html", "Server Status"], ["docs", "/docs.html", "Docs"], ["blog", "/blog.html", "Blog"], ["faq", "/faq.html", "FAQ"],
   ];
   return items.map(([k, href, label]) => `<a href="${href}"${k === active ? ' class="active"' : ""}>${label}</a>`).join("");
 }
@@ -159,7 +164,7 @@ function footerHtml() {
         <li><a href="/plans.html">Pricing</a></li>
       </ul></div>
       <div class="footer-col"><h4>Resources</h4><ul>
-        <li><a href="https://docs.stealthrdp.com/hc/stealth-rdp-docs/en" target="_blank" rel="noopener noreferrer">Documentation</a></li>
+        <li><a href="/docs.html">Documentation</a></li>
         <li><a href="/blog.html">Tutorials</a></li>
         <li><a href="/faq.html">FAQ</a></li>
         <li><a href="/blog.html">Blog</a></li>
@@ -169,14 +174,14 @@ function footerHtml() {
         <li><a href="/about.html">About Us</a></li>
         <li><a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact Support</a></li>
         <li><a href="/privacy.html">Privacy Policy</a></li>
-        <li><a href="https://docs.stealthrdp.com/hc/stealth-rdp-docs/en/categories/terms-and-conditions" target="_blank" rel="noopener noreferrer">Terms of Service</a></li>
+        <li><a href="${TERMS_URL}">Terms of Service</a></li>
       </ul></div>
     </div>
     <div class="footer-bottom">
       <span>© 2026 StealthRDP. All rights reserved.</span>
       <span class="links">
         <a href="/privacy.html">Privacy</a>
-        <a href="https://docs.stealthrdp.com/hc/stealth-rdp-docs/en/categories/terms-and-conditions" target="_blank" rel="noopener noreferrer">Terms</a>
+        <a href="${TERMS_URL}">Terms</a>
         <a href="/status.html">Status</a>
       </span>
     </div>
@@ -240,11 +245,13 @@ function featureCardHtml(f) {
 
 function nodeCardHtml(m) {
   const ratios = m.custom_uptime_ranges ? m.custom_uptime_ranges.split("-") : [];
-  const last = ratios.length ? parseFloat(ratios[ratios.length - 1]) : null;
-  const upNow = m.status === 2;
+  const last = Number.isFinite(Number(m.uptimeRatio)) ? Number(m.uptimeRatio) : (ratios.length ? parseFloat(ratios[ratios.length - 1]) : null);
+  const upNow = isUp(m);
+  const label = m.label || m.friendly_name || "Production node";
+  const region = m.region || "Protected infrastructure";
   return `<div class="node-card">
     <div class="n-left"><span class="n-dot ${upNow ? "up" : "down"}"></span>
-      <div><div class="n-name">${esc(m.friendly_name)}</div><div class="n-target">${esc(m.url || "")}${m.port ? ":" + m.port : ""}</div></div>
+      <div><div class="n-name">${esc(label)}</div><div class="n-target">${esc(region)}</div></div>
     </div>
     <div class="n-right"><div class="n-uptime"><div class="u-val ${upNow ? "good" : ""}">${last != null ? last.toFixed(2) : "—"}%</div><div class="u-lbl">90-day uptime</div></div></div>
   </div>`;
@@ -268,6 +275,301 @@ function blogCardHtml(p) {
     <div class="bc-meta"><span>${esc(p.author)}</span><span>${esc(p.date)}</span></div>
     <a class="bc-link" href="/blog/${esc(p.slug)}.html">Read article →</a>
   </div></article>`;
+}
+
+/* ---------- native documentation ---------- */
+const DOC_SUPPORT_URL = "https://dash.stealthrdp.com/submitticket.php";
+
+function redactPublic(value) {
+  return String(value == null ? "" : value)
+    .replace(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g, "[redacted address]")
+    .replace(/docs\.stealthrdp\.com/gi, "the documentation source")
+    .replace(/Chatwoot/gi, "the support platform");
+}
+
+function slugifyHeading(value) {
+  const slug = redactPublic(value).toLowerCase().replace(/<[^>]+>/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return slug || "section";
+}
+
+function safeDocHref(rawHref) {
+  const original = String(rawHref || "").trim().replace(/[.,;:!?]+$/, "");
+  if (!original) return "";
+  const hashIndex = original.indexOf("#");
+  const base = hashIndex >= 0 ? original.slice(0, hashIndex) : original;
+  const hash = hashIndex >= 0 ? original.slice(hashIndex) : "";
+  for (const article of DOCS) {
+    if (base === article.sourceUrl || base.startsWith(article.sourceUrl + "?")) {
+      return `/docs/${article.slug}.html${hash}`;
+    }
+  }
+  if (/^https?:\/\/docs\.stealthrdp\.com/i.test(base)) return "/docs.html";
+  if (/^(?:javascript|data):/i.test(original)) return "";
+  if (/^https?:\/\//i.test(original) || original.startsWith("/")) return redactPublic(original);
+  if (original.startsWith("#")) return original;
+  return "";
+}
+
+function inlineDocHtml(value) {
+  let source = String(value == null ? "" : value);
+  const tokens = [];
+  const token = (html) => {
+    const key = `\u0000DOC${tokens.length}\u0000`;
+    tokens.push(html);
+    return key;
+  };
+  source = source.replace(/`([^`]+)`/g, (_, code) => token(`<code>${esc(redactPublic(code))}</code>`));
+  source = source.replace(/\[([^\]]+)\]\(([^)\s]+)(?:\s+["'][^)]*["'])?\)/g, (_, label, href) => {
+    const safeHref = safeDocHref(href);
+    return safeHref
+      ? token(`<a href="${esc(safeHref)}">${inlineDocHtml(label)}</a>`)
+      : inlineDocHtml(label);
+  });
+  let output = esc(source)
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/__([^_]+)__/g, "<strong>$1</strong>")
+    .replace(/\*([^*]+)\*/g, "<em>$1</em>")
+    .replace(/_([^_]+)_/g, "<em>$1</em>");
+  output = output.replace(/https?:\/\/[^\s<]+/g, (href) => {
+    const trailing = href.match(/[)\],.!?]+$/);
+    const suffix = trailing ? trailing[0] : "";
+    const clean = trailing ? href.slice(0, -suffix.length) : href;
+    const safeHref = safeDocHref(clean);
+    return safeHref ? `<a href="${esc(safeHref)}">${esc(redactPublic(clean))}</a>${esc(suffix)}` : esc(redactPublic(clean)) + esc(suffix);
+  });
+  return redactPublic(output).replace(/\u0000DOC(\d+)\u0000/g, (_, index) => tokens[Number(index)] || "");
+}
+
+function docCodeBlock(lines, counter) {
+  const id = `docs-code-${counter.value++}`;
+  const code = redactPublic(lines.join("\n"));
+  return `<div class="docs-code-wrap"><div class="docs-code-tools"><span class="mono">Command</span><button class="docs-copy" type="button" data-copy-target="${id}">Copy</button></div><pre class="docs-code" id="${id}"><code>${esc(code)}</code></pre></div>`;
+}
+
+function looksLikeDocCode(line) {
+  const value = String(line || "").trim();
+  return /^(?:\$\s+|sudo\s|apt(?:-get)?\s|yum\s|dnf\s|systemctl\s|service\s|mkdir\s|mknod\s|chmod\s|wget\s|curl\s|bash\s|sh\s|winrm\s|slmgr\s|docker\s|python\s|Rewrite(?:Engine|Cond|Rule)\b|apt-get\s)/i.test(value);
+}
+
+function articleBodyLines(article) {
+  const lines = String(article.content || "").replace(/\r/g, "").split("\n");
+  const updatedIndex = lines.findIndex((line) => /^\s*Last updated on\b/i.test(line));
+  return updatedIndex >= 0 ? lines.slice(updatedIndex + 1) : lines;
+}
+
+function renderDocMarkdown(article) {
+  const lines = articleBodyLines(article);
+  const html = [];
+  const headings = [];
+  const counter = { value: 1 };
+  let paragraph = [];
+  let list = null;
+  let code = [];
+  let fence = null;
+
+  const flushParagraph = () => {
+    if (!paragraph.length) return;
+    const text = paragraph.join(" ").trim();
+    if (text) html.push(`<p>${inlineDocHtml(text)}</p>`);
+    paragraph = [];
+  };
+  const flushList = () => {
+    if (!list) return;
+    const tag = list.ordered ? "ol" : "ul";
+    html.push(`<${tag}>${list.items.map((item) => `<li>${inlineDocHtml(item)}</li>`).join("")}</${tag}>`);
+    list = null;
+  };
+  const flushCode = () => {
+    if (!code.length) return;
+    html.push(docCodeBlock(code, counter));
+    code = [];
+  };
+  const addHeading = (rawText, level) => {
+    flushParagraph();
+    flushList();
+    flushCode();
+    const safeLevel = Math.max(2, Math.min(6, Number(level) || 2));
+    const clean = rawText.replace(/\[#\]\([^)]*\)/g, "").replace(/^\*\*(.*)\*\*$/, "$1").trim();
+    const idBase = slugifyHeading(clean);
+    let id = idBase;
+    let suffix = 2;
+    while (headings.some((heading) => heading.id === id)) id = `${idBase}-${suffix++}`;
+    headings.push({ id, text: clean, level: safeLevel });
+    html.push(`<h${safeLevel} id="${id}">${inlineDocHtml(clean)}</h${safeLevel}>`);
+  };
+  const addRule = () => {
+    flushParagraph();
+    flushList();
+    flushCode();
+    html.push("<hr />");
+  };
+
+  for (let i = 0; i < lines.length; i += 1) {
+    const raw = lines[i];
+    const trimmed = raw.trim();
+    const next = lines[i + 1] ? lines[i + 1].trim() : "";
+
+    if (fence) {
+      const closing = new RegExp(`^\\s{0,3}${fence.char}{${fence.length},}\\s*$`);
+      if (closing.test(raw)) {
+        flushCode();
+        fence = null;
+      } else {
+        code.push(raw.replace(/^\s{0,3}/, ""));
+      }
+      continue;
+    }
+
+    const fenceStart = raw.match(/^\s{0,3}(`{3,}|~{3,})(?:\s*.*)?$/);
+    if (fenceStart) {
+      flushParagraph();
+      flushList();
+      flushCode();
+      fence = { char: fenceStart[1][0], length: fenceStart[1].length };
+      continue;
+    }
+    if (!trimmed) {
+      flushParagraph();
+      if (!(list && /^\d+[.)]\s+/.test(next) || /^(?:[-*+]\s+|[–~]\s*)/.test(next))) flushList();
+      flushCode();
+      continue;
+    }
+
+    const atx = trimmed.match(/^(#{1,6})\s+(.+?)\s*#*$/);
+    if (atx) {
+      // The article title is rendered by the page shell as the only H1.
+      addHeading(atx[2], Math.max(2, Math.min(6, atx[1].length)));
+      continue;
+    }
+    if (/^(?:=+|-+)\s*$/.test(next) && trimmed.length > 1) {
+      addHeading(trimmed, next[0] === "=" ? 2 : 3);
+      i += 1;
+      continue;
+    }
+    if (/^(?:(?:\*\s*){3,}|(?:-\s*){3,}|(?:_\s*){3,})$/.test(trimmed)) {
+      addRule();
+      continue;
+    }
+
+    if (/^\s{4}/.test(raw)) {
+      flushParagraph();
+      flushList();
+      code.push(raw.replace(/^\s{4}/, ""));
+      continue;
+    }
+
+    const ordered = trimmed.match(/^\d+[.)]\s+(.*)$/);
+    const unordered = trimmed.match(/^(?:[-*+]\s+|[–~]\s*)(.*)$/);
+    if (ordered || unordered) {
+      flushParagraph();
+      flushCode();
+      const isOrdered = Boolean(ordered);
+      if (!list || list.ordered !== isOrdered) {
+        flushList();
+        list = { ordered: isOrdered, items: [] };
+      }
+      list.items.push((ordered || unordered)[1]);
+      continue;
+    }
+    if (list && /^\s{2,}\S/.test(raw)) {
+      list.items[list.items.length - 1] += ` ${trimmed}`;
+      continue;
+    }
+    if (looksLikeDocCode(trimmed) && !paragraph.length) {
+      flushList();
+      code.push(trimmed);
+      continue;
+    }
+    if (code.length) flushCode();
+    if (list) flushList();
+    paragraph.push(trimmed);
+  }
+  flushParagraph();
+  flushList();
+  flushCode();
+  return { html: html.join("\n"), headings };
+}
+
+function docDateIso(dateText) {
+  const timestamp = Date.parse(dateText || "");
+  return Number.isFinite(timestamp) ? new Date(timestamp).toISOString().slice(0, 10) : "";
+}
+
+function docsWarning(article) {
+  if (!/(fresh(?:ly)? installed|reinstall|reformat|no uninstaller|rebuild|terminate|deleted|without backups)/i.test(article.content || "")) return "";
+  return `<aside class="docs-warning"><strong>Read before acting.</strong> The verified source content mentions a fresh operating system or an irreversible server change. Confirm prerequisites and backups before continuing.</aside>`;
+}
+
+function docCardHtml(article) {
+  return `<article class="docs-card" data-doc-title="${esc(article.title)}" data-doc-summary="${esc(article.summary)}" data-doc-category="${esc(article.category)}">
+    <div class="docs-card-meta"><span class="docs-category">${esc(article.category)}</span><time>${esc(article.date)}</time></div>
+    <h2><a href="/docs/${esc(article.slug)}.html">${esc(article.title)}</a></h2>
+    <p>${esc(article.summary)}</p>
+    <a class="docs-card-link" href="/docs/${esc(article.slug)}.html">Read guide <span aria-hidden="true">→</span></a>
+  </article>`;
+}
+
+function docsArticleLd(article) {
+  const iso = docDateIso(article.date);
+  const value = {
+    "@type": "TechArticle",
+    headline: article.title,
+    description: article.summary,
+    author: { "@type": "Organization", name: "StealthRDP" },
+    publisher: { "@type": "Organization", name: "StealthRDP", url: "__SRDP_BASE__/" },
+    mainEntityOfPage: `__SRDP_BASE__/docs/${article.slug}.html`,
+    url: `__SRDP_BASE__/docs/${article.slug}.html`,
+    articleSection: article.category,
+  };
+  if (iso) value.dateModified = iso;
+  return value;
+}
+
+function docsIndexDescription() {
+  return "Read verified StealthRDP guides for Windows, Linux, networking, panels, server management, and account questions. Search the native documentation index.";
+}
+
+function buildDocsIndex() {
+  const categories = [...new Set(DOCS.map((article) => article.category))].sort((a, b) => a.localeCompare(b));
+  const options = categories.map((category) => `<option value="${esc(category)}">${esc(category)}</option>`).join("");
+  const cards = DOCS.map(docCardHtml).join("");
+  const body = `<main class="docs-index docs-surface">
+    <section class="docs-index-hero"><div class="container">
+      <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>Docs</span></nav>
+      <span class="eyebrow">Read / Explore</span><h1>StealthRDP Documentation</h1>
+      <p>Task-focused guides from the verified StealthRDP documentation snapshot. Search first, then follow the prerequisites and commands that fit your server.</p>
+    </div></section>
+    <section class="section docs-index-section"><div class="container docs-index-layout">
+      <aside class="docs-index-intro"><span class="sec-index">Knowledge base</span><h2>Find the next safe step</h2><p>Browse by task or search exact terms. The articles below are preserved source material, not new product claims.</p><a class="btn btn-ghost btn-sm" href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">Ask support</a></aside>
+      <div class="docs-results"><div class="docs-controls"><label class="docs-search-label" for="docsSearch">Search guides</label><input id="docsSearch" type="search" placeholder="Try: rebuild, VPN, PowerShell…" autocomplete="off" /><label class="docs-category-label" for="docsCategory">Category</label><select id="docsCategory"><option value="all">All categories</option>${options}</select></div><div class="docs-results-bar"><span id="docsResultsCount">${DOCS.length} guides</span><span>Verified source snapshot · ${DOCS.length} articles</span></div><div class="docs-card-grid" id="docsResults" data-docs-index>${cards}</div><p class="docs-empty" id="docsEmpty" hidden>No guides match that search. Try a broader term or another category.</p></div>
+    </div></section>
+  </main>`;
+  const jsonLd = [{ "@context": "https://schema.org", "@graph": [breadcrumbLd("Docs", [{ name: "Home", url: "__SRDP_BASE__/" }, { name: "Docs", url: "__SRDP_BASE__/docs.html" }]), { "@type": "ItemList", name: "StealthRDP Documentation", itemListElement: DOCS.map((article, index) => ({ "@type": "ListItem", position: index + 1, item: { "@type": "TechArticle", headline: article.title, url: `__SRDP_BASE__/docs/${article.slug}.html` } })) }] }];
+  return page({ active: "docs", title: "Documentation — StealthRDP", description: docsIndexDescription(), canonical: "__SRDP_BASE__/docs.html", jsonLd, body, extraScripts: ["/js/docs.js"] });
+}
+
+function buildDocArticle(article, index) {
+  const rendered = renderDocMarkdown(article);
+  const contents = rendered.headings.length ? `<aside class="docs-toc" aria-label="On this page"><span class="docs-toc-title">On this page</span><ol>${rendered.headings.map((heading) => `<li class="toc-level-${heading.level}"><a href="#${esc(heading.id)}">${esc(heading.text)}</a></li>`).join("")}</ol></aside>` : "";
+  const related = article.relatedSlugs.map((slug) => DOC_BY_SLUG.get(slug)).filter(Boolean);
+  const next = DOCS[index + 1] && DOCS[index + 1].slug !== article.slug ? DOCS[index + 1] : null;
+  const links = [...related, ...(next && !related.some((item) => item.slug === next.slug) ? [next] : [])].slice(0, 3);
+  const relatedHtml = links.length ? `<nav class="docs-related" aria-label="Related guides"><div class="docs-related-head"><span class="sec-index">Continue exploring</span><h2>Related guides</h2></div><div class="docs-related-grid">${links.map((item) => `<a class="docs-related-link" href="/docs/${esc(item.slug)}.html"><span class="docs-category">${esc(item.category)}</span><strong>${esc(item.title)}</strong><span>Read guide →</span></a>`).join("")}</div></nav>` : "";
+  const dateIso = docDateIso(article.date);
+  const time = dateIso ? `<span>Source date: <time datetime="${dateIso}">${esc(article.date)}</time></span>` : `<span>Source date: ${esc(article.date)}</span>`;
+  const migration = article.migration || {};
+  const sourceLabel = migration.source || "Verified StealthRDP documentation snapshot";
+  const migrationDate = migration.date ? `Migrated ${migration.date}` : "Migration date not provided";
+  const redactionLabel = Array.isArray(migration.redactions) && migration.redactions.length ? "Public examples redacted" : "No public redactions recorded";
+  const sourceMeta = `<span>Source: ${esc(sourceLabel)}</span>${time}<span>${esc(migrationDate)}</span><span>${redactionLabel}</span>`;
+  const body = `<main class="docs-article-page docs-surface" data-docs-category="${esc(article.category)}" data-doc-slug="${esc(article.slug)}"><div class="container docs-article-layout"><div class="docs-article-column">
+    <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/docs.html">Docs</a><span aria-hidden="true">/</span><span>${esc(article.category)}</span></nav>
+    <article class="docs-article"><header class="docs-article-header"><span class="docs-category">${esc(article.category)}</span><h1>${esc(article.title)}</h1><p class="docs-summary">${esc(article.summary)}</p><div class="docs-source-meta">${sourceMeta}</div></header>${docsWarning(article)}<div class="docs-content">${rendered.html}</div><div class="docs-support"><div><span class="sec-index">Need a hand?</span><h2>Support is still on WHMCS</h2><p>For account or server-specific help, use the StealthRDP support portal.</p></div><a class="btn btn-primary" href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">Contact support</a></div>${relatedHtml}</article>
+  </div>${contents}</div></main>`;
+  const fullTitle = `${article.title} — StealthRDP Docs`;
+  const useTitle = fullTitle.length <= 70 ? fullTitle : `${article.title.slice(0, Math.max(30, 70 - " — StealthRDP".length - 1)).trim()}… — StealthRDP`;
+  const jsonLd = [{ "@context": "https://schema.org", "@graph": [breadcrumbLd(article.title, [{ name: "Home", url: "__SRDP_BASE__/" }, { name: "Docs", url: "__SRDP_BASE__/docs.html" }, { name: article.category, url: `__SRDP_BASE__/docs.html?category=${encodeURIComponent(article.category)}` }, { name: article.title, url: `__SRDP_BASE__/docs/${article.slug}.html` }]), docsArticleLd(article)] }];
+  return page({ active: "docs", title: useTitle, description: (article.summary.length < 70 ? `${article.summary} Read the verified guide and contact StealthRDP support when you need account-specific help.` : article.summary).slice(0, 165), canonical: `__SRDP_BASE__/docs/${article.slug}.html`, pageType: "article", jsonLd, body, extraScripts: ["/js/docs.js"] });
 }
 
 /* ---------- JSON-LD ---------- */
@@ -335,8 +637,8 @@ function articleLd(post) {
 }
 
 /* ---------- page builders ---------- */
-function page({ active, title, description, canonical, jsonLd = [], body, extraScripts = [] }) {
-  return `${head({ title, description, canonical, jsonLd })}
+function page({ active, title, description, canonical, pageType = "website", jsonLd = [], body, extraScripts = [] }) {
+  return `${head({ title, description, canonical, pageType, jsonLd })}
 <body data-page="${active}">
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NS397SS9"
@@ -373,18 +675,18 @@ function buildIndex() {
           <div class="hero-stat"><div class="num">99.9<span class="plus">%</span></div><div class="lbl">Uptime SLA</div></div>
         </div>
       </div>
-      <div class="hero-console fade-up d2" aria-label="Live deploy console preview">
+      <div class="hero-console fade-up d2" aria-label="Deployment demonstration">
         <div class="console-card">
-          <div class="console-head"><span class="c-dot r"></span><span class="c-dot y"></span><span class="c-dot g"></span><span class="c-title">stealth-deploy — v2</span></div>
+          <div class="console-head"><span class="c-dot r"></span><span class="c-dot y"></span><span class="c-dot g"></span><span class="c-title">stealth-deploy — demonstration</span></div>
           <div class="console-body">
+            <div class="console-demo-note"><span class="warn">DEMONSTRATION</span> This is not a live deployment. No server is provisioned.</div>
             <div class="console-line"><span class="cmd">$ stealth deploy --plan bronze-usa --region us-east</span></div>
-            <div class="console-line"><span class="ok">▸</span> provisioning virtual machine <span class="ok">ok</span></div>
-            <div class="console-line"><span class="ok">▸</span> attaching nvme storage 60GB <span class="ok">ok</span></div>
-            <div class="console-line"><span class="ok">▸</span> enabling ddos shield <span class="warn">active</span></div>
-            <div class="console-line"><span class="ok">▸</span> configuring admin access <span class="ok">ok</span></div>
-            <div class="console-progress"><div class="bar" id="deployBar"></div></div>
-            <div class="console-line"><span class="pct" id="deployPct">0%</span></div>
-            <div class="console-line" id="consoleOnline" style="visibility:hidden"><span class="ok">✓ server online</span> <span class="dim">—</span> <span class="console-ip" id="consoleIp"><span class="live"></span>protected node</span></div>
+            <div class="console-line"><span class="dim">▸ plan selected for illustration</span></div>
+            <div class="console-line"><span class="dim">▸ region selected for illustration</span></div>
+            <div class="console-line"><span class="warn">▸ pricing and availability shown at checkout</span></div>
+            <div class="console-line"><span class="dim">▸ no infrastructure request is made by this preview</span></div>
+            <div class="console-progress"><div class="bar" style="width:42%"></div></div>
+            <div class="console-line"><span class="pct">illustration only</span></div>
           </div>
           <div class="console-foot"><span class="chip">2 <b>vCPU</b></span><span class="chip">4 <b>GB RAM</b></span><span class="chip">60 <b>GB NVMe</b></span><span class="chip">1 <b>Gbps</b></span></div>
         </div>
@@ -598,9 +900,9 @@ function buildFeatures() {
 
 /* ---------- 4. status ---------- */
 function buildStatus() {
-  const summary = `<div class="ss-card"><div class="ss-num ${UP === TOTAL ? "good" : "warn"}">${UP}/${TOTAL}</div><div class="ss-lbl">Nodes online</div></div>
-    <div class="ss-card"><div class="ss-num ${UP === TOTAL ? "good" : "warn"}">${TOTAL ? Math.round((UP / TOTAL) * 100) : 0}%</div><div class="ss-lbl">Current availability</div></div>
-    <div class="ss-card"><div class="ss-num ${UP === TOTAL ? "good" : "warn"}">24/7</div><div class="ss-lbl">Automated monitoring</div></div>`;
+  const summary = `<div class="ss-card"><div class="ss-num ${ALL_UP ? "good" : "warn"}">${UP}/${TOTAL}</div><div class="ss-lbl">Nodes online</div></div>
+    <div class="ss-card"><div class="ss-num ${ALL_UP ? "good" : "warn"}">${TOTAL ? Math.round((UP / TOTAL) * 100) : 0}%</div><div class="ss-lbl">Current availability</div></div>
+    <div class="ss-card"><div class="ss-num ${ALL_UP ? "good" : "warn"}">24/7</div><div class="ss-lbl">Automated monitoring</div></div>`;
   const nodes = MONITORS.map(nodeCardHtml).join("");
   const body = `
   <section class="page-hero">
@@ -609,9 +911,10 @@ function buildStatus() {
   <section class="section" style="padding-top:0">
     <div class="container">
       <div class="status-summary" id="statusSummary" aria-live="polite">${summary}</div>
+      <p class="status-source-note" id="statusSourceNote">Baked uptime snapshot · live refresh is attempted when this page loads.</p>
       <h2 style="font-size:22px;margin-bottom:18px">Production nodes</h2>
       <div class="node-list" id="nodeList" aria-live="polite">${nodes}</div>
-      <div style="margin-top:64px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+      <div class="status-info-grid">
         <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px"><h3 style="font-size:18px;margin-bottom:10px">Service Level Agreement</h3><p style="color:var(--text-muted);font-size:14px">StealthRDP is committed to maintaining a 99.9% uptime for all our VPS services. Our monitoring system alerts us instantly of any service disruptions.</p></div>
         <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px"><h3 style="font-size:18px;margin-bottom:10px">Uptime Guarantee</h3><p style="color:var(--text-muted);font-size:14px">We offer compensation credits for any monthly uptime percentage below our guaranteed 99.9%. The real-time data above shows our actual performance.</p></div>
         <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px"><h3 style="font-size:18px;margin-bottom:10px">Incident Response</h3><p style="color:var(--text-muted);font-size:14px">Our technical team is available 24/7 to respond to service disruptions. Most issues are detected and resolved before they affect your experience.</p></div>
@@ -840,9 +1143,11 @@ function buildSitemap() {
     ["/faq.html", "2026-08-06"],
     ["/about.html", "2026-08-06"],
     ["/privacy.html", "2026-08-06"],
+    ["/docs.html", "2026-08-13"],
   ];
   const blogRoutes = BLOG.map((p) => [`/blog/${p.slug}.html`, p.date]);
-  const urls = staticRoutes.concat(blogRoutes);
+  const docRoutes = DOCS.map((article) => [`/docs/${article.slug}.html`, docDateIso(article.date) || "2026-08-13"]);
+  const urls = staticRoutes.concat(blogRoutes, docRoutes);
   const items = urls
     .map(([loc, lastmod]) => `  <url>\n    <loc>__SRDP_BASE__${loc}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>monthly</changefreq>\n  </url>`)
     .join("\n");
@@ -854,6 +1159,7 @@ ${items}
 }
 
 /* ---------- write ---------- */
+fs.mkdirSync(path.join(ROOT, "docs"), { recursive: true });
 const OUT = {
   "index.html": buildIndex(),
   "plans.html": buildPlans(),
@@ -863,6 +1169,7 @@ const OUT = {
   "faq.html": buildFaq(),
   "about.html": buildAbout(),
   "privacy.html": buildPrivacy(),
+  "docs.html": buildDocsIndex(),
   "robots.txt": buildRobots(),
   "sitemap.xml": buildSitemap(),
 };
@@ -870,6 +1177,9 @@ const OUT = {
 fs.mkdirSync(path.join(ROOT, "blog"), { recursive: true });
 for (const post of BLOG) {
   OUT[`blog/${post.slug}.html`] = buildBlogPost(post);
+}
+for (const [index, article] of DOCS.entries()) {
+  OUT[`docs/${article.slug}.html`] = buildDocArticle(article, index);
 }
 
 for (const [file, content] of Object.entries(OUT)) {

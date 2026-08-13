@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Why you should redirect all HTTP traffic to HTTPS — StealthRDP Docs</title>
+  <meta name="description" content="If you’re thinking about switching to the HTTPS protocol but aren’t exactly sure how it will affect your website, this article will guide you through the process." />
+  <meta name="robots" content="index,follow" />
+  <meta name="author" content="StealthRDP" />
+  <link rel="canonical" href="__SRDP_BASE__/docs/1737945988-why-you-should-redirect-all-http-traffic-to-https.html" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <meta property="og:title" content="Why you should redirect all HTTP traffic to HTTPS — StealthRDP Docs" />
+  <meta property="og:description" content="If you’re thinking about switching to the HTTPS protocol but aren’t exactly sure how it will affect your website, this article will guide you through the process." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="__SRDP_BASE__/docs/1737945988-why-you-should-redirect-all-http-traffic-to-https.html" />
+  <meta property="og:image" content="__SRDP_BASE__/assets/og-cover.png" />
+  <meta property="og:site_name" content="StealthRDP" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@stealthrdp" />
+  <meta name="twitter:title" content="Why you should redirect all HTTP traffic to HTTPS — StealthRDP Docs" />
+  <meta name="twitter:description" content="If you’re thinking about switching to the HTTPS protocol but aren’t exactly sure how it will affect your website, this article will guide you through the process." />
+  <meta name="twitter:image" content="__SRDP_BASE__/assets/og-cover.png" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <!-- Google Tag Manager (real container from live site) -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-NS397SS9');</script>
+  <!-- End Google Tag Manager -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"__SRDP_BASE__/"},{"@type":"ListItem","position":2,"name":"Docs","item":"__SRDP_BASE__/docs.html"},{"@type":"ListItem","position":3,"name":"Web panels","item":"__SRDP_BASE__/docs.html?category=Web%20panels"},{"@type":"ListItem","position":4,"name":"Why you should redirect all HTTP traffic to HTTPS","item":"__SRDP_BASE__/docs/1737945988-why-you-should-redirect-all-http-traffic-to-https.html"}]},{"@type":"TechArticle","headline":"Why you should redirect all HTTP traffic to HTTPS","description":"If you’re thinking about switching to the HTTPS protocol but aren’t exactly sure how it will affect your website, this article will guide you through the process.","author":{"@type":"Organization","name":"StealthRDP"},"publisher":{"@type":"Organization","name":"StealthRDP","url":"__SRDP_BASE__/"},"mainEntityOfPage":"__SRDP_BASE__/docs/1737945988-why-you-should-redirect-all-http-traffic-to-https.html","url":"__SRDP_BASE__/docs/1737945988-why-you-should-redirect-all-http-traffic-to-https.html","articleSection":"Web panels","dateModified":"2025-01-27"}]}</script>
+</head>
+<body data-page="docs">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NS397SS9"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  <div class="ticker"><div class="ticker-inner">
+    <span class="left"><span class="dot" id="tickerDot"></span><span id="tickerStatus">Checking live status…</span></span>
+    <span class="right"><span class="promotion-note">Pricing and availability shown at checkout</span></span>
+  </div></div>
+  <header class="header"><div class="container header-inner">
+    <a href="/" class="logo" aria-label="StealthRDP home">
+      <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></span><span>Stealth<em>RDP</em></span>
+    </a>
+    <nav class="nav" aria-label="Main navigation"><a href="/">Home</a><a href="/plans.html">Plans</a><a href="/features.html">Features</a><a href="/status.html">Server Status</a><a href="/docs.html" class="active">Docs</a><a href="/blog.html">Blog</a><a href="/faq.html">FAQ</a></nav>
+    <div class="header-actions">
+      <a class="btn btn-sm btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client Area</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobileNav"><a href="/">Home</a><a href="/plans.html">Plans</a><a href="/features.html">Features</a><a href="/status.html">Server Status</a><a href="/docs.html" class="active">Docs</a><a href="/blog.html">Blog</a><a href="/faq.html">FAQ</a><a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client Area</a></div>
+  </header>
+  <main class="docs-article-page docs-surface" data-docs-category="Web panels" data-doc-slug="1737945988-why-you-should-redirect-all-http-traffic-to-https"><div class="container docs-article-layout"><div class="docs-article-column">
+    <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/docs.html">Docs</a><span aria-hidden="true">/</span><span>Web panels</span></nav>
+    <article class="docs-article"><header class="docs-article-header"><span class="docs-category">Web panels</span><h1>Why you should redirect all HTTP traffic to HTTPS</h1><p class="docs-summary">If you’re thinking about switching to the HTTPS protocol but aren’t exactly sure how it will affect your website, this article will guide you through the process.</p><div class="docs-source-meta"><span>Source: Verified StealthRDP documentation snapshot</span><span>Source date: <time datetime="2025-01-27">Jan 27, 2025</time></span><span>Migrated 2026-08-13</span><span>Public examples redacted</span></div></header><div class="docs-content"><h3 id="if-you-re-thinking-about-switching-to-the-https-protocol-but-aren-t-exactly-sure-how-it-will-affect-your-website-this-article-will-guide-you-through-the-process">If you’re thinking about switching to the HTTPS protocol but aren’t exactly sure how it will affect your website, this article will guide you through the process.</h3>
+<p><strong>We will explain the difference between HTTP and HTTPS in terms of security, performance, and search engine optimization (SEO) benefits</strong></p>
+<p>Also, we’ll explore how the HTTP vs HTTPS protocols transport data via the internet and the significant role of SSL certificates.</p>
+<p>Aside from that, we’ll discuss the pros and cons of each protocol to help you decide whether to make the switch.</p>
+<h3 id="differences-between-http-vs-https">Differences Between HTTP vs HTTPS</h3>
+<p><strong>HTTP</strong> stands for <strong>Hypertext Transfer Protocol</strong>. It is the protocol that enables communication between different systems, transferring information and data over a network.</p>
+<p>On the other hand, <strong>HTTPS</strong> stands for <strong>Hypertext Transfer Protocol Secure</strong>. Although it functions similarly to <strong>HTTP</strong>, <strong>HTTPS</strong> works to protect communication between web servers and browsers when transporting data</p>
+<p>HTTPS secures connections with a digital security protocol that uses cryptographic keys to encrypt and validate data. The most common way for websites to use HTTPS and have a secure domain is by obtaining a Secure Sockets Layer (SSL) or Transport Layer Security (TLS) certificate.</p>
+<p>Keep in mind that although TLS is widely becoming the standard for HTTPS, most SSL certificates support both <strong>SSL/TLS</strong> protocols</p>
+<h3 id="how-http-works">How HTTP Works</h3>
+<p>In practice, HTTP is an application layer protocol that web browsers and web servers use to communicate via the internet.</p>
+<p>When a web user wants to load or interact with a web page, their web browser sends an <strong>HTTP</strong> request to the origin server that hosts the website’s files. These requests are essentially lines of text that are sent via the internet. A connection is then established between the browser and server, after which the server processes the request and sends back an <strong>HTTP</strong> response. This makes web pages accessible to site visitors.</p>
+<h3 id="http-vs-https-which-one-is-better-for-my-site">HTTP vs HTTPS: Which One Is Better for My Site?</h3>
+<p><strong>Technically, there is no correct answer</strong></p>
+<p>It all depends on the type of site you run and the data you manage. For example, a simple portfolio website and an eCommerce site with membership features and digital payment systems have different security requirements.</p>
+<p>However, it doesn’t matter whether your site handles sensitive information – HTTPS is becoming the standard for all websites. Not only that, there are numerous benefits to having an SSL certificate enabled on your site.</p>
+<p>Consider the following factors when deciding between <strong>HTTP vs HTTPS</strong></p>
+<h3 id="security">Security</h3>
+<p>Having strong security measures and providing a secure browsing experience on your website is crucial. A GlobalSign survey found that 77% of visitors have concerns about unauthorized parties misusing or intercepting user data.</p>
+<p>In regards to HTTP vs HTTPS, the latter outperforms in terms of security.</p>
+<p>A standard HTTP protocol does not encrypt connections. That means the lines of text in an HTTP request or response are visible to anyone monitoring the connection, including cybercriminals.</p>
+<p>Using a standard HTTP generally poses minimal issues if the text only contains general information, such as to load a public web page.</p>
+<p>However, if it contains sensitive data like usernames, passwords, or credit card details, using unencrypted HTTP can pose serious security risks. Since this information is visible to anyone, data breaches, hacks, and identity theft become serious concerns.</p>
+<p>Users can see if they are browsing HTTP sites by checking two elements. First, the icon before a website’s <strong>URL</strong> (Uniform Resource Locator) may show a ! symbol or say “<strong>Not secure</strong>.”</p>
+<p>The warning may also advise users not to enter sensitive or confidential information on the website. Second, the site’s URL will start with <strong>http://</strong></p>
+<p><strong>HTTPS = HTTP + SSL</strong></p>
+<p>To protect potentially sensitive information from being leaked, websites use SSL certificates to create a secure connection between web servers and browsers, protecting the transmission of HTTP requests and responses.</p>
+<p>The use of an SSL certificate is the key difference between HTTP and HTTPS.</p>
+<p>HTTPS encrypts the transport of data so it’s not visible to hackers or others monitoring the connection. This ensures data integrity and prevents information from being modified, corrupted, or stolen during transmission.</p>
+<p>SSL/TLS protocols also authenticate users to secure information and ensure it won’t be revealed to unauthorized users</p>
+<p>Users can easily check if a website uses SSL/TLS. First, a padlock icon should be visible on the left-hand side of a website’s URL, signifying that the connection is secure. Second, the website’s URL will start with <strong><a href="https://">https://</a>.</strong></p>
+<h3 id="seo-advantages">SEO Advantages</h3>
+<p>Not only does Google recommend that all websites use HTTPS for higher security, but it also rewards these sites with a minor ranking boost on the search engine results pages (SERPs).</p>
+<p>In fact, a study by Rank Ranger found that by 2018, 70% of Google’s first page results were sites that use HTTPS.</p>
+<p>Let’s consider this in practical terms. For example, a competitor’s site may be similar to yours in many aspects, such as content, speed, and backlinks. However, the competitor site uses HTTPS while you don’t.</p>
+<p>Add the fact that HTTPS sites receive higher browsing times, which is beneficial for SEO, and the winner is clear. Considering Google’s algorithm, your competitor will most likely rank higher than your site, which will lead them to receive higher traffic volumes and other SEO benefits.</p>
+<h3 id="speed-and-performance">Speed and Performance</h3>
+<p>Another benefit of using <strong>HTTPS</strong> compared to <strong>HTTP</strong> is that websites will load relatively faster with it, especially if used with a server that supports <strong>HTTP/2</strong>.</p>
+<p>HTTP/2 supports HTTPS encryption and complements its security protocols. Among other functions, HTTP/2 reduces latency by having low resource consumption and maximizing bandwidth efficiency.</p>
+<p>This results in faster site speeds and smoother performance compared to using the standard HTTP protocol.</p>
+<p>HTTPS is also a better option when loading websites on mobile devices, especially when using Accelerated Mobile Pages (AMP). AMP is a Google-made web component framework that, among other functions, creates a more streamlined user experience for mobile users by loading the website content much faster.</p>
+<p>A secure encrypted connection is required for a website’s AMP version to show up on search engines. Considering that by the end of 2019, 61% of Google search queries came from mobile devices, the performance benefits of using HTTPS outweigh HTTP</p></div><div class="docs-support"><div><span class="sec-index">Need a hand?</span><h2>Support is still on WHMCS</h2><p>For account or server-specific help, use the StealthRDP support portal.</p></div><a class="btn btn-primary" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact support</a></div><nav class="docs-related" aria-label="Related guides"><div class="docs-related-head"><span class="sec-index">Continue exploring</span><h2>Related guides</h2></div><div class="docs-related-grid"><a class="docs-related-link" href="/docs/1737946010-10-ways-to-optimize-your-word_press-website-for-speed.html"><span class="docs-category">Web panels</span><strong>10 Ways to Optimize Your WordPress Website for Speed</strong><span>Read guide →</span></a></div></nav></article>
+  </div><aside class="docs-toc" aria-label="On this page"><span class="docs-toc-title">On this page</span><ol><li class="toc-level-3"><a href="#if-you-re-thinking-about-switching-to-the-https-protocol-but-aren-t-exactly-sure-how-it-will-affect-your-website-this-article-will-guide-you-through-the-process">If you’re thinking about switching to the HTTPS protocol but aren’t exactly sure how it will affect your website, this article will guide you through the process.</a></li><li class="toc-level-3"><a href="#differences-between-http-vs-https">Differences Between HTTP vs HTTPS</a></li><li class="toc-level-3"><a href="#how-http-works">How HTTP Works</a></li><li class="toc-level-3"><a href="#http-vs-https-which-one-is-better-for-my-site">HTTP vs HTTPS: Which One Is Better for My Site?</a></li><li class="toc-level-3"><a href="#security">Security</a></li><li class="toc-level-3"><a href="#seo-advantages">SEO Advantages</a></li><li class="toc-level-3"><a href="#speed-and-performance">Speed and Performance</a></li></ol></aside></div></main>
+  <footer class="footer"><div class="container">
+    <div class="footer-status"><span class="dot"></span><span id="footerStatus">Checking live status…</span></div>
+    <div class="footer-grid">
+      <div class="footer-about">
+        <a href="/" class="logo" aria-label="StealthRDP home"><span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></span><span>Stealth<em>RDP</em></span></a>
+        <p>Enterprise-grade remote desktop infrastructure with unmatched security and performance.</p>
+        <div class="footer-social"><a href="https://x.com/stealthrdp" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L2.8 2h6.4l4.4 5.9L18.9 2zm-1.1 18h1.7L7.1 3.9H5.3L17.8 20z"/></svg></a><a href="https://www.instagram.com/stealth_rdp" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg></a><a href="https://discord.gg/9JJFs4DDyF" target="_blank" rel="noopener noreferrer" aria-label="Discord"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12h.01M12 12h.01M16 12h.01M8.5 19c-2.5-.5-4.5-2-5.5-4.5C2 10 3.5 5 8.5 4.5c.5-1 3.5-1 3.5-1s3 0 3.5 1c5 .5 6.5 5.5 6 10-1 2.5-3 4-5.5 4.5"/></svg></a><a href="https://t.me/StealthRDP" target="_blank" rel="noopener noreferrer" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></a></div>
+      </div>
+      <div class="footer-col"><h4>Products</h4><ul>
+        <li><a href="/plans.html">RDP Plans</a></li>
+        <li><a href="/features.html">Features</a></li>
+        <li><a href="/plans.html#build-your-own">Build Your Own VPS</a></li>
+        <li><a href="/plans.html">Pricing</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Resources</h4><ul>
+        <li><a href="/docs.html">Documentation</a></li>
+        <li><a href="/blog.html">Tutorials</a></li>
+        <li><a href="/faq.html">FAQ</a></li>
+        <li><a href="/blog.html">Blog</a></li>
+        <li><a href="/status.html">Server Status</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Company</h4><ul>
+        <li><a href="/about.html">About Us</a></li>
+        <li><a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact Support</a></li>
+        <li><a href="/privacy.html">Privacy Policy</a></li>
+        <li><a href="/docs/1737944013-use-of-service.html">Terms of Service</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 StealthRDP. All rights reserved.</span>
+      <span class="links">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/docs/1737944013-use-of-service.html">Terms</a>
+        <a href="/status.html">Status</a>
+      </span>
+    </div>
+  </div></footer>
+  <script src="/js/main.js"></script><script src="/js/docs.js"></script>
+</body>
+</html>

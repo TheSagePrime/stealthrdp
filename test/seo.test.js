@@ -10,6 +10,7 @@ const path = require("path");
 const ROOT = path.join(__dirname, "..");
 const HTML = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 const BLOG = require(path.join(ROOT, "js", "blog-data.js")).SRDP_BLOG;
+const DOCS = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "docs-articles.json"), "utf8"));
 
 const ROUTES = [
   "index.html",
@@ -21,6 +22,8 @@ const ROUTES = [
   "about.html",
   "privacy.html",
   ...BLOG.map((p) => `blog/${p.slug}.html`),
+  "docs.html",
+  ...DOCS.map((p) => `docs/${p.slug}.html`),
 ];
 
 function parse(html) {

@@ -37,19 +37,19 @@
   <!-- End Google Tag Manager (noscript) -->
   <div class="ticker"><div class="ticker-inner">
     <span class="left"><span class="dot" id="tickerDot"></span><span id="tickerStatus">Checking live status…</span></span>
-    <span class="right"><span>Use code <span class="code">POWER30</span></span><span class="countdown" id="countdown" aria-label="Offer countdown">--d --:--:--</span></span>
+    <span class="right"><span class="promotion-note">Pricing and availability shown at checkout</span></span>
   </div></div>
   <header class="header"><div class="container header-inner">
     <a href="/" class="logo" aria-label="StealthRDP home">
       <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></span><span>Stealth<em>RDP</em></span>
     </a>
-    <nav class="nav" aria-label="Main navigation"><a href="/">Home</a><a href="/plans.html">Plans</a><a href="/features.html">Features</a><a href="/status.html" class="active">Server Status</a><a href="/blog.html">Blog</a><a href="/faq.html">FAQ</a></nav>
+    <nav class="nav" aria-label="Main navigation"><a href="/">Home</a><a href="/plans.html">Plans</a><a href="/features.html">Features</a><a href="/status.html" class="active">Server Status</a><a href="/docs.html">Docs</a><a href="/blog.html">Blog</a><a href="/faq.html">FAQ</a></nav>
     <div class="header-actions">
       <a class="btn btn-sm btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client Area</a>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     </div>
   </div>
-  <div class="mobile-nav" id="mobileNav"><a href="/">Home</a><a href="/plans.html">Plans</a><a href="/features.html">Features</a><a href="/status.html" class="active">Server Status</a><a href="/blog.html">Blog</a><a href="/faq.html">FAQ</a><a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client Area</a></div>
+  <div class="mobile-nav" id="mobileNav"><a href="/">Home</a><a href="/plans.html">Plans</a><a href="/features.html">Features</a><a href="/status.html" class="active">Server Status</a><a href="/docs.html">Docs</a><a href="/blog.html">Blog</a><a href="/faq.html">FAQ</a><a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client Area</a></div>
   </header>
   
   <section class="page-hero">
@@ -60,54 +60,55 @@
       <div class="status-summary" id="statusSummary" aria-live="polite"><div class="ss-card"><div class="ss-num good">9/9</div><div class="ss-lbl">Nodes online</div></div>
     <div class="ss-card"><div class="ss-num good">100%</div><div class="ss-lbl">Current availability</div></div>
     <div class="ss-card"><div class="ss-num good">24/7</div><div class="ss-lbl">Automated monitoring</div></div></div>
+      <p class="status-source-note" id="statusSourceNote">Baked uptime snapshot · live refresh is attempted when this page loads.</p>
       <h2 style="font-size:22px;margin-bottom:18px">Production nodes</h2>
       <div class="node-list" id="nodeList" aria-live="polite"><div class="node-card">
     <div class="n-left"><span class="n-dot up"></span>
       <div><div class="n-name">EU / Netherlands Node 01</div><div class="n-target">EU / Netherlands</div></div>
     </div>
-    <div class="n-right"><div class="n-uptime"><div class="u-val good">—%</div><div class="u-lbl">90-day uptime</div></div></div>
+    <div class="n-right"><div class="n-uptime"><div class="u-val good">100.00%</div><div class="u-lbl">90-day uptime</div></div></div>
   </div><div class="node-card">
     <div class="n-left"><span class="n-dot up"></span>
-      <div><div class="n-name">Control Plane Node 01</div><div class="n-target">Control plane</div></div>
+      <div><div class="n-name">Control plane Node 01</div><div class="n-target">Control plane</div></div>
     </div>
-    <div class="n-right"><div class="n-uptime"><div class="u-val good">—%</div><div class="u-lbl">90-day uptime</div></div></div>
+    <div class="n-right"><div class="n-uptime"><div class="u-val good">99.92%</div><div class="u-lbl">90-day uptime</div></div></div>
   </div><div class="node-card">
     <div class="n-left"><span class="n-dot up"></span>
       <div><div class="n-name">USA Node 01</div><div class="n-target">USA</div></div>
     </div>
-    <div class="n-right"><div class="n-uptime"><div class="u-val good">—%</div><div class="u-lbl">90-day uptime</div></div></div>
+    <div class="n-right"><div class="n-uptime"><div class="u-val good">100.00%</div><div class="u-lbl">90-day uptime</div></div></div>
   </div><div class="node-card">
     <div class="n-left"><span class="n-dot up"></span>
       <div><div class="n-name">USA Node 02</div><div class="n-target">USA</div></div>
     </div>
-    <div class="n-right"><div class="n-uptime"><div class="u-val good">—%</div><div class="u-lbl">90-day uptime</div></div></div>
+    <div class="n-right"><div class="n-uptime"><div class="u-val good">100.00%</div><div class="u-lbl">90-day uptime</div></div></div>
   </div><div class="node-card">
     <div class="n-left"><span class="n-dot up"></span>
       <div><div class="n-name">USA Node 03</div><div class="n-target">USA</div></div>
     </div>
-    <div class="n-right"><div class="n-uptime"><div class="u-val good">—%</div><div class="u-lbl">90-day uptime</div></div></div>
+    <div class="n-right"><div class="n-uptime"><div class="u-val good">100.00%</div><div class="u-lbl">90-day uptime</div></div></div>
   </div><div class="node-card">
     <div class="n-left"><span class="n-dot up"></span>
       <div><div class="n-name">USA Node 04</div><div class="n-target">USA</div></div>
     </div>
-    <div class="n-right"><div class="n-uptime"><div class="u-val good">—%</div><div class="u-lbl">90-day uptime</div></div></div>
+    <div class="n-right"><div class="n-uptime"><div class="u-val good">100.00%</div><div class="u-lbl">90-day uptime</div></div></div>
   </div><div class="node-card">
     <div class="n-left"><span class="n-dot up"></span>
       <div><div class="n-name">USA Node 05</div><div class="n-target">USA</div></div>
     </div>
-    <div class="n-right"><div class="n-uptime"><div class="u-val good">—%</div><div class="u-lbl">90-day uptime</div></div></div>
+    <div class="n-right"><div class="n-uptime"><div class="u-val good">99.98%</div><div class="u-lbl">90-day uptime</div></div></div>
   </div><div class="node-card">
     <div class="n-left"><span class="n-dot up"></span>
       <div><div class="n-name">USA Node 06</div><div class="n-target">USA</div></div>
     </div>
-    <div class="n-right"><div class="n-uptime"><div class="u-val good">—%</div><div class="u-lbl">90-day uptime</div></div></div>
+    <div class="n-right"><div class="n-uptime"><div class="u-val good">100.00%</div><div class="u-lbl">90-day uptime</div></div></div>
   </div><div class="node-card">
     <div class="n-left"><span class="n-dot up"></span>
       <div><div class="n-name">Website Node 01</div><div class="n-target">Website</div></div>
     </div>
-    <div class="n-right"><div class="n-uptime"><div class="u-val good">—%</div><div class="u-lbl">90-day uptime</div></div></div>
+    <div class="n-right"><div class="n-uptime"><div class="u-val good">99.92%</div><div class="u-lbl">90-day uptime</div></div></div>
   </div></div>
-      <div style="margin-top:64px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+      <div class="status-info-grid">
         <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px"><h3 style="font-size:18px;margin-bottom:10px">Service Level Agreement</h3><p style="color:var(--text-muted);font-size:14px">StealthRDP is committed to maintaining a 99.9% uptime for all our VPS services. Our monitoring system alerts us instantly of any service disruptions.</p></div>
         <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px"><h3 style="font-size:18px;margin-bottom:10px">Uptime Guarantee</h3><p style="color:var(--text-muted);font-size:14px">We offer compensation credits for any monthly uptime percentage below our guaranteed 99.9%. The real-time data above shows our actual performance.</p></div>
         <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px"><h3 style="font-size:18px;margin-bottom:10px">Incident Response</h3><p style="color:var(--text-muted);font-size:14px">Our technical team is available 24/7 to respond to service disruptions. Most issues are detected and resolved before they affect your experience.</p></div>
@@ -129,7 +130,7 @@
         <li><a href="/plans.html">Pricing</a></li>
       </ul></div>
       <div class="footer-col"><h4>Resources</h4><ul>
-        <li><a href="https://docs.stealthrdp.com/hc/stealth-rdp-docs/en" target="_blank" rel="noopener noreferrer">Documentation</a></li>
+        <li><a href="/docs.html">Documentation</a></li>
         <li><a href="/blog.html">Tutorials</a></li>
         <li><a href="/faq.html">FAQ</a></li>
         <li><a href="/blog.html">Blog</a></li>
@@ -139,18 +140,18 @@
         <li><a href="/about.html">About Us</a></li>
         <li><a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact Support</a></li>
         <li><a href="/privacy.html">Privacy Policy</a></li>
-        <li><a href="https://docs.stealthrdp.com/hc/stealth-rdp-docs/en/categories/terms-and-conditions" target="_blank" rel="noopener noreferrer">Terms of Service</a></li>
+        <li><a href="/docs/1737944013-use-of-service.html">Terms of Service</a></li>
       </ul></div>
     </div>
     <div class="footer-bottom">
       <span>© 2026 StealthRDP. All rights reserved.</span>
       <span class="links">
         <a href="/privacy.html">Privacy</a>
-        <a href="https://docs.stealthrdp.com/hc/stealth-rdp-docs/en/categories/terms-and-conditions" target="_blank" rel="noopener noreferrer">Terms</a>
+        <a href="/docs/1737944013-use-of-service.html">Terms</a>
         <a href="/status.html">Status</a>
       </span>
     </div>
   </div></footer>
-  <script src="/js/main.js?v=security-redacted-1"></script>
+  <script src="/js/main.js"></script>
 </body>
 </html>

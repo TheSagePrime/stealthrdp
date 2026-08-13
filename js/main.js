@@ -21,6 +21,11 @@
     return container && container.querySelector("article, .faq-item, .node-card, .q-text");
   }
 
+  function isMonitorUp(monitor) {
+    var status = monitor && monitor.status;
+    return status === "up" || status === 2 || status === "2";
+  }
+
   /* ---------- Analytics (real GTM container from live site, no PII) ---------- */
   function dl(event, props) {
     try {
@@ -37,30 +42,6 @@
   });
   if (document.body.getAttribute("data-page") === "plans") {
     dl("view_plans", { location: "USA" });
-  }
-
-  /* ---------- Countdown (72h rolling, persisted) ---------- */
-  var COUNTDOWN_MS = 72 * 60 * 60 * 1000;
-  var cdEl = $("#countdown");
-  if (cdEl) {
-    var end;
-    try { end = parseInt(localStorage.getItem("srdp_offer_end") || "0", 10); } catch (e) { end = 0; }
-    if (!end || end < Date.now()) {
-      end = Date.now() + COUNTDOWN_MS;
-      try { localStorage.setItem("srdp_offer_end", String(end)); } catch (e) {}
-    }
-    function tick() {
-      var diff = end - Date.now();
-      if (diff <= 0) { end = Date.now() + COUNTDOWN_MS; try { localStorage.setItem("srdp_offer_end", String(end)); } catch (e) {} diff = end - Date.now(); }
-      var d = Math.floor(diff / 86400000);
-      var h = Math.floor((diff % 86400000) / 3600000);
-      var m = Math.floor((diff % 3600000) / 60000);
-      var s = Math.floor((diff % 60000) / 1000);
-      var pad = function (n) { return n < 10 ? "0" + n : String(n); };
-      cdEl.textContent = d + "d " + pad(h) + ":" + pad(m) + ":" + pad(s);
-    }
-    tick();
-    setInterval(tick, 1000);
   }
 
   /* ---------- Mobile nav ---------- */
@@ -99,28 +80,53 @@
     fetch(API + "/uptime", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" })
       .then(function (r) { if (!r.ok) throw new Error("bad status"); return r.json(); })
       .then(function (d) {
+        if (!d || d.stat !== "ok" || !Array.isArray(d.monitors) || !d.monitors.length) throw new Error("status unavailable");
         var monitors = (d && d.monitors) || [];
-        var up = monitors.filter(function (m) { return m.status === "up"; }).length;
+        var up = monitors.filter(isMonitorUp).length;
         var total = monitors.length;
-        var msg = total ? "All systems operational — " + up + "/" + total + " nodes online" : "Status unavailable";
+        var msg = total && up === total ? "All systems operational — " + up + "/" + total + " nodes online" : total ? "Service state requires attention — " + up + "/" + total + " nodes online" : "Live status unavailable";
         var tickerStatus = $("#tickerStatus");
         if (tickerStatus) tickerStatus.textContent = msg;
         var footerStatus = $("#footerStatus");
         if (footerStatus) footerStatus.textContent = msg;
         var heroNodeStatus = $("#heroNodeStatus");
         if (heroNodeStatus) {
-          heroNodeStatus.innerHTML = '<span class="live"></span> ' + up + "/" + total + " nodes operational";
-          heroNodeStatus.style.color = total && up === total ? "var(--green)" : "var(--accent)";
+          heroNodeStatus.innerHTML = '<span class="' + (total && up === total ? "live" : "status-failed") + '"></span> ' + up + "/" + total + (total && up === total ? " nodes operational" : " nodes require attention");
+          heroNodeStatus.style.color = total && up === total ? "var(--green)" : "var(--red)";
         }
+        var sourceNote = $("#statusSourceNote");
+        if (sourceNote) sourceNote.textContent = "Live status refreshed from the monitoring service.";
         renderStatusPage(d);
       })
       .catch(function () {
-        // Baked status stays; only soften the ticker if the API is unreachable.
+        // The baked snapshot remains, but a failed live call must be visibly distinct.
         var tickerStatus = $("#tickerStatus");
-        if (tickerStatus && tickerStatus.textContent === "Checking live status…") {
-          tickerStatus.textContent = "Status page available";
+        if (tickerStatus) tickerStatus.textContent = "Live status unavailable";
+        var footerStatus = $("#footerStatus");
+        if (footerStatus) footerStatus.textContent = "Live status unavailable";
+        var heroNodeStatus = $("#heroNodeStatus");
+        if (heroNodeStatus) {
+          heroNodeStatus.innerHTML = '<span class="status-failed"></span> Live status unavailable';
+          heroNodeStatus.style.color = "var(--red)";
         }
+        renderStatusFailure();
       });
+  }
+
+  function renderStatusFailure() {
+    var summary = $("#statusSummary");
+    if (summary) {
+      summary.innerHTML =
+        '<div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">Live status unavailable</div></div>' +
+        '<div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">Current availability</div></div>' +
+        '<div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">Check again shortly</div></div>';
+    }
+    var sourceNote = $("#statusSourceNote");
+    if (sourceNote) {
+      sourceNote.textContent = "Live status unavailable · showing the baked uptime snapshot below.";
+      sourceNote.classList.add("status-source-note-failure");
+      sourceNote.setAttribute("role", "status");
+    }
   }
 
   function renderStatusPage(d) {
@@ -128,7 +134,7 @@
     var summary = $("#statusSummary");
     if (!nodeList && !summary) return;
     var monitors = (d && d.monitors) || [];
-    var up = monitors.filter(function (m) { return m.status === "up"; }).length;
+    var up = monitors.filter(isMonitorUp).length;
     if (summary) {
       summary.innerHTML =
         '<div class="ss-card"><div class="ss-num ' + (up === monitors.length ? "good" : "warn") + '">' + up + "/" + monitors.length + '</div><div class="ss-lbl">Nodes online</div></div>' +
@@ -137,7 +143,7 @@
     }
     if (nodeList) {
       nodeList.innerHTML = monitors.map(function (m) {
-        var upNow = m.status === "up";
+        var upNow = isMonitorUp(m);
         return (
           '<div class="node-card">' +
             '<div class="n-left"><span class="n-dot ' + (upNow ? "up" : "down") + '"></span>' +
@@ -344,23 +350,9 @@
       .catch(function () { /* baked features remain */ });
   }
 
-  /* ---------- Deploy console animation (home hero) ---------- */
-  var deployBar = $("#deployBar");
-  var deployPct = $("#deployPct");
-  var consoleOnline = $("#consoleOnline");
-  if (deployBar && deployPct) {
-    var pct = 0;
-    var timer = setInterval(function () {
-      pct = Math.min(100, pct + 3 + Math.floor(Math.random() * 7));
-      deployBar.style.width = pct + "%";
-      deployPct.textContent = pct + "%";
-      if (pct >= 100) {
-        clearInterval(timer);
-        deployPct.textContent = "✓ deployed in 42s";
-        if (consoleOnline) consoleOnline.style.visibility = "visible";
-      }
-    }, 420);
-  }
+  /* ---------- Static deployment demonstration ---------- */
+  // The hero console is intentionally static. It never claims that a server
+  // was provisioned and does not simulate progress or completion.
 
   fetchUptime();
 })();

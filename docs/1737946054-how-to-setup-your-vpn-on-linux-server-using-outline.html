@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Setup your VPN on Linux Server using outline? — StealthRDP Docs</title>
+  <meta name="description" content="Outline VPN is a new open-source VPN that promises an incredibly easy-to-install VPN experience—far easier than existing options, like OpenVPN. Via Outline, Jigsaw i" />
+  <meta name="robots" content="index,follow" />
+  <meta name="author" content="StealthRDP" />
+  <link rel="canonical" href="__SRDP_BASE__/docs/1737946054-how-to-setup-your-vpn-on-linux-server-using-outline.html" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <meta property="og:title" content="How to Setup your VPN on Linux Server using outline? — StealthRDP Docs" />
+  <meta property="og:description" content="Outline VPN is a new open-source VPN that promises an incredibly easy-to-install VPN experience—far easier than existing options, like OpenVPN. Via Outline, Jigsaw i" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="__SRDP_BASE__/docs/1737946054-how-to-setup-your-vpn-on-linux-server-using-outline.html" />
+  <meta property="og:image" content="__SRDP_BASE__/assets/og-cover.png" />
+  <meta property="og:site_name" content="StealthRDP" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@stealthrdp" />
+  <meta name="twitter:title" content="How to Setup your VPN on Linux Server using outline? — StealthRDP Docs" />
+  <meta name="twitter:description" content="Outline VPN is a new open-source VPN that promises an incredibly easy-to-install VPN experience—far easier than existing options, like OpenVPN. Via Outline, Jigsaw i" />
+  <meta name="twitter:image" content="__SRDP_BASE__/assets/og-cover.png" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <!-- Google Tag Manager (real container from live site) -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-NS397SS9');</script>
+  <!-- End Google Tag Manager -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"__SRDP_BASE__/"},{"@type":"ListItem","position":2,"name":"Docs","item":"__SRDP_BASE__/docs.html"},{"@type":"ListItem","position":3,"name":"VPN and networking","item":"__SRDP_BASE__/docs.html?category=VPN%20and%20networking"},{"@type":"ListItem","position":4,"name":"How to Setup your VPN on Linux Server using outline?","item":"__SRDP_BASE__/docs/1737946054-how-to-setup-your-vpn-on-linux-server-using-outline.html"}]},{"@type":"TechArticle","headline":"How to Setup your VPN on Linux Server using outline?","description":"Outline VPN is a new open-source VPN that promises an incredibly easy-to-install VPN experience—far easier than existing options, like OpenVPN. Via Outline, Jigsaw is trying to make VPNs not only secure but also incre…","author":{"@type":"Organization","name":"StealthRDP"},"publisher":{"@type":"Organization","name":"StealthRDP","url":"__SRDP_BASE__/"},"mainEntityOfPage":"__SRDP_BASE__/docs/1737946054-how-to-setup-your-vpn-on-linux-server-using-outline.html","url":"__SRDP_BASE__/docs/1737946054-how-to-setup-your-vpn-on-linux-server-using-outline.html","articleSection":"VPN and networking","dateModified":"2025-01-27"}]}</script>
+</head>
+<body data-page="docs">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NS397SS9"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  <div class="ticker"><div class="ticker-inner">
+    <span class="left"><span class="dot" id="tickerDot"></span><span id="tickerStatus">Checking live status…</span></span>
+    <span class="right"><span class="promotion-note">Pricing and availability shown at checkout</span></span>
+  </div></div>
+  <header class="header"><div class="container header-inner">
+    <a href="/" class="logo" aria-label="StealthRDP home">
+      <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></span><span>Stealth<em>RDP</em></span>
+    </a>
+    <nav class="nav" aria-label="Main navigation"><a href="/">Home</a><a href="/plans.html">Plans</a><a href="/features.html">Features</a><a href="/status.html">Server Status</a><a href="/docs.html" class="active">Docs</a><a href="/blog.html">Blog</a><a href="/faq.html">FAQ</a></nav>
+    <div class="header-actions">
+      <a class="btn btn-sm btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client Area</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobileNav"><a href="/">Home</a><a href="/plans.html">Plans</a><a href="/features.html">Features</a><a href="/status.html">Server Status</a><a href="/docs.html" class="active">Docs</a><a href="/blog.html">Blog</a><a href="/faq.html">FAQ</a><a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client Area</a></div>
+  </header>
+  <main class="docs-article-page docs-surface" data-docs-category="VPN and networking" data-doc-slug="1737946054-how-to-setup-your-vpn-on-linux-server-using-outline"><div class="container docs-article-layout"><div class="docs-article-column">
+    <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/docs.html">Docs</a><span aria-hidden="true">/</span><span>VPN and networking</span></nav>
+    <article class="docs-article"><header class="docs-article-header"><span class="docs-category">VPN and networking</span><h1>How to Setup your VPN on Linux Server using outline?</h1><p class="docs-summary">Outline VPN is a new open-source VPN that promises an incredibly easy-to-install VPN experience—far easier than existing options, like OpenVPN. Via Outline, Jigsaw is trying to make VPNs not only secure but also incre…</p><div class="docs-source-meta"><span>Source: Verified StealthRDP documentation snapshot</span><span>Source date: <time datetime="2025-01-27">Jan 27, 2025</time></span><span>Migrated 2026-08-13</span><span>Public examples redacted</span></div></header><div class="docs-content"><p>Outline VPN is a new open-source VPN that promises an incredibly easy-to-install VPN experience—far easier than existing options, like OpenVPN. Via Outline, Jigsaw is trying to make VPNs not only secure but also incredibly easy to set up—especially for those who don’t happen to be sysadmins. The target demographic for the Outline VPN is journalists and news organizations, but anyone can take advantage of their hard work. For example, Journalists need safe access to information to research issues, communicate with sources, and report the news. Outline makes it easy for news organizations to set up a virtual private network (VPN) on their server. This gives news organizations the power to provide anyone in their organization with safer access to the internet and keep their communications private.</p>
+<p><strong>Prerequisites:</strong></p>
+<p>A VPS running any of our OS options A working Docker installation A non-root, sudo-enabled user A local computer running Windows or Linux</p>
+<p><strong>Step 1. Install Docker (if not installed already)</strong></p>
+<p>The Outline + Docker combination is what makes this VPN solution so easy to install. So, if you don’t have Docker installed on your server yet, take a moment to perform this one-command installation: $ sudo curl -sS <a href="https://get.docker.com/">https://get.docker.com/</a> | sh The script will update your system as needed, add the appropriate Docker repositories, and install the correct Docker packages. You may then need to start the Docker service. $ sudo systemctl start docker $ sudo systemctl enable docker</p>
+<p><strong>Finally, verify that the Docker service is running:</strong></p>
+<div class="docs-code-wrap"><div class="docs-code-tools"><span class="mono">Command</span><button class="docs-copy" type="button" data-copy-target="docs-code-1">Copy</button></div><pre class="docs-code" id="docs-code-1"><code>$ sudo sudo systemctl status docker ● docker.service - Docker Application Container Engine Loaded: loaded (/usr/lib/systemd/system/docker.service; disabled; vendor preset: disabled) Drop-In: /etc/systemd/system/docker.service.d └─firewalld.conf Active: active (running) since Mon 2018-03-26 14:36:26 EDT; 4s ago Docs: https://docs.docker.com Main PID: 31232 (dockerd)</code></pre></div>
+<p><strong>Step 2. Installing the Outline VPN server</strong></p>
+<p>With Docker installed, you can run the Outline server installation script: $ sudo wget -qO- <a href="https://raw.githubusercontent.com/Jigsaw-Code/outline-server/master/src/server\">https://raw.githubusercontent.com/Jigsaw-Code/outline-server/master/src/server\</a><em>manager/install\</em>scripts/install\_server.sh | bash You will see lots of output from the script: first, it checks for the necessary programs (Docker), creates secret keys, and then downloads and starts two Docker containers: a shadowbox server and a watchtower server to update shadowbox as needed.</p>
+<p><strong>When the Outline VPN server installation script finishes, you’ll see some output similar to the following:</strong></p>
+<p>{ &quot;apiUrl&quot;: &quot;<a href="https://[redacted">https://[redacted</a> example endpoint]:12345/xxxxxxxxxxxxxxxxxxxxxxx&quot;, &quot;certSha256&quot;: &quot;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&quot; }</p>
+<p><strong>Step 3. Keep that information safe, as you’ll need it in the next step. For now, rejoice: You have successfully installed a VPN server!</strong> <strong>Step 4. Using Outline Manager to set up your VPN</strong></p>
+<p>Jigsaw has created a desktop app called Outline Manager to help users configure their Outline VPN servers. You can download the server manager from the following link:</p>
+<p><strong><a href="https://getoutline.org/get-started/#step-1">https://getoutline.org/get-started/#step-1</a></strong> <strong>Once you open the Outline Manager app, scroll down to Set up Outline anywhere and click on the Get started button.</strong></p>
+<p>You’ll see two steps to follow. You’ve already done the first one, and for the second step, all you need to do is copy the bracketed text from Step 3 into the field and click Done Once you’re connected, you will see that you already have a key called My access key. Click on the Get connected button, which will give you a walkthrough on how to install and configure the appropriate VPN client for your platform. For every user, it’s recommended that you create a new key and give it to the user.</p>
+<p><strong>STAY SAFE ONLINE WITH OUTLINE VPN!</strong></p></div><div class="docs-support"><div><span class="sec-index">Need a hand?</span><h2>Support is still on WHMCS</h2><p>For account or server-specific help, use the StealthRDP support portal.</p></div><a class="btn btn-primary" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact support</a></div><nav class="docs-related" aria-label="Related guides"><div class="docs-related-head"><span class="sec-index">Continue exploring</span><h2>Related guides</h2></div><div class="docs-related-grid"><a class="docs-related-link" href="/docs/1737946569-install-fast-panel-in-linux-good-web-hosting-free-panel.html"><span class="docs-category">Web panels</span><strong>Install Fast Panel in Linux (Good Web Hosting Free Panel)</strong><span>Read guide →</span></a></div></nav></article>
+  </div></div></main>
+  <footer class="footer"><div class="container">
+    <div class="footer-status"><span class="dot"></span><span id="footerStatus">Checking live status…</span></div>
+    <div class="footer-grid">
+      <div class="footer-about">
+        <a href="/" class="logo" aria-label="StealthRDP home"><span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></span><span>Stealth<em>RDP</em></span></a>
+        <p>Enterprise-grade remote desktop infrastructure with unmatched security and performance.</p>
+        <div class="footer-social"><a href="https://x.com/stealthrdp" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L2.8 2h6.4l4.4 5.9L18.9 2zm-1.1 18h1.7L7.1 3.9H5.3L17.8 20z"/></svg></a><a href="https://www.instagram.com/stealth_rdp" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg></a><a href="https://discord.gg/9JJFs4DDyF" target="_blank" rel="noopener noreferrer" aria-label="Discord"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12h.01M12 12h.01M16 12h.01M8.5 19c-2.5-.5-4.5-2-5.5-4.5C2 10 3.5 5 8.5 4.5c.5-1 3.5-1 3.5-1s3 0 3.5 1c5 .5 6.5 5.5 6 10-1 2.5-3 4-5.5 4.5"/></svg></a><a href="https://t.me/StealthRDP" target="_blank" rel="noopener noreferrer" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></a></div>
+      </div>
+      <div class="footer-col"><h4>Products</h4><ul>
+        <li><a href="/plans.html">RDP Plans</a></li>
+        <li><a href="/features.html">Features</a></li>
+        <li><a href="/plans.html#build-your-own">Build Your Own VPS</a></li>
+        <li><a href="/plans.html">Pricing</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Resources</h4><ul>
+        <li><a href="/docs.html">Documentation</a></li>
+        <li><a href="/blog.html">Tutorials</a></li>
+        <li><a href="/faq.html">FAQ</a></li>
+        <li><a href="/blog.html">Blog</a></li>
+        <li><a href="/status.html">Server Status</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Company</h4><ul>
+        <li><a href="/about.html">About Us</a></li>
+        <li><a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact Support</a></li>
+        <li><a href="/privacy.html">Privacy Policy</a></li>
+        <li><a href="/docs/1737944013-use-of-service.html">Terms of Service</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 StealthRDP. All rights reserved.</span>
+      <span class="links">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/docs/1737944013-use-of-service.html">Terms</a>
+        <a href="/status.html">Status</a>
+      </span>
+    </div>
+  </div></footer>
+  <script src="/js/main.js"></script><script src="/js/docs.js"></script>
+</body>
+</html>

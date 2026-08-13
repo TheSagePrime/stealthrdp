@@ -12,7 +12,7 @@ const DATA_DIR = path.join(ROOT, "data");
 const PORT = Number(process.env.PORT || 8080);
 const HOST = process.env.HOST || "127.0.0.1";
 const UPTIME_API_KEY = process.env.UPTIMEROBOT_API_KEY || "";
-const ALLOW_UPTIME_FIXTURE = process.env.ALLOW_UPTIME_FIXTURE === "true" || process.env.NODE_ENV !== "production";
+const ALLOW_UPTIME_FIXTURE = process.env.ALLOW_UPTIME_FIXTURE === "true";
 
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -60,6 +60,10 @@ function readJson(name, fallback) {
   } catch (_) {
     return fallback;
   }
+}
+
+function isUpStatus(status) {
+  return status === "up" || status === 2 || status === "2";
 }
 
 function safePlan(plan) {
@@ -123,7 +127,7 @@ function fallbackUptimePayload() {
   const monitors = Array.isArray(source.monitors) ? source.monitors.map((monitor, index) => ({
     label: /^\d{1,3}(?:\.\d{1,3}){3}/.test(String(monitor.label || "")) ? "Protected node " + String(index + 1).padStart(2, "0") : String(monitor.label || "Protected node " + String(index + 1).padStart(2, "0")),
     region: String(monitor.region || "Production"),
-    status: monitor.status === "up" ? "up" : "down",
+    status: isUpStatus(monitor.status) ? "up" : "down",
     uptimeRatio: Number.isFinite(Number(monitor.uptimeRatio)) ? Number(monitor.uptimeRatio) : null,
   })) : [];
   return { stat: source.stat === "ok" ? "ok" : "error", monitors };
@@ -155,7 +159,7 @@ function safeUptimePayload(body) {
     return {
       label: region + " Node " + String(counters[region]).padStart(2, "0"),
       region,
-      status: monitor.status === 2 || monitor.status === "2" ? "up" : "down",
+      status: isUpStatus(monitor.status) ? "up" : "down",
       uptimeRatio: Number.isFinite(uptimeRatio) ? uptimeRatio : null,
     };
   }) : [];
