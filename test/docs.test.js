@@ -145,3 +145,14 @@ test("hero console is an honest demonstration without fake completion state", ()
   assert.doesNotMatch(home, /server online|deployed in \\d+s|demo complete|provisioning virtual machine[^<]*ok/i);
   assert.doesNotMatch(mainJs, /deployBar|deployPct|consoleOnline|Math\\.random|setInterval/);
 });
+
+test("homepage uses the infrastructure control-room composition", () => {
+  const home = HTML("index.html");
+  assert.match(home, /class="home-control-room"/);
+  assert.match(home, /class="home-decision-board"/);
+  assert.match(home, /class="home-journey"/);
+  assert.match(home, /class="[^"]*home-evidence-grid/);
+  assert.match(home, /class="home-plan-rail"/);
+  assert.doesNotMatch(home, /id="testimonials"|class="quote-block"/);
+  assert.match(home, /makes no infrastructure request|no infrastructure request/i);
+});

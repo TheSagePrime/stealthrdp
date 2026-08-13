@@ -653,7 +653,7 @@ function page({ active, title, description, canonical, pageType = "website", jso
 }
 
 /* ---------- 1. index ---------- */
-function buildIndex() {
+function buildLegacyIndex() {
   const preview = USA.slice(0, 3).map((p) => planCardHtml(p)).join("");
   const body = `
   <!-- ============ Hero ============ -->
@@ -799,6 +799,88 @@ function buildIndex() {
       </div>
     </div>
   </section>`;
+  const jsonLd = [{ "@context": "https://schema.org", "@graph": [ORG, websiteLd()] }];
+  return page({
+    active: "home",
+    title: "StealthRDP — Secure Remote Desktop & VPS Infrastructure",
+    description: "Deploy a Windows or Linux VPS in 60 seconds. Enterprise-grade hardware, DDoS protection, 99.9% uptime SLA and 24/7 support — from $9.50/month.",
+    canonical: "__SRDP_BASE__/",
+    jsonLd,
+    body,
+  });
+}
+
+function buildIndex() {
+  const preview = USA.slice(0, 3).map((p) => planCardHtml(p)).join("");
+  const nodeRows = MONITORS.slice(0, 5).map((m) => {
+    const upNow = isUp(m);
+    const value = Number.isFinite(Number(m.uptimeRatio)) ? `${Number(m.uptimeRatio).toFixed(2)}%` : "—";
+    return `<div class="home-evidence-row"><span class="home-state"><span class="home-state-dot ${upNow ? "up" : "unknown"}"></span>${upNow ? "Snapshot reports online" : "State unavailable"}</span><strong>${esc(m.label || "Production node")}</strong><span>${esc(m.region || "Protected infrastructure")}</span><span class="mono">${value} / 90d</span></div>`;
+  }).join("");
+  const body = `
+  <main class="home-control-room">
+    <section class="home-command" aria-labelledby="home-title">
+      <div class="container">
+        <div class="home-command-bar"><span class="home-command-id">SRDP / PUBLIC CONTROL ROOM</span><span>Choose a workload. Verify the path. Then hand off to checkout.</span></div>
+        <div class="home-command-grid">
+          <div class="home-proposition">
+            <span class="eyebrow">Windows &amp; Linux VPS infrastructure</span>
+            <h1 id="home-title">Remote infrastructure with a clear handoff.</h1>
+            <p class="home-lede">StealthRDP gives you a Windows or Linux VPS, the resources to run it, and the operational signals to understand what happens next — without pretending this public site is your billing or server console.</p>
+            <div class="home-actions"><a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Choose a plan <span aria-hidden="true">↗</span></a><a class="btn btn-ghost" href="/status.html">Inspect service status</a></div>
+            <p class="home-note"><span class="mono">ENTRY</span> Plans and availability are shown at checkout. Support stays on WHMCS.</p>
+          </div>
+          <div class="home-decision-board" aria-label="Deployment briefing demonstration">
+            <div class="home-board-head"><span>DEPLOYMENT BRIEFING</span><span class="home-board-badge">DEMONSTRATION</span></div>
+            <p class="home-board-title">A real buyer path, shown without a fake provisioning event.</p>
+            <div class="home-board-rows">
+              <div><span>Workload</span><b>Windows or Linux VPS</b></div>
+              <div><span>Public next step</span><b>Compare plans → WHMCS checkout</b></div>
+              <div><span>After purchase</span><b>Manage the server through the service systems</b></div>
+              <div><span>Evidence</span><b>Status page + native documentation</b></div>
+            </div>
+            <div class="home-board-foot"><span class="home-board-mark">◎</span><span>This preview makes no infrastructure request. No server is provisioned.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-journey" id="journey" aria-labelledby="journey-title">
+      <div class="container">
+        <div class="home-section-intro"><span class="sec-index">01 / The operating path</span><h2 id="journey-title">From selection to a server you can operate.</h2><p>Each step points to the system that actually owns it. The public site explains; WHMCS sells; VirtFusion manages server operations.</p></div>
+        <ol class="home-journey-line">
+          <li><span class="home-step-number">01</span><strong>Choose</strong><p>Compare USA and EU plans by CPU, RAM, storage, bandwidth, and billing cycle.</p><a href="/plans.html">Compare plans <span aria-hidden="true">→</span></a></li>
+          <li><span class="home-step-number">02</span><strong>Provision</strong><p>Use the existing WHMCS checkout to select and purchase a service.</p><a href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Open checkout <span aria-hidden="true">↗</span></a></li>
+          <li><span class="home-step-number">03</span><strong>Connect</strong><p>Follow verified Windows, Linux, VPN, and networking guides in the native docs.</p><a href="/docs.html">Open documentation <span aria-hidden="true">→</span></a></li>
+          <li><span class="home-step-number">04</span><strong>Operate</strong><p>Check service state publicly and take account-specific questions to support.</p><a href="/status.html">View status <span aria-hidden="true">→</span></a></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="home-evidence" aria-labelledby="evidence-title">
+      <div class="container home-evidence-layout home-evidence-grid">
+        <div class="home-section-intro"><span class="sec-index">02 / Operational evidence</span><h2 id="evidence-title">The useful signal, not dashboard theatre.</h2><p>These are the public surfaces you can verify before purchase: a fail-closed status path, source-labelled guides, and the approved service commitments.</p><a class="btn btn-ghost btn-sm" href="/status.html">Open full status page <span aria-hidden="true">→</span></a></div>
+        <div class="home-evidence-panel">
+          <div class="home-evidence-panel-head"><span>MONITORING SNAPSHOT</span><span class="mono">${TOTAL} logical monitors in source data</span></div>
+          <div class="home-evidence-summary"><strong>${UP}/${TOTAL}</strong><span>monitors currently marked online in the baked snapshot</span><a href="/status.html">Live refresh attempted on status page ↗</a></div>
+          <div class="home-evidence-list">${nodeRows}</div>
+          <p class="home-evidence-caption">Snapshot values are not a live deployment claim. If the live status request fails, the status page says so instead of presenting fallback data as current.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-plan-rail" id="plans" aria-labelledby="home-plans-title">
+      <div class="container">
+        <div class="home-plan-head"><div><span class="sec-index">03 / Plan selection</span><h2 id="home-plans-title">Start with the shape of your workload.</h2></div><a class="btn btn-ghost btn-sm" href="/plans.html">See all ${USA.length + EU.length} plans <span aria-hidden="true">→</span></a></div>
+        <div class="home-plan-context"><p>USA and EU options are available. The public snapshot shows plan data; final pricing and availability are confirmed in checkout.</p><div class="billing-toggle" id="billingToggle" role="tablist" aria-label="Billing cycle"><button role="tab" data-cycle="monthly" class="active">Monthly</button><button role="tab" data-cycle="quarterly">Quarterly <span class="off">−10%</span></button><button role="tab" data-cycle="annual">Annual <span class="off">−20%</span></button><button role="tab" data-cycle="biannual">Biannual <span class="off">−30%</span></button></div></div>
+        <div class="home-plan-list plan-grid" id="planGrid" aria-live="polite">${preview}</div>
+      </div>
+    </section>
+
+    <section class="home-close" aria-labelledby="home-close-title">
+      <div class="container home-close-layout"><div><span class="eyebrow">Next action</span><h2 id="home-close-title">Pick a route and keep the system boundary clear.</h2><p>Buy through WHMCS, verify service state through Status, and use the native docs when you need a safe next step.</p></div><div class="home-close-links"><a href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer"><span>01</span><b>Purchase a VPS</b><em>WHMCS checkout ↗</em></a><a href="/status.html"><span>02</span><b>Check status</b><em>Public monitoring →</em></a><a href="/docs.html"><span>03</span><b>Read the docs</b><em>Verified guides →</em></a><a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer"><span>04</span><b>Ask support</b><em>WHMCS support ↗</em></a></div></div>
+    </section>
+  </main>`;
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [ORG, websiteLd()] }];
   return page({
     active: "home",
