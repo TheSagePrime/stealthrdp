@@ -122,7 +122,18 @@ Keep approved product data from the existing repository unless Bhuvan changes it
 Do not silently resolve the existing currency mismatch between homepage copy and plan cards.
 Record pricing or promotion changes as a business decision.
 
-## External system boundaries
+## Homepage composition decision (2026-08-13)
+
+The Home surface remains `Persuade`, but it now uses an infrastructure-control-room composition rather than a marketing template:
+
+1. **Command opening** — one infrastructure proposition paired with a deployment briefing that is explicitly a demonstration and makes no infrastructure request.
+2. **Operating path** — an asymmetric four-step `choose → provision → connect → operate` route that names the real system boundary between the public site, WHMCS, VirtFusion, Status, and native Docs.
+3. **Operational evidence** — a source-labelled monitoring snapshot that points to the fail-closed Status page instead of presenting dashboard theatre or invented proof.
+4. **Plan rail** — plan selection follows evidence and preserves the existing baked plan data, billing toggles, and checkout URLs.
+5. **Route close** — purchase, status, docs, and support are presented as four distinct next actions rather than a generic testimonial/CTA sequence.
+
+The homepage intentionally does not render the former customer-story/testimonial section. Existing product claims remain in the rest of the site and approved SEO metadata; no new customers, uptime, locations, testimonials, prices, or guarantees were introduced.
+
 
 WHMCS layout remains unchanged.
 VirtFusion layout remains unchanged.
