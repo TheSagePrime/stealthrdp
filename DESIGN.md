@@ -120,36 +120,36 @@ Keep approved product data from the existing repository unless Bhuvan changes it
 Keep currency tied to the plan location in visible pricing and structured data.
 Record pricing or promotion changes as a business decision.
 
-## Premium Technical-Editorial homepage contract (2026-08-14)
+## Warm Instrument / C homepage contract (2026-08-14)
 
-The Home surface remains `Persuade`. Its job is to explain the private machine, make plan fit easy to judge, and hand the selected plan to secure checkout.
+The Home surface remains `Persuade`. Its job is to explain the private machine, make plan fit easy to judge, and hand the selected plan to secure WHMCS checkout.
 
-The current visual direction is **Premium Technical-Editorial**: a cool light canvas, deep navy order surfaces, warm gold actions, oversized asymmetrical type, thin catalog rules, and restrained technical labels. Dark theme remains supported through the existing theme toggle. The page must feel authored and quiet, not like a template assembled from feature cards.
+The approved visual direction is **Warm Instrument / C**: dark control-room surfaces with warm gold action states, an optional calm light theme, large asymmetrical type, original operating-system marks, and restrained motion. The page must remain compact and product-specific.
 
 ### Composition and interaction contract
 
-1. **Direct opening** — open with the machine choice. Use one headline, one supporting sentence, and one factual product note. Do not use a fake terminal, demo console, invented activity, or decorative dashboard.
-2. **Decision-led pricing** — show all six real USA plan choices and a selected-plan summary. Each selection updates the baked price, resources, badge, and real checkout URL.
-3. **Clear handoff** — state that prices and stock are shown on the order page. The order button opens the real checkout destination in a new tab.
-4. **Proof rail** — show Windows + Linux, NVMe storage, full admin rights, and unlimited bandwidth only when those facts match the selected product data.
-5. **Operating explanation** — explain remote access, automation, and independent control with direct product language. Avoid generic feature grids and unsupported claims.
+1. **Direct opening** — “Make room for the work.” Keep one supporting sentence, one primary plan action, one secondary explanation link, and one honest local deployment demonstration. The console must say that it is a demonstration and that it provisions nothing.
+2. **Verified proof row** — show Windows + Linux, NVMe storage, full admin rights, and unlimited bandwidth only when those facts match the selected product data.
+3. **Decision-led pricing** — show all six real USA plan choices and a selected-plan summary. Each selection updates the baked price, resources, visual bars, badge, and real WHMCS URL.
+4. **Operating path** — keep the three-step choose, checkout, and connect journey. WHMCS owns checkout, billing, account access, pricing confirmation, and availability confirmation.
+5. **Capabilities** — explain why a private machine helps with remote work, automation, and control. Use concrete StealthRDP language, not generic feature bento cards.
 6. **Operating systems** — use verbatim open-source library assets. Devicon supplies Windows Server, Ubuntu, Debian, CentOS, Rocky Linux, AlmaLinux, and Fedora. theSVG supplies FreeBSD and Alpine Linux. Do not hand-assemble brand paths or add wrapper backgrounds.
-7. **Status and FAQ** — keep a compact fail-closed status panel and useful native `details` controls. Orange indicates an incident only. Unavailable status remains neutral.
-8. **Final handoff** — use one closing CTA that returns to the selected machine list. Do not add duplicate checkout surfaces.
+7. **FAQ and status** — keep the two-column FAQ, native `details` controls, and fail-closed status card. Orange indicates an incident only. Unavailable status remains neutral.
+8. **Reviews** — keep the compact OneUptime-style marquee and human-voiced review cards. Duplicate cards may support the visual loop, but clones must stay out of the accessibility tree.
+9. **Final handoff** — use one closing CTA that returns to the selected machine list. Do not add duplicate checkout surfaces.
 
 ### Material, responsive, and motion rules
 
-- Home uses the cool canvas, deep navy, text, gold, and green tokens. Light mode is the primary authored presentation.
-- Keep borders thin and meaningful. Use them for catalog rows, section divisions, proof rails, and handoff surfaces.
-- Keep rounded containers limited to controls and FAQ disclosure items. Do not stack generic cards.
-- Use Space Grotesk for display hierarchy, Inter for reading and interface text, and JetBrains Mono for labels and technical values.
+- Home uses the approved navy, surface, text, gold, and green tokens. Light mode uses contrast-tested token values.
+- Keep the shared status ticker off Home. Retain it on other public pages.
+- Keep the header calm and the copy direct. Use the keyword context “Windows and Linux VPS hosting in the USA” in metadata and supporting copy.
 - Use self-hosted fonts and SVG assets. Do not add runtime asset CDNs.
-- Keep the first viewport focused on machine choice. Avoid oversized decorative objects and repeated hero sections.
-- Use scroll reveal only for orientation. Disable non-essential motion under `prefers-reduced-motion`.
-- On mobile, preserve the order text → plan list → selected plan → proof → explanation. Keep controls at comfortable touch sizes and prevent horizontal overflow.
+- Keep section rhythm compact. Prefer one strong explanation over repeated claims.
+- Use scroll reveal, plan-change feedback, console sequencing, and the review marquee only when they improve orientation. Disable non-essential motion under `prefers-reduced-motion`.
+- On mobile, preserve the order text → visual → proof → plans. Keep controls at comfortable touch sizes and prevent horizontal overflow.
 - Respect visible focus, semantic landmarks, accessible names, and neutral unavailable states.
 
-The Home surface is not the checkout system. It explains the product and hands off clearly. The external order system remains the source of truth for checkout, billing, login, support, pricing, and availability.
+The Home surface is not WHMCS or VirtFusion. It explains the product and hands off clearly; WHMCS remains the source of truth for checkout, billing, login, support, pricing, and availability.
 
 WHMCS layout remains unchanged.
 VirtFusion layout remains unchanged.
