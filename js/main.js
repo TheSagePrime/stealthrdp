@@ -465,5 +465,28 @@
   // The hero console is intentionally static. It never claims that a server
   // was provisioned and does not simulate progress or completion.
 
+  /* ---------- OS grid scroll reveal ---------- */
+  var osTiles = $$(".cq-os-tile");
+  if (osTiles.length && "IntersectionObserver" in window) {
+    var revealDelay = 60; // ms between tiles
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            var tile = entry.target;
+            var order = parseInt(tile.getAttribute("data-reveal") || "0", 10) + 1;
+            tile.style.transitionDelay = order * revealDelay + "ms";
+            tile.classList.add("revealed");
+            observer.unobserve(tile);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+    osTiles.forEach(function (t) { observer.observe(t); });
+  } else if (osTiles.length) {
+    osTiles.forEach(function (t) { t.classList.add("revealed"); });
+  }
+
   fetchUptime();
 })();

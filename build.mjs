@@ -14,6 +14,7 @@
 import { createRequire } from "module";
 import fs from "fs";
 import path from "path";
+import { OS_ICONS, OS_BRAND, OS_LIST } from "./js/os-icons.mjs";
 
 const require = createRequire(import.meta.url);
 const ROOT = path.dirname(new URL(import.meta.url).pathname);
@@ -969,9 +970,11 @@ function buildIndex() {
       <section class="cq-os" aria-labelledby="os-title">
         <div class="cq-os-head"><div><div class="cq-eyebrow">Works with your operating system</div><h2 id="os-title">Windows or Linux. Your choice.</h2></div><p>Every machine runs with full admin rights, so the operating system is the starting point — not the ceiling.</p></div>
         <div class="cq-os-grid">
-          ${["Windows Server", "Ubuntu", "Debian", "CentOS", "Rocky Linux", "AlmaLinux", "Fedora", "FreeBSD", "Alpine Linux"].map((os) => {
+          ${OS_LIST.map((os, i) => {
+            const d = OS_ICONS[os];
+            const brand = OS_BRAND[os];
             const [family, ver] = os.split(" ");
-            return `<div class="cq-os-tile"><span class="cq-os-mark" aria-hidden="true">${esc(family[0])}</span><span class="cq-os-name">${esc(os)}</span>${ver ? `<span class="cq-os-note">${esc(ver)}</span>` : ""}</div>`;
+            return `<div class="cq-os-tile" style="--os-brand:${brand}" data-reveal="${i % 3}"><span class="cq-os-mark" aria-hidden="true"><svg viewBox="0 0 24 24" role="img"><path d="${d}" fill="currentColor"/></svg></span><span class="cq-os-name">${esc(os)}</span>${ver ? `<span class="cq-os-note">${esc(ver)}</span>` : ""}</div>`;
           }).join("")}
         </div>
       </section>
