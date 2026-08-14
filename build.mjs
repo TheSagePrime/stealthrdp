@@ -14,7 +14,7 @@
 import { createRequire } from "module";
 import fs from "fs";
 import path from "path";
-import { OS_ICONS, OS_BRAND, OS_LIST } from "./js/os-icons.mjs";
+import { OS_ICONS, OS_BRAND, OS_LIST, WINDOWS_LOGO } from "./js/os-icons.mjs";
 
 const require = createRequire(import.meta.url);
 const ROOT = path.dirname(new URL(import.meta.url).pathname);
@@ -974,7 +974,10 @@ function buildIndex() {
             const d = OS_ICONS[os];
             const brand = OS_BRAND[os];
             const [family, ver] = os.split(" ");
-            return `<div class="cq-os-tile" style="--os-brand:${brand}" data-reveal="${i % 3}"><span class="cq-os-mark" aria-hidden="true"><svg viewBox="0 0 24 24" role="img"><path d="${d}" fill="currentColor"/></svg></span><span class="cq-os-name">${esc(os)}</span>${ver ? `<span class="cq-os-note">${esc(ver)}</span>` : ""}</div>`;
+            const mark = os === "Windows Server"
+              ? WINDOWS_LOGO
+              : `<svg viewBox="0 0 24 24" role="img" style="color:${brand}"><path d="${d}" fill="currentColor"/></svg>`;
+            return `<div class="cq-os-tile" data-reveal="${i % 3}"><span class="cq-os-mark" aria-hidden="true">${mark}</span><span class="cq-os-name">${esc(os)}</span>${ver ? `<span class="cq-os-note">${esc(ver)}</span>` : ""}</div>`;
           }).join("")}
         </div>
       </section>

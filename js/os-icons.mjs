@@ -22,4 +22,6 @@ export const OS_BRAND = {
   "FreeBSD": "#ab2b28",
   "Alpine Linux": "#0d597f",
 };
+/* True four-pane Microsoft Windows logo (multi-color), used instead of the monochrome path. */
+export const WINDOWS_LOGO = `<svg viewBox="0 0 24 24" role="img" aria-label="Windows"><rect x="1" y="1" width="10.2" height="10.2" fill="#f25022"/><rect x="12.8" y="1" width="10.2" height="10.2" fill="#7fba00"/><rect x="1" y="12.8" width="10.2" height="10.2" fill="#00a4ef"/><rect x="12.8" y="12.8" width="10.2" height="10.2" fill="#ffb900"/></svg>`;
 export const OS_LIST = Object.keys(OS_ICONS);

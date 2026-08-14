@@ -1439,10 +1439,9 @@ a.cq-review-card:hover { border-color: var(--accent); transform: translateY(-2px
 .cq-os-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
 .cq-os-tile { display: flex; align-items: center; gap: 14px; background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 20px; box-shadow: var(--shadow-1); transition: border-color .2s, transform .2s, box-shadow .2s; opacity: 0; transform: translateY(16px); }
 .cq-os-tile.revealed { opacity: 1; transform: none; transition: opacity .5s var(--ease), transform .5s var(--ease), border-color .2s, box-shadow .2s; }
-.cq-os-tile:hover { border-color: var(--os-brand, var(--accent)); transform: translateY(-3px); box-shadow: 0 14px 30px rgba(0, 0, 0, .18); }
-.cq-os-mark { width: 44px; height: 44px; border-radius: 12px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; flex: none; transition: background .25s, color .25s; }
-.cq-os-mark svg { width: 26px; height: 26px; }
-.cq-os-tile:hover .cq-os-mark { background: var(--os-brand, var(--accent)); color: #fff; }
+.cq-os-tile:hover { border-color: var(--border-strong); transform: translateY(-3px); box-shadow: 0 14px 30px rgba(0, 0, 0, .18); }
+.cq-os-mark { width: 44px; height: 44px; border-radius: 12px; background: var(--surface-2); display: grid; place-items: center; flex: none; }
+.cq-os-mark svg { width: 28px; height: 28px; }
 .cq-os-name { font-size: 15.5px; font-weight: 600; }
 .cq-os-note { margin-left: auto; color: var(--text-dim); font-size: 11px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .08em; }
 @media (max-width: 900px) {
