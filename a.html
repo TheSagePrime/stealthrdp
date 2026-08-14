@@ -33,8 +33,7 @@ a{color:inherit;text-decoration:none}
 .btn-small{min-height:40px;padding:0 16px;font-size:10px}
 
 /* hero */
-.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(430px,.95fr);gap:40px;padding:72px 0 60px;border-bottom:2px solid var(--ink)}
-.eyebrow{display:flex;align-items:center;gap:12px;color:var(--orange);font-family:JetBrains,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(430px,.95fr);gap:40px;padding:72px 0 60px;border-bottom:2px solid var(--ink)}.eyebrow{display:flex;align-items:center;gap:12px;color:var(--orange);font-family:JetBrains,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
 .eyebrow::before{content:"";width:26px;height:2px;background:var(--orange)}
 h1.hero-title{margin-top:34px;font-size:clamp(64px,7.6vw,118px);line-height:.88;letter-spacing:-.055em}
 h1 .outline{color:transparent;-webkit-text-stroke:2px var(--ink)}
@@ -51,8 +50,7 @@ h1 .outline{color:transparent;-webkit-text-stroke:2px var(--ink)}
 .spec-caption b{color:var(--ink);font-weight:400}
 
 /* proof band */
-.proof{display:grid;grid-template-columns:1.35fr repeat(4,1fr);gap:24px;align-items:center;min-height:84px;background:var(--ink);color:var(--bone)}
-.proof .mono{color:var(--orange)}
+.proof{display:grid;grid-template-columns:1.35fr repeat(4,1fr);gap:24px;align-items:center;min-height:84px;background:var(--ink);color:var(--bone)}.proof .mono{color:var(--orange)}
 .proof-item{display:flex;align-items:center;gap:10px;font-size:12.5px;letter-spacing:.02em}
 .proof-item::before{content:"";width:7px;height:7px;background:var(--bone);flex:none}
 
@@ -94,7 +92,7 @@ h1 .outline{color:transparent;-webkit-text-stroke:2px var(--ink)}
 .sheet-cta{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:36px}
 .sheet-cta .btn{flex:1}
 .sheet-foot{margin-top:16px;color:#7d786e;font-size:10.5px}
-@media (max-width:900px){.wrap{width:min(calc(100% - 36px),1320px)}.nav{display:none}.hero{grid-template-columns:1fr;padding:48px 0 40px}.hero-art{min-height:340px;margin-top:10px}.spec-plate{width:100%}.proof{grid-template-columns:repeat(2,1fr);gap:12px;min-height:0;padding:18px 0}.head{grid-template-columns:1fr;gap:16px;margin-bottom:36px}.head-note{text-align:left}.machine-layout{grid-template-columns:1fr;gap:36px}.ledger-head{display:none}.plan-row{grid-template-columns:32px 1fr auto auto;gap:10px;min-height:78px;padding:12px 4px}.plan-row .plan-spec{display:none}.spec-sheet{position:relative;top:auto;padding:28px 24px}}
+@media (max-width:900px){.wrap{width:min(calc(100% - 36px),1320px)}.nav{display:none}.hero{grid-template-columns:1fr;padding:48px 0 40px}.hero-art{min-height:340px;margin-top:10px;overflow:hidden}.spec-plate{width:100%}.proof{grid-template-columns:repeat(2,1fr);gap:12px;min-height:0;padding:18px 0}.head{grid-template-columns:1fr;gap:16px;margin-bottom:36px}.head-note{text-align:left}.machine-layout{grid-template-columns:1fr;gap:36px}.ledger-head{display:none}.plan-row{grid-template-columns:32px 1fr auto auto;gap:10px;min-height:78px;padding:12px 4px}.plan-row .plan-spec{display:none}.spec-sheet{position:relative;top:auto;padding:28px 24px}}
 </style>
 </head>
 <body>
@@ -105,7 +103,7 @@ h1 .outline{color:transparent;-webkit-text-stroke:2px var(--ink)}
 </div></header>
 
 <main>
-<section class="hero"><div class="wrap" style="display:grid;grid-template-columns:minmax(0,1.05fr) minmax(430px,.95fr);gap:40px;width:100%">
+<section class="hero"><div class="wrap" style="width:100%">
   <div>
     <div class="eyebrow">Private compute — USA</div>
     <h1 class="hero-title">MAKE ROOM<br><span class="outline">FOR THE WORK.</span></h1>
@@ -151,7 +149,7 @@ h1 .outline{color:transparent;-webkit-text-stroke:2px var(--ink)}
   </div>
 </div></section>
 
-<section class="proof"><div class="wrap" style="display:grid;grid-template-columns:1.35fr repeat(4,1fr);gap:24px;align-items:center;min-height:84px;width:100%">
+<section class="proof"><div class="wrap" style="width:100%">
   <span class="mono">The essentials, included</span>
   <span class="proof-item">Windows + Linux</span><span class="proof-item">NVMe storage</span><span class="proof-item">Full admin rights</span><span class="proof-item">Unlimited bandwidth</span>
 </div></section>
