@@ -3,7 +3,7 @@
 Status: active working contract
 Owner: Sage Prime
 Implementation owner: Suho / #Builder
-Last reviewed: 2026-08-13
+Last reviewed: 2026-08-14
 
 ## Product truth
 
@@ -43,22 +43,20 @@ The terminal motif belongs to deployment, status, commands, and technical eviden
 
 ## Visual direction
 
-Use a dark control-room foundation with a restrained electric-gold deployment signal.
-Use green only for healthy or online states.
-Use orange for warnings, maintenance, and service risk.
-Use red for severe failure or destructive actions.
-Use neutral gray for unknown or unavailable data.
-Use blue only when a future external-system bridge needs a neutral action relationship.
+Use a soft cloud-gray/light canvas on the homepage only, with deep navy product surfaces and one restrained gold accent.
+Keep the shared pages practical and dark where their current operational context benefits from it.
+Use green only for healthy or online states, orange for warnings, and neutral gray for unknown data.
 
 Use Space Grotesk for display hierarchy.
 Use Inter for reading and interface text.
-Use JetBrains Mono for commands, technical values, timestamps, and status labels.
+Use JetBrains Mono sparingly for technical values and status labels, not as decorative chrome.
 Keep the type system limited to these self-hosted families.
 
-Use charcoal surfaces, thin borders, deliberate shared edges, and modest radius values.
-Use gradients only when they reinforce depth or a state.
-Do not use purple-blue gradient chrome, glass orbs, neon decoration, or generic SaaS blobs.
-Do not nest cards without a clear information relationship.
+On Home, favour whitespace, alignment, a calm light header, and one simple local server/workspace visual.
+Use borders only to separate real relationships: the proof rail, plan rail, operating path, and support links.
+Use a deep navy surface for the selected-plan summary and final handoff.
+Do not use a ticker, grid wallpaper, beige editorial styling, gold shadows, nested card stacks, pills, fake terminal output, dashboard theatre, fake metrics, testimonials, or generic SaaS bento grids on Home.
+Do not copy a reference brand's identity, exact layout, assets, copy, or claims.
 
 ## Composition rules
 
@@ -122,18 +120,47 @@ Keep approved product data from the existing repository unless Bhuvan changes it
 Do not silently resolve the existing currency mismatch between homepage copy and plan cards.
 Record pricing or promotion changes as a business decision.
 
-## Homepage composition decision (2026-08-14)
+## Quiet Infrastructure homepage contract (2026-08-14)
 
-The Home surface remains `Persuade`, but the homepage is an authored **Stealth Workspace**: an image-led infrastructure artifact makes the product tangible, then an attached decision dock turns that interest into a grounded plan choice.
+The Home surface remains `Persuade`, but its job is intentionally quiet: explain the machine, make plan fit easy to judge, and move the selected plan to secure WHMCS checkout without theatre.
 
-1. **Artifact-led opening** — a local original SVG shows a remote workspace connected to Windows, Linux, and storage layers. It is explicitly labelled as a concept illustration; it is not live monitoring or fake provisioning.
-2. **Attached decision dock** — workload intent → recommended fit → manual plan choice → persistent selection summary → WHMCS handoff. The selector is visually attached to the artifact rather than rendered as a separate dark form panel beside copy.
-3. **Concise proposition** — the first viewport prioritises one high-impact proposition, one primary checkout action, a clear secondary route, and a small boundary note.
-4. **Proof after fit** — public status, native docs, checkout ownership, and support boundaries appear as evidence for the decision. No fake deployment state, scarcity, testimonial, or invented metric is introduced.
-5. **Material system** — the homepage uses a dark navy/graphite shell, deliberate blue-gray depth, a restrained gold deployment signal, and green only for healthy state semantics. It avoids beige editorial styling, generic SaaS cards, glassmorphism, neon decoration, and faux terminal theatre.
+### Dated reference synthesis
 
-The homepage intentionally does not render the former customer-story/testimonial section. Existing product claims remain in the rest of the site and approved SEO metadata; no new customers, uptime, locations, testimonials, prices, or guarantees were introduced.
+The following live references were reviewed on 2026-08-14 for conversion structure, pacing, and product-family clarity. They are not visual templates:
 
+- Cloudzy — https://cloudzy.com — clear proposition, whitespace, one primary action, and restrained dark atmosphere. We keep the hierarchy and omit the star field, copy, and identity.
+- Latitude.sh — https://latitude.sh — premium type scale, negative space, and one hero object. We keep the restraint and omit its layout, imagery, and brand language.
+- Render — https://render.com — light canvas, readable headline, simple action pair, and product-led proof. We keep the calm canvas and omit its product screenshots and composition.
+- Kinsta — https://kinsta.com — off-white calm, strong proof, and a direct CTA. We keep the pacing and omit the editorial style, claims, and imagery.
+- Hetzner Cloud — https://hetzner.com/cloud — practical plan clarity and useful infrastructure explanation. We keep the comparison discipline and omit its identity and illustrations.
+- Kamatera — https://kamatera.com — small set of feature proofs around a direct proposition. We keep the proof count and use only verified StealthRDP facts.
+- UpCloud — https://upcloud.com — product-family clarity and restrained section rhythm. We keep the grouping principle and omit its visual system.
+- Scaleway — https://scaleway.com — infrastructure-specific product grouping. We keep the product-first reading path and omit its copy, assets, and brand treatment.
+- Cherry Servers — https://cherryservers.com — direct server categories and operational clarity. We keep the plainness and omit its layout and claims.
+- DigitalOcean — https://digitalocean.com — accessible product grouping and clear getting-started flow. We keep the task-first conversion path and omit its identity.
+- Runpod — https://runpod.io — workload-led product framing. We keep the intent-to-fit relationship and omit its imagery, language, and visual energy.
+- Vultr — https://vultr.com — compact product choice and infrastructure specificity. We keep the directness and omit its layout and claims.
+
+### Composition and interaction contract
+
+1. **Direct opening** — “Your own Windows or Linux VPS.” One supporting sentence, one primary WHMCS CTA, one secondary text link, and one original local server/workspace visual. No annotations, fake terminal, live console, or status dashboard.
+2. **Verified proof row** — exactly three facts: Windows + Linux VPS, NVMe storage, and full admin / root access. No fabricated numbers, customer counts, uptime, or urgency on the Home surface.
+3. **Decision-led pricing** — “Start with the right machine.” Keep four real USA plan choices in a horizontal rail and a selected-plan summary. The workload control is compact and optional; every plan selection updates the existing `desk-plan-choice`, `desk-intents`, `desk-plan-choices`, `selectorCta`, `deskTopCta`, and `closePurchaseLink` path to a real `https://dash.stealthrdp.com` URL.
+4. **Capabilities** — three calm columns: remote desktop, services and hosting, development and automation. Use verified product language, not generic feature bento cards.
+5. **Operating path** — one quiet three-step line: choose, check, continue. WHMCS owns checkout, billing, and account access.
+6. **Proof/support** — three links only: public status, native docs, and pre-sales support. Status data stays on `/status.html`; the Home surface has no monitoring table.
+7. **Final handoff** — one deep navy band showing the selected plan and one button. No duplicate action grid.
+
+### Material and responsive rules
+
+- Home uses a soft cloud-gray canvas, deep navy selected-plan/final surfaces, and one restrained gold accent.
+- Hide the shared status ticker on Home; retain it on other public pages.
+- Keep the header light and calm. Reduce decorative micro-labels by at least 60% versus the rejected preview.
+- Avoid beige editorial styling, gold shadows, grid wallpaper, dense borders, nested cards, pills, fake metrics, testimonials, dashboard theatre, and generic SaaS bento grids.
+- On mobile, preserve the order text → visual → proof → plan rail, use comfortable controls, stack the three intent choices, and prevent horizontal overflow.
+- Respect visible focus, reduced motion, and semantic landmarks.
+
+The Home surface is not WHMCS or VirtFusion. It explains the product and hands off clearly; WHMCS remains the source of truth for checkout, billing, login, support, pricing, and availability.
 
 WHMCS layout remains unchanged.
 VirtFusion layout remains unchanged.

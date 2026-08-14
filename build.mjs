@@ -124,8 +124,8 @@ function navHtml(active) {
 }
 
 function headerHtml(active) {
-  return `${tickerHtml()}
-  <header class="header"><div class="container header-inner">
+  const ticker = active === "home" ? "" : `${tickerHtml()}\n  `;
+  return `${ticker}<header class="header"><div class="container header-inner">
     <a href="/" class="logo" aria-label="StealthRDP home">
       <span class="logo-mark">${LOGO_SVG}</span><span>Stealth<em>RDP</em></span>
     </a>
@@ -815,59 +815,64 @@ function buildIndex() {
   const initialPlan = selectorPlans[1] || selectorPlans[0];
   const planChoices = selectorPlans.map((p) => `<button type="button" class="desk-plan-choice${p === initialPlan ? " is-selected" : ""}" data-plan-name="${esc(planName(p))}" data-plan-url="${esc(planUrl(p))}" data-plan-price="${monthlyPrice(p).toFixed(2)}" data-plan-cpu="${esc(p.specs && p.specs.cpu)}" data-plan-ram="${esc(p.specs && p.specs.ram)}" data-plan-storage="${esc(p.specs && p.specs.storage)}" aria-pressed="${p === initialPlan ? "true" : "false"}"><span><b>${esc(planName(p))}</b><small>${esc(p.specs && p.specs.cpu)} · ${esc(p.specs && p.specs.ram)}</small></span><strong>&euro;${fmt(monthlyPrice(p))}<small>/mo</small></strong></button>`).join("");
   const intents = [
-    ["remote-work", "Remote work &amp; apps", "A full desktop with room for everyday multitasking.", "Silver"],
-    ["trading", "Trading &amp; automation", "Run terminals, bots, and scripts on a dedicated VPS.", "Gold"],
-    ["web-hosting", "Websites &amp; services", "Keep a site, panel, or service close to its resources.", "Gold"],
-    ["development", "Development workspace", "More headroom for tools, builds, and parallel work.", "Platinum"],
-  ].map(([id, title, desc, plan]) => `<button type="button" class="desk-intent${id === "remote-work" ? " is-selected" : ""}" data-intent="${id}" data-recommend="${plan}" aria-pressed="${id === "remote-work" ? "true" : "false"}"><span class="desk-intent-index">0${["remote-work", "trading", "web-hosting", "development"].indexOf(id) + 1}</span><span><b>${title}</b><small>${desc}</small></span><span class="desk-intent-arrow" aria-hidden="true">↗</span></button>`).join("");
-  const nodeRows = MONITORS.slice(0, 4).map((m) => {
-    const upNow = isUp(m);
-    const value = Number.isFinite(Number(m.uptimeRatio)) ? `${Number(m.uptimeRatio).toFixed(2)}%` : "—";
-    return `<div class="desk-proof-row"><span class="desk-proof-state"><i class="${upNow ? "up" : "unknown"}"></i>${upNow ? "Snapshot online" : "State unavailable"}</span><strong>${esc(m.label || "Production node")}</strong><span>${esc(m.region || "Protected infrastructure")}</span><span class="mono">${value} / 90d</span></div>`;
-  }).join("");
+    ["remote-work", "Remote desktop", "A balanced Windows or Linux workspace.", "Silver"],
+    ["web-hosting", "Services &amp; hosting", "Sites, panels, and always-on services.", "Gold"],
+    ["development", "Development &amp; automation", "Tools, builds, scripts, and scheduled work.", "Platinum"],
+  ].map(([id, title, desc, plan], index) => `<button type="button" class="desk-intent${id === "remote-work" ? " is-selected" : ""}" data-intent="${id}" data-recommend="${plan}" aria-pressed="${id === "remote-work" ? "true" : "false"}"><span class="desk-intent-index">0${index + 1}</span><span><b>${title}</b><small>${desc}</small></span><span class="desk-intent-arrow" aria-hidden="true">↗</span></button>`).join("");
+  const capabilities = [
+    ["Remote desktop", "Keep a familiar Windows or Linux workspace available from wherever the work takes you."],
+    ["Services and hosting", "Run a site, panel, or service on a machine with its own resources and admin access."],
+    ["Development and automation", "Give builds, scripts, and scheduled work a place to keep running."],
+  ].map(([title, desc], index) => `<li><span class="quiet-capability-number">0${index + 1}</span><h3>${title}</h3><p>${desc}</p></li>`).join("");
   const initialUrl = planUrl(initialPlan);
   const initialName = planName(initialPlan);
   const body = `
   <main class="home-control-room decision-desk">
-    <section class="infra-hero" aria-labelledby="home-title">
-      <div class="container">
-        <div class="infra-topline"><span><i></i> STEALTHRDP / INFRASTRUCTURE AT YOUR DESK</span><span>WINDOWS + LINUX VPS</span></div>
-        <div class="infra-hero-grid">
-          <div class="infra-copy">
-            <span class="infra-kicker">A machine for the work ahead</span>
-            <h1 id="home-title">Your work deserves its own <em>machine.</em></h1>
-            <p class="infra-lede">Remote desktops, services, scripts, and development tools on a Windows or Linux VPS you can actually shape around the workload.</p>
-            <div class="infra-actions"><a id="deskTopCta" class="btn btn-primary" href="${initialUrl}" target="_blank" rel="noopener noreferrer">Continue with ${initialName} <span aria-hidden="true">↗</span></a><a class="infra-secondary" href="#decision-desk">Find your starting point <span aria-hidden="true">↓</span></a></div>
-            <p class="infra-note"><span class="infra-note-mark">01</span><span>Choose by intent, check the real specs, then hand off to WHMCS for checkout. This page does not provision infrastructure.</span></p>
-          </div>
-          <div class="infra-artifact-column">
-            <figure class="machine-artifact">
-              <img src="/assets/stealth-workspace.svg" alt="Concept illustration of a remote workspace connected to Windows and Linux server layers" />
-              <figcaption><span>CONCEPT ILLUSTRATION</span><span>THE PRODUCT IS THE MACHINE</span></figcaption>
-            </figure>
-            <div class="artifact-annotation artifact-annotation-a"><span>01</span><b>Remote workspace</b><small>One surface for the job.</small></div>
-            <div class="artifact-annotation artifact-annotation-b"><span>02</span><b>Plan fit</b><small>Grounded in real specs.</small></div>
-          </div>
+    <section class="quiet-hero" aria-labelledby="home-title">
+      <div class="container quiet-hero-grid">
+        <div class="quiet-hero-copy">
+          <p class="quiet-kicker">Quiet Infrastructure</p>
+          <h1 id="home-title">Your own Windows or Linux VPS.</h1>
+          <p class="quiet-lede">A private machine for remote work, services, automation, and development. Choose a plan, then continue to secure checkout.</p>
+          <div class="quiet-actions"><a id="deskTopCta" class="btn btn-primary" href="${initialUrl}" target="_blank" rel="noopener noreferrer">Continue with ${initialName} <span aria-hidden="true">↗</span></a><a class="quiet-secondary" href="#plans">See plans <span aria-hidden="true">↓</span></a></div>
         </div>
-        <div class="decision-workspace home-decision-board" id="decision-desk" aria-labelledby="desk-title">
-          <div class="desk-workspace-head"><div><span class="desk-label">02 / BUILD YOUR STARTING POINT</span><h2 id="desk-title">What are you putting online?</h2></div><span class="desk-step-count">SELECTOR / 01—03</span></div>
-          <div class="desk-intents" role="group" aria-label="Choose a workload">${intents}</div>
-          <div class="desk-fit-line"><span class="desk-label">RECOMMENDED FIT</span><span id="deskFitMessage">Balanced memory for a full remote workspace.</span></div>
-          <div class="desk-plan-picker"><div class="desk-label">02 / CHECK THE PLAN</div><div class="desk-plan-choices" role="group" aria-label="Choose a plan">${planChoices}</div></div>
-          <aside class="desk-summary" aria-live="polite"><div><span class="desk-label">CURRENT SELECTION</span><strong id="selectedPlanName">${initialName}</strong></div><p id="selectedPlanReason">Recommended for a balanced remote workspace.</p><dl><div><dt>CPU</dt><dd id="selectedPlanCpu">${esc(initialPlan.specs && initialPlan.specs.cpu)}</dd></div><div><dt>RAM</dt><dd id="selectedPlanRam">${esc(initialPlan.specs && initialPlan.specs.ram)}</dd></div><div><dt>STORAGE</dt><dd id="selectedPlanStorage">${esc(initialPlan.specs && initialPlan.specs.storage)}</dd></div><div><dt>SNAPSHOT</dt><dd>&euro;<span id="selectedPlanPrice">${monthlyPrice(initialPlan).toFixed(2)}</span> / mo</dd></div></dl><a id="selectorCta" class="btn btn-primary" href="${initialUrl}" target="_blank" rel="noopener noreferrer"><span id="selectorCtaLabel">Continue with ${initialName}</span> <span aria-hidden="true">↗</span></a><a class="desk-all-plans" href="/plans.html">Need a different shape? Compare all ${USA.length + EU.length} plans →</a></aside>
-          <p class="desk-handoff"><span class="desk-handoff-mark">↳</span><span>Checkout, billing, and account access happen on WHMCS. Pricing and availability are confirmed there.</span></p>
-        </div>
+        <figure class="quiet-visual">
+          <img src="/assets/quiet-server.svg" alt="Simplified server workspace with Windows, Linux, and NVMe signals" />
+        </figure>
+      </div>
+      <div class="container quiet-proof-row" aria-label="Included infrastructure features">
+        <div><strong>Windows + Linux VPS</strong><span>Choose the environment that fits the work.</span></div>
+        <div><strong>NVMe storage</strong><span>Fast storage for the machine you rely on.</span></div>
+        <div><strong>Full admin / root access</strong><span>Configure the server around your own workflow.</span></div>
       </div>
     </section>
 
-    <section class="decision-path home-journey" id="journey" aria-labelledby="journey-title"><div class="container"><div class="infra-section-intro"><span class="desk-label">03 / FROM INTENT TO MACHINE</span><h2 id="journey-title">A clearer route through infrastructure.</h2><p>The site handles the decision. The service systems keep their proper boundaries.</p></div><ol class="decision-path-grid"><li><span>01</span><b>Describe the work</b><p>Start with a workload, not a wall of specs.</p></li><li><span>02</span><b>Shape the fit</b><p>Move through actual CPU, RAM, storage, and price.</p></li><li><span>03</span><b>Verify the path</b><p>Use public status and native docs before checkout.</p></li><li><span>04</span><b>Hand off cleanly</b><p>WHMCS owns billing and account access.</p></li></ol></div></section>
+    <section class="decision-workspace home-decision-board" id="plans" aria-labelledby="plans-title">
+      <div class="container">
+        <div class="quiet-section-heading"><p class="quiet-kicker">Choose your starting point</p><h2 id="plans-title">Start with the right machine.</h2><p>Use a workload as a starting point, or select one of the four real USA plans directly.</p></div>
+        <div class="quiet-plan-layout">
+          <div class="quiet-plan-controls">
+            <div class="quiet-control-label">Workload (optional)</div>
+            <div class="desk-intents" role="group" aria-label="Choose a workload">${intents}</div>
+            <div class="quiet-rail-head"><h3>USA plans</h3><span>Monthly view · prices confirmed at checkout</span></div>
+            <div class="desk-plan-choices" role="group" aria-label="Choose a plan">${planChoices}</div>
+          </div>
+          <aside class="desk-summary" aria-live="polite"><div><span class="desk-label">SELECTED PLAN</span><strong id="selectedPlanName">${initialName}</strong></div><p id="selectedPlanReason">Recommended for a balanced remote workspace.</p><dl><div><dt>CPU</dt><dd id="selectedPlanCpu">${esc(initialPlan.specs && initialPlan.specs.cpu)}</dd></div><div><dt>RAM</dt><dd id="selectedPlanRam">${esc(initialPlan.specs && initialPlan.specs.ram)}</dd></div><div><dt>STORAGE</dt><dd id="selectedPlanStorage">${esc(initialPlan.specs && initialPlan.specs.storage)}</dd></div><div><dt>PRICE</dt><dd>&euro;<span id="selectedPlanPrice">${monthlyPrice(initialPlan).toFixed(2)}</span> / mo</dd></div></dl><a id="selectorCta" class="btn btn-primary" href="${initialUrl}" target="_blank" rel="noopener noreferrer"><span id="selectorCtaLabel">Continue with ${initialName}</span> <span aria-hidden="true">↗</span></a><a class="desk-all-plans" href="/plans.html">Compare all ${USA.length + EU.length} plans →</a></aside>
+        </div>
+        <p class="desk-handoff"><span class="desk-handoff-mark">↳</span><span>Checkout, billing, and account access happen on WHMCS. Pricing and availability are confirmed there.</span></p>
+      </div>
+    </section>
 
-    <section class="decision-proof home-evidence-grid" id="proof" aria-labelledby="proof-title"><div class="container decision-proof-grid"><div class="infra-section-intro"><span class="desk-label">04 / EVIDENCE WITH A SOURCE</span><h2 id="proof-title">Confidence should be inspectable.</h2><p>Current service state belongs on the public status page. Task guidance belongs in native docs. Neither pretends to be the checkout.</p><div class="decision-proof-links"><a class="btn btn-ghost btn-sm" href="/status.html">Open public status →</a><a class="infra-secondary" href="/docs.html">Read the docs ↗</a></div></div><div class="desk-proof-panel"><div class="desk-proof-panel-head"><span>BAKED MONITORING SNAPSHOT</span><span class="mono">${UP}/${TOTAL} MARKED ONLINE</span></div><div class="desk-proof-list">${nodeRows}</div><p class="desk-proof-caption">Snapshot data is source-labelled, not a live deployment claim. Pricing and availability are confirmed in checkout.</p></div></div></section>
+    <section class="quiet-capabilities" aria-labelledby="capabilities-title"><div class="container"><div class="quiet-section-heading"><p class="quiet-kicker">Built around the work</p><h2 id="capabilities-title">Infrastructure that stays out of the way.</h2><p>Choose the machine for the job, then shape the environment yourself.</p></div><ul class="quiet-capability-grid">${capabilities}</ul></div></section>
 
-    <section class="decision-close home-plan-rail" aria-labelledby="close-title"><div class="container decision-close-grid"><div class="infra-section-intro"><span class="desk-label">05 / NEXT HANDOFF</span><h2 id="close-title">Leave with a plan, not a guess.</h2><p>Continue with the selected plan, compare the complete USA + EU set, or ask a pre-sales question before committing.</p></div><div class="decision-close-actions"><a href="${initialUrl}" id="closePurchaseLink" target="_blank" rel="noopener noreferrer"><span>01</span><b>Continue to checkout</b><em id="closePurchaseLabel">${initialName} · WHMCS ↗</em></a><a href="/plans.html"><span>02</span><b>Compare all plans</b><em>USA + EU plan data →</em></a><a href="/docs.html"><span>03</span><b>Read the docs</b><em>Verified task guides →</em></a><a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer"><span>04</span><b>Ask support</b><em>Pre-sales on WHMCS ↗</em></a></div></div></section>
+    <section class="decision-path home-journey" id="journey" aria-labelledby="journey-title"><div class="container"><div class="quiet-section-heading"><p class="quiet-kicker">A simple operating path</p><h2 id="journey-title">Choose, configure, continue.</h2></div><ol class="quiet-step-line"><li><span>01</span><strong>Choose</strong><p>Start with the work, not a wall of specs.</p></li><li><span>02</span><strong>Check</strong><p>Compare the actual CPU, RAM, storage, and price.</p></li><li><span>03</span><strong>Continue</strong><p>WHMCS owns secure checkout, billing, and account access.</p></li></ol></div></section>
+
+    <section class="decision-proof home-evidence-grid" id="proof" aria-labelledby="proof-title"><div class="container quiet-proof-layout"><div class="quiet-section-heading"><p class="quiet-kicker">Proof and support</p><h2 id="proof-title">Useful paths, kept separate.</h2><p>Check service state, read task guidance, or ask a question before you buy.</p></div><nav class="quiet-support-links" aria-label="Proof and support"><a href="/status.html"><strong>Public status</strong><span>Current service state →</span></a><a href="/docs.html"><strong>Native docs</strong><span>Task-focused guides →</span></a><a href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer"><strong>Pre-sales support</strong><span>Ask before checkout ↗</span></a></nav></div></section>
+
+    <section class="decision-close home-plan-rail" id="close" aria-labelledby="close-title"><div class="container decision-close-grid"><div><p class="quiet-kicker">Your selected machine</p><h2 id="close-title">Ready when you are.</h2><p>Continue with the plan you selected. WHMCS confirms pricing, availability, checkout, and account access.</p></div><a class="btn btn-primary" href="${initialUrl}" id="closePurchaseLink" target="_blank" rel="noopener noreferrer"><span id="closePurchaseLabel">Continue with ${initialName}</span> <span aria-hidden="true">↗</span></a></div></section>
   </main>`;
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [ORG, websiteLd()] }];
-  return page({ active: "home", title: "StealthRDP — Choose the VPS for the Work", description: "Choose a Windows or Linux VPS by workload, verify the public operating path, and continue to real WHMCS checkout.", canonical: "__SRDP_BASE__/", jsonLd, body });
+  return page({ active: "home", title: "StealthRDP — Quiet Infrastructure for Windows & Linux VPS", description: "Your own Windows or Linux VPS for remote work, services, automation, and development. Choose a plan and continue to secure WHMCS checkout.", canonical: "__SRDP_BASE__/", jsonLd, body });
 }
 
 /* ---------- 2. plans ---------- */

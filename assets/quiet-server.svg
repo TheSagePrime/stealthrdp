@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 500" role="img" aria-labelledby="title desc">
+  <title id="title">Quiet Infrastructure server workspace</title>
+  <desc id="desc">A simple server form with understated Windows, Linux, and NVMe signals.</desc>
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#0d2338" flood-opacity=".16" />
+    </filter>
+  </defs>
+  <rect x="54" y="32" width="572" height="372" rx="38" fill="#dfe7ed" />
+  <path d="M104 404h472" stroke="#c1ced7" stroke-width="2" stroke-linecap="round" />
+  <g filter="url(#shadow)">
+    <rect x="126" y="88" width="428" height="254" rx="22" fill="#0e2941" />
+    <rect x="151" y="114" width="378" height="170" rx="14" fill="#153954" stroke="#2c506b" stroke-width="2" />
+    <path d="M179 149h122" stroke="#d2ab58" stroke-width="5" stroke-linecap="round" />
+    <path d="M179 174h250M179 195h198" stroke="#7191a8" stroke-width="7" stroke-linecap="round" opacity=".7" />
+    <path d="M179 238h95M294 238h78M391 238h104" stroke="#4e728c" stroke-width="6" stroke-linecap="round" opacity=".8" />
+    <circle cx="472" cy="154" r="18" fill="#0e2941" stroke="#6e8ca1" stroke-width="2" />
+    <path d="M464 154h16M472 146v16" stroke="#d2ab58" stroke-width="3" stroke-linecap="round" />
+    <path d="M151 306h378" stroke="#294b65" stroke-width="2" />
+    <circle cx="176" cy="325" r="5" fill="#d2ab58" />
+    <circle cx="194" cy="325" r="5" fill="#7191a8" />
+    <circle cx="212" cy="325" r="5" fill="#7191a8" />
+    <rect x="506" y="318" width="23" height="12" rx="6" fill="#1d4d69" />
+  </g>
+  <path d="M175 359v14M340 359v14M505 359v14" stroke="#9eb1bf" stroke-width="2" stroke-linecap="round" />
+  <g font-family="Arial, Helvetica, sans-serif" font-size="16" fill="#18334a">
+    <g transform="translate(82 378)">
+      <rect width="176" height="66" rx="16" fill="#f9fbfc" stroke="#c5d0d8" stroke-width="2" />
+      <rect x="17" y="19" width="24" height="24" rx="3" fill="#d2ab58" />
+      <path d="M29 21v20M19 31h20" stroke="#f9fbfc" stroke-width="2" />
+      <text x="56" y="30" font-weight="700">Windows</text>
+      <text x="56" y="48" font-size="12" fill="#6b7d8b">familiar desktop</text>
+    </g>
+    <g transform="translate(252 378)">
+      <rect width="176" height="66" rx="16" fill="#f9fbfc" stroke="#c5d0d8" stroke-width="2" />
+      <circle cx="30" cy="30" r="12" fill="none" stroke="#d2ab58" stroke-width="3" />
+      <path d="M21 40c5-8 13-11 23-12M29 18c-1 6 1 11 7 14" fill="none" stroke="#d2ab58" stroke-width="2" stroke-linecap="round" />
+      <text x="56" y="30" font-weight="700">Linux</text>
+      <text x="56" y="48" font-size="12" fill="#6b7d8b">open environment</text>
+    </g>
+    <g transform="translate(422 378)">
+      <rect width="176" height="66" rx="16" fill="#f9fbfc" stroke="#c5d0d8" stroke-width="2" />
+      <rect x="17" y="21" width="26" height="19" rx="4" fill="none" stroke="#d2ab58" stroke-width="3" />
+      <path d="M22 27h16M22 34h16" stroke="#d2ab58" stroke-width="2" stroke-linecap="round" />
+      <text x="56" y="30" font-weight="700">NVMe</text>
+      <text x="56" y="48" font-size="12" fill="#6b7d8b">fast storage</text>
+    </g>
+  </g>
+</svg>

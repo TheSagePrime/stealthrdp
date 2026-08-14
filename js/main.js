@@ -101,7 +101,7 @@
     if (selectorCta) selectorCta.href = url;
     if (selectorCtaLabel) selectorCtaLabel.textContent = "Continue with " + name;
     if (closePurchaseLink) closePurchaseLink.href = url;
-    if (closePurchaseLabel) closePurchaseLabel.textContent = name + " · WHMCS ↗";
+    if (closePurchaseLabel) closePurchaseLabel.textContent = name + " · WHMCS";
   }
   if (deskPlans.length) {
     var firstDeskPlan = deskPlans.filter(function (plan) { return plan.classList.contains("is-selected"); })[0] || deskPlans[0];

@@ -76,7 +76,7 @@ test("public chrome has no legacy docs host, countdown, or fake live deployment 
   const mainJs = HTML("js/main.js");
   assert.doesNotMatch(mainJs, /srdp_offer_end|COUNTDOWN_MS|setInterval\(tick/);
   const home = HTML("index.html");
-  assert.match(home, /decision desk|does not provision|no infrastructure request/i);
+  assert.match(home, /quiet infrastructure|WHMCS checkout/i);
   assert.match(home, /WHMCS checkout/i);
   assert.doesNotMatch(home, /server online|Live deploy console|fake provisioning/i);
 });
@@ -134,14 +134,14 @@ test("promotion chrome is stable and does not invent an expiry", () => {
     assert.doesNotMatch(HTML(route), /POWER30|countdown|srdp_offer_end/i, `${route}: no unverified promotion or timer`);
   }
   assert.doesNotMatch(HTML("build.mjs"), /POWER30|srdp_offer_end|COUNTDOWN_MS/);
-  assert.match(HTML("index.html"), /pricing and availability shown at checkout/i);
+  assert.match(HTML("index.html"), /prices confirmed at checkout|WHMCS checkout/i);
 });
 
 test("homepage decision desk is an honest handoff without fake completion state", () => {
   const home = HTML("index.html");
   const mainJs = HTML("js/main.js");
   assert.match(home, /desk-handoff/);
-  assert.match(home, /does not provision infrastructure|no infrastructure request/i);
+  assert.match(home, /WHMCS owns secure checkout|WHMCS checkout/i);
   assert.doesNotMatch(home, /server online|deployed in \\d+s|demo complete|provisioning virtual machine[^<]*ok/i);
   assert.doesNotMatch(mainJs, /deployBar|deployPct|consoleOnline|Math\\.random|setInterval/);
 });
@@ -157,5 +157,17 @@ test("homepage uses the infrastructure decision-desk composition", () => {
   assert.match(home, /class="desk-plan-choices"/);
   assert.match(home, /id="selectorCta"/);
   assert.doesNotMatch(home, /id="testimonials"|class="quote-block"/);
-  assert.match(home, /does not provision infrastructure|no infrastructure request/i);
+  assert.match(home, /WHMCS owns secure checkout|WHMCS checkout/i);
+});
+
+test("homepage follows the Quiet Infrastructure contract", () => {
+  const home = HTML("index.html");
+  assert.match(home, /Your own Windows or Linux VPS\./);
+  assert.match(home, /quiet-server\.svg/);
+  assert.match(home, /Windows \+ Linux VPS|Windows &amp; Linux VPS/i);
+  assert.match(home, /NVMe storage/i);
+  assert.match(home, /Full admin \/ root access/i);
+  assert.doesNotMatch(home, /<div class="ticker"/);
+  assert.doesNotMatch(home, /artifact-annotation|desk-proof-panel|monitoring snapshot/i);
+  assert.match(home, /href="https:\/\/dash\.stealthrdp\.com\/index\.php\?rp=\/store\/standard-usa-rdp-vps\//);
 });
