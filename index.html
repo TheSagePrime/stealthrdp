@@ -3,24 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>StealthRDP — Quiet Infrastructure for Windows &amp; Linux VPS</title>
-  <meta name="description" content="Your own Windows or Linux VPS for remote work, services, automation, and development. Choose a plan and continue to secure WHMCS checkout." />
+  <title>StealthRDP — Make room for the work.</title>
+  <meta name="description" content="A private Windows or Linux VPS for remote work, services, automation, and development. Choose a plan and continue to secure checkout." />
   <meta name="robots" content="index,follow" />
   <meta name="author" content="StealthRDP" />
   <link rel="canonical" href="__SRDP_BASE__/" />
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
-  <meta property="og:title" content="StealthRDP — Quiet Infrastructure for Windows &amp; Linux VPS" />
-  <meta property="og:description" content="Your own Windows or Linux VPS for remote work, services, automation, and development. Choose a plan and continue to secure WHMCS checkout." />
+  <meta property="og:title" content="StealthRDP — Make room for the work." />
+  <meta property="og:description" content="A private Windows or Linux VPS for remote work, services, automation, and development. Choose a plan and continue to secure checkout." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="__SRDP_BASE__/" />
   <meta property="og:image" content="__SRDP_BASE__/assets/og-cover.png" />
   <meta property="og:site_name" content="StealthRDP" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@stealthrdp" />
-  <meta name="twitter:title" content="StealthRDP — Quiet Infrastructure for Windows &amp; Linux VPS" />
-  <meta name="twitter:description" content="Your own Windows or Linux VPS for remote work, services, automation, and development. Choose a plan and continue to secure WHMCS checkout." />
+  <meta name="twitter:title" content="StealthRDP — Make room for the work." />
+  <meta name="twitter:description" content="A private Windows or Linux VPS for remote work, services, automation, and development. Choose a plan and continue to secure checkout." />
   <meta name="twitter:image" content="__SRDP_BASE__/assets/og-cover.png" />
   <link rel="stylesheet" href="/css/style.css" />
+  <script>(function(){try{var t=localStorage.getItem('srdp-theme');if(!t){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','dark')}})();</script>
   <!-- Google Tag Manager (real container from live site) -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -41,6 +42,7 @@
     </a>
     <nav class="nav" aria-label="Main navigation"><a href="/" class="active">Home</a><a href="/plans.html">Plans</a><a href="/features.html">Features</a><a href="/status.html">Server Status</a><a href="/docs.html">Docs</a><a href="/blog.html">Blog</a><a href="/faq.html">FAQ</a></nav>
     <div class="header-actions">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark and light theme" aria-pressed="false"><svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"/></svg><svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 14.2A8.3 8.3 0 0 1 9.8 3.6 8.3 8.3 0 1 0 20.4 14.2Z"/></svg></button>
       <a class="btn btn-sm btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client Area</a>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     </div>
@@ -48,49 +50,89 @@
   <div class="mobile-nav" id="mobileNav"><a href="/" class="active">Home</a><a href="/plans.html">Plans</a><a href="/features.html">Features</a><a href="/status.html">Server Status</a><a href="/docs.html">Docs</a><a href="/blog.html">Blog</a><a href="/faq.html">FAQ</a><a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client Area</a></div>
   </header>
   
-  <main class="home-control-room decision-desk">
-    <section class="quiet-hero" aria-labelledby="home-title">
-      <div class="container quiet-hero-grid">
-        <div class="quiet-hero-copy">
-          <p class="quiet-kicker">Quiet Infrastructure</p>
-          <h1 id="home-title">Your own Windows or Linux VPS.</h1>
-          <p class="quiet-lede">A private machine for remote work, services, automation, and development. Choose a plan, then continue to secure checkout.</p>
-          <div class="quiet-actions"><a id="deskTopCta" class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/silver-usa&billingcycle=monthly" target="_blank" rel="noopener noreferrer">Continue with Silver <span aria-hidden="true">↗</span></a><a class="quiet-secondary" href="#plans">See plans <span aria-hidden="true">↓</span></a></div>
+  <main class="cq-home">
+    <div class="cq-wrap">
+      <section class="cq-hero" aria-labelledby="home-title">
+        <div class="cq-eyebrow">Private compute / USA</div>
+        <h1 id="home-title">Make room for the work.</h1>
+        <p class="cq-lede">A private Windows or Linux VPS for work that needs its own machine — remote access, automation, development, and everything between.</p>
+        <div class="cq-hero-actions"><a class="btn btn-primary" href="#machines">Choose a machine <span aria-hidden="true">→</span></a><a class="btn btn-ghost" href="#why">See why it works <span aria-hidden="true">↓</span></a></div>
+        <div class="cq-hero-caption"><span class="cq-signal" aria-hidden="true"></span>USA location · pricing confirmed at checkout</div>
+        <div class="cq-hero-art">
+          <div class="cq-art-index"><strong>01</strong> / the machine</div>
+          <svg class="cq-machine" viewBox="0 0 540 400" role="img" aria-label="A clean private server with gold and green status lights">
+      <defs><linearGradient id="cq-body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--machine-body-a)"/><stop offset="1" stop-color="var(--machine-body-b)"/></linearGradient></defs>
+      <ellipse cx="270" cy="368" rx="200" ry="18" fill="#000" opacity=".4"/>
+      <rect x="90" y="60" width="360" height="280" rx="22" fill="url(#cq-body)" stroke="var(--machine-stroke)" stroke-width="2"/>
+      <rect x="90" y="60" width="360" height="66" rx="22" fill="var(--machine-band)"/>
+      <rect x="90" y="92" width="360" height="34" fill="var(--machine-band)"/>
+      <circle cx="122" cy="109" r="6" fill="var(--accent)"/><circle cx="142" cy="109" r="6" fill="var(--green)"/>
+      <rect x="170" y="101" width="128" height="16" rx="8" fill="var(--accent)" opacity=".85"/>
+      <rect x="122" y="148" width="296" height="10" rx="5" fill="var(--machine-vent)"/>
+      <rect x="122" y="172" width="296" height="10" rx="5" fill="var(--machine-vent)"/>
+      <rect x="122" y="196" width="296" height="10" rx="5" fill="var(--machine-vent)"/>
+      <rect x="122" y="220" width="180" height="10" rx="5" fill="var(--machine-vent)"/>
+      <rect x="318" y="220" width="100" height="10" rx="5" fill="var(--machine-fill2)"/>
+      <circle cx="150" cy="258" r="7" fill="var(--green)"/><circle cx="178" cy="258" r="7" fill="var(--accent)"/><circle cx="206" cy="258" r="7" fill="var(--machine-dot3)"/>
+      <path d="M122 296 h296" stroke="var(--machine-line)" stroke-width="2"/>
+      <text x="122" y="326" font-family="monospace" font-size="12" fill="var(--machine-text)">WINDOWS · LINUX · NVMe · FULL ADMIN</text>
+    </svg>
+          <div class="cq-art-note"><span aria-hidden="true"></span><div><b>One private machine.</b>&nbsp;<span>Yours to configure and run.</span></div></div>
         </div>
-        <figure class="quiet-visual">
-          <img src="/assets/quiet-server.svg" alt="Simplified server workspace with Windows, Linux, and NVMe signals" />
-        </figure>
-      </div>
-      <div class="container quiet-proof-row" aria-label="Included infrastructure features">
-        <div><strong>Windows + Linux VPS</strong><span>Choose the environment that fits the work.</span></div>
-        <div><strong>NVMe storage</strong><span>Fast storage for the machine you rely on.</span></div>
-        <div><strong>Full admin / root access</strong><span>Configure the server around your own workflow.</span></div>
-      </div>
-    </section>
-
-    <section class="decision-workspace home-decision-board" id="plans" aria-labelledby="plans-title">
-      <div class="container">
-        <div class="quiet-section-heading"><p class="quiet-kicker">Choose your starting point</p><h2 id="plans-title">Start with the right machine.</h2><p>Use a workload as a starting point, or select one of the four real USA plans directly.</p></div>
-        <div class="quiet-plan-layout">
-          <div class="quiet-plan-controls">
-            <div class="quiet-control-label">Workload (optional)</div>
-            <div class="desk-intents" role="group" aria-label="Choose a workload"><button type="button" class="desk-intent is-selected" data-intent="remote-work" data-recommend="Silver" aria-pressed="true"><span class="desk-intent-index">01</span><span><b>Remote desktop</b><small>A balanced Windows or Linux workspace.</small></span><span class="desk-intent-arrow" aria-hidden="true">↗</span></button><button type="button" class="desk-intent" data-intent="web-hosting" data-recommend="Gold" aria-pressed="false"><span class="desk-intent-index">02</span><span><b>Services &amp; hosting</b><small>Sites, panels, and always-on services.</small></span><span class="desk-intent-arrow" aria-hidden="true">↗</span></button><button type="button" class="desk-intent" data-intent="development" data-recommend="Platinum" aria-pressed="false"><span class="desk-intent-index">03</span><span><b>Development &amp; automation</b><small>Tools, builds, scripts, and scheduled work.</small></span><span class="desk-intent-arrow" aria-hidden="true">↗</span></button></div>
-            <div class="quiet-rail-head"><h3>USA plans</h3><span>Monthly view · prices confirmed at checkout</span></div>
-            <div class="desk-plan-choices" role="group" aria-label="Choose a plan"><button type="button" class="desk-plan-choice" data-plan-name="Bronze" data-plan-url="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/bronze-usa2&amp;billingcycle=monthly" data-plan-price="9.50" data-plan-cpu="2 Core" data-plan-ram="4 GB" data-plan-storage="60 GB NVMe" aria-pressed="false"><span><b>Bronze</b><small>2 Core · 4 GB</small></span><strong>&euro;9.50<small>/mo</small></strong></button><button type="button" class="desk-plan-choice is-selected" data-plan-name="Silver" data-plan-url="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/silver-usa&amp;billingcycle=monthly" data-plan-price="18.05" data-plan-cpu="2 Core" data-plan-ram="8 GB" data-plan-storage="80 GB NVMe" aria-pressed="true"><span><b>Silver</b><small>2 Core · 8 GB</small></span><strong>&euro;18.05<small>/mo</small></strong></button><button type="button" class="desk-plan-choice" data-plan-name="Gold" data-plan-url="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/gold-usa&amp;billingcycle=monthly" data-plan-price="26.59" data-plan-cpu="4 Core" data-plan-ram="16 GB" data-plan-storage="100 GB NVMe" aria-pressed="false"><span><b>Gold</b><small>4 Core · 16 GB</small></span><strong>&euro;26.59<small>/mo</small></strong></button><button type="button" class="desk-plan-choice" data-plan-name="Platinum" data-plan-url="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/platinum-usa&amp;billingcycle=monthly" data-plan-price="33.24" data-plan-cpu="6 Core" data-plan-ram="16 GB" data-plan-storage="100 GB NVMe" aria-pressed="false"><span><b>Platinum</b><small>6 Core · 16 GB</small></span><strong>&euro;33.24<small>/mo</small></strong></button></div>
+      </section>
+      <section class="cq-proof" aria-label="Included with every machine">
+        <span class="cq-proof-item">Windows + Linux</span><span class="cq-proof-item">NVMe storage</span><span class="cq-proof-item">Full admin rights</span><span class="cq-proof-item">Unlimited bandwidth</span>
+      </section>
+      <section class="cq-machines" id="machines" aria-labelledby="machines-title">
+        <div class="cq-head">
+          <h2 id="machines-title">Choose the headroom you need.</h2>
+          <p class="cq-head-note">Start with a real configuration. Change it when your work changes. Every USA plan below is shown with its monthly price and actual resources.</p>
+        </div>
+        <div class="cq-machine-layout">
+          <div>
+            <div class="cq-machine-list" role="group" aria-label="USA VPS plans"><button type="button" class="cq-plan-row" aria-pressed="false" data-name="Bronze" data-price="$9.50" data-cpu="2 Core" data-ram="4 GB" data-storage="60 GB NVMe" data-url="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/bronze-usa2&amp;billingcycle=monthly" data-desc="Blazing Fast Connectivity" data-badge="Recommended"><span class="cq-plan-name">Bronze<small>Unlimited</small></span><span class="cq-plan-spec">2 Core</span><span class="cq-plan-spec">4 GB</span><span class="cq-plan-price">$9.50<small>/mo</small></span><span class="cq-plan-arrow" aria-hidden="true">→</span></button><button type="button" class="cq-plan-row" aria-pressed="false" data-name="Silver" data-price="$18.05" data-cpu="2 Core" data-ram="8 GB" data-storage="80 GB NVMe" data-url="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/silver-usa&amp;billingcycle=monthly" data-desc="Blazing Fast Connectivity" data-badge="Available"><span class="cq-plan-name">Silver<small>Unlimited</small></span><span class="cq-plan-spec">2 Core</span><span class="cq-plan-spec">8 GB</span><span class="cq-plan-price">$18.05<small>/mo</small></span><span class="cq-plan-arrow" aria-hidden="true">→</span></button><button type="button" class="cq-plan-row" aria-pressed="true" data-name="Gold" data-price="$26.59" data-cpu="4 Core" data-ram="16 GB" data-storage="100 GB NVMe" data-url="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/gold-usa&amp;billingcycle=monthly" data-desc="Blazing Fast Connectivity" data-badge="Recommended"><span class="cq-plan-name">Gold<small>Unlimited</small></span><span class="cq-plan-spec">4 Core</span><span class="cq-plan-spec">16 GB</span><span class="cq-plan-price">$26.59<small>/mo</small></span><span class="cq-plan-arrow" aria-hidden="true">→</span></button><button type="button" class="cq-plan-row" aria-pressed="false" data-name="Platinum" data-price="$33.24" data-cpu="6 Core" data-ram="16 GB" data-storage="100 GB NVMe" data-url="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/platinum-usa&amp;billingcycle=monthly" data-desc="Blazing Fast Connectivity" data-badge="Available"><span class="cq-plan-name">Platinum<small>Unlimited</small></span><span class="cq-plan-spec">6 Core</span><span class="cq-plan-spec">16 GB</span><span class="cq-plan-price">$33.24<small>/mo</small></span><span class="cq-plan-arrow" aria-hidden="true">→</span></button><button type="button" class="cq-plan-row" aria-pressed="false" data-name="Diamond" data-price="$42.75" data-cpu="6 Core" data-ram="32 GB" data-storage="150 GB NVMe" data-url="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/diamond-usa&amp;billingcycle=monthly" data-desc="Blazing Fast Connectivity" data-badge="Recommended"><span class="cq-plan-name">Diamond<small>Unlimited</small></span><span class="cq-plan-spec">6 Core</span><span class="cq-plan-spec">32 GB</span><span class="cq-plan-price">$42.75<small>/mo</small></span><span class="cq-plan-arrow" aria-hidden="true">→</span></button><button type="button" class="cq-plan-row" aria-pressed="false" data-name="Emerald" data-price="$51.30" data-cpu="8 Core" data-ram="32 GB" data-storage="150 GB NVMe" data-url="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/emerald-usa&amp;billingcycle=monthly" data-desc="Blazing Fast Connectivity" data-badge="Available"><span class="cq-plan-name">Emerald<small>Unlimited</small></span><span class="cq-plan-spec">8 Core</span><span class="cq-plan-spec">32 GB</span><span class="cq-plan-price">$51.30<small>/mo</small></span><span class="cq-plan-arrow" aria-hidden="true">→</span></button></div>
+            <div class="cq-list-note"><span>Every plan includes 100% dedicated CPU resources.</span><span>Storage: NVMe · Bandwidth: Unlimited</span></div>
           </div>
-          <aside class="desk-summary" aria-live="polite"><div><span class="desk-label">SELECTED PLAN</span><strong id="selectedPlanName">Silver</strong></div><p id="selectedPlanReason">Recommended for a balanced remote workspace.</p><dl><div><dt>CPU</dt><dd id="selectedPlanCpu">2 Core</dd></div><div><dt>RAM</dt><dd id="selectedPlanRam">8 GB</dd></div><div><dt>STORAGE</dt><dd id="selectedPlanStorage">80 GB NVMe</dd></div><div><dt>PRICE</dt><dd>&euro;<span id="selectedPlanPrice">18.05</span> / mo</dd></div></dl><a id="selectorCta" class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/silver-usa&billingcycle=monthly" target="_blank" rel="noopener noreferrer"><span id="selectorCtaLabel">Continue with Silver</span> <span aria-hidden="true">↗</span></a><a class="desk-all-plans" href="/plans.html">Compare all 11 plans →</a></aside>
+          <aside class="cq-detail-card" aria-live="polite" aria-label="Selected plan summary">
+            <div class="cq-detail-top"><span class="cq-mono">Selected machine</span><span class="cq-detail-badge" id="selectedBadge">Recommended</span></div>
+            <h3 class="cq-detail-title" id="selectedName">Gold</h3>
+            <p class="cq-detail-desc" id="selectedDesc">Blazing Fast Connectivity</p>
+            <div class="cq-detail-price"><span id="selectedPrice">$26.59</span><small>per month · USA</small></div>
+            <div class="cq-detail-bars">
+              <div class="cq-bar-row"><span>CPU</span><div class="cq-bar-track"><div class="cq-bar-fill" id="barCpu" style="width:50%"></div></div><strong id="selectedCpu">4 Core</strong></div>
+              <div class="cq-bar-row"><span>Memory</span><div class="cq-bar-track"><div class="cq-bar-fill" id="barRam" style="width:50%"></div></div><strong id="selectedRam">16 GB</strong></div>
+              <div class="cq-bar-row"><span>Storage</span><div class="cq-bar-track"><div class="cq-bar-fill" id="barStorage" style="width:67%"></div></div><strong id="selectedStorage">100 GB NVMe</strong></div>
+            </div>
+            <div class="cq-detail-cta"><a class="btn btn-primary" id="selectorCta" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/gold-usa&amp;billingcycle=monthly" target="_blank" rel="noopener noreferrer"><span id="selectorCtaLabel">Continue with Gold</span> <span aria-hidden="true">→</span></a></div>
+            <p class="cq-detail-foot">Windows or Linux · full admin rights · checkout confirms pricing and availability.</p>
+          </aside>
         </div>
-        <p class="desk-handoff"><span class="desk-handoff-mark">↳</span><span>Checkout, billing, and account access happen on WHMCS. Pricing and availability are confirmed there.</span></p>
-      </div>
-    </section>
-
-    <section class="quiet-capabilities" aria-labelledby="capabilities-title"><div class="container"><div class="quiet-section-heading"><p class="quiet-kicker">Built around the work</p><h2 id="capabilities-title">Infrastructure that stays out of the way.</h2><p>Choose the machine for the job, then shape the environment yourself.</p></div><ul class="quiet-capability-grid"><li><span class="quiet-capability-number">01</span><h3>Remote desktop</h3><p>Keep a familiar Windows or Linux workspace available from wherever the work takes you.</p></li><li><span class="quiet-capability-number">02</span><h3>Services and hosting</h3><p>Run a site, panel, or service on a machine with its own resources and admin access.</p></li><li><span class="quiet-capability-number">03</span><h3>Development and automation</h3><p>Give builds, scripts, and scheduled work a place to keep running.</p></li></ul></div></section>
-
-    <section class="decision-path home-journey" id="journey" aria-labelledby="journey-title"><div class="container"><div class="quiet-section-heading"><p class="quiet-kicker">A simple operating path</p><h2 id="journey-title">Choose, configure, continue.</h2></div><ol class="quiet-step-line"><li><span>01</span><strong>Choose</strong><p>Start with the work, not a wall of specs.</p></li><li><span>02</span><strong>Check</strong><p>Compare the actual CPU, RAM, storage, and price.</p></li><li><span>03</span><strong>Continue</strong><p>WHMCS owns secure checkout, billing, and account access.</p></li></ol></div></section>
-
-    <section class="decision-proof home-evidence-grid" id="proof" aria-labelledby="proof-title"><div class="container quiet-proof-layout"><div class="quiet-section-heading"><p class="quiet-kicker">Proof and support</p><h2 id="proof-title">Useful paths, kept separate.</h2><p>Check service state, read task guidance, or ask a question before you buy.</p></div><nav class="quiet-support-links" aria-label="Proof and support"><a href="/status.html"><strong>Public status</strong><span>Current service state →</span></a><a href="/docs.html"><strong>Native docs</strong><span>Task-focused guides →</span></a><a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer"><strong>Pre-sales support</strong><span>Ask before checkout ↗</span></a></nav></div></section>
-
-    <section class="decision-close home-plan-rail" id="close" aria-labelledby="close-title"><div class="container decision-close-grid"><div><p class="quiet-kicker">Your selected machine</p><h2 id="close-title">Ready when you are.</h2><p>Continue with the plan you selected. WHMCS confirms pricing, availability, checkout, and account access.</p></div><a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/silver-usa&billingcycle=monthly" id="closePurchaseLink" target="_blank" rel="noopener noreferrer"><span id="closePurchaseLabel">Continue with Silver</span> <span aria-hidden="true">↗</span></a></div></section>
+        <p class="cq-handoff"><span class="cq-handoff-mark" aria-hidden="true">↳</span><span>Checkout, billing, and account access happen on WHMCS. Pricing and availability are confirmed there.</span></p>
+      </section>
+      <section class="cq-story" id="why" aria-labelledby="why-title">
+        <div class="cq-story-head"><div class="cq-eyebrow">Why a private machine</div><h2 id="why-title">Your work gets a room of its own.</h2><p>Not another tab. Not another shared surface. A machine with its own resources, its own access, and a clear job.</p></div>
+        <div class="cq-story-list">
+          <article class="cq-story-item"><span class="cq-story-num">01</span><div><h3>Remote work that stays together.</h3><p>Keep the desktop, tools, files, and routine in one place you can reach from anywhere.</p></div></article>
+          <article class="cq-story-item"><span class="cq-story-num">02</span><div><h3>Automation with somewhere to run.</h3><p>Give services, scheduled jobs, and development environments a machine instead of your laptop.</p></div></article>
+          <article class="cq-story-item"><span class="cq-story-num">03</span><div><h3>Control that does not disappear.</h3><p>Full administrative rights let you configure the operating system around the work you actually do.</p></div></article>
+        </div>
+      </section>
+      <section class="cq-details" aria-labelledby="details-title">
+        <div class="cq-details-head"><div><div class="cq-eyebrow">The useful details</div><h2 id="details-title">Simple on purpose.</h2></div><p>The important parts are visible before checkout. The billing system confirms price and availability when you continue.</p></div>
+        <div class="cq-detail-rows">
+          <div class="cq-detail-row"><span class="cq-mono">Operating system</span><strong>Windows or Linux</strong><p>Choose the environment that matches your work. The machine is yours to configure.</p></div>
+          <div class="cq-detail-row"><span class="cq-mono">Resources</span><strong>2–8 cores · 4–32 GB RAM</strong><p>Plans scale from a focused workspace to a high-headroom machine, with NVMe storage on every USA plan.</p></div>
+          <div class="cq-detail-row"><span class="cq-mono">Access</span><strong>Full admin rights</strong><p>Install the tools you need, shape the environment, and keep the operating boundary clear.</p></div>
+          <div class="cq-detail-row"><span class="cq-mono">Support</span><strong>Pre-sales and client area</strong><p>Ask a question before checkout, or manage your account and services in the client area.</p></div>
+        </div>
+      </section>
+      <section class="cq-close" aria-labelledby="close-title">
+        <div class="cq-close-grid">
+          <div><div class="cq-eyebrow">Start with the machine</div><h2 id="close-title">Leave the noise outside.</h2><a class="btn btn-primary cq-close-cta" href="#machines">Choose your machine <span aria-hidden="true">→</span></a></div>
+          <p>Pick a plan above, then continue to secure checkout. Pricing and availability are confirmed there.</p>
+        </div>
+      </section>
+    </div>
   </main>
   <footer class="footer"><div class="container">
     <div class="footer-status"><span class="dot dim"></span><span id="footerStatus">Checking live status…</span></div>

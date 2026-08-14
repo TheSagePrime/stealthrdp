@@ -94,6 +94,7 @@ function head({ title, description, canonical, pageType = "website", jsonLd = []
   <meta name="twitter:description" content="${esc(description)}" />
   <meta name="twitter:image" content="__SRDP_BASE__/assets/og-cover.png" />
   <link rel="stylesheet" href="/css/style.css" />
+  <script>(function(){try{var t=localStorage.getItem('srdp-theme');if(!t){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','dark')}})();</script>
   <!-- Google Tag Manager (real container from live site) -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -131,6 +132,7 @@ function headerHtml(active) {
     </a>
     <nav class="nav" aria-label="Main navigation">${navHtml(active)}</nav>
     <div class="header-actions">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark and light theme" aria-pressed="false"><svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"/></svg><svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 14.2A8.3 8.3 0 0 1 9.8 3.6 8.3 8.3 0 1 0 20.4 14.2Z"/></svg></button>
       <a class="btn btn-sm btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client Area</a>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     </div>
@@ -811,68 +813,113 @@ function buildLegacyIndex() {
 }
 
 function buildIndex() {
-  const selectorPlans = USA.slice(0, 4);
-  const initialPlan = selectorPlans[1] || selectorPlans[0];
-  const planChoices = selectorPlans.map((p) => `<button type="button" class="desk-plan-choice${p === initialPlan ? " is-selected" : ""}" data-plan-name="${esc(planName(p))}" data-plan-url="${esc(planUrl(p))}" data-plan-price="${monthlyPrice(p).toFixed(2)}" data-plan-cpu="${esc(p.specs && p.specs.cpu)}" data-plan-ram="${esc(p.specs && p.specs.ram)}" data-plan-storage="${esc(p.specs && p.specs.storage)}" aria-pressed="${p === initialPlan ? "true" : "false"}"><span><b>${esc(planName(p))}</b><small>${esc(p.specs && p.specs.cpu)} · ${esc(p.specs && p.specs.ram)}</small></span><strong>&euro;${fmt(monthlyPrice(p))}<small>/mo</small></strong></button>`).join("");
-  const intents = [
-    ["remote-work", "Remote desktop", "A balanced Windows or Linux workspace.", "Silver"],
-    ["web-hosting", "Services &amp; hosting", "Sites, panels, and always-on services.", "Gold"],
-    ["development", "Development &amp; automation", "Tools, builds, scripts, and scheduled work.", "Platinum"],
-  ].map(([id, title, desc, plan], index) => `<button type="button" class="desk-intent${id === "remote-work" ? " is-selected" : ""}" data-intent="${id}" data-recommend="${plan}" aria-pressed="${id === "remote-work" ? "true" : "false"}"><span class="desk-intent-index">0${index + 1}</span><span><b>${title}</b><small>${desc}</small></span><span class="desk-intent-arrow" aria-hidden="true">↗</span></button>`).join("");
-  const capabilities = [
-    ["Remote desktop", "Keep a familiar Windows or Linux workspace available from wherever the work takes you."],
-    ["Services and hosting", "Run a site, panel, or service on a machine with its own resources and admin access."],
-    ["Development and automation", "Give builds, scripts, and scheduled work a place to keep running."],
-  ].map(([title, desc], index) => `<li><span class="quiet-capability-number">0${index + 1}</span><h3>${title}</h3><p>${desc}</p></li>`).join("");
-  const initialUrl = planUrl(initialPlan);
-  const initialName = planName(initialPlan);
+  const plans = USA; /* real USA plans from data/plans_usa.json */
+  const initial = plans[2] || plans[0]; /* Gold by default */
+  const planRows = plans.map((p, i) => {
+    const name = esc(planName(p));
+    const desc = esc(p.description || "Private Windows or Linux VPS");
+    const cpu = esc(p.specs && p.specs.cpu || "");
+    const ram = esc(p.specs && p.specs.ram || "");
+    const storage = esc(p.specs && p.specs.storage || "");
+    const price = "$" + monthlyPrice(p).toFixed(2);
+    const url = esc(planUrl(p));
+    const selected = p === initial ? "true" : "false";
+    return `<button type="button" class="cq-plan-row" aria-pressed="${selected}" data-name="${name}" data-price="${price}" data-cpu="${cpu}" data-ram="${ram}" data-storage="${storage}" data-url="${url}" data-desc="${desc}" data-badge="${p.popular ? "Recommended" : "Available"}"><span class="cq-plan-name">${name}<small>${esc(p.specs && p.specs.bandwidth || "Unlimited bandwidth")}</small></span><span class="cq-plan-spec">${cpu}</span><span class="cq-plan-spec">${ram}</span><span class="cq-plan-price">${price}<small>/mo</small></span><span class="cq-plan-arrow" aria-hidden="true">→</span></button>`;
+  }).join("");
+  const initialUrl = esc(planUrl(initial));
+  const initialName = esc(planName(initial));
+  const initialPrice = "$" + monthlyPrice(initial).toFixed(2);
+  const initialCpu = esc(initial.specs && initial.specs.cpu || "");
+  const initialRam = esc(initial.specs && initial.specs.ram || "");
+  const initialStorage = esc(initial.specs && initial.specs.storage || "");
+  const machineSvg = `<svg class="cq-machine" viewBox="0 0 540 400" role="img" aria-label="A clean private server with gold and green status lights">
+      <defs><linearGradient id="cq-body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--machine-body-a)"/><stop offset="1" stop-color="var(--machine-body-b)"/></linearGradient></defs>
+      <ellipse cx="270" cy="368" rx="200" ry="18" fill="#000" opacity=".4"/>
+      <rect x="90" y="60" width="360" height="280" rx="22" fill="url(#cq-body)" stroke="var(--machine-stroke)" stroke-width="2"/>
+      <rect x="90" y="60" width="360" height="66" rx="22" fill="var(--machine-band)"/>
+      <rect x="90" y="92" width="360" height="34" fill="var(--machine-band)"/>
+      <circle cx="122" cy="109" r="6" fill="var(--accent)"/><circle cx="142" cy="109" r="6" fill="var(--green)"/>
+      <rect x="170" y="101" width="128" height="16" rx="8" fill="var(--accent)" opacity=".85"/>
+      <rect x="122" y="148" width="296" height="10" rx="5" fill="var(--machine-vent)"/>
+      <rect x="122" y="172" width="296" height="10" rx="5" fill="var(--machine-vent)"/>
+      <rect x="122" y="196" width="296" height="10" rx="5" fill="var(--machine-vent)"/>
+      <rect x="122" y="220" width="180" height="10" rx="5" fill="var(--machine-vent)"/>
+      <rect x="318" y="220" width="100" height="10" rx="5" fill="var(--machine-fill2)"/>
+      <circle cx="150" cy="258" r="7" fill="var(--green)"/><circle cx="178" cy="258" r="7" fill="var(--accent)"/><circle cx="206" cy="258" r="7" fill="var(--machine-dot3)"/>
+      <path d="M122 296 h296" stroke="var(--machine-line)" stroke-width="2"/>
+      <text x="122" y="326" font-family="monospace" font-size="12" fill="var(--machine-text)">WINDOWS · LINUX · NVMe · FULL ADMIN</text>
+    </svg>`;
   const body = `
-  <main class="home-control-room decision-desk">
-    <section class="quiet-hero" aria-labelledby="home-title">
-      <div class="container quiet-hero-grid">
-        <div class="quiet-hero-copy">
-          <p class="quiet-kicker">Quiet Infrastructure</p>
-          <h1 id="home-title">Your own Windows or Linux VPS.</h1>
-          <p class="quiet-lede">A private machine for remote work, services, automation, and development. Choose a plan, then continue to secure checkout.</p>
-          <div class="quiet-actions"><a id="deskTopCta" class="btn btn-primary" href="${initialUrl}" target="_blank" rel="noopener noreferrer">Continue with ${initialName} <span aria-hidden="true">↗</span></a><a class="quiet-secondary" href="#plans">See plans <span aria-hidden="true">↓</span></a></div>
+  <main class="cq-home">
+    <div class="cq-wrap">
+      <section class="cq-hero" aria-labelledby="home-title">
+        <div class="cq-eyebrow">Private compute / USA</div>
+        <h1 id="home-title">Make room for the work.</h1>
+        <p class="cq-lede">A private Windows or Linux VPS for work that needs its own machine — remote access, automation, development, and everything between.</p>
+        <div class="cq-hero-actions"><a class="btn btn-primary" href="#machines">Choose a machine <span aria-hidden="true">→</span></a><a class="btn btn-ghost" href="#why">See why it works <span aria-hidden="true">↓</span></a></div>
+        <div class="cq-hero-caption"><span class="cq-signal" aria-hidden="true"></span>USA location · pricing confirmed at checkout</div>
+        <div class="cq-hero-art">
+          <div class="cq-art-index"><strong>01</strong> / the machine</div>
+          ${machineSvg}
+          <div class="cq-art-note"><span aria-hidden="true"></span><div><b>One private machine.</b>&nbsp;<span>Yours to configure and run.</span></div></div>
         </div>
-        <figure class="quiet-visual">
-          <img src="/assets/quiet-server.svg" alt="Simplified server workspace with Windows, Linux, and NVMe signals" />
-        </figure>
-      </div>
-      <div class="container quiet-proof-row" aria-label="Included infrastructure features">
-        <div><strong>Windows + Linux VPS</strong><span>Choose the environment that fits the work.</span></div>
-        <div><strong>NVMe storage</strong><span>Fast storage for the machine you rely on.</span></div>
-        <div><strong>Full admin / root access</strong><span>Configure the server around your own workflow.</span></div>
-      </div>
-    </section>
-
-    <section class="decision-workspace home-decision-board" id="plans" aria-labelledby="plans-title">
-      <div class="container">
-        <div class="quiet-section-heading"><p class="quiet-kicker">Choose your starting point</p><h2 id="plans-title">Start with the right machine.</h2><p>Use a workload as a starting point, or select one of the four real USA plans directly.</p></div>
-        <div class="quiet-plan-layout">
-          <div class="quiet-plan-controls">
-            <div class="quiet-control-label">Workload (optional)</div>
-            <div class="desk-intents" role="group" aria-label="Choose a workload">${intents}</div>
-            <div class="quiet-rail-head"><h3>USA plans</h3><span>Monthly view · prices confirmed at checkout</span></div>
-            <div class="desk-plan-choices" role="group" aria-label="Choose a plan">${planChoices}</div>
+      </section>
+      <section class="cq-proof" aria-label="Included with every machine">
+        <span class="cq-proof-item">Windows + Linux</span><span class="cq-proof-item">NVMe storage</span><span class="cq-proof-item">Full admin rights</span><span class="cq-proof-item">Unlimited bandwidth</span>
+      </section>
+      <section class="cq-machines" id="machines" aria-labelledby="machines-title">
+        <div class="cq-head">
+          <h2 id="machines-title">Choose the headroom you need.</h2>
+          <p class="cq-head-note">Start with a real configuration. Change it when your work changes. Every USA plan below is shown with its monthly price and actual resources.</p>
+        </div>
+        <div class="cq-machine-layout">
+          <div>
+            <div class="cq-machine-list" role="group" aria-label="USA VPS plans">${planRows}</div>
+            <div class="cq-list-note"><span>Every plan includes 100% dedicated CPU resources.</span><span>Storage: NVMe · Bandwidth: Unlimited</span></div>
           </div>
-          <aside class="desk-summary" aria-live="polite"><div><span class="desk-label">SELECTED PLAN</span><strong id="selectedPlanName">${initialName}</strong></div><p id="selectedPlanReason">Recommended for a balanced remote workspace.</p><dl><div><dt>CPU</dt><dd id="selectedPlanCpu">${esc(initialPlan.specs && initialPlan.specs.cpu)}</dd></div><div><dt>RAM</dt><dd id="selectedPlanRam">${esc(initialPlan.specs && initialPlan.specs.ram)}</dd></div><div><dt>STORAGE</dt><dd id="selectedPlanStorage">${esc(initialPlan.specs && initialPlan.specs.storage)}</dd></div><div><dt>PRICE</dt><dd>&euro;<span id="selectedPlanPrice">${monthlyPrice(initialPlan).toFixed(2)}</span> / mo</dd></div></dl><a id="selectorCta" class="btn btn-primary" href="${initialUrl}" target="_blank" rel="noopener noreferrer"><span id="selectorCtaLabel">Continue with ${initialName}</span> <span aria-hidden="true">↗</span></a><a class="desk-all-plans" href="/plans.html">Compare all ${USA.length + EU.length} plans →</a></aside>
+          <aside class="cq-detail-card" aria-live="polite" aria-label="Selected plan summary">
+            <div class="cq-detail-top"><span class="cq-mono">Selected machine</span><span class="cq-detail-badge" id="selectedBadge">${initial.popular ? "Recommended" : "Available"}</span></div>
+            <h3 class="cq-detail-title" id="selectedName">${initialName}</h3>
+            <p class="cq-detail-desc" id="selectedDesc">${esc(initial.description || "Private Windows or Linux VPS")}</p>
+            <div class="cq-detail-price"><span id="selectedPrice">${initialPrice}</span><small>per month · USA</small></div>
+            <div class="cq-detail-bars">
+              <div class="cq-bar-row"><span>CPU</span><div class="cq-bar-track"><div class="cq-bar-fill" id="barCpu" style="width:50%"></div></div><strong id="selectedCpu">${initialCpu}</strong></div>
+              <div class="cq-bar-row"><span>Memory</span><div class="cq-bar-track"><div class="cq-bar-fill" id="barRam" style="width:50%"></div></div><strong id="selectedRam">${initialRam}</strong></div>
+              <div class="cq-bar-row"><span>Storage</span><div class="cq-bar-track"><div class="cq-bar-fill" id="barStorage" style="width:67%"></div></div><strong id="selectedStorage">${initialStorage}</strong></div>
+            </div>
+            <div class="cq-detail-cta"><a class="btn btn-primary" id="selectorCta" href="${initialUrl}" target="_blank" rel="noopener noreferrer"><span id="selectorCtaLabel">Continue with ${initialName}</span> <span aria-hidden="true">→</span></a></div>
+            <p class="cq-detail-foot">Windows or Linux · full admin rights · checkout confirms pricing and availability.</p>
+          </aside>
         </div>
-        <p class="desk-handoff"><span class="desk-handoff-mark">↳</span><span>Checkout, billing, and account access happen on WHMCS. Pricing and availability are confirmed there.</span></p>
-      </div>
-    </section>
-
-    <section class="quiet-capabilities" aria-labelledby="capabilities-title"><div class="container"><div class="quiet-section-heading"><p class="quiet-kicker">Built around the work</p><h2 id="capabilities-title">Infrastructure that stays out of the way.</h2><p>Choose the machine for the job, then shape the environment yourself.</p></div><ul class="quiet-capability-grid">${capabilities}</ul></div></section>
-
-    <section class="decision-path home-journey" id="journey" aria-labelledby="journey-title"><div class="container"><div class="quiet-section-heading"><p class="quiet-kicker">A simple operating path</p><h2 id="journey-title">Choose, configure, continue.</h2></div><ol class="quiet-step-line"><li><span>01</span><strong>Choose</strong><p>Start with the work, not a wall of specs.</p></li><li><span>02</span><strong>Check</strong><p>Compare the actual CPU, RAM, storage, and price.</p></li><li><span>03</span><strong>Continue</strong><p>WHMCS owns secure checkout, billing, and account access.</p></li></ol></div></section>
-
-    <section class="decision-proof home-evidence-grid" id="proof" aria-labelledby="proof-title"><div class="container quiet-proof-layout"><div class="quiet-section-heading"><p class="quiet-kicker">Proof and support</p><h2 id="proof-title">Useful paths, kept separate.</h2><p>Check service state, read task guidance, or ask a question before you buy.</p></div><nav class="quiet-support-links" aria-label="Proof and support"><a href="/status.html"><strong>Public status</strong><span>Current service state →</span></a><a href="/docs.html"><strong>Native docs</strong><span>Task-focused guides →</span></a><a href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer"><strong>Pre-sales support</strong><span>Ask before checkout ↗</span></a></nav></div></section>
-
-    <section class="decision-close home-plan-rail" id="close" aria-labelledby="close-title"><div class="container decision-close-grid"><div><p class="quiet-kicker">Your selected machine</p><h2 id="close-title">Ready when you are.</h2><p>Continue with the plan you selected. WHMCS confirms pricing, availability, checkout, and account access.</p></div><a class="btn btn-primary" href="${initialUrl}" id="closePurchaseLink" target="_blank" rel="noopener noreferrer"><span id="closePurchaseLabel">Continue with ${initialName}</span> <span aria-hidden="true">↗</span></a></div></section>
+        <p class="cq-handoff"><span class="cq-handoff-mark" aria-hidden="true">↳</span><span>Checkout, billing, and account access happen on WHMCS. Pricing and availability are confirmed there.</span></p>
+      </section>
+      <section class="cq-story" id="why" aria-labelledby="why-title">
+        <div class="cq-story-head"><div class="cq-eyebrow">Why a private machine</div><h2 id="why-title">Your work gets a room of its own.</h2><p>Not another tab. Not another shared surface. A machine with its own resources, its own access, and a clear job.</p></div>
+        <div class="cq-story-list">
+          <article class="cq-story-item"><span class="cq-story-num">01</span><div><h3>Remote work that stays together.</h3><p>Keep the desktop, tools, files, and routine in one place you can reach from anywhere.</p></div></article>
+          <article class="cq-story-item"><span class="cq-story-num">02</span><div><h3>Automation with somewhere to run.</h3><p>Give services, scheduled jobs, and development environments a machine instead of your laptop.</p></div></article>
+          <article class="cq-story-item"><span class="cq-story-num">03</span><div><h3>Control that does not disappear.</h3><p>Full administrative rights let you configure the operating system around the work you actually do.</p></div></article>
+        </div>
+      </section>
+      <section class="cq-details" aria-labelledby="details-title">
+        <div class="cq-details-head"><div><div class="cq-eyebrow">The useful details</div><h2 id="details-title">Simple on purpose.</h2></div><p>The important parts are visible before checkout. The billing system confirms price and availability when you continue.</p></div>
+        <div class="cq-detail-rows">
+          <div class="cq-detail-row"><span class="cq-mono">Operating system</span><strong>Windows or Linux</strong><p>Choose the environment that matches your work. The machine is yours to configure.</p></div>
+          <div class="cq-detail-row"><span class="cq-mono">Resources</span><strong>2–8 cores · 4–32 GB RAM</strong><p>Plans scale from a focused workspace to a high-headroom machine, with NVMe storage on every USA plan.</p></div>
+          <div class="cq-detail-row"><span class="cq-mono">Access</span><strong>Full admin rights</strong><p>Install the tools you need, shape the environment, and keep the operating boundary clear.</p></div>
+          <div class="cq-detail-row"><span class="cq-mono">Support</span><strong>Pre-sales and client area</strong><p>Ask a question before checkout, or manage your account and services in the client area.</p></div>
+        </div>
+      </section>
+      <section class="cq-close" aria-labelledby="close-title">
+        <div class="cq-close-grid">
+          <div><div class="cq-eyebrow">Start with the machine</div><h2 id="close-title">Leave the noise outside.</h2><a class="btn btn-primary cq-close-cta" href="#machines">Choose your machine <span aria-hidden="true">→</span></a></div>
+          <p>Pick a plan above, then continue to secure checkout. Pricing and availability are confirmed there.</p>
+        </div>
+      </section>
+    </div>
   </main>`;
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [ORG, websiteLd()] }];
-  return page({ active: "home", title: "StealthRDP — Quiet Infrastructure for Windows & Linux VPS", description: "Your own Windows or Linux VPS for remote work, services, automation, and development. Choose a plan and continue to secure WHMCS checkout.", canonical: "__SRDP_BASE__/", jsonLd, body });
+  return page({ active: "home", title: "StealthRDP — Make room for the work.", description: "A private Windows or Linux VPS for remote work, services, automation, and development. Choose a plan and continue to secure checkout.", canonical: "__SRDP_BASE__/", jsonLd, body });
 }
 
 /* ---------- 2. plans ---------- */

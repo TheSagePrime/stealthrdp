@@ -54,77 +54,70 @@
     });
   }
 
-  /* ---------- Decision desk plan selector ---------- */
-  var deskIntents = $$(".desk-intent");
-  var deskPlans = $$(".desk-plan-choice");
-  var deskFitMessage = $("#deskFitMessage");
-  var deskTopCta = $("#deskTopCta");
+  /* ---------- Theme toggle ---------- */
+  var themeToggle = $(".theme-toggle");
+  function setTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    if (themeToggle) themeToggle.setAttribute("aria-pressed", theme === "light" ? "true" : "false");
+    try { localStorage.setItem("srdp-theme", theme); } catch (e) {}
+  }
+  if (themeToggle) {
+    themeToggle.setAttribute("aria-pressed", (document.documentElement.getAttribute("data-theme") || "dark") === "light" ? "true" : "false");
+    themeToggle.addEventListener("click", function () {
+      var current = document.documentElement.getAttribute("data-theme") || "dark";
+      setTheme(current === "light" ? "dark" : "light");
+    });
+  }
+
+  /* ---------- Homepage plan selector (approved C design) ---------- */
+  var cqRows = $$(".cq-plan-row");
+  var selectedName = $("#selectedName");
+  var selectedDesc = $("#selectedDesc");
+  var selectedPrice = $("#selectedPrice");
+  var selectedCpu = $("#selectedCpu");
+  var selectedRam = $("#selectedRam");
+  var selectedStorage = $("#selectedStorage");
+  var selectedBadge = $("#selectedBadge");
   var selectorCta = $("#selectorCta");
   var selectorCtaLabel = $("#selectorCtaLabel");
-  var closePurchaseLink = $("#closePurchaseLink");
-  var closePurchaseLabel = $("#closePurchaseLabel");
-  var selectedPlanName = $("#selectedPlanName");
-  var selectedPlanReason = $("#selectedPlanReason");
-  var selectedPlanCpu = $("#selectedPlanCpu");
-  var selectedPlanRam = $("#selectedPlanRam");
-  var selectedPlanStorage = $("#selectedPlanStorage");
-  var selectedPlanPrice = $("#selectedPlanPrice");
-  var deskReasons = {
-    "remote-work": "Recommended for a balanced remote workspace.",
-    "trading": "More CPU and memory for terminals, bots, and scripts.",
-    "web-hosting": "A higher resource baseline for a site or service stack.",
-    "development": "Extra headroom for tools, builds, and parallel work."
-  };
-  var deskFits = {
-    "remote-work": "Balanced memory for a full remote workspace.",
-    "trading": "Gold adds CPU and memory for active automation workloads.",
-    "web-hosting": "Gold gives a larger baseline for a service stack.",
-    "development": "Platinum is the higher-headroom starting point."
-  };
-  function updateDeskPlan(button, reason) {
+  var barCpu = $("#barCpu");
+  var barRam = $("#barRam");
+  var barStorage = $("#barStorage");
+  function cqBarWidth(value) {
+    var n = parseInt(value, 10);
+    if (isNaN(n)) return "50%";
+    if (n >= 32) return "100%";
+    if (n >= 16) return "75%";
+    if (n >= 8) return "50%";
+    return "25%";
+  }
+  function updateCqPlan(button) {
     if (!button) return;
-    deskPlans.forEach(function (plan) {
-      var selected = plan === button;
-      plan.classList.toggle("is-selected", selected);
-      plan.setAttribute("aria-pressed", selected ? "true" : "false");
+    cqRows.forEach(function (row) {
+      var selected = row === button;
+      row.setAttribute("aria-pressed", selected ? "true" : "false");
     });
-    var name = button.getAttribute("data-plan-name") || "Selected plan";
-    var url = button.getAttribute("data-plan-url") || "https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps";
-    var price = button.getAttribute("data-plan-price") || "—";
-    if (selectedPlanName) selectedPlanName.textContent = name;
-    if (selectedPlanCpu) selectedPlanCpu.textContent = button.getAttribute("data-plan-cpu") || "—";
-    if (selectedPlanRam) selectedPlanRam.textContent = button.getAttribute("data-plan-ram") || "—";
-    if (selectedPlanStorage) selectedPlanStorage.textContent = button.getAttribute("data-plan-storage") || "—";
-    if (selectedPlanPrice) selectedPlanPrice.textContent = price;
-    if (selectedPlanReason) selectedPlanReason.textContent = reason || "Selected from the available plan set.";
-    if (deskTopCta) { deskTopCta.href = url; deskTopCta.textContent = "Continue with " + name + " ↗"; }
+    var name = button.getAttribute("data-name") || "Selected plan";
+    var url = button.getAttribute("data-url") || "https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps";
+    if (selectedName) selectedName.textContent = name;
+    if (selectedDesc) selectedDesc.textContent = button.getAttribute("data-desc") || "Private Windows or Linux VPS";
+    if (selectedPrice) selectedPrice.textContent = button.getAttribute("data-price") || "—";
+    if (selectedCpu) selectedCpu.textContent = button.getAttribute("data-cpu") || "—";
+    if (selectedRam) selectedRam.textContent = button.getAttribute("data-ram") || "—";
+    if (selectedStorage) selectedStorage.textContent = button.getAttribute("data-storage") || "—";
+    if (selectedBadge) selectedBadge.textContent = button.getAttribute("data-badge") || "Available";
+    if (barCpu) barCpu.style.width = cqBarWidth(button.getAttribute("data-cpu"));
+    if (barRam) barRam.style.width = cqBarWidth(button.getAttribute("data-ram"));
+    if (barStorage) barStorage.style.width = cqBarWidth(button.getAttribute("data-storage"));
     if (selectorCta) selectorCta.href = url;
     if (selectorCtaLabel) selectorCtaLabel.textContent = "Continue with " + name;
-    if (closePurchaseLink) closePurchaseLink.href = url;
-    if (closePurchaseLabel) closePurchaseLabel.textContent = name + " · WHMCS";
+    dl("select_plan", { plan_name: name, location: "USA" });
   }
-  if (deskPlans.length) {
-    var firstDeskPlan = deskPlans.filter(function (plan) { return plan.classList.contains("is-selected"); })[0] || deskPlans[0];
-    updateDeskPlan(firstDeskPlan, deskReasons["remote-work"]);
-    deskPlans.forEach(function (button) {
-      button.addEventListener("click", function () { updateDeskPlan(button, "Selected manually from the available plan set."); });
+  if (cqRows.length) {
+    cqRows.forEach(function (button) {
+      button.addEventListener("click", function () { updateCqPlan(button); });
     });
   }
-  deskIntents.forEach(function (button) {
-    button.addEventListener("click", function () {
-      var intent = button.getAttribute("data-intent") || "remote-work";
-      deskIntents.forEach(function (item) {
-        var selected = item === button;
-        item.classList.toggle("is-selected", selected);
-        item.setAttribute("aria-pressed", selected ? "true" : "false");
-      });
-      if (deskFitMessage) deskFitMessage.textContent = deskFits[intent] || deskFits["remote-work"];
-      var recommended = button.getAttribute("data-recommend") || "Silver";
-      var recommendedPlan = deskPlans.filter(function (plan) { return plan.getAttribute("data-plan-name") === recommended; })[0];
-      updateDeskPlan(recommendedPlan || deskPlans[0], deskReasons[intent] || deskReasons["remote-work"]);
-      dl("select_workload", { workload: intent, recommended_plan: recommended });
-    });
-  });
 
   /* ---------- Live status (ticker + footer + status page) ---------- */
   var PLAN_SLUGS = {
