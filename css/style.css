@@ -1398,11 +1398,21 @@ code, .mono { font-family: var(--font-mono); }
 .cq-reviews-head { max-width: 560px; margin-bottom: 48px; }
 .cq-reviews-head h2 { margin-top: 18px; font-size: clamp(40px, 4.8vw, 68px); line-height: .98; letter-spacing: -0.05em; }
 .cq-reviews-head p { max-width: 440px; margin-top: 16px; color: var(--text-muted); font-size: 15px; }
+.cq-review-viewport { overflow: hidden; position: relative; mask-image: linear-gradient(180deg, transparent 0, #000 9%, #000 91%, transparent 100%); -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 9%, #000 91%, transparent 100%); }
 .cq-review-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; }
+.cq-review-col { display: flex; flex-direction: column; gap: 16px; animation: cqReviewScroll 42s linear infinite; }
+.cq-review-col[data-col="1"] { animation-duration: 54s; animation-direction: reverse; }
+.cq-review-col[data-col="2"] { animation-duration: 48s; animation-delay: -12s; }
+.cq-review-grid:hover .cq-review-col { animation-play-state: paused; }
+@keyframes cqReviewScroll {
+  from { transform: translateY(0); }
+  to { transform: translateY(-50%); }
+}
 .cq-review-card { display: block; background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 26px 24px 22px; box-shadow: var(--shadow-1); transition: border-color .2s, transform .2s; }
 a.cq-review-card:hover { border-color: var(--accent); transform: translateY(-2px); }
 .cq-review-stars { color: var(--accent); font-size: 14px; letter-spacing: 2px; }
-.cq-review-quote { margin-top: 12px; color: var(--text); font-size: 14.5px; line-height: 1.6; }
+.cq-review-title { margin-top: 10px; font-size: 17px; letter-spacing: -0.02em; }
+.cq-review-quote { margin-top: 10px; color: var(--text); font-size: 14.5px; line-height: 1.6; }
 .cq-review-who { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
 .cq-review-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-family: var(--font-display); font-weight: 700; font-size: 13px; flex: none; }
 .cq-review-name b { display: block; font-size: 13.5px; }
@@ -1413,4 +1423,10 @@ a.cq-review-card:hover { border-color: var(--accent); transform: translateY(-2px
 .cq-review-cta .cq-review-name small { color: var(--text-dim); }
 @media (max-width: 900px) {
   .cq-review-grid { grid-template-columns: 1fr; }
+  .cq-review-col { animation: none; }
+  .cq-review-viewport { mask-image: none; -webkit-mask-image: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cq-review-col { animation: none; }
+  .cq-review-viewport { mask-image: none; -webkit-mask-image: none; }
 }

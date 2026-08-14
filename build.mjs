@@ -856,8 +856,23 @@ function buildIndex() {
     const name = esc(t.authorName || t.name || t.customerName || "StealthRDP Customer");
     const role = esc([t.authorPosition, t.authorCompany].filter(Boolean).join(" · "));
     const quote = esc(t.quote || t.testimonial || t.content || "");
+    const title = esc(t.title || "");
     const initials = name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
-    return `<article class="cq-review-card"><div class="cq-review-stars" aria-label="Five star review"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="cq-review-quote">“${quote}”</p><div class="cq-review-who"><span class="cq-review-avatar" aria-hidden="true">${esc(initials)}</span><span class="cq-review-name"><b>${name}</b>${role ? `<small>${role}</small>` : ""}</span></div></article>`;
+    return `<article class="cq-review-card"><div class="cq-review-stars" aria-label="Five star review"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>${title ? `<h3 class="cq-review-title">${title}</h3>` : ""}<p class="cq-review-quote">“${quote}”</p><div class="cq-review-who"><span class="cq-review-avatar" aria-hidden="true">${esc(initials)}</span><span class="cq-review-name"><b>${name}</b>${role ? `<small>${role}</small>` : ""}</span></div></article>`;
+  }).join("");
+  /* Three scrolling columns, each a duplicated list for a seamless loop. */
+  const perCol = Math.ceil(TESTIMONIALS.length / 3);
+  const reviewCols = [0, 1, 2].map((col) => {
+    const slice = TESTIMONIALS.slice(col * perCol, col * perCol + perCol);
+    const inner = slice.map((t) => {
+      const name = esc(t.authorName || t.name || t.customerName || "StealthRDP Customer");
+      const role = esc([t.authorPosition, t.authorCompany].filter(Boolean).join(" · "));
+      const quote = esc(t.quote || t.testimonial || t.content || "");
+      const title = esc(t.title || "");
+      const initials = name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+      return `<article class="cq-review-card"><div class="cq-review-stars" aria-label="Five star review"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>${title ? `<h3 class="cq-review-title">${title}</h3>` : ""}<p class="cq-review-quote">“${quote}”</p><div class="cq-review-who"><span class="cq-review-avatar" aria-hidden="true">${esc(initials)}</span><span class="cq-review-name"><b>${name}</b>${role ? `<small>${role}</small>` : ""}</span></div></article>`;
+    }).join("");
+    return `<div class="cq-review-col" data-col="${col}">${inner}${inner}</div>`;
   }).join("");
   const machineSvg = `<svg class="cq-machine" viewBox="0 0 540 400" role="img" aria-label="A clean private server with gold and green status lights">
       <defs><linearGradient id="cq-body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--machine-body-a)"/><stop offset="1" stop-color="var(--machine-body-b)"/></linearGradient></defs>
@@ -964,7 +979,9 @@ function buildIndex() {
       </section>
       <section class="cq-reviews" aria-labelledby="reviews-title">
         <div class="cq-reviews-head"><div class="cq-eyebrow">Trusted by teams worldwide</div><h2 id="reviews-title">What our users say.</h2><p>See why teams choose StealthRDP for their remote work, automation, and infrastructure.</p></div>
-        <div class="cq-review-grid">${testimonials}<a class="cq-review-card cq-review-cta" href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer"><span class="cq-review-plus" aria-hidden="true">+</span><p class="cq-review-quote">Run on StealthRDP? Share your experience.</p><div class="cq-review-who"><span class="cq-review-name"><b>Your review could be here</b><small>Verified customers only · via support ↗</small></span></div></a></div>
+        <div class="cq-review-viewport">
+          <div class="cq-review-grid">${reviewCols}<a class="cq-review-card cq-review-cta" href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer"><span class="cq-review-plus" aria-hidden="true">+</span><p class="cq-review-quote">Run on StealthRDP? Share your experience.</p><div class="cq-review-who"><span class="cq-review-name"><b>Your review could be here</b><small>Verified customers only · via support ↗</small></span></div></a></div>
+        </div>
       </section>
       <section class="cq-close" aria-labelledby="close-title">
         <div class="cq-close-grid">
