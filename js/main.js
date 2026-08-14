@@ -213,11 +213,11 @@
       }
       if (note) note.textContent = "Some production nodes require attention. See the status page.";
     } else {
-      if (dot) dot.classList.add("bad");
+      // Feed unavailable: neutral state, not an alarm.
       if (summary) {
         summary.innerHTML =
-          '<div class="cq-live-slot"><strong>—</strong><span>Nodes online</span></div>' +
-          '<div class="cq-live-slot"><strong>—</strong><span>Current availability</span></div>' +
+          '<div class="cq-live-slot"><strong class="dash">—</strong><span>Nodes online</span></div>' +
+          '<div class="cq-live-slot"><strong class="dash">—</strong><span>Current availability</span></div>' +
           '<div class="cq-live-slot"><strong>24/7</strong><span>Automated monitoring</span></div>';
       }
       if (note) note.textContent = "Live status unavailable · showing nothing until the feed responds.";
