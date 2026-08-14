@@ -9,7 +9,7 @@
 @font-face{font-family:Inter;src:url('/fonts/inter_400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:Inter;src:url('/fonts/inter_500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
 @font-face{font-family:JetBrains;src:url('/fonts/jetbrains-mono_400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
-:root{--bone:#f2efe8;--paper:#e9e4d9;--ink:#141414;--orange:#ff4a00;--muted:#6f6a60;--line:#141414}
+:root{--bone:#f2efe8;--paper:#e9e4d9;--ink:#141414;--orange:#ff4a00;--muted:#57524a;--line:#141414}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bone);color:var(--ink);font-family:Inter,Arial,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
 .wrap{width:min(calc(100% - 72px),1320px);margin-inline:auto}
@@ -36,7 +36,7 @@ a{color:inherit;text-decoration:none}
 .hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(430px,.95fr);gap:40px;padding:72px 0 60px;border-bottom:2px solid var(--ink)}.eyebrow{display:flex;align-items:center;gap:12px;color:var(--orange);font-family:JetBrains,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
 .eyebrow::before{content:"";width:26px;height:2px;background:var(--orange)}
 h1.hero-title{margin-top:34px;font-size:clamp(64px,7.6vw,118px);line-height:.88;letter-spacing:-.055em}
-h1 .outline{color:transparent;-webkit-text-stroke:2px var(--ink)}
+h1 .outline{color:transparent;-webkit-text-stroke:3px var(--ink)}
 .lede{max-width:430px;margin:30px 0 0;color:#3a372f;font-size:15.5px;line-height:1.6}
 .hero-actions{display:flex;align-items:center;gap:14px;margin-top:38px}
 .hero-caption{display:flex;align-items:center;gap:10px;margin-top:44px;color:var(--muted);font-family:JetBrains,monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
@@ -99,7 +99,7 @@ h1 .outline{color:transparent;-webkit-text-stroke:2px var(--ink)}
 <header class="topbar"><div class="wrap" style="display:flex;align-items:center;justify-content:space-between;width:100%">
   <a class="brand" href="#"><span class="mark" aria-hidden="true"></span>STEALTHRDP</a>
   <nav class="nav"><a href="#machines">Machines</a><a href="#why">Why Stealth</a><a href="#details">Details</a></nav>
-  <div class="actions"><a class="login" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client area</a><a class="btn btn-small" href="#machines">Choose a machine ↓</a></div>
+  <div class="actions"><a class="login" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client area</a><a class="btn btn-small" href="#machines">Choose a machine →</a></div>
 </div></header>
 
 <main>
@@ -115,10 +115,10 @@ h1 .outline{color:transparent;-webkit-text-stroke:2px var(--ink)}
     <div class="art-label"><strong>01</strong> / the machine</div>
     <svg class="spec-plate" viewBox="0 0 560 520" role="img" aria-label="Architectural specification plate of a private server machine">
       <!-- registration marks -->
-      <path d="M16 26 V10 H32" fill="none" stroke="#141414" stroke-width="2"/>
-      <path d="M544 26 V10 H528" fill="none" stroke="#141414" stroke-width="2"/>
-      <path d="M16 494 V510 H32" fill="none" stroke="#141414" stroke-width="2"/>
-      <path d="M544 494 V510 H528" fill="none" stroke="#141414" stroke-width="2"/>
+      <path d="M16 26 V10 H32" fill="none" stroke="#141414" stroke-width="1.5" opacity=".45"/>
+      <path d="M544 26 V10 H528" fill="none" stroke="#141414" stroke-width="1.5" opacity=".45"/>
+      <path d="M16 494 V510 H32" fill="none" stroke="#141414" stroke-width="1.5" opacity=".45"/>
+      <path d="M544 494 V510 H528" fill="none" stroke="#141414" stroke-width="1.5" opacity=".45"/>
       <!-- rack unit outline -->
       <rect x="180" y="130" width="240" height="260" fill="#ffffff" stroke="#141414" stroke-width="3"/>
       <rect x="196" y="150" width="208" height="48" fill="#141414"/>
@@ -133,6 +133,8 @@ h1 .outline{color:transparent;-webkit-text-stroke:2px var(--ink)}
       <circle cx="404" cy="376" r="4" fill="#141414"/>
       <!-- dimension arrows -->
       <line x1="120" y1="130" x2="120" y2="390" stroke="#ff4a00" stroke-width="2"/>
+      <line x1="120" y1="130" x2="180" y2="130" stroke="#ff4a00" stroke-width="1" stroke-dasharray="3 4"/>
+      <line x1="120" y1="390" x2="180" y2="390" stroke="#ff4a00" stroke-width="1" stroke-dasharray="3 4"/>
       <path d="M114 138 l6 -8 6 8" fill="none" stroke="#ff4a00" stroke-width="2"/>
       <path d="M114 382 l6 8 6 -8" fill="none" stroke="#ff4a00" stroke-width="2"/>
       <text x="104" y="268" font-family="monospace" font-size="13" fill="#141414" transform="rotate(-90 104 268)" text-anchor="middle">4U</text>
