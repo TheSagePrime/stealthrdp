@@ -1380,6 +1380,7 @@ body[data-page="home"] .footer-bottom { border-top-color: #31536b; }
 }
 @media (max-width: 680px) {
   body[data-page="home"] .header-inner { height: 68px; }
+  body[data-page="home"] .nav-toggle { width: 44px; height: 44px; }
   body[data-page="home"] .quiet-hero { padding-top: 56px; }
   body[data-page="home"] .quiet-hero-grid { padding-bottom: 52px; }
   body[data-page="home"] .quiet-hero h1 { font-size: clamp(46px,14vw,66px); }
@@ -1432,5 +1433,10 @@ body[data-page="home"] .footer-bottom { border-top-color: #31536b; }
   body[data-page="home"] #close .btn-primary { width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
-  body[data-page="home"] * { scroll-behavior: auto !important; }
+  body[data-page="home"] * {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
 }
