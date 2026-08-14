@@ -124,13 +124,13 @@ Record pricing or promotion changes as a business decision.
 
 ## Homepage composition decision (2026-08-14)
 
-The Home surface remains `Persuade`, but the homepage is now an authored **infrastructure decision desk**, not a control-room-themed marketing page:
+The Home surface remains `Persuade`, but the homepage is an authored **Stealth Workspace**: an image-led infrastructure artifact makes the product tangible, then an attached decision dock turns that interest into a grounded plan choice.
 
-1. **Decision opening** — an asymmetric editorial proposition is paired with a real workload-to-plan workspace in the first viewport. The user makes a small, explicit choice instead of reading a centered hero and then hunting for pricing.
-2. **Progressive commitment** — workload intent → recommended fit → inspect evidence → checkout. Intent choices reduce the plan set without hiding the complete plans route or preselecting paid add-ons.
-3. **Persistent selection summary** — the selected plan keeps its real CPU, RAM, storage, price snapshot, and WHMCS URL visible while the user changes intent or manually compares nearby plans.
-4. **Proof after fit** — status, native docs, checkout ownership, and support boundaries appear as evidence for the decision. No fake deployment state, scarcity, testimonial, or invented metric is introduced.
-5. **Editorial material system** — the homepage uses warm paper, ink, large rules, a compact ochre signal, and a dark selection workspace. It intentionally does not use the previous navy/gold card template, gradients, or faux terminal chrome.
+1. **Artifact-led opening** — a local original SVG shows a remote workspace connected to Windows, Linux, and storage layers. It is explicitly labelled as a concept illustration; it is not live monitoring or fake provisioning.
+2. **Attached decision dock** — workload intent → recommended fit → manual plan choice → persistent selection summary → WHMCS handoff. The selector is visually attached to the artifact rather than rendered as a separate dark form panel beside copy.
+3. **Concise proposition** — the first viewport prioritises one high-impact proposition, one primary checkout action, a clear secondary route, and a small boundary note.
+4. **Proof after fit** — public status, native docs, checkout ownership, and support boundaries appear as evidence for the decision. No fake deployment state, scarcity, testimonial, or invented metric is introduced.
+5. **Material system** — the homepage uses a dark navy/graphite shell, deliberate blue-gray depth, a restrained gold deployment signal, and green only for healthy state semantics. It avoids beige editorial styling, generic SaaS cards, glassmorphism, neon decoration, and faux terminal theatre.
 
 The homepage intentionally does not render the former customer-story/testimonial section. Existing product claims remain in the rest of the site and approved SEO metadata; no new customers, uptime, locations, testimonials, prices, or guarantees were introduced.
 

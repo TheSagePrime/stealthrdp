@@ -1,0 +1,88 @@
+<svg width="960" height="600" viewBox="0 0 960 600" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">StealthRDP remote workspace concept illustration</title>
+  <desc id="desc">An original illustration of a remote workspace connected to Windows and Linux server rails. It is a concept diagram, not live monitoring.</desc>
+  <defs>
+    <linearGradient id="bg" x1="55" y1="24" x2="890" y2="580" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#172131"/>
+      <stop offset="0.56" stop-color="#0D141F"/>
+      <stop offset="1" stop-color="#080C13"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="206" y1="105" x2="697" y2="405" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#26364A"/>
+      <stop offset="1" stop-color="#111A27"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="170" y1="150" x2="778" y2="480" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F4C96D"/>
+      <stop offset="1" stop-color="#B8862E"/>
+    </linearGradient>
+    <filter id="shadow" x="78" y="38" width="808" height="530" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="25" stdDeviation="20" flood-color="#02050A" flood-opacity="0.72"/>
+    </filter>
+    <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" stroke="#A6B5C8" stroke-opacity="0.08"/>
+    </pattern>
+  </defs>
+
+  <rect width="960" height="600" rx="22" fill="url(#bg)"/>
+  <rect x="1" y="1" width="958" height="598" rx="21" stroke="#35465B" stroke-opacity="0.78"/>
+  <path d="M0 435C169 382 265 501 430 454C605 403 708 288 960 337V600H0V435Z" fill="#071019" fill-opacity="0.58"/>
+  <path d="M0 0H960V600H0V0Z" fill="url(#grid)"/>
+
+  <g filter="url(#shadow)">
+    <path d="M165 92C165 78.7452 175.745 68 189 68H743C756.255 68 767 78.7452 767 92V411H165V92Z" fill="#0A1019" stroke="#53667D" stroke-width="2"/>
+    <path d="M165 92C165 78.7452 175.745 68 189 68H743C756.255 68 767 78.7452 767 92V112H165V92Z" fill="#172333"/>
+    <circle cx="190" cy="90" r="5" fill="#C25D57"/>
+    <circle cx="207" cy="90" r="5" fill="#D6A64B"/>
+    <circle cx="224" cy="90" r="5" fill="#4CBA84"/>
+    <text x="253" y="95" fill="#8F9FB3" font-family="JetBrains Mono, monospace" font-size="11" letter-spacing="1.2">REMOTE WORKSPACE / CONCEPT</text>
+    <rect x="193" y="134" width="546" height="247" rx="8" fill="url(#screen)" stroke="#40556D"/>
+    <path d="M193 179H739" stroke="#40556D"/>
+    <path d="M284 134V381" stroke="#40556D"/>
+    <rect x="210" y="151" width="57" height="11" rx="5.5" fill="#B98A38" fill-opacity="0.9"/>
+    <text x="302" y="160" fill="#C6D2E2" font-family="JetBrains Mono, monospace" font-size="11">STEALTH / WORKSPACE MAP</text>
+    <text x="216" y="207" fill="#7D91A9" font-family="JetBrains Mono, monospace" font-size="10">01</text>
+    <text x="216" y="235" fill="#7D91A9" font-family="JetBrains Mono, monospace" font-size="10">02</text>
+    <text x="216" y="263" fill="#7D91A9" font-family="JetBrains Mono, monospace" font-size="10">03</text>
+    <text x="216" y="291" fill="#7D91A9" font-family="JetBrains Mono, monospace" font-size="10">04</text>
+    <path d="M305 207H448" stroke="#D8B15E" stroke-width="2"/>
+    <path d="M305 235H540" stroke="#7E9BB7" stroke-width="2"/>
+    <path d="M305 263H481" stroke="#7E9BB7" stroke-width="2"/>
+    <path d="M305 291H589" stroke="#7E9BB7" stroke-width="2"/>
+    <rect x="305" y="320" width="221" height="33" rx="4" fill="#0B121D" stroke="#38506B"/>
+    <circle cx="320" cy="336" r="4" fill="#54C590" filter="url(#glow)"/>
+    <text x="334" y="340" fill="#B9C8D7" font-family="JetBrains Mono, monospace" font-size="10">workspace ready for your workload</text>
+    <rect x="563" y="202" width="150" height="139" rx="7" fill="#0A121D" stroke="#41566E"/>
+    <text x="579" y="224" fill="#899BB0" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="1">MACHINE LAYERS</text>
+    <path d="M579 248H697M579 281H697M579 314H697" stroke="#273B51"/>
+    <circle cx="590" cy="248" r="4" fill="#D8B15E"/>
+    <circle cx="590" cy="281" r="4" fill="#52BE89"/>
+    <circle cx="590" cy="314" r="4" fill="#93A5B7"/>
+    <text x="604" y="252" fill="#D7E2EF" font-family="Inter, sans-serif" font-size="10">WINDOWS</text>
+    <text x="604" y="285" fill="#D7E2EF" font-family="Inter, sans-serif" font-size="10">LINUX</text>
+    <text x="604" y="318" fill="#D7E2EF" font-family="Inter, sans-serif" font-size="10">NVMe STORAGE</text>
+    <path d="M141 411H791L848 464H84L141 411Z" fill="#151F2D" stroke="#53667D" stroke-width="2"/>
+    <path d="M84 464H848L824 486H108L84 464Z" fill="#0B121C" stroke="#36485D"/>
+    <rect x="428" y="426" width="92" height="8" rx="4" fill="#71839A" fill-opacity="0.4"/>
+  </g>
+
+  <g>
+    <path d="M756 119H863C871.284 119 878 125.716 878 134V218C878 226.284 871.284 233 863 233H756C747.716 233 741 226.284 741 218V134C741 125.716 747.716 119 756 119Z" fill="#101A27" stroke="#40566E"/>
+    <text x="759" y="145" fill="#8FA2B8" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="1">RESOURCE RAIL</text>
+    <path d="M759 160H860M759 189H860" stroke="#2D4054"/>
+    <rect x="759" y="168" width="74" height="6" rx="3" fill="#B98A38"/>
+    <rect x="759" y="197" width="52" height="6" rx="3" fill="#4BB780"/>
+    <text x="843" y="174" text-anchor="end" fill="#D8B15E" font-family="JetBrains Mono, monospace" font-size="9">CPU</text>
+    <text x="843" y="203" text-anchor="end" fill="#5AC18D" font-family="JetBrains Mono, monospace" font-size="9">RAM</text>
+  </g>
+
+  <g>
+    <path d="M118 505H318" stroke="#B98A38" stroke-opacity="0.7"/>
+    <circle cx="118" cy="505" r="4" fill="#D8B15E"/>
+    <text x="118" y="530" fill="#8193A8" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="1">CHOOSE / CONNECT / OPERATE</text>
+  </g>
+  <text x="719" y="534" fill="#667A90" font-family="JetBrains Mono, monospace" font-size="10">ILLUSTRATIVE SYSTEM VIEW</text>
+</svg>
