@@ -45,6 +45,11 @@ function resolveTokens(body, origin) {
   return body.split("__SRDP_BASE__").join(origin);
 }
 
+function isPreviewHost(req) {
+  const host = String(req.headers.host || "").split(":")[0].toLowerCase();
+  return host === "preview.antah.de" || process.env.SRDP_PREVIEW === "true";
+}
+
 function sendJson(res, status, value) {
   res.writeHead(status, {
     "Content-Type": "application/json; charset=utf-8",
@@ -111,7 +116,7 @@ function localApi(pathname, url) {
   }
   if (pathname === "/api/testimonials") {
     const data = readJson("testimonials.json", []);
-    return Array.isArray(data) ? data.map((item) => ({
+    return Array.isArray(data) ? data.filter((item) => !String(item._id || "").startsWith("inv")).map((item) => ({
       quote: String(item.quote || ""),
       authorName: String(item.authorName || ""),
       authorPosition: String(item.authorPosition || ""),
@@ -243,6 +248,13 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  const previewHost = isPreviewHost(req);
+  if (previewHost && url.pathname === "/sitemap.xml") {
+    res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8", ...SECURITY_HEADERS });
+    res.end("Not found");
+    return;
+  }
+
   const filePath = path.normalize(path.join(ROOT, url.pathname === "/" ? "index.html" : url.pathname));
   if (!filePath.startsWith(ROOT + path.sep) && filePath !== ROOT) {
     res.writeHead(403, { "Content-Type": "text/plain", ...SECURITY_HEADERS });
@@ -263,12 +275,22 @@ const server = http.createServer((req, res) => {
       : ext === ".css" || ext === ".js"
         ? "public, max-age=3600"
         : "no-cache";
-    res.writeHead(200, {
+    const previewRobots = previewHost && ext === ".html";
+    const headers = {
       "Content-Type": MIME[ext] || "application/octet-stream",
       "Cache-Control": cacheControl,
       ...SECURITY_HEADERS,
-    });
-    res.end(isMarkup ? resolveTokens(data.toString(), origin) : data);
+      ...(previewRobots ? { "X-Robots-Tag": "noindex, nofollow, noarchive" } : {}),
+    };
+    if (previewHost && url.pathname === "/robots.txt") {
+      res.writeHead(200, { ...headers, "Content-Type": MIME[".txt"] });
+      res.end("User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /blog-post.html\n");
+      return;
+    }
+    res.writeHead(200, headers);
+    let output = isMarkup ? resolveTokens(data.toString(), origin) : data;
+    if (previewRobots) output = output.replace('name="robots" content="index,follow"', 'name="robots" content="noindex,nofollow"');
+    res.end(output);
   });
 });
 

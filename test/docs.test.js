@@ -35,7 +35,7 @@ test("every native article has metadata, breadcrumbs, readable content, and WHMC
     assert.match(html, /class="docs-breadcrumbs"/);
     assert.match(html, /class="docs-source-meta"/);
     assert.match(html, /class="docs-content"/);
-    assert.match(html, /https:\/\/dash\.stealthrdp\.com\/submitticket\.php/);
+    assert.match(html, /https:\/\/dash\.stealthrdp\.com\/index\.php\?rp=\/login/);
     assert.ok(!html.includes("docs.stealthrdp.com"), `${article.slug}: no legacy docs host`);
     assert.ok(!html.includes("Chatwoot"), `${article.slug}: no Chatwoot reference`);
   }
@@ -81,11 +81,12 @@ test("public chrome has no legacy docs host, countdown, or fake live deployment 
   assert.doesNotMatch(home, /server online|Live deploy console|fake provisioning/i);
 });
 
-test("baked status fixture renders up monitors as healthy", () => {
+test("status page fails closed when the live feed is unavailable", () => {
   const html = HTML("status.html");
-  assert.match(html, />9\/9<\/div>[\s\S]*?Nodes online/);
-  assert.match(html, />100%<\/div>[\s\S]*?Current availability/);
-  assert.strictEqual((html.match(/n-dot up/g) || []).length, 9);
+  assert.match(html, /Live status unavailable/);
+  assert.match(html, /class="status-empty"/);
+  assert.doesNotMatch(html, />9\/9<\/div>|>100%<\/div>/);
+  assert.strictEqual((html.match(/n-dot up/g) || []).length, 0);
   assert.strictEqual((html.match(/n-dot down/g) || []).length, 0);
   assert.match(HTML("build.mjs"), /status === "up"/);
   assert.match(HTML("server.js"), /status === "up"/);
@@ -150,7 +151,7 @@ test("homepage uses the approved warm-instrument composition", () => {
   const home = HTML("index.html");
   assert.match(home, /class="cq-home"/);
   assert.match(home, /class="cq-hero"/);
-  assert.match(home, /class="cq-machines"/);
+  assert.match(home, /class="cq-machines(?:\s|["])/);
   assert.match(home, /class="cq-machine-list"/);
   assert.match(home, /class="cq-detail-card"/);
   assert.match(home, /class="cq-plan-row"/);

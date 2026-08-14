@@ -5,6 +5,8 @@
 (function () {
   "use strict";
 
+  document.documentElement.classList.add("js");
+
   var API = "/api"; // same-origin proxy (server.js) — no CORS dependency
 
   function $(sel, root) { return (root || document).querySelector(sel); }
@@ -52,6 +54,19 @@
       var open = mobileNav.classList.toggle("open");
       navToggle.setAttribute("aria-expanded", open ? "true" : "false");
     });
+    $$("a", mobileNav).forEach(function (link) {
+      link.addEventListener("click", function () {
+        mobileNav.classList.remove("open");
+        navToggle.setAttribute("aria-expanded", "false");
+      });
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && mobileNav.classList.contains("open")) {
+        mobileNav.classList.remove("open");
+        navToggle.setAttribute("aria-expanded", "false");
+        navToggle.focus();
+      }
+    });
   }
 
   /* ---------- Theme toggle ---------- */
@@ -59,8 +74,13 @@
   function setTheme(theme) {
     document.documentElement.setAttribute("data-theme", theme);
     if (themeToggle) themeToggle.setAttribute("aria-pressed", theme === "light" ? "true" : "false");
+    var themeColor = $("meta[name=theme-color]");
+    if (themeColor) themeColor.setAttribute("content", theme === "light" ? "#f7f4ee" : "#08090c");
     try { localStorage.setItem("srdp-theme", theme); } catch (e) {}
   }
+  var themeColor = $("meta[name=theme-color]");
+  var initialTheme = document.documentElement.getAttribute("data-theme") || "dark";
+  if (themeColor) themeColor.setAttribute("content", initialTheme === "light" ? "#f7f4ee" : "#08090c");
   if (themeToggle) {
     themeToggle.setAttribute("aria-pressed", (document.documentElement.getAttribute("data-theme") || "dark") === "light" ? "true" : "false");
     themeToggle.addEventListener("click", function () {
@@ -93,6 +113,7 @@
   }
   function updateCqPlan(button) {
     if (!button) return;
+    var detailCard = $(".cq-detail-card");
     cqRows.forEach(function (row) {
       var selected = row === button;
       row.setAttribute("aria-pressed", selected ? "true" : "false");
@@ -111,6 +132,10 @@
     if (barStorage) barStorage.style.width = cqBarWidth(button.getAttribute("data-storage"));
     if (selectorCta) selectorCta.href = url;
     if (selectorCtaLabel) selectorCtaLabel.textContent = "Continue with " + name;
+    if (detailCard) {
+      detailCard.classList.remove("is-switching");
+      window.requestAnimationFrame(function () { detailCard.classList.add("is-switching"); });
+    }
     dl("select_plan", { plan_name: name, location: "USA" });
   }
   if (cqRows.length) {
@@ -128,12 +153,43 @@
   };
   var CYCLE_MULT = { monthly: 0.95, quarterly: 0.90, annual: 0.80, biannual: 0.70 };
   var CYCLE_KEY = { monthly: "monthly", quarterly: "quarterly", annual: "annually", biannual: "biannually" };
+  var CHECKOUT_MONTHLY_PRICES = {
+    "Bronze USA": 9.50, "Silver USA": 18.04, "Gold USA": 26.59,
+    "Platinum USA": 33.24, "Diamond USA": 42.75, "Emerald USA": 51.30
+  };
+  var USA_CHECKOUT_AVAILABILITY = {
+    "Bronze USA": true, "Silver USA": false, "Gold USA": false,
+    "Platinum USA": false, "Diamond USA": false, "Emerald USA": false
+  };
+
+  function planAvailable(plan) {
+    return plan.location !== "USA" || USA_CHECKOUT_AVAILABILITY[plan.name] === true;
+  }
+
+  function displayMonthlyPrice(plan, cycle) {
+    if (cycle === "monthly" && Object.prototype.hasOwnProperty.call(CHECKOUT_MONTHLY_PRICES, plan.name)) {
+      return CHECKOUT_MONTHLY_PRICES[plan.name];
+    }
+    return Math.round((plan.monthlyPrice || 0) * (CYCLE_MULT[cycle] || 1) * 100) / 100;
+  }
+
+  function planDescription(plan) {
+    var specs = plan.specs || {};
+    return "Private " + (plan.location ? plan.location + " " : "") + "VPS with " +
+      (specs.cpu || "dedicated CPU") + ", " + (specs.ram || "scalable RAM") +
+      ", and " + (specs.storage || "NVMe storage") + ".";
+  }
+
+  function currencySymbol(plan) {
+    return plan.location === "EU" ? "&euro;" : "$";
+  }
 
   function planUrl(plan, cycle) {
     var slug = PLAN_SLUGS[plan.name] || "";
     var cyc = CYCLE_KEY[cycle] || "monthly";
     if (slug) {
-      return "https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/" + slug + "&billingcycle=" + cyc;
+      var category = plan.location === "EU" ? "eu" : "standard-usa-rdp-vps";
+      return "https://dash.stealthrdp.com/index.php?rp=/store/" + category + "/" + slug + "&billingcycle=" + cyc;
     }
     if (plan.purchaseUrl) {
       return plan.purchaseUrl.replace("https://stealthrdp.com/dash", "https://dash.stealthrdp.com");
@@ -163,22 +219,22 @@
           heroNodeStatus.innerHTML = '<span class="' + (total && up === total ? "live" : "status-failed") + '"></span> ' + up + "/" + total + (total && up === total ? " nodes operational" : " nodes require attention");
           heroNodeStatus.style.color = total && up === total ? "var(--green)" : "var(--red)";
         }
-        var sourceNote = $(" #statusSourceNote");
+        var sourceNote = $("#statusSourceNote");
         if (sourceNote) sourceNote.textContent = "Live status refreshed from the monitoring service.";
         renderHomeStatus(up, total);
         renderStatusPage(d);
       })
       .catch(function () {
         // The baked snapshot remains, but a failed live call must be visibly distinct.
-        var tickerStatus = $(" #tickerStatus");
+        var tickerStatus = $("#tickerStatus");
         if (tickerStatus) tickerStatus.textContent = "Live status unavailable";
-        var footerStatus = $(" #footerStatus");
+        var footerStatus = $("#footerStatus");
         if (footerStatus) footerStatus.textContent = "Live status unavailable";
-        var tickerDot = $(" #tickerDot");
+        var tickerDot = $("#tickerDot");
         if (tickerDot) tickerDot.classList.add("dim");
         var footerDot = footerStatus && footerStatus.previousElementSibling;
         if (footerDot) footerDot.classList.add("dim");
-        var heroNodeStatus = $(" #heroNodeStatus");
+        var heroNodeStatus = $("#heroNodeStatus");
         if (heroNodeStatus) {
           heroNodeStatus.innerHTML = '<span class="status-failed"></span> Live status unavailable';
           heroNodeStatus.style.color = "var(--red)";
@@ -189,9 +245,9 @@
   }
 
   function renderHomeStatus(up, total) {
-    var dot = $(" #homeStatusDot");
-    var summary = $(" #homeStatusSummary");
-    var note = $(" #homeStatusNote");
+    var dot = $("#homeStatusDot");
+    var summary = $("#homeStatusSummary");
+    var note = $("#homeStatusNote");
     if (!dot && !summary && !note) return;
     if (dot) dot.classList.remove("good", "bad");
     if (total && up === total) {
@@ -200,7 +256,7 @@
         summary.innerHTML =
           '<div class="cq-live-slot"><strong>' + up + '/' + total + '</strong><span>Nodes online</span></div>' +
           '<div class="cq-live-slot"><strong>' + (total ? Math.round((up / total) * 100) : 0) + '%</strong><span>Current availability</span></div>' +
-          '<div class="cq-live-slot"><strong>24/7</strong><span>Automated monitoring</span></div>';
+          '<div class="cq-live-slot"><strong>Live</strong><span>Monitoring feed</span></div>';
       }
       if (note) note.textContent = "All production nodes are operational.";
     } else if (total) {
@@ -209,7 +265,7 @@
         summary.innerHTML =
           '<div class="cq-live-slot"><strong>' + up + '/' + total + '</strong><span>Nodes online</span></div>' +
           '<div class="cq-live-slot"><strong>' + (total ? Math.round((up / total) * 100) : 0) + '%</strong><span>Current availability</span></div>' +
-          '<div class="cq-live-slot"><strong>24/7</strong><span>Automated monitoring</span></div>';
+          '<div class="cq-live-slot"><strong>Live</strong><span>Monitoring feed</span></div>';
       }
       if (note) note.textContent = "Some production nodes require attention. See the status page.";
     } else {
@@ -218,7 +274,7 @@
         summary.innerHTML =
           '<div class="cq-live-slot"><strong class="dash">—</strong><span>Nodes online</span></div>' +
           '<div class="cq-live-slot"><strong class="dash">—</strong><span>Current availability</span></div>' +
-          '<div class="cq-live-slot"><strong>24/7</strong><span>Automated monitoring</span></div>';
+          '<div class="cq-live-slot"><strong>Live</strong><span>Monitoring feed</span></div>';
       }
       if (note) note.textContent = "Live status unavailable · showing nothing until the feed responds.";
     }
@@ -226,15 +282,18 @@
 
   function renderStatusFailure() {
     var summary = $("#statusSummary");
+    var nodeList = $("#nodeList");
     if (summary) {
       summary.innerHTML =
         '<div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">Live status unavailable</div></div>' +
         '<div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">Current availability</div></div>' +
         '<div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">Check again shortly</div></div>';
     }
+    // Static trusted fallback; no remote values are interpolated.
+    if (nodeList) nodeList.innerHTML = '<div class="status-empty">Live status is unavailable until the monitoring feed responds.</div>';
     var sourceNote = $("#statusSourceNote");
     if (sourceNote) {
-      sourceNote.textContent = "Live status unavailable · showing the baked uptime snapshot below.";
+      sourceNote.textContent = "Live status unavailable · no snapshot is shown.";
       sourceNote.classList.add("status-source-note-failure");
       sourceNote.setAttribute("role", "status");
     }
@@ -250,7 +309,7 @@
       summary.innerHTML =
         '<div class="ss-card"><div class="ss-num ' + (up === monitors.length ? "good" : "warn") + '">' + up + "/" + monitors.length + '</div><div class="ss-lbl">Nodes online</div></div>' +
         '<div class="ss-card"><div class="ss-num ' + (up === monitors.length ? "good" : "warn") + '">' + (monitors.length ? Math.round((up / monitors.length) * 100) : 0) + '%</div><div class="ss-lbl">Current availability</div></div>' +
-        '<div class="ss-card"><div class="ss-num ' + (up === monitors.length ? "good" : "warn") + '">24/7</div><div class="ss-lbl">Automated monitoring</div></div>';
+        '<div class="ss-card"><div class="ss-num ' + (up === monitors.length ? "good" : "warn") + '">Live</div><div class="ss-lbl">Monitoring feed</div></div>';
     }
     if (nodeList) {
       nodeList.innerHTML = monitors.map(function (m) {
@@ -275,31 +334,31 @@
   var currentCycle = "monthly";
   var cachedPlans = [];
   var PLAN_LOCATION = document.body.getAttribute("data-plan-location") || "USA";
-  var PLAN_LIMIT = parseInt(document.body.getAttribute("data-plan-limit") || "3", 10);
+  var PLAN_LIMIT = parseInt(document.body.getAttribute("data-plan-limit") || "6", 10);
 
   function renderPlans(plans) {
     if (!planGrid) return;
-    var mult = CYCLE_MULT[currentCycle] || 1;
     var popularIdx = -1;
-    for (var i = 0; i < plans.length; i++) { if (plans[i].popular) { popularIdx = i; break; } }
+    for (var i = 0; i < plans.length; i++) { if (plans[i].popular && planAvailable(plans[i])) { popularIdx = i; break; } }
     var html = plans.map(function (p, i) {
       var base = p.monthlyPrice || 0;
-      var price = Math.round(base * mult * 100) / 100;
+      var price = displayMonthlyPrice(p, currentCycle);
       var isPop = i === popularIdx;
+      var available = planAvailable(p);
       return (
         '<article class="plan-card' + (isPop ? " popular" : "") + '">' +
           (isPop ? '<span class="plan-popular">Most Popular</span>' : "") +
           '<div class="p-name">' + esc(p.name.replace(" USA", "").replace(" EU", "")) + "</div>" +
-          '<div class="p-desc">' + esc(p.description || "") + "</div>" +
-          '<div class="plan-price"><span class="cur">&euro;' + fmtPrice(price) + '<small>/mo</small></span>' +
-          '<span class="was">&euro;' + fmtPrice(base) + "</span></div>" +
+          '<div class="p-desc">' + esc(planDescription(p)) + "</div>" +
+          '<div class="plan-price"><span class="cur">' + currencySymbol(p) + fmtPrice(price) + '<small>/mo</small></span>' +
+          '<span class="was">' + currencySymbol(p) + fmtPrice(base) + "</span></div>" +
           '<div class="plan-specs">' +
             specRow("CPU", p.specs && p.specs.cpu) +
             specRow("RAM", p.specs && p.specs.ram) +
             specRow("Storage", p.specs && p.specs.storage) +
             specRow("Bandwidth", p.specs && p.specs.bandwidth) +
           "</div>" +
-          '<a class="btn ' + (isPop ? "btn-primary" : "btn-ghost") + '" href="' + planUrl(p, currentCycle) + '" target="_blank" rel="noopener noreferrer">Deploy Now</a>' +
+          (available ? '<a class="btn ' + (isPop ? "btn-primary" : "btn-ghost") + '" href="' + planUrl(p, currentCycle) + '" target="_blank" rel="noopener noreferrer">Deploy Now</a>' : '<span class="plan-unavailable" role="status">Unavailable at checkout</span>') +
         "</article>"
       );
     }).join("");
@@ -367,8 +426,8 @@
               '<td class="v">' + esc(p.specs && p.specs.ram || "—") + "</td>" +
               '<td class="v">' + esc(p.specs && p.specs.storage || "—") + "</td>" +
               '<td class="v">' + esc(p.specs && p.specs.bandwidth || "—") + "</td>" +
-              '<td class="v">&euro;' + fmtPrice(p.monthlyPrice || 0) + "</td>" +
-              '<td><a class="btn btn-sm ' + (p.popular ? "btn-primary" : "btn-ghost") + '" href="' + planUrl(p, "monthly") + '" target="_blank" rel="noopener noreferrer">Deploy</a></td>' +
+              '<td class="v">' + currencySymbol(p) + fmtPrice(displayMonthlyPrice(p, "monthly")) + "</td>" +
+              '<td>' + (planAvailable(p) ? '<a class="btn btn-sm ' + (p.popular ? "btn-primary" : "btn-ghost") + '" href="' + planUrl(p, "monthly") + '" target="_blank" rel="noopener noreferrer">Deploy</a>' : '<span class="plan-unavailable" role="status">Unavailable</span>') + '</td>' +
             "</tr>"
           );
         }).join("");
@@ -384,7 +443,8 @@
       .then(function (data) {
         var list = Array.isArray(data) ? data : [];
         if (!list.length) {
-          testimonialQuote.innerHTML = '<div class="quote-empty">Testimonials are being collected. Our 10,877+ customers trust us — join them today.</div>';
+          // Static trusted fallback; no remote values are interpolated.
+          testimonialQuote.innerHTML = '<div class="quote-empty">Verified customer stories will appear here after approval.</div>';
           return;
         }
         var t = list[0];
@@ -465,27 +525,37 @@
   // The hero console is intentionally static. It never claims that a server
   // was provisioned and does not simulate progress or completion.
 
-  /* ---------- OS grid scroll reveal ---------- */
-  var osTiles = $$(".cq-os-tile");
-  if (osTiles.length && "IntersectionObserver" in window) {
-    var revealDelay = 60; // ms between tiles
-    var observer = new IntersectionObserver(
-      function (entries) {
+  /* ---------- Section and OS grid reveal ---------- */
+  var revealSections = $$(".cq-reveal");
+  var osGrid = $(".cq-os-grid");
+  if ("IntersectionObserver" in window) {
+    var sectionObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          sectionObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: "0px 0px -8% 0px" });
+    revealSections.forEach(function (section) { sectionObserver.observe(section); });
+
+    if (osGrid) {
+      var osObserver = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
           if (entry.isIntersecting) {
-            var tile = entry.target;
-            var order = parseInt(tile.getAttribute("data-reveal") || "0", 10) + 1;
-            tile.style.transitionDelay = order * revealDelay + "ms";
-            tile.classList.add("revealed");
-            observer.unobserve(tile);
+            $$(".cq-os-tile", osGrid).forEach(function (tile, index) {
+              tile.style.transitionDelay = (index * 55) + "ms";
+              tile.classList.add("revealed");
+            });
+            osObserver.unobserve(entry.target);
           }
         });
-      },
-      { threshold: 0.15 }
-    );
-    osTiles.forEach(function (t) { observer.observe(t); });
-  } else if (osTiles.length) {
-    osTiles.forEach(function (t) { t.classList.add("revealed"); });
+      }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+      osObserver.observe(osGrid);
+    }
+  } else {
+    revealSections.forEach(function (section) { section.classList.add("is-visible"); });
+    if (osGrid) $$(".cq-os-tile", osGrid).forEach(function (tile) { tile.classList.add("revealed"); });
   }
 
   fetchUptime();

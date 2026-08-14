@@ -77,15 +77,16 @@ test("homepage JSON-LD has Organization + WebSite; plans has Service offers; faq
   assert.ok(faqPage && faqPage.mainEntity.length === 21, `faq: FAQPage with 21 Q&A (got ${faqPage && faqPage.mainEntity.length})`);
 });
 
-test("blog post pages carry Article JSON-LD + breadcrumbs", () => {
+test("draft blog pages are honest and excluded from the index", () => {
   for (const post of BLOG) {
-    const s = parse(HTML(`blog/${post.slug}.html`));
+    const html = HTML(`blog/${post.slug}.html`);
+    const s = parse(html);
     const graph = s.ldBlocks.flatMap((b) => JSON.parse(b)["@graph"] || [JSON.parse(b)]);
     const types = graph.map((x) => x["@type"]);
-    assert.ok(types.includes("BlogPosting"), `${post.slug}: BlogPosting`);
+    assert.match(html, /<meta name="robots" content="noindex,follow" \/>/, `${post.slug}: noindex`);
+    assert.ok(!types.includes("BlogPosting"), `${post.slug}: no BlogPosting for draft`);
     assert.ok(types.includes("BreadcrumbList"), `${post.slug}: BreadcrumbList`);
-    const art = graph.find((x) => x["@type"] === "BlogPosting");
-    assert.ok(art.headline === post.title && art.datePublished === post.date, `${post.slug}: article metadata matches`);
+    assert.ok(html.includes("This article is not published yet."), `${post.slug}: draft disclosure`);
   }
 });
 
@@ -94,9 +95,10 @@ test("sitemap.xml is valid XML with all routes; robots.txt allows + references i
   assert.ok(sitemap.startsWith("<?xml"), "sitemap XML declaration");
   assert.ok(sitemap.includes("<urlset"), "sitemap urlset");
   const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-  assert.strictEqual(locs.length, ROUTES.length, `sitemap has ${ROUTES.length} URLs`);
+  const sitemapRoutes = ROUTES.filter((route) => !route.startsWith("blog/"));
+  assert.strictEqual(locs.length, sitemapRoutes.length, `sitemap has ${sitemapRoutes.length} URLs`);
   for (const loc of locs) assert.ok(loc.startsWith("__SRDP_BASE__/"), `sitemap absolute loc ${loc}`);
-  for (const route of ROUTES) {
+  for (const route of sitemapRoutes) {
     const wanted = route === "index.html" ? "__SRDP_BASE__/" : `__SRDP_BASE__/${route}`;
     assert.ok(locs.includes(wanted), `sitemap includes ${wanted}`);
   }
@@ -112,8 +114,8 @@ test("AI-readable guide exists and source templates stay free of raw infrastruct
   assert.ok(llms.startsWith("# StealthRDP"), "llms.txt heading");
   assert.ok(llms.includes("__SRDP_BASE__/plans.html"), "llms.txt links to plans");
   assert.ok(llms.includes("__SRDP_BASE__/faq.html"), "llms.txt links to FAQ");
-  assert.ok(llms.includes("10,877 customers"), "llms.txt preserves approved customer claim");
-  assert.ok(llms.includes("25,000+ servers"), "llms.txt preserves approved server claim");
+  assert.ok(!llms.includes("10,877") && !llms.includes("25,000+"), "llms.txt omits unapproved scale claims");
+  assert.ok(llms.includes("unavailable data must remain unavailable"), "llms.txt preserves fail-closed status guidance");
   assert.doesNotMatch(HTML("build.mjs").replace(/\sd="[^"]*"/g, " "), /\b(?:\d{1,3}\.){3}\d{1,3}\b/, "build template has no raw IPv4 address");
   for (const route of ROUTES) {
     const visible = HTML(route).replace(/\sd="[^"]*"/g, " ");
@@ -135,8 +137,9 @@ test("baked content is present in raw HTML (plans, features, faq, status, blog)"
   assert.strictEqual((faq.match(/<div class="faq-item/g) || []).length, 21, "faq: 21 baked items");
 
   const status = HTML("status.html");
-  assert.ok(status.includes("Nodes online"), "status: summary baked");
-  assert.ok(status.includes("node-card"), "status: node cards baked");
+  assert.ok(status.includes("Live status unavailable"), "status: fail-closed summary");
+  assert.ok(status.includes("status-empty"), "status: neutral node fallback");
+  assert.ok(!status.includes("node-card"), "status: no baked node snapshot");
 
   const blog = HTML("blog.html");
   assert.strictEqual((blog.match(/<article class="blog-card/g) || []).length, 11, "blog: 11 baked cards");

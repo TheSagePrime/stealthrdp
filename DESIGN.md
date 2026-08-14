@@ -117,48 +117,37 @@ Keep the server-side status response redacted to logical components and regions.
 Do not expose raw IP addresses, ports, monitor IDs, or upstream hostnames.
 
 Keep approved product data from the existing repository unless Bhuvan changes it.
-Do not silently resolve the existing currency mismatch between homepage copy and plan cards.
+Keep currency tied to the plan location in visible pricing and structured data.
 Record pricing or promotion changes as a business decision.
 
-## Quiet Infrastructure homepage contract (2026-08-14)
+## Warm Instrument / C homepage contract (2026-08-14)
 
-The Home surface remains `Persuade`, but its job is intentionally quiet: explain the machine, make plan fit easy to judge, and move the selected plan to secure WHMCS checkout without theatre.
+The Home surface remains `Persuade`. Its job is to explain the private machine, make plan fit easy to judge, and hand the selected plan to secure WHMCS checkout.
 
-### Dated reference synthesis
-
-The following live references were reviewed on 2026-08-14 for conversion structure, pacing, and product-family clarity. They are not visual templates:
-
-- Cloudzy — https://cloudzy.com — clear proposition, whitespace, one primary action, and restrained dark atmosphere. We keep the hierarchy and omit the star field, copy, and identity.
-- Latitude.sh — https://latitude.sh — premium type scale, negative space, and one hero object. We keep the restraint and omit its layout, imagery, and brand language.
-- Render — https://render.com — light canvas, readable headline, simple action pair, and product-led proof. We keep the calm canvas and omit its product screenshots and composition.
-- Kinsta — https://kinsta.com — off-white calm, strong proof, and a direct CTA. We keep the pacing and omit the editorial style, claims, and imagery.
-- Hetzner Cloud — https://hetzner.com/cloud — practical plan clarity and useful infrastructure explanation. We keep the comparison discipline and omit its identity and illustrations.
-- Kamatera — https://kamatera.com — small set of feature proofs around a direct proposition. We keep the proof count and use only verified StealthRDP facts.
-- UpCloud — https://upcloud.com — product-family clarity and restrained section rhythm. We keep the grouping principle and omit its visual system.
-- Scaleway — https://scaleway.com — infrastructure-specific product grouping. We keep the product-first reading path and omit its copy, assets, and brand treatment.
-- Cherry Servers — https://cherryservers.com — direct server categories and operational clarity. We keep the plainness and omit its layout and claims.
-- DigitalOcean — https://digitalocean.com — accessible product grouping and clear getting-started flow. We keep the task-first conversion path and omit its identity.
-- Runpod — https://runpod.io — workload-led product framing. We keep the intent-to-fit relationship and omit its imagery, language, and visual energy.
-- Vultr — https://vultr.com — compact product choice and infrastructure specificity. We keep the directness and omit its layout and claims.
+The approved visual direction is **Warm Instrument / C**: dark control-room surfaces with warm gold action states, an optional calm light theme, large asymmetrical type, original operating-system marks, and restrained motion. The page must remain compact and product-specific.
 
 ### Composition and interaction contract
 
-1. **Direct opening** — “Your own Windows or Linux VPS.” One supporting sentence, one primary WHMCS CTA, one secondary text link, and one original local server/workspace visual. No annotations, fake terminal, live console, or status dashboard.
-2. **Verified proof row** — exactly three facts: Windows + Linux VPS, NVMe storage, and full admin / root access. No fabricated numbers, customer counts, uptime, or urgency on the Home surface.
-3. **Decision-led pricing** — “Start with the right machine.” Keep four real USA plan choices in a horizontal rail and a selected-plan summary. The workload control is compact and optional; every plan selection updates the existing `desk-plan-choice`, `desk-intents`, `desk-plan-choices`, `selectorCta`, `deskTopCta`, and `closePurchaseLink` path to a real `https://dash.stealthrdp.com` URL.
-4. **Capabilities** — three calm columns: remote desktop, services and hosting, development and automation. Use verified product language, not generic feature bento cards.
-5. **Operating path** — one quiet three-step line: choose, check, continue. WHMCS owns checkout, billing, and account access.
-6. **Proof/support** — three links only: public status, native docs, and pre-sales support. Status data stays on `/status.html`; the Home surface has no monitoring table.
-7. **Final handoff** — one deep navy band showing the selected plan and one button. No duplicate action grid.
+1. **Direct opening** — “Make room for the work.” Keep one supporting sentence, one primary plan action, one secondary explanation link, and one honest local deployment demonstration. The console must say that it is a demonstration and that it provisions nothing.
+2. **Verified proof row** — show Windows + Linux, NVMe storage, full admin rights, and unlimited bandwidth only when those facts match the selected product data.
+3. **Decision-led pricing** — show all six real USA plan choices and a selected-plan summary. Each selection updates the baked price, resources, visual bars, badge, and real WHMCS URL.
+4. **Operating path** — keep the three-step choose, checkout, and connect journey. WHMCS owns checkout, billing, account access, pricing confirmation, and availability confirmation.
+5. **Capabilities** — explain why a private machine helps with remote work, automation, and control. Use concrete StealthRDP language, not generic feature bento cards.
+6. **Operating systems** — use verbatim open-source library assets. Devicon supplies Windows Server, Ubuntu, Debian, CentOS, Rocky Linux, AlmaLinux, and Fedora. theSVG supplies FreeBSD and Alpine Linux. Do not hand-assemble brand paths or add wrapper backgrounds.
+7. **FAQ and status** — keep the two-column FAQ, native `details` controls, and fail-closed status card. Orange indicates an incident only. Unavailable status remains neutral.
+8. **Reviews** — keep the compact OneUptime-style marquee and human-voiced review cards. Duplicate cards may support the visual loop, but clones must stay out of the accessibility tree.
+9. **Final handoff** — use one closing CTA that returns to the selected machine list. Do not add duplicate checkout surfaces.
 
-### Material and responsive rules
+### Material, responsive, and motion rules
 
-- Home uses a soft cloud-gray canvas, deep navy selected-plan/final surfaces, and one restrained gold accent.
-- Hide the shared status ticker on Home; retain it on other public pages.
-- Keep the header light and calm. Reduce decorative micro-labels by at least 60% versus the rejected preview.
-- Avoid beige editorial styling, gold shadows, grid wallpaper, dense borders, nested cards, pills, fake metrics, testimonials, dashboard theatre, and generic SaaS bento grids.
-- On mobile, preserve the order text → visual → proof → plan rail, use comfortable controls, stack the three intent choices, and prevent horizontal overflow.
-- Respect visible focus, reduced motion, and semantic landmarks.
+- Home uses the approved navy, surface, text, gold, and green tokens. Light mode uses contrast-tested token values.
+- Keep the shared status ticker off Home. Retain it on other public pages.
+- Keep the header calm and the copy direct. Use the keyword context “Windows and Linux VPS hosting in the USA” in metadata and supporting copy.
+- Use self-hosted fonts and SVG assets. Do not add runtime asset CDNs.
+- Keep section rhythm compact. Prefer one strong explanation over repeated claims.
+- Use scroll reveal, plan-change feedback, console sequencing, and the review marquee only when they improve orientation. Disable non-essential motion under `prefers-reduced-motion`.
+- On mobile, preserve the order text → visual → proof → plans. Keep controls at comfortable touch sizes and prevent horizontal overflow.
+- Respect visible focus, semantic landmarks, accessible names, and neutral unavailable states.
 
 The Home surface is not WHMCS or VirtFusion. It explains the product and hands off clearly; WHMCS remains the source of truth for checkout, billing, login, support, pricing, and availability.
 

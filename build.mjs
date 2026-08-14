@@ -43,9 +43,8 @@ const esc = (s) =>
 const round2 = (n) => Math.round(n * 100) / 100;
 const fmt = (n) => n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-// Visible monthly price = API base * 0.95 (matches main.js CYCLE_MULT.monthly)
+// Visible monthly price follows the current WHMCS monthly checkout snapshot.
 const MONTHLY_MULT = 0.95;
-const monthlyPrice = (p) => round2((p.monthlyPrice || 0) * MONTHLY_MULT);
 
 const PLAN_SLUGS = {
   "Bronze USA": "bronze-usa2", "Silver USA": "silver-usa", "Gold USA": "gold-usa",
@@ -53,19 +52,51 @@ const PLAN_SLUGS = {
   "Bronze EU": "bronze-eu", "Silver EU": "silver-eu", "GOLD EU": "gold-eu",
   "Platinum EU": "platinum-eu", "Diamond EU": "diamond-eu", "Emerald EU": "emerald-eu",
 };
+const CHECKOUT_MONTHLY_PRICES = {
+  "Bronze USA": 9.50, "Silver USA": 18.04, "Gold USA": 26.59,
+  "Platinum USA": 33.24, "Diamond USA": 42.75, "Emerald USA": 51.30,
+};
+const USA_CHECKOUT_AVAILABILITY = {
+  "bronze-usa2": true, "silver-usa": false, "gold-usa": false,
+  "platinum-usa": false, "diamond-usa": false, "emerald-usa": false,
+};
+const monthlyPrice = (p) => Object.prototype.hasOwnProperty.call(CHECKOUT_MONTHLY_PRICES, p.name)
+  ? CHECKOUT_MONTHLY_PRICES[p.name]
+  : round2((p.monthlyPrice || 0) * MONTHLY_MULT);
+const planAvailable = (p) => p.location !== "USA" || USA_CHECKOUT_AVAILABILITY[PLAN_SLUGS[p.name]] === true;
 const planUrl = (p) => {
   const slug = PLAN_SLUGS[p.name];
-  if (slug) return "https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/" + slug + "&billingcycle=monthly";
+  if (slug) {
+    const category = p.location === "EU" ? "eu" : "standard-usa-rdp-vps";
+    return "https://dash.stealthrdp.com/index.php?rp=/store/" + category + "/" + slug + "&billingcycle=monthly";
+  }
   if (p.purchaseUrl) return p.purchaseUrl;
   return "https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps";
 };
 const planName = (p) => p.name.replace(" USA", "").replace(" EU", "");
+// Keep visible currency tied to plan location. Checkout remains authoritative.
+const currencyCode = (p) => p.location === "EU" ? "EUR" : "USD";
+const currencySymbol = (p) => p.location === "EU" ? "€" : "$";
+const planDescription = (p) => {
+  const specs = p.specs || {};
+  const location = p.location ? `${p.location} ` : "";
+  return `Private ${location}VPS with ${specs.cpu || "dedicated CPU"}, ${specs.ram || "scalable RAM"}, and ${specs.storage || "NVMe storage"}.`;
+};
 
 const SOCIAL = [
   { href: "https://x.com/stealthrdp", label: "X / Twitter" },
   { href: "https://www.instagram.com/stealth_rdp", label: "Instagram" },
   { href: "https://discord.gg/9JJFs4DDyF", label: "Discord" },
   { href: "https://t.me/StealthRDP", label: "Telegram" },
+];
+
+const HOME_FAQS = [
+  { question: "What exactly am I renting?", answer: "A private Windows or Linux VPS in a USA location — dedicated CPU, NVMe storage, unlimited bandwidth, and full admin rights on your own machine." },
+  { question: "Do I really get full admin rights?", answer: "Yes. Windows machines give you administrator access and Linux machines give you root. You install and configure what the work needs." },
+  { question: "Which operating systems are available?", answer: "Windows Server plus the main Linux families — Ubuntu, Debian, CentOS, Rocky Linux, AlmaLinux, Fedora, FreeBSD, and Alpine Linux. The machine is yours to configure after setup." },
+  { question: "How does checkout and delivery work?", answer: "You continue to WHMCS for secure checkout. Pricing and availability are confirmed there. Credentials and account access come from the client area after the order." },
+  { question: "Can I upgrade later?", answer: "Plans are listed on this page, and the client area is the place to manage services and billing. Pricing and availability are confirmed at checkout." },
+  { question: "Where are the servers located?", answer: "This page shows the USA range. Additional locations can be added as the range expands." },
 ];
 
 /* ---------- head generator ---------- */
@@ -81,21 +112,24 @@ function head({ title, description, canonical, pageType = "website", jsonLd = []
   <meta name="description" content="${esc(description)}" />
   <meta name="robots" content="${robots}" />
   <meta name="author" content="StealthRDP" />
+  <meta name="theme-color" content="#08090c" />
   <link rel="canonical" href="${canonical}" />
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
   <meta property="og:title" content="${esc(title)}" />
   <meta property="og:description" content="${esc(description)}" />
   <meta property="og:type" content="${og}" />
   <meta property="og:url" content="${canonical}" />
+  <meta property="og:locale" content="en_US" />
   <meta property="og:image" content="__SRDP_BASE__/assets/og-cover.png" />
   <meta property="og:site_name" content="StealthRDP" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@stealthrdp" />
+  <meta name="twitter:url" content="${canonical}" />
   <meta name="twitter:title" content="${esc(title)}" />
   <meta name="twitter:description" content="${esc(description)}" />
   <meta name="twitter:image" content="__SRDP_BASE__/assets/og-cover.png" />
   <link rel="stylesheet" href="/css/style.css" />
-  <script>(function(){try{var t=localStorage.getItem('srdp-theme');if(!t){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','dark')}})();</script>
+  <script>(function(){try{document.documentElement.classList.add('js');var t=localStorage.getItem('srdp-theme');if(!t){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.classList.add('js');document.documentElement.setAttribute('data-theme','dark')}})();</script>
   <!-- Google Tag Manager (real container from live site) -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -135,7 +169,7 @@ function headerHtml(active) {
     <div class="header-actions">
       <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark and light theme" aria-pressed="false"><svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"/></svg><svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 14.2A8.3 8.3 0 0 1 9.8 3.6 8.3 8.3 0 1 0 20.4 14.2Z"/></svg></button>
       <a class="btn btn-sm btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client Area</a>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-controls="mobileNav" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     </div>
   </div>
   <div class="mobile-nav" id="mobileNav">${navHtml(active)}<a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client Area</a></div>
@@ -157,25 +191,25 @@ function footerHtml() {
     <div class="footer-grid">
       <div class="footer-about">
         <a href="/" class="logo" aria-label="StealthRDP home"><span class="logo-mark">${LOGO_SVG}</span><span>Stealth<em>RDP</em></span></a>
-        <p>Enterprise-grade remote desktop infrastructure with unmatched security and performance.</p>
+        <p>Windows and Linux VPS infrastructure for remote access, automation, and development.</p>
         <div class="footer-social">${social}</div>
       </div>
-      <div class="footer-col"><h4>Products</h4><ul>
+      <div class="footer-col"><h3>Products</h3><ul>
         <li><a href="/plans.html">RDP Plans</a></li>
         <li><a href="/features.html">Features</a></li>
         <li><a href="/plans.html#build-your-own">Build Your Own VPS</a></li>
         <li><a href="/plans.html">Pricing</a></li>
       </ul></div>
-      <div class="footer-col"><h4>Resources</h4><ul>
+      <div class="footer-col"><h3>Resources</h3><ul>
         <li><a href="/docs.html">Documentation</a></li>
         <li><a href="/blog.html">Tutorials</a></li>
         <li><a href="/faq.html">FAQ</a></li>
         <li><a href="/blog.html">Blog</a></li>
         <li><a href="/status.html">Server Status</a></li>
       </ul></div>
-      <div class="footer-col"><h4>Company</h4><ul>
+      <div class="footer-col"><h3>Company</h3><ul>
         <li><a href="/about.html">About Us</a></li>
-        <li><a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact Support</a></li>
+        <li><a href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Open Client Area</a></li>
         <li><a href="/privacy.html">Privacy Policy</a></li>
         <li><a href="${TERMS_URL}">Terms of Service</a></li>
       </ul></div>
@@ -198,19 +232,19 @@ function scripts(extra = []) {
 /* ---------- baked content ---------- */
 function planCardHtml(p, { showPopular = true } = {}) {
   const price = monthlyPrice(p);
-  const isPop = showPopular && p.popular;
+  const available = planAvailable(p);
+  const isPop = showPopular && p.popular && available;
   return `<article class="plan-card${isPop ? " popular" : ""}">
-    ${isPop ? '<span class="plan-popular">Most Popular</span>' : ""}
-    <div class="p-name">${esc(planName(p))}</div>
-    <div class="p-desc">${esc(p.description || "")}</div>
-    <div class="plan-price"><span class="cur">&euro;${fmt(price)}<small>/mo</small></span><span class="was">&euro;${fmt(p.monthlyPrice || 0)}</span></div>
+    ${isPop ? '<span class="plan-popular">Most Popular</span>\n    ' : ""}<div class="p-name">${esc(planName(p))}</div>
+    <div class="p-desc">${esc(planDescription(p))}</div>
+    <div class="plan-price"><span class="cur">${currencySymbol(p)}${fmt(price)}<small>/mo</small></span><span class="was">${currencySymbol(p)}${fmt(p.monthlyPrice || 0)}</span></div>
     <div class="plan-specs">
       ${specRow("CPU", p.specs && p.specs.cpu)}
       ${specRow("RAM", p.specs && p.specs.ram)}
       ${specRow("Storage", p.specs && p.specs.storage)}
       ${specRow("Bandwidth", p.specs && p.specs.bandwidth)}
     </div>
-    <a class="btn ${isPop ? "btn-primary" : "btn-ghost"}" href="${planUrl(p)}" target="_blank" rel="noopener noreferrer">Deploy Now</a>
+    ${available ? `<a class="btn ${isPop ? "btn-primary" : "btn-ghost"}" href="${planUrl(p)}" target="_blank" rel="noopener noreferrer">Deploy Now</a>` : '<span class="plan-unavailable" role="status">Unavailable at checkout</span>'}
   </article>`;
 }
 
@@ -226,8 +260,8 @@ function compareRowHtml(p) {
     <td class="v">${esc((p.specs && p.specs.ram) || "—")}</td>
     <td class="v">${esc((p.specs && p.specs.storage) || "—")}</td>
     <td class="v">${esc((p.specs && p.specs.bandwidth) || "—")}</td>
-    <td class="v">&euro;${fmt(p.monthlyPrice || 0)}</td>
-    <td><a class="btn btn-sm ${p.popular ? "btn-primary" : "btn-ghost"}" href="${planUrl(p)}" target="_blank" rel="noopener noreferrer">Deploy</a></td>
+    <td class="v">${currencySymbol(p)}${fmt(monthlyPrice(p))}</td>
+    <td>${planAvailable(p) ? `<a class="btn btn-sm ${p.popular ? "btn-primary" : "btn-ghost"}" href="${planUrl(p)}" target="_blank" rel="noopener noreferrer">Deploy</a>` : '<span class="plan-unavailable" role="status">Unavailable</span>'}</td>
   </tr>`;
 }
 
@@ -262,7 +296,7 @@ function nodeCardHtml(m) {
 
 function testimonialHtml() {
   if (!TESTIMONIALS.length) {
-    return '<div class="quote-empty">Testimonials are being collected. Our 10,877+ customers trust us — join them today.</div>';
+    return '<div class="quote-empty">Verified customer stories will appear here after approval.</div>';
   }
   const t = TESTIMONIALS[0];
   const name = t.authorName || t.name || t.customerName || "StealthRDP Customer";
@@ -281,7 +315,7 @@ function blogCardHtml(p) {
 }
 
 /* ---------- native documentation ---------- */
-const DOC_SUPPORT_URL = "https://dash.stealthrdp.com/submitticket.php";
+const DOC_SUPPORT_URL = "https://dash.stealthrdp.com/index.php?rp=/login";
 
 function redactPublic(value) {
   return String(value == null ? "" : value)
@@ -567,7 +601,7 @@ function buildDocArticle(article, index) {
   const sourceMeta = `<span>Source: ${esc(sourceLabel)}</span>${time}<span>${esc(migrationDate)}</span><span>${redactionLabel}</span>`;
   const body = `<main class="docs-article-page docs-surface" data-docs-category="${esc(article.category)}" data-doc-slug="${esc(article.slug)}"><div class="container docs-article-layout"><div class="docs-article-column">
     <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/docs.html">Docs</a><span aria-hidden="true">/</span><span>${esc(article.category)}</span></nav>
-    <article class="docs-article"><header class="docs-article-header"><span class="docs-category">${esc(article.category)}</span><h1>${esc(article.title)}</h1><p class="docs-summary">${esc(article.summary)}</p><div class="docs-source-meta">${sourceMeta}</div></header>${docsWarning(article)}<div class="docs-content">${rendered.html}</div><div class="docs-support"><div><span class="sec-index">Need a hand?</span><h2>Support is still on WHMCS</h2><p>For account or server-specific help, use the StealthRDP support portal.</p></div><a class="btn btn-primary" href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">Contact support</a></div>${relatedHtml}</article>
+    <article class="docs-article"><header class="docs-article-header"><span class="docs-category">${esc(article.category)}</span><h1>${esc(article.title)}</h1><p class="docs-summary">${esc(article.summary)}</p><div class="docs-source-meta">${sourceMeta}</div></header>${docsWarning(article)}<div class="docs-content">${rendered.html}</div><div class="docs-support"><div><span class="sec-index">Need a hand?</span><h2>Support is still on WHMCS</h2><p>For account or server-specific help, open the StealthRDP client area.</p></div><a class="btn btn-primary" href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">Open client area</a></div>${relatedHtml}</article>
   </div>${contents}</div></main>`;
   const fullTitle = `${article.title} — StealthRDP Docs`;
   const useTitle = fullTitle.length <= 70 ? fullTitle : `${article.title.slice(0, Math.max(30, 70 - " — StealthRDP".length - 1)).trim()}… — StealthRDP`;
@@ -582,7 +616,7 @@ const ORG = {
   name: "StealthRDP",
   url: "__SRDP_BASE__/",
   logo: "__SRDP_BASE__/assets/favicon.svg",
-  description: "Windows and Linux remote desktop infrastructure and VPS hosting with DDoS protection, full administrative access, live status monitoring, and a 99.9% uptime SLA.",
+  description: "Windows and Linux VPS hosting for remote work, remote access, automation, and development with full administrative access.",
   sameAs: SOCIAL.map((s) => s.href),
 };
 
@@ -607,22 +641,26 @@ function serviceLd(p) {
   return {
     "@type": "Service",
     name: p.name,
-    description: p.description || `${p.name} — ${(p.specs && p.specs.cpu) || ""} CPU, ${(p.specs && p.specs.ram) || ""} RAM, ${(p.specs && p.specs.storage) || ""} NVMe`,
+    description: planDescription(p),
     url: planUrl(p),
     provider: { "@type": "Organization", name: "StealthRDP", url: "__SRDP_BASE__/" },
-    offers: { "@type": "Offer", price: monthlyPrice(p), priceCurrency: "EUR", url: planUrl(p) },
+    offers: { "@type": "Offer", price: monthlyPrice(p), priceCurrency: currencyCode(p), url: planUrl(p) },
   };
 }
 
-function faqLd() {
+function faqLdFrom(list) {
   return {
     "@type": "FAQPage",
-    mainEntity: FAQS.map((f) => ({
+    mainEntity: list.map((f) => ({
       "@type": "Question",
       name: f.question,
       acceptedAnswer: { "@type": "Answer", text: f.answer },
     })),
   };
+}
+
+function faqLd() {
+  return faqLdFrom(FAQS);
 }
 
 function articleLd(post) {
@@ -640,8 +678,8 @@ function articleLd(post) {
 }
 
 /* ---------- page builders ---------- */
-function page({ active, title, description, canonical, pageType = "website", jsonLd = [], body, extraScripts = [] }) {
-  return `${head({ title, description, canonical, pageType, jsonLd })}
+function page({ active, title, description, canonical, pageType = "website", jsonLd = [], body, extraScripts = [], robots = "index,follow" }) {
+  return `${head({ title, description, canonical, pageType, jsonLd, robots })}
 <body data-page="${active}">
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NS397SS9"
@@ -656,180 +694,25 @@ function page({ active, title, description, canonical, pageType = "website", jso
 }
 
 /* ---------- 1. index ---------- */
-function buildLegacyIndex() {
-  const preview = USA.slice(0, 3).map((p) => planCardHtml(p)).join("");
-  const body = `
-  <!-- ============ Hero ============ -->
-  <section class="hero">
-    <div class="container hero-grid">
-      <div class="hero-copy">
-        <span class="eyebrow fade-up">Windows &amp; Linux VPS · Instant Setup</span>
-        <h1 class="fade-up d1">Your server. <span class="gold">Live in 60 seconds.</span></h1>
-        <p class="sub fade-up d2">High-performance remote desktop infrastructure without the complexity. Enterprise hardware, DDoS protection, and a 99.9% uptime SLA — online the moment you pay.</p>
-        <div class="hero-cta fade-up d3">
-          <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Deploy Your Server Now
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <a class="btn btn-ghost" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Ask a Pre-Sales Question</a>
-        </div>
-        <p class="hero-micro fade-up d3">Starting at only <b>$9.50/month</b> · No hidden fees · Cancel anytime · 7-day money-back</p>
-        <div class="hero-stats fade-up d4">
-          <div class="hero-stat"><div class="num">10,877<span class="plus">+</span></div><div class="lbl">Customers</div></div>
-          <div class="hero-stat"><div class="num">25,000<span class="plus">+</span></div><div class="lbl">Servers deployed</div></div>
-          <div class="hero-stat"><div class="num">99.9<span class="plus">%</span></div><div class="lbl">Uptime SLA</div></div>
-        </div>
-      </div>
-      <div class="hero-console fade-up d2" aria-label="Deployment demonstration">
-        <div class="console-card">
-          <div class="console-head"><span class="c-dot r"></span><span class="c-dot y"></span><span class="c-dot g"></span><span class="c-title">stealth-deploy — demonstration</span></div>
-          <div class="console-body">
-            <div class="console-demo-note"><span class="warn">DEMONSTRATION</span> This is not a live deployment. No server is provisioned.</div>
-            <div class="console-line"><span class="cmd">$ stealth deploy --plan bronze-usa --region us-east</span></div>
-            <div class="console-line"><span class="dim">▸ plan selected for illustration</span></div>
-            <div class="console-line"><span class="dim">▸ region selected for illustration</span></div>
-            <div class="console-line"><span class="warn">▸ pricing and availability shown at checkout</span></div>
-            <div class="console-line"><span class="dim">▸ no infrastructure request is made by this preview</span></div>
-            <div class="console-progress"><div class="bar" style="width:42%"></div></div>
-            <div class="console-line"><span class="pct">illustration only</span></div>
-          </div>
-          <div class="console-foot"><span class="chip">2 <b>vCPU</b></span><span class="chip">4 <b>GB RAM</b></span><span class="chip">60 <b>GB NVMe</b></span><span class="chip">1 <b>Gbps</b></span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ OS marquee ============ -->
-  <div class="marquee">
-    <div class="marquee-track" id="osTrack">
-      <span class="marquee-label">Works with your OS</span>
-      <span class="marquee-item">Debian</span><span class="marquee-item">CentOS</span><span class="marquee-item">Rocky Linux</span><span class="marquee-item">Ubuntu</span><span class="marquee-item">Fedora</span><span class="marquee-item">FreeBSD</span><span class="marquee-item">Alpine Linux</span><span class="marquee-item">AlmaLinux</span><span class="marquee-item">Windows</span>
-      <span class="marquee-label">Works with your OS</span>
-      <span class="marquee-item">Debian</span><span class="marquee-item">CentOS</span><span class="marquee-item">Rocky Linux</span><span class="marquee-item">Ubuntu</span><span class="marquee-item">Fedora</span><span class="marquee-item">FreeBSD</span><span class="marquee-item">Alpine Linux</span><span class="marquee-item">AlmaLinux</span><span class="marquee-item">Windows</span>
-    </div>
-  </div>
-
-  <!-- ============ Trust strip ============ -->
-  <div class="trust-bar" style="padding:22px 0;border-bottom:1px solid var(--border)">
-    <div class="container" style="display:flex;align-items:center;gap:8px 32px;flex-wrap:wrap;font-size:13.5px;color:var(--text-muted)">
-      <span style="color:var(--text);font-weight:600">Trusted by</span>
-      <span><b style="color:var(--text)">10,877+</b> customers</span><span style="color:var(--border-strong)">/</span>
-      <span><b style="color:var(--text)">25,000+</b> servers deployed</span><span style="color:var(--border-strong)">/</span>
-      <span><b style="color:var(--text)">99.9%</b> uptime SLA</span><span style="color:var(--border-strong)">/</span>
-      <span>Support <b style="color:var(--text)">&lt; 2hr</b> response</span><span style="color:var(--border-strong)">/</span>
-      <span><b style="color:var(--text)">7-day</b> money-back guarantee</span>
-    </div>
-  </div>
-
-  <!-- ============ Section 01 — Why (bento) ============ -->
-  <section class="section" id="why">
-    <div class="container">
-      <div class="section-head">
-        <span class="sec-index fade-up">01 / Why StealthRDP</span>
-        <h2 class="fade-up d1">Infrastructure that doesn't flinch</h2>
-        <p class="fade-up d2">Built for speed, secured for production, and priced for growth.</p>
-      </div>
-      <div class="bento">
-        <article class="bento-card bento-2"><span class="bic">${LOGO_SVG}</span><h3>NVMe SSD Storage</h3><p>6x faster than traditional SSDs. Applications, databases, and trading terminals load instantly — no waiting on slow disk I/O.</p></article>
-        <article class="bento-card bento-2"><span class="bic">${LOGO_SVG}</span><h3>Enterprise-Grade Security</h3><p>DDoS protection and isolated VM instances for maximum privacy. Your infrastructure stays up even while others are under attack.</p></article>
-        <article class="bento-card bento-2"><span class="bic">${LOGO_SVG}</span><h3>Global Network</h3><p>Strategically located data centers with 1Gbps network speeds — deploy close to your users, anywhere in the world.</p></article>
-        <article class="bento-card bento-wide">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
-            <div><h3>Live-monitored, always-on</h3><p style="max-width:560px">Every node is watched 24/7 by automated monitors. See the current state of all ${TOTAL} production nodes in real time — transparency you can verify, not just claim.</p></div>
-            <a class="btn btn-ghost btn-sm" href="/status.html">View live status</a>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Section 02 — Use cases ============ -->
-  <section class="section section-tight" id="usecases">
-    <div class="container">
-      <div class="section-head">
-        <span class="sec-index fade-up">02 / Who it's for</span>
-        <h2 class="fade-up d1">Stop struggling with server problems</h2>
-        <p class="fade-up d2">Our customers come to us when traditional hosting limits their work. Here's how StealthRDP changes that.</p>
-      </div>
-      <div class="uc-list">
-        <div class="uc-row fade-up"><div class="uc-num">01</div><div class="uc-main"><h3>Remote Work Freedom</h3><p>Your full desktop, from any device, anywhere.</p></div><div class="uc-cols"><div class="uc-col before"><div class="uc-tag">Before</div><p>"I'm tied to my office computer and can't access my work when traveling or at home."</p></div><div class="uc-col after"><div class="uc-tag">With StealthRDP</div><p>"I access my full desktop from any device — with all my files and applications."</p></div></div></div>
-        <div class="uc-row fade-up d1"><div class="uc-num">02</div><div class="uc-main"><h3>Reliable Web Hosting</h3><p>Stay up under traffic spikes, get real support.</p></div><div class="uc-cols"><div class="uc-col before"><div class="uc-tag">Before</div><p>"My website keeps going down during traffic spikes and support tickets go unanswered."</p></div><div class="uc-col after"><div class="uc-tag">With StealthRDP</div><p>"My site stays up under heavy traffic, and support responds within 2 hours."</p></div></div></div>
-        <div class="uc-row fade-up d2"><div class="uc-num">03</div><div class="uc-main"><h3>Trading &amp; Automation</h3><p>24/7 uptime for terminals, bots, and scripts.</p></div><div class="uc-cols"><div class="uc-col before"><div class="uc-tag">Before</div><p>"My automation scripts only run when my laptop is on, and they're unreliable."</p></div><div class="uc-col after"><div class="uc-tag">With StealthRDP</div><p>"My scripts and trading terminals run 24/7 on low-latency infrastructure."</p></div></div></div>
-        <div class="uc-row fade-up d3"><div class="uc-num">04</div><div class="uc-main"><h3>Secure Data Storage</h3><p>Backed up, protected, and always available.</p></div><div class="uc-cols"><div class="uc-col before"><div class="uc-tag">Before</div><p>"I worry about data loss from hardware failures and have no reliable backup system."</p></div><div class="uc-col after"><div class="uc-tag">With StealthRDP</div><p>"My data is securely backed up with automated disaster recovery on enterprise hardware."</p></div></div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Section 03 — Plans ============ -->
-  <section class="section plans-preview" id="plans">
-    <div class="container">
-      <div class="section-head">
-        <span class="sec-index fade-up">03 / Pick your power</span>
-        <h2 class="fade-up d1">Select your performance level</h2>
-        <p class="fade-up d2">All plans include free migration assistance, 24/7 support, and our industry-leading uptime guarantee.</p>
-      </div>
-      <div style="text-align:center" class="fade-up d2">
-        <div class="billing-toggle" id="billingToggle" role="tablist" aria-label="Billing cycle">
-          <button role="tab" data-cycle="monthly" class="active">Monthly</button>
-          <button role="tab" data-cycle="quarterly">Quarterly <span class="off">−10%</span></button>
-          <button role="tab" data-cycle="annual">Annual <span class="off">−20%</span></button>
-          <button role="tab" data-cycle="biannual">Biannual <span class="off">−30%</span></button>
-        </div>
-      </div>
-      <div class="plan-grid" id="planGrid" aria-live="polite">${preview}</div>
-      <div class="all-link"><a class="btn btn-ghost" href="/plans.html">View All ${USA.length + EU.length} Plans</a></div>
-    </div>
-  </section>
-
-  <!-- ============ Testimonial ============ -->
-  <section class="section" id="testimonials">
-    <div class="container">
-      <div class="section-head center"><span class="sec-index" style="justify-content:center">04 / Customer stories</span><h2 class="fade-up d1">Trusted by server owners</h2></div>
-      <div id="testimonialQuote" class="quote-block" aria-live="polite">${testimonialHtml()}</div>
-    </div>
-  </section>
-
-  <!-- ============ CTA band ============ -->
-  <section class="cta-band">
-    <div class="container cta-grid">
-      <div class="cta-copy">
-        <span class="eyebrow fade-up">Join 10,877+ server owners</span>
-        <h2 class="fade-up d1">Ready to stop wasting time on server management?</h2>
-        <p class="fade-up d2">Deploy your high-performance VPS in the next 60 seconds and focus on what matters — your actual work.</p>
-        <p class="micro fade-up d3">Starting at just <b>$9.50/month</b> · 7-day money-back guarantee · Cancel anytime</p>
-      </div>
-      <div class="cta-actions fade-up d3">
-        <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Deploy Your Server Now</a>
-        <a class="btn btn-ghost" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Ask a Pre-Sales Question</a>
-      </div>
-    </div>
-  </section>`;
-  const jsonLd = [{ "@context": "https://schema.org", "@graph": [ORG, websiteLd()] }];
-  return page({
-    active: "home",
-    title: "StealthRDP — Secure Remote Desktop & VPS Infrastructure",
-    description: "Deploy a Windows or Linux VPS in 60 seconds. Enterprise-grade hardware, DDoS protection, 99.9% uptime SLA and 24/7 support — from $9.50/month.",
-    canonical: "__SRDP_BASE__/",
-    jsonLd,
-    body,
-  });
-}
-
 function buildIndex() {
   const plans = USA; /* real USA plans from data/plans_usa.json */
-  const initial = plans[2] || plans[0]; /* Gold by default */
+  const initial = plans.find((p) => planAvailable(p)) || plans[0]; /* First orderable plan by default */
   const planRows = plans.map((p, i) => {
     const name = esc(planName(p));
-    const desc = esc(p.description || "Private Windows or Linux VPS");
+    const desc = esc(planDescription(p));
     const cpu = esc(p.specs && p.specs.cpu || "");
     const ram = esc(p.specs && p.specs.ram || "");
     const storage = esc(p.specs && p.specs.storage || "");
-    const price = "$" + monthlyPrice(p).toFixed(2);
+    const price = currencySymbol(p) + monthlyPrice(p).toFixed(2);
     const url = esc(planUrl(p));
     const selected = p === initial ? "true" : "false";
-    return `<button type="button" class="cq-plan-row" aria-pressed="${selected}" data-name="${name}" data-price="${price}" data-cpu="${cpu}" data-ram="${ram}" data-storage="${storage}" data-url="${url}" data-desc="${desc}" data-badge="${p.popular ? "Recommended" : "Available"}"><span class="cq-plan-name">${name}<small>${esc(p.specs && p.specs.bandwidth || "Unlimited bandwidth")}</small></span><span class="cq-plan-spec">${cpu}</span><span class="cq-plan-spec">${ram}</span><span class="cq-plan-price">${price}<small>/mo</small></span><span class="cq-plan-arrow" aria-hidden="true">→</span></button>`;
+    const available = planAvailable(p);
+    const status = available ? esc(p.specs && p.specs.bandwidth || "Unlimited bandwidth") : "Unavailable at checkout";
+    return `<button type="button" class="cq-plan-row" aria-pressed="${selected}" aria-disabled="${available ? "false" : "true"}"${available ? "" : " disabled"} data-available="${available ? "true" : "false"}" data-name="${name}" data-price="${price}" data-cpu="${cpu}" data-ram="${ram}" data-storage="${storage}" data-url="${url}" data-desc="${desc}" data-badge="${p.popular && available ? "Recommended" : available ? "Available" : "Unavailable at checkout"}"><span class="cq-plan-name">${name}<small>${status}</small></span><span class="cq-plan-spec">${cpu}</span><span class="cq-plan-spec">${ram}</span><span class="cq-plan-price">${price}<small>/mo</small></span><span class="cq-plan-arrow" aria-hidden="true">${available ? "→" : "—"}</span></button>`;
   }).join("");
   const initialUrl = esc(planUrl(initial));
   const initialName = esc(planName(initial));
-  const initialPrice = "$" + monthlyPrice(initial).toFixed(2);
+  const initialPrice = currencySymbol(initial) + monthlyPrice(initial).toFixed(2);
   const initialCpu = esc(initial.specs && initial.specs.cpu || "");
   const initialRam = esc(initial.specs && initial.specs.ram || "");
   const initialStorage = esc(initial.specs && initial.specs.storage || "");
@@ -839,41 +722,38 @@ function buildIndex() {
     [initialStorage.replace(" GB NVMe", "").replace(" GB", ""), "GB NVMe"],
     ["Unlimited", "BW"],
   ].map(([v, l]) => `<span class="cq-chip">${esc(v)} <b>${esc(l)}</b></span>`).join("");
-  const consoleHtml = `<div class="cq-console-card" role="img" aria-label="Demonstration of the StealthRDP order flow">
-    <div class="cq-console-bar"><span class="cq-cdot r"></span><span class="cq-cdot y"></span><span class="cq-cdot g"></span><span class="cq-console-title">stealth-deploy — demonstration</span></div>
+  const consoleHtml = `<div class="cq-console-card" role="group" aria-labelledby="console-title">
+    <div class="cq-console-bar"><span class="cq-cdot r" aria-hidden="true"></span><span class="cq-cdot y" aria-hidden="true"></span><span class="cq-cdot g" aria-hidden="true"></span><span class="cq-console-title" id="console-title">stealth-deploy — demonstration</span></div>
     <div class="cq-console-body">
-      <div class="cq-cline cq-demo-note"><span class="cq-warn">DEMONSTRATION</span> This is not a live deployment. No server is provisioned.</div>
+      <div class="cq-cline cq-demo-note"><span class="cq-warn">DEMO</span> No live deployment. Nothing is provisioned.</div>
       <div class="cq-cline cq-cmdline"><span class="cq-cmd">$ stealth deploy --plan ${initialName.toLowerCase()} --region us-east</span><span class="cq-cursor" aria-hidden="true"></span></div>
       <div class="cq-cline"><span class="cq-dim">▸ plan selected for illustration</span></div>
       <div class="cq-cline"><span class="cq-dim">▸ region selected for illustration</span></div>
-      <div class="cq-cline"><span class="cq-warn">▸ pricing and availability shown at checkout</span></div>
-      <div class="cq-cline"><span class="cq-dim">▸ no infrastructure request is made by this preview</span></div>
+      <div class="cq-cline"><span class="cq-warn">▸ checkout confirms price and availability</span></div>
+      <div class="cq-cline"><span class="cq-dim">▸ no infrastructure request is made</span></div>
       <div class="cq-progress"><div class="cq-bar"></div></div>
       <div class="cq-cline"><span class="cq-pct">illustration only</span></div>
     </div>
     <div class="cq-console-foot">${consoleChips}</div>
   </div>`;
-  const testimonials = TESTIMONIALS.map((t) => {
-    const name = esc(t.authorName || t.name || t.customerName || "StealthRDP Customer");
-    const role = esc([t.authorPosition, t.authorCompany].filter(Boolean).join(" · "));
+  const reviewCardHtml = (t, clone = false) => {
+    const verified = !String(t._id || "").startsWith("inv");
+    const name = verified ? esc(t.authorName || t.name || t.customerName || "Verified customer") : "Illustrative workflow";
+    const role = verified ? esc([t.authorPosition, t.authorCompany].filter(Boolean).join(" · ")) : "Example only · not a customer testimonial";
     const quote = esc(t.quote || t.testimonial || t.content || "");
     const title = esc(t.title || "");
-    const initials = name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
-    return `<article class="cq-review-card"><div class="cq-review-stars" aria-label="Five star review"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>${title ? `<h3 class="cq-review-title">${title}</h3>` : ""}<p class="cq-review-quote">“${quote}”</p><div class="cq-review-who"><span class="cq-review-avatar" aria-hidden="true">${esc(initials)}</span><span class="cq-review-name"><b>${name}</b>${role ? `<small>${role}</small>` : ""}</span></div></article>`;
-  }).join("");
+    const initials = verified ? name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase() : "EX";
+    const marker = verified ? '<div class="cq-review-stars" aria-label="Verified customer review"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>' : '<div class="cq-review-label">Illustrative example</div>';
+    const hidden = clone ? ' aria-hidden="true" tabindex="-1"' : "";
+    return `<article class="cq-review-card${verified ? "" : " cq-review-illustrative"}"${hidden}>${marker}${title ? `<h3 class="cq-review-title">${title}</h3>` : ""}<p class="cq-review-quote">“${quote}”</p><div class="cq-review-who"><span class="cq-review-avatar" aria-hidden="true">${esc(initials)}</span><span class="cq-review-name"><b>${name}</b><small>${role}</small></span></div></article>`;
+  };
   /* Three scrolling columns, each a duplicated list for a seamless loop. */
   const perCol = Math.ceil(TESTIMONIALS.length / 3);
   const reviewCols = [0, 1, 2].map((col) => {
     const slice = TESTIMONIALS.slice(col * perCol, col * perCol + perCol);
-    const inner = slice.map((t) => {
-      const name = esc(t.authorName || t.name || t.customerName || "StealthRDP Customer");
-      const role = esc([t.authorPosition, t.authorCompany].filter(Boolean).join(" · "));
-      const quote = esc(t.quote || t.testimonial || t.content || "");
-      const title = esc(t.title || "");
-      const initials = name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
-      return `<article class="cq-review-card"><div class="cq-review-stars" aria-label="Five star review"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>${title ? `<h3 class="cq-review-title">${title}</h3>` : ""}<p class="cq-review-quote">“${quote}”</p><div class="cq-review-who"><span class="cq-review-avatar" aria-hidden="true">${esc(initials)}</span><span class="cq-review-name"><b>${name}</b>${role ? `<small>${role}</small>` : ""}</span></div></article>`;
-    }).join("");
-    return `<div class="cq-review-col" data-col="${col}">${inner}${inner}</div>`;
+    const inner = slice.map((t) => reviewCardHtml(t)).join("");
+    const clone = slice.map((t) => reviewCardHtml(t, true)).join("");
+    return `<div class="cq-review-col" data-col="${col}">${inner}${clone}</div>`;
   }).join("");
   const machineSvg = `<svg class="cq-machine" viewBox="0 0 540 400" role="img" aria-label="A clean private server with gold and green status lights">      <defs><linearGradient id="cq-body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--machine-body-a)"/><stop offset="1" stop-color="var(--machine-body-b)"/></linearGradient></defs>
       <ellipse cx="270" cy="368" rx="200" ry="18" fill="#000" opacity=".4"/>
@@ -910,18 +790,18 @@ function buildIndex() {
           </div>
         </div>
       </section>
-      <section class="cq-proof" aria-label="Included with every machine">
+      <section class="cq-proof cq-reveal" aria-label="Included with every machine">
         <span class="cq-proof-item">Windows + Linux</span><span class="cq-proof-item">NVMe storage</span><span class="cq-proof-item">Full admin rights</span><span class="cq-proof-item">Unlimited bandwidth</span>
       </section>
-      <section class="cq-journey" aria-labelledby="journey-title">
+      <section class="cq-journey cq-reveal" aria-labelledby="journey-title">
         <div class="cq-journey-head"><div class="cq-eyebrow">One machine, end to end</div><h2 id="journey-title">From choose to connected, in three honest steps.</h2></div>
         <ol class="cq-journey-steps">
           <li class="cq-journey-step"><span class="cq-journey-num">01</span><div><h3>Choose</h3><p>Pick the machine that fits the work — a real USA plan with actual resources.</p></div><a class="cq-journey-link" href="#machines">Choose a machine <span aria-hidden="true">→</span></a></li>
           <li class="cq-journey-step"><span class="cq-journey-num">02</span><div><h3>Checkout</h3><p>Continue to WHMCS for secure checkout. Pricing and availability are confirmed there.</p></div><a class="cq-journey-link" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">See checkout <span aria-hidden="true">↗</span></a></li>
-          <li class="cq-journey-step"><span class="cq-journey-num">03</span><div><h3>Connect</h3><p>Use your credentials with a Windows or Linux desktop client, with full admin rights.</p></div><a class="cq-journey-link" href="/docs.html" target="_blank" rel="noopener noreferrer">Read the guide <span aria-hidden="true">→</span></a></li>
+          <li class="cq-journey-step"><span class="cq-journey-num">03</span><div><h3>Connect</h3><p>Use your credentials with a Windows or Linux desktop client, with full admin rights.</p></div><a class="cq-journey-link" href="/docs.html">Read the guide <span aria-hidden="true">→</span></a></li>
         </ol>
       </section>
-      <section class="cq-machines" id="machines" aria-labelledby="machines-title">
+      <section class="cq-machines cq-reveal" id="machines" aria-labelledby="machines-title">
         <div class="cq-head">
           <h2 id="machines-title">Choose the headroom you need.</h2>
           <p class="cq-head-note">Start with a real configuration. Change it when your work changes. Every USA plan below is shown with its monthly price and actual resources.</p>
@@ -947,7 +827,7 @@ function buildIndex() {
         </div>
         <p class="cq-handoff"><span class="cq-handoff-mark" aria-hidden="true">↳</span><span>Checkout, billing, and account access happen on WHMCS. Pricing and availability are confirmed there.</span></p>
       </section>
-      <section class="cq-story" id="why" aria-labelledby="why-title">
+      <section class="cq-story cq-reveal" id="why" aria-labelledby="why-title">
         <div class="cq-story-head"><div class="cq-eyebrow">Why a private machine</div><h2 id="why-title">Your work gets a room of its own.</h2><p>Not another tab. Not another shared surface. A machine with its own resources, its own access, and a clear job.</p></div>
         <div class="cq-story-layout">
           <div class="cq-story-visual">${machineSvg}<div class="cq-art-note"><span aria-hidden="true"></span><div><b>One private machine.</b>&nbsp;<span>Yours to configure and run.</span></div></div></div>
@@ -958,7 +838,7 @@ function buildIndex() {
           </div>
         </div>
       </section>
-      <section class="cq-details" aria-labelledby="details-title">
+      <section class="cq-details cq-reveal" aria-labelledby="details-title">
         <div class="cq-details-head"><div><div class="cq-eyebrow">The useful details</div><h2 id="details-title">Simple on purpose.</h2></div><p>The important parts are visible before checkout. The billing system confirms price and availability when you continue.</p></div>
         <div class="cq-detail-rows">
           <div class="cq-detail-row"><span class="cq-mono">Operating system</span><strong>Windows or Linux</strong><p>Choose the environment that matches your work. The machine is yours to configure.</p></div>
@@ -967,7 +847,7 @@ function buildIndex() {
           <div class="cq-detail-row"><span class="cq-mono">Support</span><strong>Pre-sales and client area</strong><p>Ask a question before checkout, or manage your account and services in the client area.</p></div>
         </div>
       </section>
-      <section class="cq-os" aria-labelledby="os-title">
+      <section class="cq-os cq-reveal" aria-labelledby="os-title">
         <div class="cq-os-head"><div><div class="cq-eyebrow">Works with your operating system</div><h2 id="os-title">Windows or Linux. Your choice.</h2></div><p>Every machine runs with full admin rights, so the operating system is the starting point — not the ceiling.</p></div>
         <div class="cq-os-grid">
           ${OS_LIST.map((os, i) => {
@@ -976,35 +856,30 @@ function buildIndex() {
           }).join("")}
         </div>
       </section>
-      <section class="cq-faq" aria-labelledby="faq-title">
+      <section class="cq-faq cq-reveal" aria-labelledby="faq-title">
         <div class="cq-faq-head"><div><div class="cq-eyebrow">Before you ask</div><h2 id="faq-title">Straight answers.</h2></div><p>No runaround. If a detail matters, it is stated here or confirmed at checkout.</p></div>
         <div class="cq-faq-list">
-          <details class="cq-faq-item" open><summary>What exactly am I renting?</summary><p>A private Windows or Linux VPS in a USA location — dedicated CPU, NVMe storage, unlimited bandwidth, and full admin rights on your own machine.</p></details>
-          <details class="cq-faq-item"><summary>Do I really get full admin rights?</summary><p>Yes. Windows machines give you administrator access and Linux machines give you root. You install and configure what the work needs.</p></details>
-          <details class="cq-faq-item"><summary>Which operating systems are available?</summary><p>Windows Server plus the main Linux families — Ubuntu, Debian, CentOS, Rocky Linux, AlmaLinux, Fedora, FreeBSD, and Alpine Linux. The machine is yours to configure after setup.</p></details>
-          <details class="cq-faq-item"><summary>How does checkout and delivery work?</summary><p>You continue to WHMCS for secure checkout. Pricing and availability are confirmed there. Credentials and account access come from the client area after the order.</p></details>
-          <details class="cq-faq-item"><summary>Can I upgrade later?</summary><p>Plans are listed on this page, and the client area is the place to manage services and billing. Pricing and availability are confirmed at checkout.</p></details>
-          <details class="cq-faq-item"><summary>Where are the servers located?</summary><p>This page shows the USA range. Additional locations can be added as the range expands.</p></details>
+          ${HOME_FAQS.map((f, i) => `<details class="cq-faq-item"${i === 0 ? " open" : ""}><summary>${esc(f.question)}</summary><p>${esc(f.answer)}</p></details>`).join("")}
         </div>
       </section>
-      <section class="cq-live" aria-labelledby="live-title">
+      <section class="cq-live cq-reveal" aria-labelledby="live-title">
         <div class="cq-live-grid">
           <div class="cq-live-copy"><div class="cq-eyebrow">Live service state</div><h2 id="live-title">Proof you can check.</h2><p>Every production node is watched by automated monitors. This card reads the same live feed as the public status page — and says so when the feed cannot be reached.</p><a class="cq-live-link" href="/status.html">Open the full status page <span aria-hidden="true">→</span></a></div>
           <div class="cq-live-card" aria-live="polite">
             <div class="cq-live-head"><span class="cq-mono">StealthRDP · production</span><span class="cq-live-dot" id="homeStatusDot"></span></div>
-            <div id="homeStatusSummary" class="cq-live-summary"><div class="cq-live-slot"><strong>—</strong><span>Nodes online</span></div><div class="cq-live-slot"><strong>—</strong><span>Current availability</span></div><div class="cq-live-slot"><strong>24/7</strong><span>Automated monitoring</span></div></div>
+            <div id="homeStatusSummary" class="cq-live-summary"><div class="cq-live-slot"><strong>—</strong><span>Nodes online</span></div><div class="cq-live-slot"><strong>—</strong><span>Current availability</span></div><div class="cq-live-slot"><strong>—</strong><span>Monitoring feed</span></div></div>
             <p class="cq-live-note" id="homeStatusNote">Live status unavailable · showing nothing until the feed responds.</p>
           </div>
         </div>
       </section>
-      <section class="cq-reviews" aria-labelledby="reviews-title">
-        <div class="cq-reviews-head"><div class="cq-eyebrow">Trusted by teams worldwide</div><h2 id="reviews-title">What our users say.</h2><p>See why teams choose StealthRDP for their remote work, automation, and infrastructure.</p></div>
+      <section class="cq-reviews cq-reveal" aria-labelledby="reviews-title">
+        <div class="cq-reviews-head"><div class="cq-eyebrow">Customer proof, clearly marked</div><h2 id="reviews-title">What the work looks like.</h2><p>One verified customer review appears with attribution. Other cards are illustrative workflow examples until consented stories are approved.</p></div>
         <div class="cq-review-viewport">
           <div class="cq-review-grid">${reviewCols}</div>
         </div>
         <div class="cq-review-invite">Run on StealthRDP? <a href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">Share your experience <span aria-hidden="true">→</span></a></div>
       </section>
-      <section class="cq-close" aria-labelledby="close-title">
+      <section class="cq-close cq-reveal" aria-labelledby="close-title">
         <div class="cq-close-grid">
           <div><div class="cq-eyebrow">Start with the machine</div><h2 id="close-title">Leave the noise outside.</h2><a class="btn btn-primary cq-close-cta" href="#machines">Choose your machine <span aria-hidden="true">→</span></a></div>
           <p>Pick a plan above, then continue to secure checkout. Pricing and availability are confirmed there.</p>
@@ -1012,8 +887,35 @@ function buildIndex() {
       </section>
     </div>
   </main>`;
-  const jsonLd = [{ "@context": "https://schema.org", "@graph": [ORG, websiteLd()] }];
-  return page({ active: "home", title: "StealthRDP — Make room for the work.", description: "A private Windows or Linux VPS for remote work, services, automation, and development. Choose a plan and continue to secure checkout.", canonical: "__SRDP_BASE__/", jsonLd, body });
+  const jsonLd = [{ "@context": "https://schema.org", "@graph": [
+    ORG,
+    websiteLd(),
+    {
+      "@type": "WebPage",
+      "@id": "__SRDP_BASE__/#webpage",
+      name: "Windows and Linux VPS hosting in the USA",
+      url: "__SRDP_BASE__/",
+      description: "Private Windows and Linux VPS hosting in the USA for remote access, automation, and development.",
+      isPartOf: { "@id": "__SRDP_BASE__/#website" },
+      about: { "@id": "__SRDP_BASE__/#service" },
+    },
+    {
+      "@type": "Service",
+      "@id": "__SRDP_BASE__/#service",
+      name: "USA Windows and Linux VPS hosting",
+      serviceType: "Windows and Linux VPS hosting",
+      description: "Private USA VPS plans with dedicated CPU resources, NVMe storage, unlimited bandwidth, and full administrative access.",
+      provider: { "@id": "__SRDP_BASE__/#organization" },
+      areaServed: { "@type": "Country", name: "United States" },
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "USA VPS plans",
+        itemListElement: plans.map(serviceLd),
+      },
+    },
+    faqLdFrom(HOME_FAQS),
+  ] }];
+  return page({ active: "home", title: "Windows & Linux VPS Hosting in the USA | StealthRDP", description: "Private Windows and Linux VPS hosting in the USA with NVMe storage, dedicated CPU resources, full admin rights, and secure checkout.", canonical: "__SRDP_BASE__/", jsonLd, body });
 }
 
 /* ---------- 2. plans ---------- */
@@ -1022,7 +924,7 @@ function buildPlans() {
   const compare = USA.concat(EU).map(compareRowHtml).join("");
   const body = `
   <section class="page-hero">
-    <div class="container"><span class="eyebrow">Pricing</span><h1>StealthRDP VPS Plans</h1><p>High-performance virtual private servers with unparalleled speed, security, and reliability. Choose the plan that fits your needs.</p></div>
+    <div class="container"><span class="eyebrow">Pricing</span><h1>StealthRDP VPS Plans</h1><p>Compare current Windows and Linux VPS resources by location, then confirm price and availability at checkout.</p></div>
   </section>
   <section class="section" style="padding-top:0">
     <div class="container">
@@ -1065,7 +967,7 @@ function buildPlans() {
   return page({
     active: "plans",
     title: "VPS Plans & Pricing — StealthRDP",
-    description: "Compare StealthRDP VPS plans: USA and EU locations, NVMe storage, DDoS protection, 99.9% uptime. From $9.50/month with 7-day money-back guarantee.",
+    description: "Compare StealthRDP VPS plans in USA and EU locations with NVMe storage, dedicated CPU resources, full admin access, and checkout-confirmed pricing.",
     canonical: "__SRDP_BASE__/plans.html",
     jsonLd,
     body,
@@ -1077,14 +979,14 @@ function buildFeatures() {
   const grid = FEATURES.map(featureCardHtml).join("");
   const body = `
   <section class="page-hero">
-    <div class="container"><span class="eyebrow">Capabilities</span><h1>Everything your workload needs</h1><p>From instant activation to enterprise-grade protection — every StealthRDP server ships with the features that matter.</p></div>
+    <div class="container"><span class="eyebrow">Capabilities</span><h1>Everything your workload needs</h1><p>See the resources and access included with each StealthRDP VPS. Checkout confirms current product availability.</p></div>
   </section>
   <section class="section" style="padding-top:0">
     <div class="container"><div class="bento" id="featureGrid">${grid}</div></div>
   </section>
   <section class="cta-band">
     <div class="container cta-grid">
-      <div class="cta-copy"><span class="eyebrow">Ready when you are</span><h2>Put these features to work</h2><p>Deploy a server in 60 seconds and get full admin access, DDoS protection, and 24/7 support from day one.</p></div>
+      <div class="cta-copy"><span class="eyebrow">Ready when you are</span><h2>Put these features to work</h2><p>Choose a Windows or Linux VPS, review the current terms, and continue to secure checkout when the right plan is available.</p></div>
       <div class="cta-actions"><a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Deploy Your Server Now</a><a class="btn btn-ghost" href="/plans.html">Compare Plans</a></div>
     </div>
   </section>`;
@@ -1097,7 +999,7 @@ function buildFeatures() {
   return page({
     active: "features",
     title: "Features — StealthRDP",
-    description: "Explore StealthRDP features: NVMe storage, DDoS protection, instant activation, 24/7 support, trading-ready low latency, and more.",
+    description: "Explore StealthRDP VPS features: NVMe storage, network protection, full admin access, operating-system choice, and resource options.",
     canonical: "__SRDP_BASE__/features.html",
     jsonLd,
     body,
@@ -1106,24 +1008,24 @@ function buildFeatures() {
 
 /* ---------- 4. status ---------- */
 function buildStatus() {
-  const summary = `<div class="ss-card"><div class="ss-num ${ALL_UP ? "good" : "warn"}">${UP}/${TOTAL}</div><div class="ss-lbl">Nodes online</div></div>
-    <div class="ss-card"><div class="ss-num ${ALL_UP ? "good" : "warn"}">${TOTAL ? Math.round((UP / TOTAL) * 100) : 0}%</div><div class="ss-lbl">Current availability</div></div>
-    <div class="ss-card"><div class="ss-num ${ALL_UP ? "good" : "warn"}">24/7</div><div class="ss-lbl">Automated monitoring</div></div>`;
-  const nodes = MONITORS.map(nodeCardHtml).join("");
+  const summary = '<div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">Live status unavailable</div></div>' +
+    '<div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">Current availability</div></div>' +
+    '<div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">Check again shortly</div></div>';
+  const nodes = '<div class="status-empty">Live status is unavailable until the monitoring feed responds.</div>';
   const body = `
   <section class="page-hero">
-    <div class="container"><span class="eyebrow">Live Monitoring</span><h1>StealthRDP Server Status</h1><p>Real-time monitoring of our server infrastructure. Check the current status and historical uptime of all StealthRDP services.</p></div>
+    <div class="container"><span class="eyebrow">Live Monitoring</span><h1>StealthRDP Server Status</h1><p>Check current service state when the monitoring feed is available. The page does not show a substitute snapshot.</p></div>
   </section>
   <section class="section" style="padding-top:0">
     <div class="container">
       <div class="status-summary" id="statusSummary" aria-live="polite">${summary}</div>
-      <p class="status-source-note" id="statusSourceNote">Baked uptime snapshot · live refresh is attempted when this page loads.</p>
+      <p class="status-source-note" id="statusSourceNote">Live status unavailable · no snapshot is shown.</p>
       <h2 style="font-size:22px;margin-bottom:18px">Production nodes</h2>
       <div class="node-list" id="nodeList" aria-live="polite">${nodes}</div>
       <div class="status-info-grid">
-        <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px"><h3 style="font-size:18px;margin-bottom:10px">Service Level Agreement</h3><p style="color:var(--text-muted);font-size:14px">StealthRDP is committed to maintaining a 99.9% uptime for all our VPS services. Our monitoring system alerts us instantly of any service disruptions.</p></div>
-        <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px"><h3 style="font-size:18px;margin-bottom:10px">Uptime Guarantee</h3><p style="color:var(--text-muted);font-size:14px">We offer compensation credits for any monthly uptime percentage below our guaranteed 99.9%. The real-time data above shows our actual performance.</p></div>
-        <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px"><h3 style="font-size:18px;margin-bottom:10px">Incident Response</h3><p style="color:var(--text-muted);font-size:14px">Our technical team is available 24/7 to respond to service disruptions. Most issues are detected and resolved before they affect your experience.</p></div>
+        <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px"><h3 style="font-size:18px;margin-bottom:10px">Service terms</h3><p style="color:var(--text-muted);font-size:14px">Any service levels or remedies are defined in the current Terms of Service. Review those terms before ordering.</p></div>
+        <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px"><h3 style="font-size:18px;margin-bottom:10px">Live data only</h3><p style="color:var(--text-muted);font-size:14px">This page shows monitoring data only when the live feed responds. It does not replace the service terms or a verified incident notice.</p></div>
+        <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px"><h3 style="font-size:18px;margin-bottom:10px">Need help?</h3><p style="color:var(--text-muted);font-size:14px">Use the client-area support portal for account or service questions. Current support terms apply.</p></div>
       </div>
     </div>
   </section>`;
@@ -1136,7 +1038,7 @@ function buildStatus() {
   return page({
     active: "status",
     title: "Server Status — StealthRDP",
-    description: "Real-time status of all StealthRDP server nodes. Live uptime monitoring of USA and EU infrastructure.",
+    description: "Check StealthRDP service status when the live monitoring feed is available. No substitute snapshot is shown.",
     canonical: "__SRDP_BASE__/status.html",
     jsonLd,
     body,
@@ -1180,7 +1082,7 @@ function buildBlogPost(post) {
         <h1 style="font-size:clamp(28px,4vw,40px);margin:14px 0">${esc(post.title)}</h1>
         <div class="bc-meta" style="margin-bottom:26px"><span>${esc(post.author)}</span><span>${esc(post.date)}</span></div>
         <p>${esc(post.excerpt || "")}</p>
-        <div class="note">Full article content is managed by our content pipeline and will appear here automatically. Need help now? <a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">Contact support</a>.</div>
+        <div class="note">This article is not published yet. Return to the Blog when the complete guide is available. Need help now? <a href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">Open the client area</a>.</div>
         <p><a href="/blog.html" style="color:var(--accent)">← Back to blog</a></p>
       </article>
     </div>
@@ -1191,7 +1093,6 @@ function buildBlogPost(post) {
       { name: "Blog", url: "__SRDP_BASE__/blog.html" },
       { name: post.title, url: `__SRDP_BASE__/blog/${post.slug}.html` },
     ]),
-    articleLd(post),
   ]}];
   const fullTitle = `${post.title} — StealthRDP Blog`;
   const shortTitle = `${post.title} — StealthRDP`;
@@ -1203,6 +1104,7 @@ function buildBlogPost(post) {
     canonical: `__SRDP_BASE__/blog/${post.slug}.html`,
     pageType: "article",
     jsonLd,
+    robots: "noindex,follow",
     body,
   });
 }
@@ -1212,15 +1114,15 @@ function buildFaq() {
   const items = FAQS.map(faqItemHtml).join("");
   const body = `
   <section class="page-hero">
-    <div class="container"><span class="eyebrow">Support</span><h1>Frequently Asked Questions</h1><p>Everything you need to know before deploying your server. Can't find an answer? Our team responds within 2 hours.</p></div>
+    <div class="container"><span class="eyebrow">Support</span><h1>Frequently Asked Questions</h1><p>Read the service, setup, billing, access, and support answers before you choose a server.</p></div>
   </section>
   <section class="section" style="padding-top:0">
     <div class="container">
       <div class="faq-list" id="faqList" aria-live="polite">${items}</div>
       <div style="margin-top:56px;text-align:center">
         <h2 style="font-size:22px;margin-bottom:10px">Still have questions?</h2>
-        <p style="color:var(--text-muted);margin-bottom:22px">Our support team is available 24/7 with an average response under 2 hours.</p>
-        <a class="btn btn-primary" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact Support</a>
+        <p style="color:var(--text-muted);margin-bottom:22px">For account or server-specific questions, use the support portal linked below.</p>
+        <a class="btn btn-primary" href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">Open Client Area</a>
       </div>
     </div>
   </section>`;
@@ -1245,23 +1147,23 @@ function buildFaq() {
 function buildAbout() {
   const body = `
   <section class="page-hero">
-    <div class="container"><span class="eyebrow">Who we are</span><h1>Built for people who need servers that just work</h1><p>StealthRDP exists to remove the friction from remote infrastructure — deploy in 60 seconds, get full control, and never worry about the hardware again.</p></div>
+    <div class="container"><span class="eyebrow">Who we are</span><h1>Built for people who need their own machine</h1><p>StealthRDP provides Windows and Linux VPS infrastructure for remote access, automation, development, and other always-on workloads.</p></div>
   </section>
   <section class="section" style="padding-top:0">
     <div class="container prose">
       <h2>What we do</h2>
-      <p>We provide high-performance remote desktop and virtual private server infrastructure. Every StealthRDP server ships with NVMe storage, DDoS protection, dedicated IPs, and 1Gbps network connectivity — online the moment you pay.</p>
+      <p>We provide Windows and Linux VPS infrastructure with the resources shown on each plan, NVMe storage, full administrative access, and checkout-confirmed product details.</p>
       <h2>Why people choose us</h2>
       <ul>
-        <li><strong>Speed of deployment</strong> — full server access within 60 seconds of purchase. No waiting, no manual provisioning.</li>
-        <li><strong>Enterprise-grade hardware</strong> — NVMe storage, isolated VM instances, and DDoS-protected infrastructure.</li>
-        <li><strong>Transparent operations</strong> — live status page showing every production node, monitored 24/7.</li>
-        <li><strong>Support that answers</strong> — 24/7 technical assistance with an average response under 2 hours.</li>
+        <li><strong>Clear resources</strong> — CPU, memory, storage, bandwidth, and location are shown before checkout.</li>
+        <li><strong>Administrative control</strong> — configure the Windows or Linux environment around the work.</li>
+        <li><strong>Transparent status</strong> — the status page shows live data when the monitoring feed responds.</li>
+        <li><strong>Direct support path</strong> — use the client area for account or server-specific questions.</li>
         <li><strong>Flexible plans</strong> — USA and EU locations, monthly to biannual billing, and a build-your-own configurator.</li>
       </ul>
-      <h2>Trusted at scale</h2>
-      <p>10,877+ customers and 25,000+ deployed servers rely on StealthRDP for remote work, web hosting, trading infrastructure, and always-on automation. Every new server is backed by our 99.9% uptime SLA and a 7-day money-back guarantee.</p>
-      <div class="note">Questions about our infrastructure? <a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">Talk to our team</a> — we respond within 2 hours, 24/7.</div>
+      <h2>What the service supports</h2>
+      <p>StealthRDP supports remote work, web hosting, development, and always-on automation. Current pricing, availability, service terms, and support details are confirmed through the linked pages and checkout.</p>
+      <div class="note">Questions about our infrastructure? <a href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">Open the client area</a> for the verified support path.</div>
     </div>
   </section>`;
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [
@@ -1274,7 +1176,7 @@ function buildAbout() {
   return page({
     active: "about",
     title: "About Us — StealthRDP",
-    description: "StealthRDP provides high-performance remote desktop and VPS infrastructure trusted by 10,877+ customers worldwide.",
+    description: "StealthRDP provides Windows and Linux VPS infrastructure for remote access, automation, development, and always-on workloads.",
     canonical: "__SRDP_BASE__/about.html",
     jsonLd,
     body,
@@ -1351,9 +1253,8 @@ function buildSitemap() {
     ["/privacy.html", "2026-08-06"],
     ["/docs.html", "2026-08-13"],
   ];
-  const blogRoutes = BLOG.map((p) => [`/blog/${p.slug}.html`, p.date]);
   const docRoutes = DOCS.map((article) => [`/docs/${article.slug}.html`, docDateIso(article.date) || "2026-08-13"]);
-  const urls = staticRoutes.concat(blogRoutes, docRoutes);
+  const urls = staticRoutes.concat(docRoutes);
   const items = urls
     .map(([loc, lastmod]) => `  <url>\n    <loc>__SRDP_BASE__${loc}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>monthly</changefreq>\n  </url>`)
     .join("\n");

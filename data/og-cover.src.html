@@ -1,72 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="utf-8">
+<title>StealthRDP social preview</title>
 <style>
-  @font-face { font-family:'Space Grotesk'; src:url('file:///opt/data/stealthrdp-v2/fonts/space-grotesk_700.woff2') format('woff2'); font-weight:700; }
-  @font-face { font-family:'Inter'; src:url('file:///opt/data/stealthrdp-v2/fonts/inter_400.woff2') format('woff2'); font-weight:400; }
-  @font-face { font-family:'Inter'; src:url('file:///opt/data/stealthrdp-v2/fonts/inter_600.woff2') format('woff2'); font-weight:600; }
-  @font-face { font-family:'JetBrains Mono'; src:url('file:///opt/data/stealthrdp-v2/fonts/jetbrains-mono_400.woff2') format('woff2'); font-weight:400; }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  html,body { width:1200px; height:630px; overflow:hidden; }
-  body {
-    background:
-      radial-gradient(ellipse 70% 60% at 80% 110%, rgba(245,185,59,0.14), transparent 60%),
-      radial-gradient(ellipse 50% 50% at 10% -10%, rgba(47,212,124,0.05), transparent 55%),
-      linear-gradient(160deg, #0c0e13 0%, #08090c 55%, #0a0b10 100%);
-    font-family:'Inter',system-ui,sans-serif;
-    color:#eaeef5;
-    position:relative;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    padding:52px 60px 44px;
-  }
-  .top { display:flex; align-items:center; gap:14px; }
-  .logo-mark { width:40px; height:40px; border-radius:10px; background:rgba(245,185,59,0.12); border:1px solid rgba(245,185,59,0.35); display:grid; place-items:center; }
-  .logo-mark svg { width:22px; height:22px; stroke:#f5b93b; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-  .wordmark { font-family:'Space Grotesk'; font-weight:700; font-size:26px; letter-spacing:-0.01em; }
-  .wordmark em { font-style:normal; color:#f5b93b; }
-  .eyebrow { font-family:'JetBrains Mono'; font-size:15px; letter-spacing:0.14em; text-transform:uppercase; color:#f5b93b; display:flex; align-items:center; gap:10px; }
-  .eyebrow::before { content:""; width:7px; height:7px; border-radius:50%; background:#f5b93b; box-shadow:0 0 10px rgba(245,185,59,0.6); }
-  .headline { font-family:'Space Grotesk'; font-weight:700; font-size:64px; line-height:1.06; letter-spacing:-0.025em; max-width:820px; margin-top:18px; }
-  .headline .gold { background:linear-gradient(100deg,#ffc94d,#f5b93b 45%,#d99a24); -webkit-background-clip:text; background-clip:text; color:transparent; }
-  .sub { font-size:22px; color:#98a3b4; margin-top:18px; max-width:700px; line-height:1.45; }
-  .bottom { display:flex; align-items:flex-end; justify-content:space-between; }
-  .stats { display:flex; gap:34px; }
-  .stat .num { font-family:'Space Grotesk'; font-weight:700; font-size:30px; letter-spacing:-0.02em; }
-  .stat .num .plus { color:#f5b93b; }
-  .stat .lbl { font-family:'JetBrains Mono'; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:#5f6a7d; margin-top:4px; }
-  .url { font-family:'JetBrains Mono'; font-size:17px; color:#5f6a7d; }
-  .url b { color:#eaeef5; font-weight:400; }
-  .console-chip { display:inline-flex; align-items:center; gap:9px; border:1px solid #2b3547; background:rgba(16,19,26,0.85); border-radius:10px; padding:10px 16px; font-family:'JetBrains Mono'; font-size:14px; color:#98a3b4; }
-  .console-chip .dot { width:8px; height:8px; border-radius:50%; background:#2fd47c; box-shadow:0 0 9px rgba(47,212,124,0.8); }
-  .grid-lines { position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.022) 1px,transparent 1px); background-size:60px 60px; pointer-events:none; }
+@font-face{font-family:Space;src:url('../fonts/space-grotesk_700.woff2') format('woff2');font-weight:700}
+@font-face{font-family:Inter;src:url('../fonts/inter_400.woff2') format('woff2');font-weight:400}
+@font-face{font-family:Mono;src:url('../fonts/jetbrains-mono_600.woff2') format('woff2');font-weight:600}
+*{box-sizing:border-box}html,body{margin:0;width:1200px;height:630px;background:#08090c;color:#eaeef5;font-family:Inter,Arial,sans-serif}body{position:relative;overflow:hidden;background-image:linear-gradient(rgba(43,53,71,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(43,53,71,.16) 1px,transparent 1px);background-size:48px 48px}.wash{position:absolute;inset:0;background:radial-gradient(circle at 84% 88%,rgba(245,185,59,.14),transparent 34%),linear-gradient(115deg,rgba(8,9,12,.2),rgba(8,9,12,.94) 65%)}.page{position:relative;padding:52px 60px;height:100%;display:flex;flex-direction:column}.brand{display:flex;align-items:center;gap:14px;font:700 24px Space,Arial}.mark{width:40px;height:40px;border:1px solid #6f5318;border-radius:10px;display:grid;place-items:center;color:#f5b93b;background:rgba(245,185,59,.08);font-size:24px}.brand em{font-style:normal;color:#f5b93b}.eyebrow{margin-top:66px;color:#f5b93b;font:600 13px Mono,monospace;letter-spacing:.22em}.headline{margin:18px 0 0;max-width:830px;font:700 70px/.98 Space,Arial;letter-spacing:-.055em}.headline span{color:#f5b93b}.sub{max-width:720px;margin:22px 0 0;color:#98a3b4;font-size:21px;line-height:1.45}.bottom{margin-top:auto;display:flex;align-items:end;justify-content:space-between;gap:40px}.facts{display:flex;gap:42px}.fact{border-left:2px solid #f5b93b;padding-left:14px}.fact b{display:block;font:700 19px Space,Arial}.fact small{display:block;margin-top:6px;color:#5f6a7d;font:600 10px Mono,monospace;letter-spacing:.13em;text-transform:uppercase}.handoff{display:flex;align-items:center;gap:12px;color:#eaeef5;font:600 15px Mono,monospace}.dot{width:9px;height:9px;border-radius:50%;background:#98a3b4;box-shadow:0 0 0 5px rgba(152,163,180,.1)}.url{display:none}
 </style>
 </head>
-<body>
-  <div class="grid-lines"></div>
-  <div>
-    <div class="top">
-      <span class="logo-mark"><svg viewBox="0 0 24 24"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></span>
-      <span class="wordmark">Stealth<em>RDP</em></span>
-    </div>
-    <div style="margin-top:56px">
-      <span class="eyebrow">Windows &amp; Linux VPS · Instant Setup</span>
-      <h1 class="headline">Your server. <span class="gold">Live in 60 seconds.</span></h1>
-      <p class="sub">Enterprise-grade remote desktop infrastructure with NVMe storage, DDoS protection, and 24/7 support.</p>
-    </div>
-  </div>
-  <div class="bottom">
-    <div class="stats">
-      <div class="stat"><div class="num">10,877<span class="plus">+</span></div><div class="lbl">Customers</div></div>
-      <div class="stat"><div class="num">25,000<span class="plus">+</span></div><div class="lbl">Servers deployed</div></div>
-      <div class="stat"><div class="num">99.9<span class="plus">%</span></div><div class="lbl">Uptime SLA</div></div>
-    </div>
-    <div style="display:flex;align-items:center;gap:18px">
-      <span class="console-chip"><span class="dot"></span>9/9 nodes online</span>
-      <span class="url"><b>stealthrdp.com</b></span>
-    </div>
-  </div>
-</body>
-</html>
+<body><div class="wash"></div><main class="page"><div class="brand"><span class="mark">ϟ</span><span>Stealth<em>RDP</em></span></div><div class="url">preview.antah.de</div><div class="eyebrow">WINDOWS &amp; LINUX VPS · USA</div><h1 class="headline">Make room for the work.<br><span>Private compute, clearly handed over.</span></h1><p class="sub">Private Windows and Linux VPS hosting for remote access, automation, development, and everything between.</p><div class="bottom"><div class="facts"><div class="fact"><b>Full admin rights</b><small>Windows + Linux</small></div><div class="fact"><b>NVMe storage</b><small>Dedicated resources</small></div><div class="fact"><b>Secure checkout</b><small>Availability confirmed there</small></div></div><div class="handoff"><span class="dot"></span>Checkout confirms price and availability</div></div></main></body></html>
