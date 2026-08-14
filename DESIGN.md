@@ -152,8 +152,10 @@ Test long article titles, long code lines, missing live data, empty results, and
 
 ## Research record
 
-Selected references were accessed on 2026-08-13:
+Selected references were accessed on 2026-08-13 and 2026-08-14:
 
+- FlashRDP: https://flashrdp.com/ — use the tangible remote-workspace artifact and early plan decision; do not copy its claims, brand, or visual identity.
+- RDP.sh: https://rdp.sh/ — use the cinematic hero rhythm, attached price/deploy dock, and infrastructure section pacing; do not copy its imagery, layout, or claims.
 - StealthRDP current site: https://www.stealthrdp.com/
 - StealthRDP proposed public design: https://stealthrdp.antah.de/
 - DigitalOcean Droplet getting started: https://docs.digitalocean.com/products/droplets/getting-started/
