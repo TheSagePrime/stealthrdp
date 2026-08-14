@@ -163,27 +163,65 @@
           heroNodeStatus.innerHTML = '<span class="' + (total && up === total ? "live" : "status-failed") + '"></span> ' + up + "/" + total + (total && up === total ? " nodes operational" : " nodes require attention");
           heroNodeStatus.style.color = total && up === total ? "var(--green)" : "var(--red)";
         }
-        var sourceNote = $("#statusSourceNote");
+        var sourceNote = $(" #statusSourceNote");
         if (sourceNote) sourceNote.textContent = "Live status refreshed from the monitoring service.";
+        renderHomeStatus(up, total);
         renderStatusPage(d);
       })
       .catch(function () {
         // The baked snapshot remains, but a failed live call must be visibly distinct.
-        var tickerStatus = $("#tickerStatus");
+        var tickerStatus = $(" #tickerStatus");
         if (tickerStatus) tickerStatus.textContent = "Live status unavailable";
-        var footerStatus = $("#footerStatus");
+        var footerStatus = $(" #footerStatus");
         if (footerStatus) footerStatus.textContent = "Live status unavailable";
-        var tickerDot = $("#tickerDot");
+        var tickerDot = $(" #tickerDot");
         if (tickerDot) tickerDot.classList.add("dim");
         var footerDot = footerStatus && footerStatus.previousElementSibling;
         if (footerDot) footerDot.classList.add("dim");
-        var heroNodeStatus = $("#heroNodeStatus");
+        var heroNodeStatus = $(" #heroNodeStatus");
         if (heroNodeStatus) {
           heroNodeStatus.innerHTML = '<span class="status-failed"></span> Live status unavailable';
           heroNodeStatus.style.color = "var(--red)";
         }
+        renderHomeStatus(0, 0);
         renderStatusFailure();
       });
+  }
+
+  function renderHomeStatus(up, total) {
+    var dot = $(" #homeStatusDot");
+    var summary = $(" #homeStatusSummary");
+    var note = $(" #homeStatusNote");
+    if (!dot && !summary && !note) return;
+    if (dot) dot.classList.remove("good", "bad");
+    if (total && up === total) {
+      if (dot) dot.classList.add("good");
+      if (summary) {
+        summary.innerHTML =
+          '<div class="cq-live-slot"><strong>' + up + '/' + total + '</strong><span>Nodes online</span></div>' +
+          '<div class="cq-live-slot"><strong>' + (total ? Math.round((up / total) * 100) : 0) + '%</strong><span>Current availability</span></div>' +
+          '<div class="cq-live-slot"><strong>24/7</strong><span>Automated monitoring</span></div>';
+      }
+      if (note) note.textContent = "All production nodes are operational.";
+    } else if (total) {
+      if (dot) dot.classList.add("bad");
+      if (summary) {
+        summary.innerHTML =
+          '<div class="cq-live-slot"><strong>' + up + '/' + total + '</strong><span>Nodes online</span></div>' +
+          '<div class="cq-live-slot"><strong>' + (total ? Math.round((up / total) * 100) : 0) + '%</strong><span>Current availability</span></div>' +
+          '<div class="cq-live-slot"><strong>24/7</strong><span>Automated monitoring</span></div>';
+      }
+      if (note) note.textContent = "Some production nodes require attention. See the status page.";
+    } else {
+      if (dot) dot.classList.add("bad");
+      if (summary) {
+        summary.innerHTML =
+          '<div class="cq-live-slot"><strong>—</strong><span>Nodes online</span></div>' +
+          '<div class="cq-live-slot"><strong>—</strong><span>Current availability</span></div>' +
+          '<div class="cq-live-slot"><strong>24/7</strong><span>Automated monitoring</span></div>';
+      }
+      if (note) note.textContent = "Live status unavailable · showing nothing until the feed responds.";
+    }
   }
 
   function renderStatusFailure() {
