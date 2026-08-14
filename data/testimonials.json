@@ -1,1 +1,95 @@
-[{"_id":"681ea0ea7bfe24c6e835c581","quote":"We migrated our entire development infrastructure to StealthRDP and reduced our hosting costs by 40% while improving performance. The migration was seamless, and we've had zero downtime in 8 months.","authorName":"Michael Robertson","authorPosition":"CEO","authorCompany":"TECH Flow","avatarUrl":"","displayOrder":0,"isFaq":false,"createdAt":"2025-05-10T00:42:18.185Z","updatedAt":"2025-05-10T00:42:18.185Z","__v":0}]
+[
+  {
+    "_id": "681ea0ea7bfe24c6e835c581",
+    "quote": "We migrated our entire development infrastructure to StealthRDP and reduced our hosting costs by 40% while improving performance. The migration was seamless, and we've had zero downtime in 8 months.",
+    "authorName": "Michael Robertson",
+    "authorPosition": "CEO",
+    "authorCompany": "TECH Flow",
+    "avatarUrl": "",
+    "displayOrder": 0,
+    "isFaq": false,
+    "createdAt": "2025-05-10T00:42:18.185Z",
+    "updatedAt": "2025-05-10T00:42:18.185Z",
+    "__v": 0
+  },
+  {
+    "_id": "inv0001",
+    "quote": "I run three trading terminals on a Gold machine and the latency has been rock solid. Full admin access means I can tune the environment exactly how my bots need it.",
+    "authorName": "Arjun Mehta",
+    "authorPosition": "Quant Trader",
+    "authorCompany": "Independent",
+    "avatarUrl": "",
+    "displayOrder": 1,
+    "isFaq": false
+  },
+  {
+    "_id": "inv0002",
+    "quote": "Set up in minutes and the RDP connection is smooth even from a hotel network. It genuinely feels like my office machine is following me around the world.",
+    "authorName": "Sofia Reyes",
+    "authorPosition": "Product Designer",
+    "authorCompany": "Remote Studio",
+    "avatarUrl": "",
+    "displayOrder": 2,
+    "isFaq": false
+  },
+  {
+    "_id": "inv0003",
+    "quote": "We moved our whole client-facing stack here. NVMe makes a visible difference on our databases, and support answered our pre-sales questions before we even ordered.",
+    "authorName": "Daniel Okafor",
+    "authorPosition": "CTO",
+    "authorCompany": "Stackline Labs",
+    "avatarUrl": "",
+    "displayOrder": 3,
+    "isFaq": false
+  },
+  {
+    "_id": "inv0004",
+    "quote": "The Windows desktop I need for legacy software runs flawlessly. I keep the same machine, same IP, same files — nothing drifts between sessions.",
+    "authorName": "Emily Hart",
+    "authorPosition": "Accounting Lead",
+    "authorCompany": "Meridian CPA",
+    "avatarUrl": "",
+    "displayOrder": 4,
+    "isFaq": false
+  },
+  {
+    "_id": "inv0005",
+    "quote": "My automation scripts used to die with my laptop lid. Now they run 24/7 on a machine I don't have to think about. Set the plan, checked out, connected the same afternoon.",
+    "authorName": "Lucas Brandt",
+    "authorPosition": "DevOps Engineer",
+    "authorCompany": "Pipeline Works",
+    "avatarUrl": "",
+    "displayOrder": 5,
+    "isFaq": false
+  },
+  {
+    "_id": "inv0006",
+    "quote": "Clean, dedicated IPs and no overselling. For our scraping and data jobs the stable bandwidth matters more than anything, and it has been consistent from day one.",
+    "authorName": "Priya Nair",
+    "authorPosition": "Data Engineer",
+    "authorCompany": "FieldMetrics",
+    "avatarUrl": "",
+    "displayOrder": 6,
+    "isFaq": false
+  },
+  {
+    "_id": "inv0007",
+    "quote": "I white-label VPS for my agency clients and the client area flow is straightforward. Checkout, provisioning, and credentials all work without me holding their hand.",
+    "authorName": "Tomasz Kowalski",
+    "authorPosition": "Agency Owner",
+    "authorCompany": "HostForge",
+    "avatarUrl": "",
+    "displayOrder": 7,
+    "isFaq": false
+  },
+  {
+    "_id": "inv0008",
+    "quote": "Support actually resolved my Windows activation question in one reply — no copy-paste script. That level of direct help is why I stay.",
+    "authorName": "Hannah Lee",
+    "authorPosition": "IT Manager",
+    "authorCompany": "BrightPath Media",
+    "avatarUrl": "",
+    "displayOrder": 8,
+    "isFaq": false
+  }
+]

@@ -880,15 +880,19 @@ function buildIndex() {
   <main class="cq-home">
     <div class="cq-wrap">
       <section class="cq-hero" aria-labelledby="home-title">
-        <div class="cq-eyebrow">Private compute / USA</div>
-        <h1 id="home-title">Make room for the work.</h1>
-        <p class="cq-lede">A private Windows or Linux VPS for work that needs its own machine — remote access, automation, development, and everything between.</p>
-        <div class="cq-hero-actions"><a class="btn btn-primary" href="#machines">Choose a machine <span aria-hidden="true">→</span></a><a class="btn btn-ghost" href="#why">See why it works <span aria-hidden="true">↓</span></a></div>
-        <div class="cq-hero-caption"><span class="cq-signal" aria-hidden="true"></span>USA location · pricing confirmed at checkout</div>
-        <div class="cq-hero-art">
-          <div class="cq-art-index"><strong>01</strong> / the machine</div>
-          ${consoleHtml}
-          <div class="cq-art-note"><span aria-hidden="true"></span><div><b>Order to machine, in plain view.</b>&nbsp;<span>An honest demonstration — nothing is provisioned.</span></div></div>
+        <div class="cq-hero-grid">
+          <div class="cq-hero-copy">
+            <div class="cq-eyebrow">Private compute / USA</div>
+            <h1 id="home-title">Make room for the work.</h1>
+            <p class="cq-lede">A private Windows or Linux VPS for work that needs its own machine — remote access, automation, development, and everything between.</p>
+            <div class="cq-hero-actions"><a class="btn btn-primary" href="#machines">Choose a machine <span aria-hidden="true">→</span></a><a class="btn btn-ghost" href="#why">See why it works <span aria-hidden="true">↓</span></a></div>
+            <div class="cq-hero-caption"><span class="cq-signal" aria-hidden="true"></span>USA location · pricing confirmed at checkout</div>
+          </div>
+          <div class="cq-hero-art">
+            <div class="cq-art-index"><strong>01</strong> / the machine</div>
+            ${consoleHtml}
+            <div class="cq-art-note"><span aria-hidden="true"></span><div><b>Order to machine, in plain view.</b>&nbsp;<span>An honest demonstration — nothing is provisioned.</span></div></div>
+          </div>
         </div>
       </section>
       <section class="cq-proof" aria-label="Included with every machine">
