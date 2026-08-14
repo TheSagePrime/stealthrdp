@@ -832,6 +832,33 @@ function buildIndex() {
   const initialCpu = esc(initial.specs && initial.specs.cpu || "");
   const initialRam = esc(initial.specs && initial.specs.ram || "");
   const initialStorage = esc(initial.specs && initial.specs.storage || "");
+  const consoleChips = [
+    [initialCpu.replace(" Core", ""), "Core"],
+    [initialRam.replace(" GB", ""), "GB RAM"],
+    [initialStorage.replace(" GB NVMe", "").replace(" GB", ""), "GB NVMe"],
+    ["Unlimited", "BW"],
+  ].map(([v, l]) => `<span class="cq-chip">${esc(v)} <b>${esc(l)}</b></span>`).join("");
+  const consoleHtml = `<div class="cq-console-card" role="img" aria-label="Demonstration of the StealthRDP order flow">
+    <div class="cq-console-bar"><span class="cq-cdot r"></span><span class="cq-cdot y"></span><span class="cq-cdot g"></span><span class="cq-console-title">stealth-deploy — demonstration</span></div>
+    <div class="cq-console-body">
+      <div class="cq-cline cq-demo-note"><span class="cq-warn">DEMONSTRATION</span> This is not a live deployment. No server is provisioned.</div>
+      <div class="cq-cline cq-cmdline"><span class="cq-cmd">$ stealth deploy --plan ${initialName.toLowerCase()} --region us-east</span><span class="cq-cursor" aria-hidden="true"></span></div>
+      <div class="cq-cline"><span class="cq-dim">▸ plan selected for illustration</span></div>
+      <div class="cq-cline"><span class="cq-dim">▸ region selected for illustration</span></div>
+      <div class="cq-cline"><span class="cq-warn">▸ pricing and availability shown at checkout</span></div>
+      <div class="cq-cline"><span class="cq-dim">▸ no infrastructure request is made by this preview</span></div>
+      <div class="cq-progress"><div class="cq-bar"></div></div>
+      <div class="cq-cline"><span class="cq-pct">illustration only</span></div>
+    </div>
+    <div class="cq-console-foot">${consoleChips}</div>
+  </div>`;
+  const testimonials = TESTIMONIALS.map((t) => {
+    const name = esc(t.authorName || t.name || t.customerName || "StealthRDP Customer");
+    const role = esc([t.authorPosition, t.authorCompany].filter(Boolean).join(" · "));
+    const quote = esc(t.quote || t.testimonial || t.content || "");
+    const initials = name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+    return `<article class="cq-review-card"><div class="cq-review-stars" aria-label="Five star review"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="cq-review-quote">“${quote}”</p><div class="cq-review-who"><span class="cq-review-avatar" aria-hidden="true">${esc(initials)}</span><span class="cq-review-name"><b>${name}</b>${role ? `<small>${role}</small>` : ""}</span></div></article>`;
+  }).join("");
   const machineSvg = `<svg class="cq-machine" viewBox="0 0 540 400" role="img" aria-label="A clean private server with gold and green status lights">
       <defs><linearGradient id="cq-body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--machine-body-a)"/><stop offset="1" stop-color="var(--machine-body-b)"/></linearGradient></defs>
       <ellipse cx="270" cy="368" rx="200" ry="18" fill="#000" opacity=".4"/>
@@ -860,8 +887,8 @@ function buildIndex() {
         <div class="cq-hero-caption"><span class="cq-signal" aria-hidden="true"></span>USA location · pricing confirmed at checkout</div>
         <div class="cq-hero-art">
           <div class="cq-art-index"><strong>01</strong> / the machine</div>
-          ${machineSvg}
-          <div class="cq-art-note"><span aria-hidden="true"></span><div><b>One private machine.</b>&nbsp;<span>Yours to configure and run.</span></div></div>
+          ${consoleHtml}
+          <div class="cq-art-note"><span aria-hidden="true"></span><div><b>Order to machine, in plain view.</b>&nbsp;<span>An honest demonstration — nothing is provisioned.</span></div></div>
         </div>
       </section>
       <section class="cq-proof" aria-label="Included with every machine">
@@ -903,10 +930,13 @@ function buildIndex() {
       </section>
       <section class="cq-story" id="why" aria-labelledby="why-title">
         <div class="cq-story-head"><div class="cq-eyebrow">Why a private machine</div><h2 id="why-title">Your work gets a room of its own.</h2><p>Not another tab. Not another shared surface. A machine with its own resources, its own access, and a clear job.</p></div>
-        <div class="cq-story-list">
-          <article class="cq-story-item"><span class="cq-story-num">01</span><div><h3>Remote work that stays together.</h3><p>Keep the desktop, tools, files, and routine in one place you can reach from anywhere.</p></div></article>
-          <article class="cq-story-item"><span class="cq-story-num">02</span><div><h3>Automation with somewhere to run.</h3><p>Give services, scheduled jobs, and development environments a machine instead of your laptop.</p></div></article>
-          <article class="cq-story-item"><span class="cq-story-num">03</span><div><h3>Control that does not disappear.</h3><p>Full administrative rights let you configure the operating system around the work you actually do.</p></div></article>
+        <div class="cq-story-layout">
+          <div class="cq-story-visual">${machineSvg}<div class="cq-art-note"><span aria-hidden="true"></span><div><b>One private machine.</b>&nbsp;<span>Yours to configure and run.</span></div></div></div>
+          <div class="cq-story-list">
+            <article class="cq-story-item"><span class="cq-story-num">01</span><div><h3>Remote work that stays together.</h3><p>Keep the desktop, tools, files, and routine in one place you can reach from anywhere.</p></div></article>
+            <article class="cq-story-item"><span class="cq-story-num">02</span><div><h3>Automation with somewhere to run.</h3><p>Give services, scheduled jobs, and development environments a machine instead of your laptop.</p></div></article>
+            <article class="cq-story-item"><span class="cq-story-num">03</span><div><h3>Control that does not disappear.</h3><p>Full administrative rights let you configure the operating system around the work you actually do.</p></div></article>
+          </div>
         </div>
       </section>
       <section class="cq-details" aria-labelledby="details-title">
@@ -927,6 +957,10 @@ function buildIndex() {
             <p class="cq-live-note" id="homeStatusNote">Live status unavailable · showing nothing until the feed responds.</p>
           </div>
         </div>
+      </section>
+      <section class="cq-reviews" aria-labelledby="reviews-title">
+        <div class="cq-reviews-head"><div class="cq-eyebrow">Trusted by teams worldwide</div><h2 id="reviews-title">What our users say.</h2><p>See why teams choose StealthRDP for their remote work, automation, and infrastructure.</p></div>
+        <div class="cq-review-grid">${testimonials}<a class="cq-review-card cq-review-cta" href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer"><span class="cq-review-plus" aria-hidden="true">+</span><p class="cq-review-quote">Run on StealthRDP? Share your experience.</p><div class="cq-review-who"><span class="cq-review-name"><b>Your review could be here</b><small>Verified customers only · via support ↗</small></span></div></a></div>
       </section>
       <section class="cq-close" aria-labelledby="close-title">
         <div class="cq-close-grid">
