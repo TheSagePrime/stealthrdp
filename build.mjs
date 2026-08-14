@@ -14,7 +14,7 @@
 import { createRequire } from "module";
 import fs from "fs";
 import path from "path";
-import { OS_LIST, osMarkSvg } from "./js/os-icons.mjs";
+import { OS_LIST, osMarkSvg, OS_VIEWBOX } from "./js/os-icons.mjs";
 
 const require = createRequire(import.meta.url);
 const ROOT = path.dirname(new URL(import.meta.url).pathname);
@@ -972,7 +972,8 @@ function buildIndex() {
         <div class="cq-os-grid">
           ${OS_LIST.map((os, i) => {
             const [family, ver] = os.split(" ");
-            return `<div class="cq-os-tile" data-reveal="${i % 3}"><span class="cq-os-mark" aria-hidden="true">${osMarkSvg(os)}</span><span class="cq-os-name">${esc(os)}</span>${ver ? `<span class="cq-os-note">${esc(ver)}</span>` : ""}</div>`;
+            const mark = osMarkSvg(os).replace(/(<svg[^>]*viewBox=")[^"]*(")/, `$1${OS_VIEWBOX[os]}$2`);
+            return `<div class="cq-os-tile" data-reveal="${i % 3}">${mark}<span class="cq-os-name">${esc(os)}</span>${ver ? `<span class="cq-os-note">${esc(ver)}</span>` : ""}</div>`;
           }).join("")}
         </div>
       </section>

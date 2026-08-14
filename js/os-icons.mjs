@@ -45,4 +45,18 @@ export function osMarkSvg(name) {
   return "";
 }
 
+/* Normalized viewBox per OS: art fills 80% of the box, centered.
+   Measured from each icon's actual artwork bounds. */
+export const OS_VIEWBOX = {
+  "Windows Server": "-14.15 -13.95 155.91 155.91",
+  "Ubuntu": "-15.67 -16 160 160",
+  "Debian": "-13.91 -13.91 155.81 155.81",
+  "CentOS": "-13.58 -15.12 155.81 155.81",
+  "Rocky Linux": "-16 -16 160 160",
+  "AlmaLinux": "-16 -16 160 160",
+  "Fedora": "-15.77 -15.77 159.55 159.55",
+  "FreeBSD": "-3 -3 30 30",
+  "Alpine Linux": "-1.97 -3.18 28.13 28.13",
+};
+
 export const OS_LIST = Object.keys(DEVICON_FILES).concat(Object.keys(MONO_PATHS));
