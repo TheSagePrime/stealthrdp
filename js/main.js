@@ -54,6 +54,78 @@
     });
   }
 
+  /* ---------- Decision desk plan selector ---------- */
+  var deskIntents = $$(".desk-intent");
+  var deskPlans = $$(".desk-plan-choice");
+  var deskFitMessage = $("#deskFitMessage");
+  var deskTopCta = $("#deskTopCta");
+  var selectorCta = $("#selectorCta");
+  var selectorCtaLabel = $("#selectorCtaLabel");
+  var closePurchaseLink = $("#closePurchaseLink");
+  var closePurchaseLabel = $("#closePurchaseLabel");
+  var selectedPlanName = $("#selectedPlanName");
+  var selectedPlanReason = $("#selectedPlanReason");
+  var selectedPlanCpu = $("#selectedPlanCpu");
+  var selectedPlanRam = $("#selectedPlanRam");
+  var selectedPlanStorage = $("#selectedPlanStorage");
+  var selectedPlanPrice = $("#selectedPlanPrice");
+  var deskReasons = {
+    "remote-work": "Recommended for a balanced remote workspace.",
+    "trading": "More CPU and memory for terminals, bots, and scripts.",
+    "web-hosting": "A higher resource baseline for a site or service stack.",
+    "development": "Extra headroom for tools, builds, and parallel work."
+  };
+  var deskFits = {
+    "remote-work": "Balanced memory for a full remote workspace.",
+    "trading": "Gold adds CPU and memory for active automation workloads.",
+    "web-hosting": "Gold gives a larger baseline for a service stack.",
+    "development": "Platinum is the higher-headroom starting point."
+  };
+  function updateDeskPlan(button, reason) {
+    if (!button) return;
+    deskPlans.forEach(function (plan) {
+      var selected = plan === button;
+      plan.classList.toggle("is-selected", selected);
+      plan.setAttribute("aria-pressed", selected ? "true" : "false");
+    });
+    var name = button.getAttribute("data-plan-name") || "Selected plan";
+    var url = button.getAttribute("data-plan-url") || "https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps";
+    var price = button.getAttribute("data-plan-price") || "—";
+    if (selectedPlanName) selectedPlanName.textContent = name;
+    if (selectedPlanCpu) selectedPlanCpu.textContent = button.getAttribute("data-plan-cpu") || "—";
+    if (selectedPlanRam) selectedPlanRam.textContent = button.getAttribute("data-plan-ram") || "—";
+    if (selectedPlanStorage) selectedPlanStorage.textContent = button.getAttribute("data-plan-storage") || "—";
+    if (selectedPlanPrice) selectedPlanPrice.textContent = price;
+    if (selectedPlanReason) selectedPlanReason.textContent = reason || "Selected from the available plan set.";
+    if (deskTopCta) { deskTopCta.href = url; deskTopCta.textContent = "Continue with " + name + " ↗"; }
+    if (selectorCta) selectorCta.href = url;
+    if (selectorCtaLabel) selectorCtaLabel.textContent = "Continue with " + name;
+    if (closePurchaseLink) closePurchaseLink.href = url;
+    if (closePurchaseLabel) closePurchaseLabel.textContent = name + " · WHMCS ↗";
+  }
+  if (deskPlans.length) {
+    var firstDeskPlan = deskPlans.filter(function (plan) { return plan.classList.contains("is-selected"); })[0] || deskPlans[0];
+    updateDeskPlan(firstDeskPlan, deskReasons["remote-work"]);
+    deskPlans.forEach(function (button) {
+      button.addEventListener("click", function () { updateDeskPlan(button, "Selected manually from the available plan set."); });
+    });
+  }
+  deskIntents.forEach(function (button) {
+    button.addEventListener("click", function () {
+      var intent = button.getAttribute("data-intent") || "remote-work";
+      deskIntents.forEach(function (item) {
+        var selected = item === button;
+        item.classList.toggle("is-selected", selected);
+        item.setAttribute("aria-pressed", selected ? "true" : "false");
+      });
+      if (deskFitMessage) deskFitMessage.textContent = deskFits[intent] || deskFits["remote-work"];
+      var recommended = button.getAttribute("data-recommend") || "Silver";
+      var recommendedPlan = deskPlans.filter(function (plan) { return plan.getAttribute("data-plan-name") === recommended; })[0];
+      updateDeskPlan(recommendedPlan || deskPlans[0], deskReasons[intent] || deskReasons["remote-work"]);
+      dl("select_workload", { workload: intent, recommended_plan: recommended });
+    });
+  });
+
   /* ---------- Live status (ticker + footer + status page) ---------- */
   var PLAN_SLUGS = {
     "Bronze USA": "bronze-usa2", "Silver USA": "silver-usa", "Gold USA": "gold-usa",
@@ -89,6 +161,10 @@
         if (tickerStatus) tickerStatus.textContent = msg;
         var footerStatus = $("#footerStatus");
         if (footerStatus) footerStatus.textContent = msg;
+        var tickerDot = $("#tickerDot");
+        if (tickerDot) tickerDot.classList.toggle("dim", !(total && up === total));
+        var footerDot = footerStatus && footerStatus.previousElementSibling;
+        if (footerDot) footerDot.classList.toggle("dim", !(total && up === total));
         var heroNodeStatus = $("#heroNodeStatus");
         if (heroNodeStatus) {
           heroNodeStatus.innerHTML = '<span class="' + (total && up === total ? "live" : "status-failed") + '"></span> ' + up + "/" + total + (total && up === total ? " nodes operational" : " nodes require attention");
@@ -104,6 +180,10 @@
         if (tickerStatus) tickerStatus.textContent = "Live status unavailable";
         var footerStatus = $("#footerStatus");
         if (footerStatus) footerStatus.textContent = "Live status unavailable";
+        var tickerDot = $("#tickerDot");
+        if (tickerDot) tickerDot.classList.add("dim");
+        var footerDot = footerStatus && footerStatus.previousElementSibling;
+        if (footerDot) footerDot.classList.add("dim");
         var heroNodeStatus = $("#heroNodeStatus");
         if (heroNodeStatus) {
           heroNodeStatus.innerHTML = '<span class="status-failed"></span> Live status unavailable';

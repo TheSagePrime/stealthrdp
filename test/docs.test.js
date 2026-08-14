@@ -76,9 +76,9 @@ test("public chrome has no legacy docs host, countdown, or fake live deployment 
   const mainJs = HTML("js/main.js");
   assert.doesNotMatch(mainJs, /srdp_offer_end|COUNTDOWN_MS|setInterval\(tick/);
   const home = HTML("index.html");
-  assert.match(home, /demonstration|simulation/i);
-  assert.match(home, /no infrastructure request|no server is provisioned/i);
-  assert.doesNotMatch(home, /server online|Live deploy console/i);
+  assert.match(home, /decision desk|does not provision|no infrastructure request/i);
+  assert.match(home, /WHMCS checkout/i);
+  assert.doesNotMatch(home, /server online|Live deploy console|fake provisioning/i);
 });
 
 test("baked status fixture renders up monitors as healthy", () => {
@@ -137,22 +137,25 @@ test("promotion chrome is stable and does not invent an expiry", () => {
   assert.match(HTML("index.html"), /pricing and availability shown at checkout/i);
 });
 
-test("hero console is an honest demonstration without fake completion state", () => {
+test("homepage decision desk is an honest handoff without fake completion state", () => {
   const home = HTML("index.html");
   const mainJs = HTML("js/main.js");
-  assert.match(home, /DEMO|DEMONSTRATION|SIMULATION/i);
-  assert.match(home, /no server is provisioned|no infrastructure request/i);
+  assert.match(home, /desk-handoff/);
+  assert.match(home, /does not provision infrastructure|no infrastructure request/i);
   assert.doesNotMatch(home, /server online|deployed in \\d+s|demo complete|provisioning virtual machine[^<]*ok/i);
   assert.doesNotMatch(mainJs, /deployBar|deployPct|consoleOnline|Math\\.random|setInterval/);
 });
 
-test("homepage uses the infrastructure control-room composition", () => {
+test("homepage uses the infrastructure decision-desk composition", () => {
   const home = HTML("index.html");
-  assert.match(home, /class="home-control-room"/);
-  assert.match(home, /class="home-decision-board"/);
-  assert.match(home, /class="home-journey"/);
-  assert.match(home, /class="[^"]*home-evidence-grid/);
-  assert.match(home, /class="home-plan-rail"/);
+  assert.match(home, /class="home-control-room decision-desk"/);
+  assert.match(home, /class="decision-workspace home-decision-board"/);
+  assert.match(home, /class="decision-path home-journey"/);
+  assert.match(home, /class="decision-proof home-evidence-grid"/);
+  assert.match(home, /class="decision-close home-plan-rail"/);
+  assert.match(home, /class="desk-intents"/);
+  assert.match(home, /class="desk-plan-choices"/);
+  assert.match(home, /id="selectorCta"/);
   assert.doesNotMatch(home, /id="testimonials"|class="quote-block"/);
-  assert.match(home, /makes no infrastructure request|no infrastructure request/i);
+  assert.match(home, /does not provision infrastructure|no infrastructure request/i);
 });

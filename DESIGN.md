@@ -122,15 +122,15 @@ Keep approved product data from the existing repository unless Bhuvan changes it
 Do not silently resolve the existing currency mismatch between homepage copy and plan cards.
 Record pricing or promotion changes as a business decision.
 
-## Homepage composition decision (2026-08-13)
+## Homepage composition decision (2026-08-14)
 
-The Home surface remains `Persuade`, but it now uses an infrastructure-control-room composition rather than a marketing template:
+The Home surface remains `Persuade`, but the homepage is now an authored **infrastructure decision desk**, not a control-room-themed marketing page:
 
-1. **Command opening** — one infrastructure proposition paired with a deployment briefing that is explicitly a demonstration and makes no infrastructure request.
-2. **Operating path** — an asymmetric four-step `choose → provision → connect → operate` route that names the real system boundary between the public site, WHMCS, VirtFusion, Status, and native Docs.
-3. **Operational evidence** — a source-labelled monitoring snapshot that points to the fail-closed Status page instead of presenting dashboard theatre or invented proof.
-4. **Plan rail** — plan selection follows evidence and preserves the existing baked plan data, billing toggles, and checkout URLs.
-5. **Route close** — purchase, status, docs, and support are presented as four distinct next actions rather than a generic testimonial/CTA sequence.
+1. **Decision opening** — an asymmetric editorial proposition is paired with a real workload-to-plan workspace in the first viewport. The user makes a small, explicit choice instead of reading a centered hero and then hunting for pricing.
+2. **Progressive commitment** — workload intent → recommended fit → inspect evidence → checkout. Intent choices reduce the plan set without hiding the complete plans route or preselecting paid add-ons.
+3. **Persistent selection summary** — the selected plan keeps its real CPU, RAM, storage, price snapshot, and WHMCS URL visible while the user changes intent or manually compares nearby plans.
+4. **Proof after fit** — status, native docs, checkout ownership, and support boundaries appear as evidence for the decision. No fake deployment state, scarcity, testimonial, or invented metric is introduced.
+5. **Editorial material system** — the homepage uses warm paper, ink, large rules, a compact ochre signal, and a dark selection workspace. It intentionally does not use the previous navy/gold card template, gradients, or faux terminal chrome.
 
 The homepage intentionally does not render the former customer-story/testimonial section. Existing product claims remain in the rest of the site and approved SEO metadata; no new customers, uptime, locations, testimonials, prices, or guarantees were introduced.
 
