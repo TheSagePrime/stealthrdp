@@ -24,7 +24,7 @@ const USA = DATA("plans_usa.json");
 const EU = DATA("plans_eu.json");
 const FEATURES = DATA("features.json");
 const FAQS = DATA("faqs.json");
-const TESTIMONIALS = DATA("testimonials.json");
+
 const UPTIME = DATA("uptime.json");
 const BLOG = require(path.join(ROOT, "js", "blog-data.js")).SRDP_BLOG;
 const DOCS = DATA("docs-articles.json");
@@ -56,14 +56,9 @@ const CHECKOUT_MONTHLY_PRICES = {
   "Bronze USA": 9.50, "Silver USA": 18.04, "Gold USA": 26.59,
   "Platinum USA": 33.24, "Diamond USA": 42.75, "Emerald USA": 51.30,
 };
-const USA_CHECKOUT_AVAILABILITY = {
-  "bronze-usa2": true, "silver-usa": false, "gold-usa": false,
-  "platinum-usa": false, "diamond-usa": false, "emerald-usa": false,
-};
 const monthlyPrice = (p) => Object.prototype.hasOwnProperty.call(CHECKOUT_MONTHLY_PRICES, p.name)
   ? CHECKOUT_MONTHLY_PRICES[p.name]
   : round2((p.monthlyPrice || 0) * MONTHLY_MULT);
-const planAvailable = (p) => p.location !== "USA" || USA_CHECKOUT_AVAILABILITY[PLAN_SLUGS[p.name]] === true;
 const planUrl = (p) => {
   const slug = PLAN_SLUGS[p.name];
   if (slug) {
@@ -79,8 +74,7 @@ const currencyCode = (p) => p.location === "EU" ? "EUR" : "USD";
 const currencySymbol = (p) => p.location === "EU" ? "€" : "$";
 const planDescription = (p) => {
   const specs = p.specs || {};
-  const location = p.location ? `${p.location} ` : "";
-  return `Private ${location}VPS with ${specs.cpu || "dedicated CPU"}, ${specs.ram || "scalable RAM"}, and ${specs.storage || "NVMe storage"}.`;
+  return `${specs.cpu || "Dedicated CPU"} CPU · ${specs.ram || "Scalable RAM"} RAM · ${specs.storage || "NVMe storage"} · ${specs.bandwidth || "Unlimited"} bandwidth.`;
 };
 
 const SOCIAL = [
@@ -94,7 +88,7 @@ const HOME_FAQS = [
   { question: "What exactly am I renting?", answer: "A private Windows or Linux VPS in a USA location — dedicated CPU, NVMe storage, unlimited bandwidth, and full admin rights on your own machine." },
   { question: "Do I really get full admin rights?", answer: "Yes. Windows machines give you administrator access and Linux machines give you root. You install and configure what the work needs." },
   { question: "Which operating systems are available?", answer: "Windows Server plus the main Linux families — Ubuntu, Debian, CentOS, Rocky Linux, AlmaLinux, Fedora, FreeBSD, and Alpine Linux. The machine is yours to configure after setup." },
-  { question: "How does checkout and delivery work?", answer: "You continue to WHMCS for secure checkout. Pricing and availability are confirmed there. Credentials and account access come from the client area after the order." },
+  { question: "How does checkout and delivery work?", answer: "You continue to the secure order page. Pricing and availability are confirmed there. Credentials and account access come from the client area after the order." },
   { question: "Can I upgrade later?", answer: "Plans are listed on this page, and the client area is the place to manage services and billing. Pricing and availability are confirmed at checkout." },
   { question: "Where are the servers located?", answer: "This page shows the USA range. Additional locations can be added as the range expands." },
 ];
@@ -232,8 +226,7 @@ function scripts(extra = []) {
 /* ---------- baked content ---------- */
 function planCardHtml(p, { showPopular = true } = {}) {
   const price = monthlyPrice(p);
-  const available = planAvailable(p);
-  const isPop = showPopular && p.popular && available;
+  const isPop = showPopular && p.popular;
   return `<article class="plan-card${isPop ? " popular" : ""}">
     ${isPop ? '<span class="plan-popular">Most Popular</span>\n    ' : ""}<div class="p-name">${esc(planName(p))}</div>
     <div class="p-desc">${esc(planDescription(p))}</div>
@@ -244,7 +237,7 @@ function planCardHtml(p, { showPopular = true } = {}) {
       ${specRow("Storage", p.specs && p.specs.storage)}
       ${specRow("Bandwidth", p.specs && p.specs.bandwidth)}
     </div>
-    ${available ? `<a class="btn ${isPop ? "btn-primary" : "btn-ghost"}" href="${planUrl(p)}" target="_blank" rel="noopener noreferrer">Deploy Now</a>` : '<span class="plan-unavailable" role="status">Unavailable at checkout</span>'}
+    <a class="btn ${isPop ? "btn-primary" : "btn-ghost"}" href="${planUrl(p)}" target="_blank" rel="noopener noreferrer">Deploy Now</a>
   </article>`;
 }
 
@@ -261,7 +254,7 @@ function compareRowHtml(p) {
     <td class="v">${esc((p.specs && p.specs.storage) || "—")}</td>
     <td class="v">${esc((p.specs && p.specs.bandwidth) || "—")}</td>
     <td class="v">${currencySymbol(p)}${fmt(monthlyPrice(p))}</td>
-    <td>${planAvailable(p) ? `<a class="btn btn-sm ${p.popular ? "btn-primary" : "btn-ghost"}" href="${planUrl(p)}" target="_blank" rel="noopener noreferrer">Deploy</a>` : '<span class="plan-unavailable" role="status">Unavailable</span>'}</td>
+    <td><a class="btn btn-sm ${p.popular ? "btn-primary" : "btn-ghost"}" href="${planUrl(p)}" target="_blank" rel="noopener noreferrer">Deploy</a></td>
   </tr>`;
 }
 
@@ -696,7 +689,7 @@ function page({ active, title, description, canonical, pageType = "website", jso
 /* ---------- 1. index ---------- */
 function buildIndex() {
   const plans = USA; /* real USA plans from data/plans_usa.json */
-  const initial = plans.find((p) => planAvailable(p)) || plans[0]; /* First orderable plan by default */
+  const initial = plans[0];
   const planRows = plans.map((p, i) => {
     const name = esc(planName(p));
     const desc = esc(planDescription(p));
@@ -706,9 +699,8 @@ function buildIndex() {
     const price = currencySymbol(p) + monthlyPrice(p).toFixed(2);
     const url = esc(planUrl(p));
     const selected = p === initial ? "true" : "false";
-    const available = planAvailable(p);
-    const status = available ? esc(p.specs && p.specs.bandwidth || "Unlimited bandwidth") : "Unavailable at checkout";
-    return `<button type="button" class="cq-plan-row" aria-pressed="${selected}" aria-disabled="${available ? "false" : "true"}"${available ? "" : " disabled"} data-available="${available ? "true" : "false"}" data-name="${name}" data-price="${price}" data-cpu="${cpu}" data-ram="${ram}" data-storage="${storage}" data-url="${url}" data-desc="${desc}" data-badge="${p.popular && available ? "Recommended" : available ? "Available" : "Unavailable at checkout"}"><span class="cq-plan-name">${name}<small>${status}</small></span><span class="cq-plan-spec">${cpu}</span><span class="cq-plan-spec">${ram}</span><span class="cq-plan-price">${price}<small>/mo</small></span><span class="cq-plan-arrow" aria-hidden="true">${available ? "→" : "—"}</span></button>`;
+    const status = esc(p.specs && p.specs.bandwidth || "Unlimited bandwidth");
+    return `<button type="button" class="cq-plan-row" aria-pressed="${selected}" aria-disabled="false" data-available="true" data-name="${name}" data-price="${price}" data-cpu="${cpu}" data-ram="${ram}" data-storage="${storage}" data-url="${url}" data-desc="${desc}" data-badge="${p.popular ? "Recommended" : "Available"}"><span class="cq-plan-name">${name}<small>${status}</small></span><span class="cq-plan-spec">${cpu}</span><span class="cq-plan-spec">${ram}</span><span class="cq-plan-price">${price}<small>/mo</small></span><span class="cq-plan-arrow" aria-hidden="true">→</span></button>`;
   }).join("");
   const initialUrl = esc(planUrl(initial));
   const initialName = esc(planName(initial));
@@ -723,38 +715,15 @@ function buildIndex() {
     ["Unlimited", "BW"],
   ].map(([v, l]) => `<span class="cq-chip">${esc(v)} <b>${esc(l)}</b></span>`).join("");
   const consoleHtml = `<div class="cq-console-card" role="group" aria-labelledby="console-title">
-    <div class="cq-console-bar"><span class="cq-cdot r" aria-hidden="true"></span><span class="cq-cdot y" aria-hidden="true"></span><span class="cq-cdot g" aria-hidden="true"></span><span class="cq-console-title" id="console-title">stealth-deploy — demonstration</span></div>
+    <div class="cq-console-bar"><span class="cq-cdot r" aria-hidden="true"></span><span class="cq-cdot y" aria-hidden="true"></span><span class="cq-cdot g" aria-hidden="true"></span><span class="cq-console-title" id="console-title">stealth-deploy — plan preview</span></div>
     <div class="cq-console-body">
-      <div class="cq-cline cq-demo-note"><span class="cq-warn">DEMO</span> No live deployment. Nothing is provisioned.</div>
-      <div class="cq-cline cq-cmdline"><span class="cq-cmd">$ stealth deploy --plan ${initialName.toLowerCase()} --region us-east</span><span class="cq-cursor" aria-hidden="true"></span></div>
-      <div class="cq-cline"><span class="cq-dim">▸ plan selected for illustration</span></div>
-      <div class="cq-cline"><span class="cq-dim">▸ region selected for illustration</span></div>
-      <div class="cq-cline"><span class="cq-warn">▸ checkout confirms price and availability</span></div>
-      <div class="cq-cline"><span class="cq-dim">▸ no infrastructure request is made</span></div>
-      <div class="cq-progress"><div class="cq-bar"></div></div>
-      <div class="cq-cline"><span class="cq-pct">illustration only</span></div>
+      <div class="cq-cline cq-cmdline"><span class="cq-cmd">$ plan show --name ${initialName.toLowerCase()} --region us-east</span><span class="cq-cursor" aria-hidden="true"></span></div>
+      <div class="cq-cline"><span class="cq-dim">▸ ${initialCpu} · ${initialRam} · ${initialStorage}</span></div>
+      <div class="cq-cline"><span class="cq-warn">▸ ${initialPrice} / month</span></div>
+      <div class="cq-cline"><span class="cq-dim">▸ order opens in the client area</span></div>
     </div>
     <div class="cq-console-foot">${consoleChips}</div>
   </div>`;
-  const reviewCardHtml = (t, clone = false) => {
-    const verified = !String(t._id || "").startsWith("inv");
-    const name = verified ? esc(t.authorName || t.name || t.customerName || "Verified customer") : "Illustrative workflow";
-    const role = verified ? esc([t.authorPosition, t.authorCompany].filter(Boolean).join(" · ")) : "Example only · not a customer testimonial";
-    const quote = esc(t.quote || t.testimonial || t.content || "");
-    const title = esc(t.title || "");
-    const initials = verified ? name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase() : "EX";
-    const marker = verified ? '<div class="cq-review-stars" aria-label="Verified customer review"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>' : '<div class="cq-review-label">Illustrative example</div>';
-    const hidden = clone ? ' aria-hidden="true" tabindex="-1"' : "";
-    return `<article class="cq-review-card${verified ? "" : " cq-review-illustrative"}"${hidden}>${marker}${title ? `<h3 class="cq-review-title">${title}</h3>` : ""}<p class="cq-review-quote">“${quote}”</p><div class="cq-review-who"><span class="cq-review-avatar" aria-hidden="true">${esc(initials)}</span><span class="cq-review-name"><b>${name}</b><small>${role}</small></span></div></article>`;
-  };
-  /* Three scrolling columns, each a duplicated list for a seamless loop. */
-  const perCol = Math.ceil(TESTIMONIALS.length / 3);
-  const reviewCols = [0, 1, 2].map((col) => {
-    const slice = TESTIMONIALS.slice(col * perCol, col * perCol + perCol);
-    const inner = slice.map((t) => reviewCardHtml(t)).join("");
-    const clone = slice.map((t) => reviewCardHtml(t, true)).join("");
-    return `<div class="cq-review-col" data-col="${col}">${inner}${clone}</div>`;
-  }).join("");
   const machineSvg = `<svg class="cq-machine" viewBox="0 0 540 400" role="img" aria-label="A clean private server with gold and green status lights">      <defs><linearGradient id="cq-body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--machine-body-a)"/><stop offset="1" stop-color="var(--machine-body-b)"/></linearGradient></defs>
       <ellipse cx="270" cy="368" rx="200" ry="18" fill="#000" opacity=".4"/>
       <rect x="90" y="60" width="360" height="280" rx="22" fill="url(#cq-body)" stroke="var(--machine-stroke)" stroke-width="2"/>
@@ -777,16 +746,16 @@ function buildIndex() {
       <section class="cq-hero" aria-labelledby="home-title">
         <div class="cq-hero-grid">
           <div class="cq-hero-copy">
-            <div class="cq-eyebrow">Private compute / USA</div>
+            <div class="cq-eyebrow">Windows and Linux VPS · USA</div>
             <h1 id="home-title">Make room for the work.</h1>
             <p class="cq-lede">A private Windows or Linux VPS for work that needs its own machine — remote access, automation, development, and everything between.</p>
             <div class="cq-hero-actions"><a class="btn btn-primary" href="#machines">Choose a machine <span aria-hidden="true">→</span></a><a class="btn btn-ghost" href="#why">See why it works <span aria-hidden="true">↓</span></a></div>
-            <div class="cq-hero-caption"><span class="cq-signal" aria-hidden="true"></span>USA location · pricing confirmed at checkout</div>
+            <div class="cq-hero-caption"><span class="cq-signal" aria-hidden="true"></span>USA plans · six configurations</div>
           </div>
           <div class="cq-hero-art">
             <div class="cq-art-index"><strong>01</strong> / the machine</div>
             ${consoleHtml}
-            <div class="cq-art-note"><span aria-hidden="true"></span><div><b>Order to machine, in plain view.</b>&nbsp;<span>An honest demonstration — nothing is provisioned.</span></div></div>
+            <div class="cq-art-note"><span aria-hidden="true"></span><div><b>Pick a plan here.</b>&nbsp;<span>The order page shows the current price and stock.</span></div></div>
           </div>
         </div>
       </section>
@@ -794,27 +763,27 @@ function buildIndex() {
         <span class="cq-proof-item">Windows + Linux</span><span class="cq-proof-item">NVMe storage</span><span class="cq-proof-item">Full admin rights</span><span class="cq-proof-item">Unlimited bandwidth</span>
       </section>
       <section class="cq-journey cq-reveal" aria-labelledby="journey-title">
-        <div class="cq-journey-head"><div class="cq-eyebrow">One machine, end to end</div><h2 id="journey-title">From choose to connected, in three honest steps.</h2></div>
+        <div class="cq-journey-head"><div class="cq-eyebrow">How it works</div><h2 id="journey-title">Pick a box, pay for it, log in.</h2></div>
         <ol class="cq-journey-steps">
-          <li class="cq-journey-step"><span class="cq-journey-num">01</span><div><h3>Choose</h3><p>Pick the machine that fits the work — a real USA plan with actual resources.</p></div><a class="cq-journey-link" href="#machines">Choose a machine <span aria-hidden="true">→</span></a></li>
-          <li class="cq-journey-step"><span class="cq-journey-num">02</span><div><h3>Checkout</h3><p>Continue to WHMCS for secure checkout. Pricing and availability are confirmed there.</p></div><a class="cq-journey-link" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">See checkout <span aria-hidden="true">↗</span></a></li>
-          <li class="cq-journey-step"><span class="cq-journey-num">03</span><div><h3>Connect</h3><p>Use your credentials with a Windows or Linux desktop client, with full admin rights.</p></div><a class="cq-journey-link" href="/docs.html">Read the guide <span aria-hidden="true">→</span></a></li>
+          <li class="cq-journey-step"><span class="cq-journey-num">01</span><div><h3>Compare</h3><p>Look at the CPU, RAM, and storage. Choose the setup that fits.</p></div><a class="cq-journey-link" href="#machines">View the plans <span aria-hidden="true">→</span></a></li>
+          <li class="cq-journey-step"><span class="cq-journey-num">02</span><div><h3>Pay</h3><p>The order page shows the price and takes payment.</p></div><a class="cq-journey-link" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Open checkout <span aria-hidden="true">↗</span></a></li>
+          <li class="cq-journey-step"><span class="cq-journey-num">03</span><div><h3>Log in</h3><p>Your credentials appear in the client area after the order.</p></div><a class="cq-journey-link" href="/docs.html">Read the login guide <span aria-hidden="true">→</span></a></li>
         </ol>
       </section>
       <section class="cq-machines cq-reveal" id="machines" aria-labelledby="machines-title">
         <div class="cq-head">
-          <h2 id="machines-title">Choose the headroom you need.</h2>
-          <p class="cq-head-note">Start with a real configuration. Change it when your work changes. Every USA plan below is shown with its monthly price and actual resources.</p>
+          <h2 id="machines-title">Pick the box that fits.</h2>
+          <p class="cq-head-note">Six USA plans. Compare the hardware, then choose one.</p>
         </div>
         <div class="cq-machine-layout">
           <div>
             <div class="cq-machine-list" role="group" aria-label="USA VPS plans">${planRows}</div>
-            <div class="cq-list-note"><span>Every plan includes 100% dedicated CPU resources.</span><span>Storage: NVMe · Bandwidth: Unlimited</span></div>
+            <div class="cq-list-note"><span>Dedicated CPU on every plan.</span><span>NVMe storage · Unlimited bandwidth</span></div>
           </div>
           <aside class="cq-detail-card" aria-live="polite" aria-label="Selected plan summary">
-            <div class="cq-detail-top"><span class="cq-mono">Selected machine</span><span class="cq-detail-badge" id="selectedBadge">${initial.popular ? "Recommended" : "Available"}</span></div>
+            <div class="cq-detail-top"><span class="cq-mono">Your selection</span><span class="cq-detail-badge" id="selectedBadge">${initial.popular ? "Most popular" : "Available"}</span></div>
             <h3 class="cq-detail-title" id="selectedName">${initialName}</h3>
-            <p class="cq-detail-desc" id="selectedDesc">${esc(initial.description || "Private Windows or Linux VPS")}</p>
+            <p class="cq-detail-desc" id="selectedDesc">${esc(planDescription(initial))}</p>
             <div class="cq-detail-price"><span id="selectedPrice">${initialPrice}</span><small>per month · USA</small></div>
             <div class="cq-detail-bars">
               <div class="cq-bar-row"><span>CPU</span><div class="cq-bar-track"><div class="cq-bar-fill" id="barCpu" style="width:50%"></div></div><strong id="selectedCpu">${initialCpu}</strong></div>
@@ -822,33 +791,33 @@ function buildIndex() {
               <div class="cq-bar-row"><span>Storage</span><div class="cq-bar-track"><div class="cq-bar-fill" id="barStorage" style="width:67%"></div></div><strong id="selectedStorage">${initialStorage}</strong></div>
             </div>
             <div class="cq-detail-cta"><a class="btn btn-primary" id="selectorCta" href="${initialUrl}" target="_blank" rel="noopener noreferrer"><span id="selectorCtaLabel">Continue with ${initialName}</span> <span aria-hidden="true">→</span></a></div>
-            <p class="cq-detail-foot">Windows or Linux · full admin rights · checkout confirms pricing and availability.</p>
+            <p class="cq-detail-foot">Windows or Linux · administrator/root access.</p>
           </aside>
         </div>
-        <p class="cq-handoff"><span class="cq-handoff-mark" aria-hidden="true">↳</span><span>Checkout, billing, and account access happen on WHMCS. Pricing and availability are confirmed there.</span></p>
+        <p class="cq-handoff"><span class="cq-handoff-mark" aria-hidden="true">↳</span><span>Prices and stock are shown on the order page.</span></p>
       </section>
       <section class="cq-story cq-reveal" id="why" aria-labelledby="why-title">
-        <div class="cq-story-head"><div class="cq-eyebrow">Why a private machine</div><h2 id="why-title">Your work gets a room of its own.</h2><p>Not another tab. Not another shared surface. A machine with its own resources, its own access, and a clear job.</p></div>
+        <div class="cq-story-head"><div class="cq-eyebrow">Why people use a VPS</div><h2 id="why-title">A computer you can leave running.</h2><p>Keep the desktop, tools, and jobs together instead of moving them between a laptop and a shared service.</p></div>
         <div class="cq-story-layout">
-          <div class="cq-story-visual">${machineSvg}<div class="cq-art-note"><span aria-hidden="true"></span><div><b>One private machine.</b>&nbsp;<span>Yours to configure and run.</span></div></div></div>
+          <div class="cq-story-visual">${machineSvg}<div class="cq-art-note"><span aria-hidden="true"></span><div><b>A machine you control.</b>&nbsp;<span>Install what you need.</span></div></div></div>
           <div class="cq-story-list">
-            <article class="cq-story-item"><span class="cq-story-num">01</span><div><h3>Remote work that stays together.</h3><p>Keep the desktop, tools, files, and routine in one place you can reach from anywhere.</p></div></article>
-            <article class="cq-story-item"><span class="cq-story-num">02</span><div><h3>Automation with somewhere to run.</h3><p>Give services, scheduled jobs, and development environments a machine instead of your laptop.</p></div></article>
-            <article class="cq-story-item"><span class="cq-story-num">03</span><div><h3>Control that does not disappear.</h3><p>Full administrative rights let you configure the operating system around the work you actually do.</p></div></article>
+            <article class="cq-story-item"><span class="cq-story-num">01</span><div><h3>Keep the desktop nearby.</h3><p>Open the same files and applications from wherever you work.</p></div></article>
+            <article class="cq-story-item"><span class="cq-story-num">02</span><div><h3>Give jobs a place to run.</h3><p>Leave scripts, services, and test environments on the server.</p></div></article>
+            <article class="cq-story-item"><span class="cq-story-num">03</span><div><h3>Set it up your way.</h3><p>You have administrator access on Windows and root access on Linux.</p></div></article>
           </div>
         </div>
       </section>
       <section class="cq-details cq-reveal" aria-labelledby="details-title">
-        <div class="cq-details-head"><div><div class="cq-eyebrow">The useful details</div><h2 id="details-title">Simple on purpose.</h2></div><p>The important parts are visible before checkout. The billing system confirms price and availability when you continue.</p></div>
+        <div class="cq-details-head"><div><div class="cq-eyebrow">The useful bits</div><h2 id="details-title">The hardware is easy to compare.</h2></div><p>Choose an operating system, pick the resources, and order when you know which box you want.</p></div>
         <div class="cq-detail-rows">
-          <div class="cq-detail-row"><span class="cq-mono">Operating system</span><strong>Windows or Linux</strong><p>Choose the environment that matches your work. The machine is yours to configure.</p></div>
-          <div class="cq-detail-row"><span class="cq-mono">Resources</span><strong>2–8 cores · 4–32 GB RAM</strong><p>Plans scale from a focused workspace to a high-headroom machine, with NVMe storage on every USA plan.</p></div>
-          <div class="cq-detail-row"><span class="cq-mono">Access</span><strong>Full admin rights</strong><p>Install the tools you need, shape the environment, and keep the operating boundary clear.</p></div>
-          <div class="cq-detail-row"><span class="cq-mono">Support</span><strong>Pre-sales and client area</strong><p>Ask a question before checkout, or manage your account and services in the client area.</p></div>
+          <div class="cq-detail-row"><span class="cq-mono">Operating system</span><strong>Windows or Linux</strong><p>Choose the one you already know.</p></div>
+          <div class="cq-detail-row"><span class="cq-mono">Resources</span><strong>2–8 cores · 4–32 GB RAM</strong><p>Every plan uses NVMe storage.</p></div>
+          <div class="cq-detail-row"><span class="cq-mono">Access</span><strong>Administrator/root access</strong><p>Install packages, change settings, and run your own software.</p></div>
+          <div class="cq-detail-row"><span class="cq-mono">Support</span><strong>Client area support</strong><p>Get help with an order or a running service.</p></div>
         </div>
       </section>
       <section class="cq-os cq-reveal" aria-labelledby="os-title">
-        <div class="cq-os-head"><div><div class="cq-eyebrow">Works with your operating system</div><h2 id="os-title">Windows or Linux. Your choice.</h2></div><p>Every machine runs with full admin rights, so the operating system is the starting point — not the ceiling.</p></div>
+        <div class="cq-os-head"><div><div class="cq-eyebrow">Operating systems</div><h2 id="os-title">Bring the setup you already use.</h2></div><p>Choose Windows or Linux, then install the tools that belong on your machine.</p></div>
         <div class="cq-os-grid">
           ${OS_LIST.map((os, i) => {
             const mark = osMarkSvg(os).replace(/(<svg[^>]*viewBox=")[^"]*(")/, `$1${OS_VIEWBOX[os]}$2`);
@@ -857,32 +826,25 @@ function buildIndex() {
         </div>
       </section>
       <section class="cq-faq cq-reveal" aria-labelledby="faq-title">
-        <div class="cq-faq-head"><div><div class="cq-eyebrow">Before you ask</div><h2 id="faq-title">Straight answers.</h2></div><p>No runaround. If a detail matters, it is stated here or confirmed at checkout.</p></div>
+        <div class="cq-faq-head"><div><div class="cq-eyebrow">Questions</div><h2 id="faq-title">Before you buy.</h2></div><p>The short version is below. The order page has the current price and stock.</p></div>
         <div class="cq-faq-list">
           ${HOME_FAQS.map((f, i) => `<details class="cq-faq-item"${i === 0 ? " open" : ""}><summary>${esc(f.question)}</summary><p>${esc(f.answer)}</p></details>`).join("")}
         </div>
       </section>
       <section class="cq-live cq-reveal" aria-labelledby="live-title">
         <div class="cq-live-grid">
-          <div class="cq-live-copy"><div class="cq-eyebrow">Live service state</div><h2 id="live-title">Proof you can check.</h2><p>Every production node is watched by automated monitors. This card reads the same live feed as the public status page — and says so when the feed cannot be reached.</p><a class="cq-live-link" href="/status.html">Open the full status page <span aria-hidden="true">→</span></a></div>
+          <div class="cq-live-copy"><div class="cq-eyebrow">Service status</div><h2 id="live-title">Check it when you need it.</h2><p>This card reads from the monitoring feed. If the feed is down, we show dashes instead of guessing.</p><a class="cq-live-link" href="/status.html">Open the status page <span aria-hidden="true">→</span></a></div>
           <div class="cq-live-card" aria-live="polite">
-            <div class="cq-live-head"><span class="cq-mono">StealthRDP · production</span><span class="cq-live-dot" id="homeStatusDot"></span></div>
+            <div class="cq-live-head"><span class="cq-mono">StealthRDP · monitoring</span><span class="cq-live-dot" id="homeStatusDot"></span></div>
             <div id="homeStatusSummary" class="cq-live-summary"><div class="cq-live-slot"><strong>—</strong><span>Nodes online</span></div><div class="cq-live-slot"><strong>—</strong><span>Current availability</span></div><div class="cq-live-slot"><strong>—</strong><span>Monitoring feed</span></div></div>
-            <p class="cq-live-note" id="homeStatusNote">Live status unavailable · showing nothing until the feed responds.</p>
+            <p class="cq-live-note" id="homeStatusNote">No live data right now.</p>
           </div>
         </div>
       </section>
-      <section class="cq-reviews cq-reveal" aria-labelledby="reviews-title">
-        <div class="cq-reviews-head"><div class="cq-eyebrow">Customer proof, clearly marked</div><h2 id="reviews-title">What the work looks like.</h2><p>One verified customer review appears with attribution. Other cards are illustrative workflow examples until consented stories are approved.</p></div>
-        <div class="cq-review-viewport">
-          <div class="cq-review-grid">${reviewCols}</div>
-        </div>
-        <div class="cq-review-invite">Run on StealthRDP? <a href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">Share your experience <span aria-hidden="true">→</span></a></div>
-      </section>
       <section class="cq-close cq-reveal" aria-labelledby="close-title">
         <div class="cq-close-grid">
-          <div><div class="cq-eyebrow">Start with the machine</div><h2 id="close-title">Leave the noise outside.</h2><a class="btn btn-primary cq-close-cta" href="#machines">Choose your machine <span aria-hidden="true">→</span></a></div>
-          <p>Pick a plan above, then continue to secure checkout. Pricing and availability are confirmed there.</p>
+          <div><div class="cq-eyebrow">Choose your machine</div><h2 id="close-title">Find the box that fits.</h2><a class="btn btn-primary cq-close-cta" href="#machines">See the plans <span aria-hidden="true">→</span></a></div>
+          <p>Six USA plans are listed above. Choose one and continue to the order page.</p>
         </div>
       </section>
     </div>

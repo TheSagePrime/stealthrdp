@@ -76,8 +76,8 @@ test("public chrome has no legacy docs host, countdown, or fake live deployment 
   const mainJs = HTML("js/main.js");
   assert.doesNotMatch(mainJs, /srdp_offer_end|COUNTDOWN_MS|setInterval\(tick/);
   const home = HTML("index.html");
-  assert.match(home, /Make room for the work|WHMCS/i);
-  assert.match(home, /WHMCS/i);
+  assert.match(home, /Make room for the work/);
+  assert.doesNotMatch(home, /WHMCS/i);
   assert.doesNotMatch(home, /server online|Live deploy console|fake provisioning/i);
 });
 
@@ -135,14 +135,14 @@ test("promotion chrome is stable and does not invent an expiry", () => {
     assert.doesNotMatch(HTML(route), /POWER30|countdown|srdp_offer_end/i, `${route}: no unverified promotion or timer`);
   }
   assert.doesNotMatch(HTML("build.mjs"), /POWER30|srdp_offer_end|COUNTDOWN_MS/);
-  assert.match(HTML("index.html"), /pricing confirmed at checkout|WHMCS/i);
+  assert.match(HTML("index.html"), /Prices and stock are shown on the order page/i);
 });
 
 test("homepage plan handoff is an honest handoff without fake completion state", () => {
   const home = HTML("index.html");
   const mainJs = HTML("js/main.js");
   assert.match(home, /cq-handoff/);
-  assert.match(home, /Checkout, billing, and account access happen on WHMCS|WHMCS checkout/i);
+  assert.match(home, /Prices and stock are shown on the order page/i);
   assert.doesNotMatch(home, /server online|deployed in \\d+s|demo complete|provisioning virtual machine[^<]*ok/i);
   assert.doesNotMatch(mainJs, /deployBar|deployPct|consoleOnline|Math\\.random|setInterval/);
 });
@@ -158,7 +158,8 @@ test("homepage uses the approved warm-instrument composition", () => {
   assert.match(home, /id="selectorCta"/);
   assert.match(home, /id="selectedName"/);
   assert.doesNotMatch(home, /id="testimonials"|class="quote-block"/);
-  assert.match(home, /happen on WHMCS|WHMCS/i);
+  assert.match(home, /Prices and stock are shown on the order page/i);
+  assert.doesNotMatch(home, /WHMCS/i);
 });
 
 test("homepage follows the Warm Instrument brand contract", () => {

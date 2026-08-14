@@ -157,15 +157,6 @@
     "Bronze USA": 9.50, "Silver USA": 18.04, "Gold USA": 26.59,
     "Platinum USA": 33.24, "Diamond USA": 42.75, "Emerald USA": 51.30
   };
-  var USA_CHECKOUT_AVAILABILITY = {
-    "Bronze USA": true, "Silver USA": false, "Gold USA": false,
-    "Platinum USA": false, "Diamond USA": false, "Emerald USA": false
-  };
-
-  function planAvailable(plan) {
-    return plan.location !== "USA" || USA_CHECKOUT_AVAILABILITY[plan.name] === true;
-  }
-
   function displayMonthlyPrice(plan, cycle) {
     if (cycle === "monthly" && Object.prototype.hasOwnProperty.call(CHECKOUT_MONTHLY_PRICES, plan.name)) {
       return CHECKOUT_MONTHLY_PRICES[plan.name];
@@ -175,9 +166,8 @@
 
   function planDescription(plan) {
     var specs = plan.specs || {};
-    return "Private " + (plan.location ? plan.location + " " : "") + "VPS with " +
-      (specs.cpu || "dedicated CPU") + ", " + (specs.ram || "scalable RAM") +
-      ", and " + (specs.storage || "NVMe storage") + ".";
+    return (specs.cpu || "Dedicated CPU") + " CPU · " + (specs.ram || "Scalable RAM") +
+      " RAM · " + (specs.storage || "NVMe storage") + " · " + (specs.bandwidth || "Unlimited") + " bandwidth.";
   }
 
   function currencySymbol(plan) {
@@ -274,9 +264,9 @@
         summary.innerHTML =
           '<div class="cq-live-slot"><strong class="dash">—</strong><span>Nodes online</span></div>' +
           '<div class="cq-live-slot"><strong class="dash">—</strong><span>Current availability</span></div>' +
-          '<div class="cq-live-slot"><strong>Live</strong><span>Monitoring feed</span></div>';
+          '<div class="cq-live-slot"><strong class="dash">—</strong><span>Monitoring feed</span></div>';
       }
-      if (note) note.textContent = "Live status unavailable · showing nothing until the feed responds.";
+      if (note) note.textContent = "No live data right now.";
     }
   }
 
@@ -339,12 +329,11 @@
   function renderPlans(plans) {
     if (!planGrid) return;
     var popularIdx = -1;
-    for (var i = 0; i < plans.length; i++) { if (plans[i].popular && planAvailable(plans[i])) { popularIdx = i; break; } }
+    for (var i = 0; i < plans.length; i++) { if (plans[i].popular) { popularIdx = i; break; } }
     var html = plans.map(function (p, i) {
       var base = p.monthlyPrice || 0;
       var price = displayMonthlyPrice(p, currentCycle);
       var isPop = i === popularIdx;
-      var available = planAvailable(p);
       return (
         '<article class="plan-card' + (isPop ? " popular" : "") + '">' +
           (isPop ? '<span class="plan-popular">Most Popular</span>' : "") +
@@ -358,7 +347,7 @@
             specRow("Storage", p.specs && p.specs.storage) +
             specRow("Bandwidth", p.specs && p.specs.bandwidth) +
           "</div>" +
-          (available ? '<a class="btn ' + (isPop ? "btn-primary" : "btn-ghost") + '" href="' + planUrl(p, currentCycle) + '" target="_blank" rel="noopener noreferrer">Deploy Now</a>' : '<span class="plan-unavailable" role="status">Unavailable at checkout</span>') +
+          '<a class="btn ' + (isPop ? "btn-primary" : "btn-ghost") + '" href="' + planUrl(p, currentCycle) + '" target="_blank" rel="noopener noreferrer">Deploy Now</a>' +
         "</article>"
       );
     }).join("");
@@ -427,7 +416,7 @@
               '<td class="v">' + esc(p.specs && p.specs.storage || "—") + "</td>" +
               '<td class="v">' + esc(p.specs && p.specs.bandwidth || "—") + "</td>" +
               '<td class="v">' + currencySymbol(p) + fmtPrice(displayMonthlyPrice(p, "monthly")) + "</td>" +
-              '<td>' + (planAvailable(p) ? '<a class="btn btn-sm ' + (p.popular ? "btn-primary" : "btn-ghost") + '" href="' + planUrl(p, "monthly") + '" target="_blank" rel="noopener noreferrer">Deploy</a>' : '<span class="plan-unavailable" role="status">Unavailable</span>') + '</td>' +
+              '<td><a class="btn btn-sm ' + (p.popular ? "btn-primary" : "btn-ghost") + '" href="' + planUrl(p, "monthly") + '" target="_blank" rel="noopener noreferrer">Deploy</a></td>' +
             "</tr>"
           );
         }).join("");
