@@ -980,8 +980,9 @@ function buildIndex() {
       <section class="cq-reviews" aria-labelledby="reviews-title">
         <div class="cq-reviews-head"><div class="cq-eyebrow">Trusted by teams worldwide</div><h2 id="reviews-title">What our users say.</h2><p>See why teams choose StealthRDP for their remote work, automation, and infrastructure.</p></div>
         <div class="cq-review-viewport">
-          <div class="cq-review-grid">${reviewCols}<a class="cq-review-card cq-review-cta" href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer"><span class="cq-review-plus" aria-hidden="true">+</span><p class="cq-review-quote">Run on StealthRDP? Share your experience.</p><div class="cq-review-who"><span class="cq-review-name"><b>Your review could be here</b><small>Verified customers only · via support ↗</small></span></div></a></div>
+          <div class="cq-review-grid">${reviewCols}</div>
         </div>
+        <div class="cq-review-invite">Run on StealthRDP? <a href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">Share your experience <span aria-hidden="true">→</span></a></div>
       </section>
       <section class="cq-close" aria-labelledby="close-title">
         <div class="cq-close-grid">
