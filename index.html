@@ -1,300 +1,202 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b1118">
-  <meta name="description" content="A private Windows or Linux VPS for work that needs its own room.">
-  <title>StealthRDP — Make room for the work.</title>
-  <style>
-    @font-face{font-family:SpaceGrotesk;src:url('/fonts/space-grotesk_500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
-    @font-face{font-family:SpaceGrotesk;src:url('/fonts/space-grotesk_700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
-    @font-face{font-family:Inter;src:url('/fonts/inter_400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
-    @font-face{font-family:Inter;src:url('/fonts/inter_500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
-    @font-face{font-family:Inter;src:url('/fonts/inter_600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
-    @font-face{font-family:JetBrains;src:url('/fonts/jetbrains-mono_400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StealthRDP — Board C · Warm Instrument (brand colors)</title>
+<style>
+@font-face{font-family:SpaceGrotesk;src:url('/fonts/space-grotesk_500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:SpaceGrotesk;src:url('/fonts/space-grotesk_700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:Inter;src:url('/fonts/inter_400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:Inter;src:url('/fonts/inter_500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:Inter;src:url('/fonts/inter_600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:JetBrains;src:url('/fonts/jetbrains-mono_400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+:root{--bg:#08090c;--bg-elev:#0c0e13;--surface-1:#10131a;--surface-2:#151a23;--surface-3:#1c2330;--border:#1d2430;--border-strong:#2b3547;--text:#eaeef5;--text-muted:#98a3b4;--text-dim:#5f6a7d;--accent:#f5b93b;--accent-hover:#ffc94d;--accent-soft:rgba(245,185,59,.09);--green:#2fd47c;--green-soft:rgba(47,212,124,.12);--radius:12px;--radius-lg:18px;--shadow-2:0 12px 32px rgba(0,0,0,.5);--shadow-gold:0 10px 36px rgba(245,185,59,.16);--max:1180px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{width:min(calc(100% - 56px),var(--max));margin-inline:auto}
+.mono{font-family:JetBrains,monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+h1,h2,h3{font-family:SpaceGrotesk,Arial,sans-serif;font-weight:700;margin:0}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
 
-    :root{
-      --ink:#0b1118;
-      --ink-2:#111c27;
-      --ink-3:#172734;
-      --paper:#f4f0e8;
-      --paper-2:#e9e3d8;
-      --line:#cfc7ba;
-      --muted:#6d706e;
-      --muted-dark:#9eaaa9;
-      --gold:#d5a84d;
-      --gold-soft:#f1d99d;
-      --blue:#8db5c4;
-      --white:#f8f6f1;
-      --green:#91b99a;
-      --shadow:0 30px 80px rgba(11,17,24,.18);
-      --max:1320px;
-      --radius:2px;
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,Arial,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
-    body:has(.menu-toggle[aria-expanded="true"]){overflow:hidden}
-    a{color:inherit;text-decoration:none}
-    button{font:inherit}
-    :focus-visible{outline:3px solid var(--gold);outline-offset:4px}
-    .wrap{width:min(calc(100% - 64px),var(--max));margin-inline:auto}
-    .micro{font-family:JetBrains,monospace;font-size:11px;line-height:1.4;letter-spacing:.06em;text-transform:uppercase}
-    .eyebrow{display:flex;align-items:center;gap:11px;color:var(--gold);font-family:JetBrains,monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
-    .eyebrow::before{content:"";width:24px;height:1px;background:currentColor}
-    .button{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:48px;padding:0 20px;border:1px solid transparent;border-radius:999px;font-weight:600;font-size:14px;letter-spacing:-.01em;transition:transform .25s ease,background .25s ease,color .25s ease,border-color .25s ease}
-    .button:hover{transform:translateY(-2px)}
-    .button-primary{background:var(--gold);color:var(--ink)}
-    .button-primary:hover{background:var(--gold-soft)}
-    .button-quiet{border-color:rgba(248,246,241,.3);color:var(--white)}
-    .button-quiet:hover{border-color:var(--gold);color:var(--gold-soft)}
-    .button-dark{background:var(--ink);color:var(--white)}
-    .button-dark:hover{background:var(--ink-2)}
-    .arrow{font-size:18px;line-height:0}
+/* top bar */
+.topbar{display:flex;align-items:center;justify-content:space-between;min-height:78px}
+.brand{display:flex;align-items:center;gap:11px;font-family:SpaceGrotesk,Arial,sans-serif;font-size:17px;font-weight:700;letter-spacing:.1em}
+.mark{width:18px;height:18px;border-radius:5px;background:var(--accent);position:relative}
+.mark::after{content:"";position:absolute;left:5px;top:5px;width:8px;height:8px;background:var(--bg)}
+.nav{display:flex;gap:28px;color:var(--text-muted);font-size:13.5px}.nav a{transition:color .2s}.nav a:hover{color:var(--text)}
+.actions{display:flex;align-items:center;gap:20px}
+.login{color:var(--text-muted);font-size:13.5px}.login:hover{color:var(--text)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 24px;border-radius:999px;font-weight:600;font-size:14px;transition:transform .2s,background .2s,color .2s,border-color .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--accent);color:#0a0b0f}.btn-primary:hover{background:var(--accent-hover)}
+.btn-ghost{border:1px solid var(--border-strong);color:var(--text)}.btn-ghost:hover{border-color:var(--accent);color:var(--accent-hover)}
+.btn-small{min-height:40px;padding:0 18px;font-size:12px}
 
-    /* Header */
-    .hero-shell{position:relative;overflow:hidden;background:var(--ink);color:var(--white)}
-    .hero-shell::after{content:"";position:absolute;right:-180px;bottom:-290px;width:660px;height:660px;border:1px solid rgba(141,181,196,.16);border-radius:50%;pointer-events:none}
-    .topbar{position:relative;z-index:5;display:flex;align-items:center;justify-content:space-between;min-height:78px;border-bottom:1px solid rgba(248,246,241,.13)}
-    .brand{display:flex;align-items:center;gap:12px;font-family:SpaceGrotesk,Arial,sans-serif;font-size:16px;font-weight:700;letter-spacing:.12em}
-    .brand-mark{position:relative;width:22px;height:22px;border:1px solid var(--gold);transform:rotate(45deg)}
-    .brand-mark::after{content:"";position:absolute;left:6px;top:6px;width:8px;height:8px;background:var(--gold)}
-    .nav{display:flex;align-items:center;gap:30px;color:var(--muted-dark);font-size:13px}
-    .nav a{transition:color .2s ease}.nav a:hover{color:var(--white)}
-    .header-actions{display:flex;align-items:center;gap:18px}
-    .login{color:var(--muted-dark);font-size:13px}.login:hover{color:var(--white)}
-    .header-cta{min-height:44px;padding-inline:16px;font-size:12px}
-    .menu-toggle{display:none;width:44px;height:44px;padding:0;border:1px solid rgba(248,246,241,.25);background:transparent;color:var(--white);border-radius:50%;cursor:pointer}
-    .menu-toggle span,.menu-toggle::before,.menu-toggle::after{display:block;width:16px;height:1px;margin:4px auto;background:currentColor;content:"";transition:transform .2s ease}
-    .menu-toggle[aria-expanded="true"] span{opacity:0}.menu-toggle[aria-expanded="true"]::before{transform:translateY(5px) rotate(45deg)}.menu-toggle[aria-expanded="true"]::after{transform:translateY(-5px) rotate(-45deg)}
-    .mobile-menu{display:none}
+/* hero */
+.hero{padding:76px 0 30px;text-align:center}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;color:var(--accent);font-family:JetBrains,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.eyebrow::before,.eyebrow::after{content:"";width:20px;height:1px;background:var(--accent)}
+h1.hero-title{margin:26px auto 22px;max-width:820px;font-size:clamp(52px,6.4vw,92px);line-height:1;letter-spacing:-.035em;text-wrap:balance}
+.lede{max-width:520px;margin:0 auto;color:var(--text-muted);font-size:16.5px;line-height:1.6}
+.hero-actions{display:flex;justify-content:center;gap:14px;margin-top:32px}
+.hero-caption{display:flex;justify-content:center;align-items:center;gap:9px;margin-top:26px;color:var(--text-muted)}
+.signal{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px var(--green-soft)}
+.hero-art{position:relative;display:grid;place-items:center;padding:46px 0 22px}
+.machine-soft{position:relative;z-index:2;width:min(100%,520px);height:auto;filter:drop-shadow(0 22px 26px rgba(0,0,0,.45))}
+.art-index{position:absolute;top:34px;left:50%;transform:translateX(-50%);color:var(--text-dim)}.art-index strong{color:var(--accent);font-weight:400}
+.art-note{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:18px;color:var(--text-muted)}
+.art-note::before{content:"";width:30px;height:1px;background:var(--accent)}
+.art-note b{color:var(--text);font-family:SpaceGrotesk,Arial,sans-serif;font-size:15px;font-weight:500;letter-spacing:-.01em}
+.art-note span{font-size:12px}
 
-    /* Hero */
-    .hero{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,.88fr) minmax(460px,1.12fr);gap:40px;min-height:680px;padding:76px 0 54px}
-    .hero-copy{align-self:center;max-width:620px;padding-bottom:20px}
-    .hero h1{max-width:640px;margin:28px 0 26px;font-family:SpaceGrotesk,Arial,sans-serif;font-size:clamp(58px,7.2vw,112px);font-weight:500;line-height:.92;letter-spacing:-.075em;text-wrap:balance}
-    .hero-lede{max-width:460px;margin:0;color:#c5cecd;font-size:18px;line-height:1.55;letter-spacing:-.02em}
-    .hero-actions{display:flex;align-items:center;gap:16px;margin-top:36px}
-    .hero-caption{display:flex;align-items:center;gap:10px;margin-top:40px;color:#9eaaa9}
-    .signal{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(145,185,154,.13)}
-    .hero-art{position:relative;display:grid;place-items:center;min-height:525px}
-    .art-index{position:absolute;top:10px;right:2px;color:#55666d}
-    .art-index strong{color:var(--gold);font-weight:400}
-    .machine-svg{position:relative;z-index:2;width:min(100%,620px);height:auto;filter:drop-shadow(0 38px 36px rgba(0,0,0,.38));animation:float 8s ease-in-out infinite}
-    .art-rule{position:absolute;z-index:1;left:12%;right:4%;top:53%;height:1px;background:rgba(141,181,196,.22)}
-    .art-rule::after{content:"";position:absolute;right:16%;top:-3px;width:7px;height:7px;background:var(--gold);border-radius:50%}
-    .art-note{position:absolute;right:0;bottom:34px;display:flex;align-items:flex-start;gap:12px;color:#9eaaa9}
-    .art-note::before{content:"";width:38px;height:1px;margin-top:9px;background:var(--gold)}
-    .art-note b{display:block;color:var(--white);font-family:SpaceGrotesk,Arial,sans-serif;font-size:16px;font-weight:500;letter-spacing:-.02em}
-    .art-note span{display:block;margin-top:2px;font-size:12px}
+/* proof strip */
+.proof{display:flex;justify-content:center;gap:34px;flex-wrap:wrap;padding:20px 0 26px;border-top:1px solid var(--border);margin-top:8px}
+.proof-item{display:flex;align-items:center;gap:9px;color:var(--text-muted);font-size:13px}
+.proof-item::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
 
-    .proof-strip{position:relative;z-index:2;border-top:1px solid rgba(248,246,241,.14);display:grid;grid-template-columns:1.3fr repeat(4,1fr);min-height:94px;align-items:center;gap:26px;color:#c5cecd}
-    .proof-intro{color:var(--gold)}
-    .proof-item{display:flex;align-items:center;gap:10px;font-size:13px;white-space:nowrap}
-    .proof-item::before{content:"";width:5px;height:5px;border:1px solid var(--gold);border-radius:50%}
-
-    /* Main machine section */
-    .machines-section{padding:126px 0 140px;background:var(--paper)}
-    .section-heading{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:end;margin-bottom:64px}
-    .section-heading h2{max-width:600px;margin:22px 0 0;font-family:SpaceGrotesk,Arial,sans-serif;font-size:clamp(44px,5.6vw,82px);font-weight:500;line-height:.94;letter-spacing:-.07em;text-wrap:balance}
-    .section-heading p{max-width:420px;margin:0 0 6px;color:var(--muted);font-size:16px}
-    .machines-layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(360px,.75fr);gap:54px;align-items:start}
-    .machine-list{border-top:1px solid var(--ink)}
-    .machine-row{position:relative;display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr auto;align-items:center;gap:20px;width:100%;min-height:92px;padding:18px 22px 18px 28px;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);text-align:left;cursor:pointer;transition:background .25s ease,color .25s ease,padding .25s ease}
-    .machine-row::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:transparent;transition:background .25s ease}
-    .machine-row:hover{background:#ebe5da}.machine-row[aria-pressed="true"]{padding-left:34px;background:var(--ink);color:var(--white)}.machine-row[aria-pressed="true"]::before{background:var(--gold)}
-    .machine-name{font-family:SpaceGrotesk,Arial,sans-serif;font-size:23px;font-weight:500;letter-spacing:-.04em}
-    .machine-name small{display:block;margin-top:2px;color:var(--muted);font-family:Inter,Arial,sans-serif;font-size:11px;letter-spacing:0}.machine-row[aria-pressed="true"] .machine-name small{color:#9eaaa9}
-    .machine-spec{color:var(--muted);font-family:JetBrains,monospace;font-size:11px;letter-spacing:.03em}.machine-row[aria-pressed="true"] .machine-spec{color:#c5cecd}
-    .machine-price{font-family:SpaceGrotesk,Arial,sans-serif;font-size:20px;letter-spacing:-.04em}.machine-price span{font-family:Inter,Arial,sans-serif;color:var(--muted);font-size:11px;letter-spacing:0}.machine-row[aria-pressed="true"] .machine-price span{color:#9eaaa9}
-    .machine-select{display:inline-grid;place-items:center;width:30px;height:30px;border:1px solid var(--line);border-radius:50%;font-size:16px;line-height:1}.machine-row[aria-pressed="true"] .machine-select{border-color:var(--gold);color:var(--gold)}
-    .machine-list-note{display:flex;justify-content:space-between;gap:20px;padding-top:18px;color:var(--muted);font-size:12px}
-    .machine-detail{position:sticky;top:24px;overflow:hidden;min-height:520px;padding:38px;background:var(--ink);color:var(--white);box-shadow:var(--shadow)}
-    .machine-detail::after{content:"";position:absolute;right:-100px;bottom:-170px;width:390px;height:390px;border:1px solid rgba(141,181,196,.22);border-radius:50%;pointer-events:none}
-    .detail-top{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:20px}.detail-top .micro{color:var(--gold)}
-    .detail-badge{padding:6px 9px;border:1px solid rgba(213,168,77,.55);color:var(--gold-soft);font-family:JetBrains,monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
-    .detail-title{position:relative;z-index:1;margin:70px 0 12px;font-family:SpaceGrotesk,Arial,sans-serif;font-size:clamp(64px,7vw,100px);font-weight:500;line-height:.86;letter-spacing:-.08em}
-    .detail-description{position:relative;z-index:1;max-width:260px;margin:0;color:#c5cecd;font-size:14px}
-    .detail-price{position:relative;z-index:1;display:flex;align-items:baseline;gap:8px;margin-top:42px;font-family:SpaceGrotesk,Arial,sans-serif;font-size:35px;letter-spacing:-.06em}.detail-price small{color:#9eaaa9;font-family:Inter,Arial,sans-serif;font-size:12px;letter-spacing:0}
-    .detail-bars{position:relative;z-index:1;display:grid;gap:14px;margin-top:34px}
-    .bar-row{display:grid;grid-template-columns:70px 1fr 45px;align-items:center;gap:12px;color:#9eaaa9;font-family:JetBrains,monospace;font-size:10px;text-transform:uppercase}.bar-row strong{color:var(--white);font-weight:400;text-align:right}
-    .bar-track{height:4px;background:#2b3943}.bar-fill{height:100%;background:var(--gold);transition:width .3s ease}
-    .detail-cta{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:38px}.detail-cta .button{flex:1}.detail-foot{position:relative;z-index:1;margin-top:18px;color:#81908e;font-size:11px}
-
-    /* Product story */
-    .story-section{padding:130px 0 144px;background:var(--ink);color:var(--white);overflow:hidden}
-    .story-layout{display:grid;grid-template-columns:minmax(300px,.74fr) minmax(0,1.26fr);gap:110px}
-    .story-intro{position:relative}.story-intro h2{max-width:420px;margin:26px 0 0;font-family:SpaceGrotesk,Arial,sans-serif;font-size:clamp(48px,6vw,88px);font-weight:500;line-height:.91;letter-spacing:-.075em}.story-intro p{max-width:340px;margin:30px 0 0;color:#9eaaa9;font-size:15px}
-    .story-list{border-top:1px solid rgba(248,246,241,.24)}
-    .story-item{display:grid;grid-template-columns:75px 1fr;gap:26px;padding:27px 0 30px;border-bottom:1px solid rgba(248,246,241,.18)}
-    .story-number{color:var(--gold);font-family:JetBrains,monospace;font-size:12px}.story-item h3{margin:0;color:var(--white);font-family:SpaceGrotesk,Arial,sans-serif;font-size:30px;font-weight:500;letter-spacing:-.045em}.story-item p{max-width:520px;margin:9px 0 0;color:#9eaaa9;font-size:14px}
-    .story-aside{display:flex;align-items:center;gap:14px;margin-top:45px;color:#9eaaa9;font-family:JetBrains,monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase}.story-aside::before{content:"";width:32px;height:1px;background:var(--gold)}
-
-    /* Operating details */
-    .details-section{padding:126px 0 136px;background:var(--paper-2)}
-    .details-head{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;margin-bottom:58px}.details-head h2{margin:18px 0 0;font-family:SpaceGrotesk,Arial,sans-serif;font-size:clamp(42px,5vw,72px);font-weight:500;line-height:.96;letter-spacing:-.07em}.details-head p{max-width:320px;margin:0;color:var(--muted);font-size:14px}
-    .detail-rows{border-top:1px solid var(--ink)}
-    .detail-row{display:grid;grid-template-columns:1.1fr 1fr 1.4fr;gap:30px;padding:25px 0;border-bottom:1px solid var(--line)}.detail-row strong{font-family:SpaceGrotesk,Arial,sans-serif;font-size:23px;font-weight:500;letter-spacing:-.04em}.detail-row .micro{color:var(--muted);padding-top:6px}.detail-row p{max-width:430px;margin:0;color:var(--muted);font-size:14px}
-
-    /* Close */
-    .close-section{position:relative;overflow:hidden;padding:122px 0 120px;background:var(--blue);color:var(--ink)}
-    .close-section::after{content:"";position:absolute;right:-160px;top:-230px;width:560px;height:560px;border:1px solid rgba(11,17,24,.18);border-radius:50%}
-    .close-layout{position:relative;z-index:1;display:flex;align-items:end;justify-content:space-between;gap:50px}.close-layout h2{max-width:620px;margin:20px 0 0;font-family:SpaceGrotesk,Arial,sans-serif;font-size:clamp(50px,6vw,88px);font-weight:500;line-height:.9;letter-spacing:-.08em}.close-layout p{max-width:360px;margin:0 0 6px;color:#334b55;font-size:14px}.close-layout .button{margin-top:38px}
-    footer{background:var(--ink);color:#9eaaa9}.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:30px;min-height:90px}.footer-brand{color:var(--white)}.footer-links{display:flex;gap:24px;font-size:12px}.footer-links a:hover{color:var(--white)}
-
-    @keyframes float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-13px) rotate(1deg)}}
-    @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.machine-svg{animation:none}.button,.bar-fill{transition:none}}
-    @media (max-width:1050px){.wrap{width:min(calc(100% - 44px),var(--max))}.hero{grid-template-columns:minmax(0,.9fr) minmax(380px,1.1fr);gap:10px}.hero h1{font-size:clamp(54px,7vw,86px)}.proof-strip{grid-template-columns:1fr repeat(4,auto);gap:16px}.proof-item{font-size:11px}.machines-layout{grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);gap:30px}.machine-row{grid-template-columns:1.1fr .8fr .8fr .8fr auto;gap:10px;padding-left:18px}.machine-row[aria-pressed="true"]{padding-left:24px}.story-layout{gap:60px}}
-    @media (max-width:800px){.wrap{width:min(calc(100% - 36px),var(--max))}.topbar{min-height:70px}.nav,.header-actions .login,.header-cta{display:none}.menu-toggle{display:block}.mobile-menu{position:absolute;z-index:6;top:70px;left:0;right:0;display:grid;gap:0;padding:10px 18px 24px;background:var(--ink);border-bottom:1px solid rgba(248,246,241,.16);transform:translateY(-140%);transition:transform .3s ease}.mobile-menu[data-open="true"]{transform:translateY(0)}.mobile-menu a{padding:16px 0;border-bottom:1px solid rgba(248,246,241,.12);color:#c5cecd}.mobile-menu .button{margin-top:16px}.hero{display:block;min-height:0;padding:70px 0 36px}.hero-copy{padding:0}.hero h1{max-width:620px;font-size:clamp(58px,16vw,100px)}.hero-lede{font-size:16px}.hero-art{min-height:410px;margin-top:20px}.machine-svg{width:110%;max-width:620px}.art-index{top:6px;right:0}.art-note{right:0;bottom:16px}.proof-strip{grid-template-columns:repeat(2,1fr);gap:0;min-height:0;padding:18px 0}.proof-intro{grid-column:1/-1;padding-bottom:13px}.proof-item{min-height:32px;white-space:normal}.machines-section,.story-section,.details-section{padding:88px 0}.section-heading{display:block;margin-bottom:42px}.section-heading h2{font-size:clamp(48px,13vw,72px)}.section-heading p{margin-top:24px}.machines-layout{display:flex;flex-direction:column;gap:48px}.machine-list{width:100%}.machine-row{grid-template-columns:1.1fr .8fr auto;gap:12px;min-height:80px;padding:15px 10px 15px 14px}.machine-row[aria-pressed="true"]{padding-left:20px}.machine-row .machine-spec:nth-of-type(2){display:none}.machine-row .machine-spec:nth-of-type(3){display:none}.machine-price{justify-self:end}.machine-list-note{display:block}.machine-list-note span+span{display:block;margin-top:5px}.machine-detail{position:relative;top:auto;width:100%;min-height:490px;padding:30px}.detail-title{margin-top:62px}.story-layout{display:block}.story-intro p{max-width:420px}.story-list{margin-top:60px}.story-item{grid-template-columns:48px 1fr;gap:12px}.story-item h3{font-size:26px}.details-head{display:block;margin-bottom:42px}.details-head p{margin-top:22px}.detail-row{grid-template-columns:1fr;gap:6px;padding:20px 0}.detail-row .micro{padding-top:0}.detail-row p{max-width:560px}.close-section{padding:88px 0}.close-layout{display:block}.close-layout p{margin-top:25px}.footer-inner{display:block;padding:24px 0}.footer-links{margin-top:18px;flex-wrap:wrap}}
-    @media (max-width:430px){.wrap{width:calc(100% - 28px)}.hero{padding-top:55px}.hero-actions{align-items:stretch;flex-direction:column;gap:10px}.hero-actions .button{width:100%}.hero-caption{margin-top:28px}.hero-art{min-height:320px;margin-inline:-14px}.art-note{right:14px}.art-note b{font-size:14px}.proof-item{font-size:10px}.machine-row{grid-template-columns:1fr auto auto}.machine-row .machine-price{font-size:18px}.machine-name{font-size:20px}.machine-detail{padding:26px 22px}.detail-cta{display:block}.detail-cta .button{width:100%}.detail-cta .micro{display:block;margin-top:14px;text-align:center}}
-  </style>
+/* machine section */
+.machines{padding:88px 0 110px}
+.head{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end;margin-bottom:46px}
+.head h2{max-width:560px;font-size:clamp(40px,4.8vw,68px);line-height:.98;letter-spacing:-.05em}
+.head-note{max-width:360px;margin:0 0 6px;color:var(--text-muted);font-size:14.5px}
+.machine-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(340px,.85fr);gap:40px;align-items:start}
+.machine-list{border-top:1px solid var(--border-strong)}
+.plan-row{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr auto;gap:18px;align-items:center;width:100%;min-height:86px;padding:16px 20px;border:0;border-bottom:1px solid var(--border);background:transparent;color:var(--text);text-align:left;cursor:pointer;border-radius:var(--radius);margin-bottom:4px;transition:background .2s,color .2s}
+.plan-row:hover{background:var(--surface-1)}
+.plan-row[aria-pressed="true"]{background:var(--accent-soft)}
+.plan-row[aria-pressed="true"] .plan-name::before{content:"";position:absolute;left:-8px;top:50%;transform:translateY(-50%);width:4px;height:30px;border-radius:99px;background:var(--accent)}
+.plan-name{position:relative;font-family:SpaceGrotesk,Arial,sans-serif;font-size:22px;font-weight:700;letter-spacing:-.03em}
+.plan-name small{display:block;margin-top:3px;color:var(--text-muted);font-family:Inter,Arial,sans-serif;font-weight:400;font-size:11px;letter-spacing:0}
+.plan-spec{color:var(--text-muted);font-family:JetBrains,monospace;font-size:11px;letter-spacing:.03em}
+.plan-row[aria-pressed="true"] .plan-spec{color:var(--accent-hover)}
+.plan-price{font-family:SpaceGrotesk,Arial,sans-serif;font-size:21px;font-weight:700;letter-spacing:-.03em}
+.plan-price small{font-family:Inter,Arial,sans-serif;font-weight:400;color:var(--text-muted);font-size:11px;letter-spacing:0}
+.plan-arrow{color:var(--text-dim);font-size:16px;transition:color .2s}
+.plan-row:hover .plan-arrow,.plan-row[aria-pressed="true"] .plan-arrow{color:var(--accent)}
+.list-note{display:flex;justify-content:space-between;gap:18px;padding:14px 6px 0;color:var(--text-dim);font-size:12px}
+.detail-card{position:sticky;top:24px;background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:34px 32px 28px;box-shadow:var(--shadow-2)}
+.detail-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.detail-top .mono{color:var(--accent)}
+.detail-badge{padding:5px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent-hover);font-family:JetBrains,monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase}
+.detail-title{margin:44px 0 10px;font-size:clamp(52px,5.4vw,76px);line-height:.9;letter-spacing:-.06em}
+.detail-desc{max-width:250px;margin:0;color:var(--text-muted);font-size:13.5px}
+.detail-price{display:flex;align-items:baseline;gap:8px;margin-top:34px;font-family:SpaceGrotesk,Arial,sans-serif;font-size:34px;font-weight:700;letter-spacing:-.05em}.detail-price small{color:var(--text-muted);font-family:Inter,Arial,sans-serif;font-size:12px;font-weight:400}
+.detail-bars{display:grid;gap:14px;margin-top:28px}
+.bar-row{display:grid;grid-template-columns:70px 1fr 48px;align-items:center;gap:12px;color:var(--text-muted);font-family:JetBrains,monospace;font-size:10px;text-transform:uppercase}.bar-row strong{color:var(--text);font-weight:400;text-align:right}
+.bar-track{height:6px;border-radius:99px;background:var(--surface-3)}.bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent-hover));transition:width .3s}
+.detail-cta{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:32px}.detail-cta .btn{flex:1}
+.detail-foot{margin-top:16px;color:var(--text-dim);font-size:11px}
+@media (max-width:900px){.wrap{width:min(calc(100% - 36px),1180px)}.nav{display:none}.hero{padding:56px 0 20px}.hero-actions{flex-wrap:wrap}.machine-soft{width:100%}.art-index{right:10px;top:24px;left:auto;transform:none}.proof{gap:18px;padding:18px 0}.head{grid-template-columns:1fr;gap:16px;margin-bottom:36px}.head-note{max-width:100%}.machine-layout{grid-template-columns:1fr;gap:32px}.plan-row{grid-template-columns:1fr auto auto auto;gap:10px}.plan-row .plan-spec{display:none}.detail-card{position:relative;top:auto}}
+</style>
 </head>
 <body>
-  <div class="hero-shell" id="top">
-    <div class="wrap">
-      <header class="topbar">
-        <a class="brand" href="#top" aria-label="StealthRDP home"><span class="brand-mark" aria-hidden="true"></span><span>STEALTHRDP</span></a>
-        <nav class="nav" aria-label="Primary navigation">
-          <a href="#machines">Machines</a>
-          <a href="#why">Why Stealth</a>
-          <a href="#details">Details</a>
-        </nav>
-        <div class="header-actions">
-          <a class="login" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client area</a>
-          <a class="button button-primary header-cta" href="#machines">Find your machine <span class="arrow">↘</span></a>
-          <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><span></span></button>
-        </div>
-      </header>
-      <div class="mobile-menu" id="mobile-menu" data-open="false">
-        <a href="#machines">Machines</a><a href="#why">Why Stealth</a><a href="#details">Details</a>
-        <a class="button button-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Open client area</a>
-      </div>
+<div class="wrap">
+<header class="topbar">
+  <a class="brand" href="#"><span class="mark" aria-hidden="true"></span>STEALTHRDP</a>
+  <nav class="nav"><a href="#machines">Machines</a><a href="#why">Why Stealth</a><a href="#details">Details</a></nav>
+  <div class="actions"><a class="login" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client area</a><a class="btn btn-primary btn-small" href="#machines">Find your machine</a></div>
+</header>
 
-      <main>
-        <section class="hero" aria-labelledby="hero-title">
-          <div class="hero-copy">
-            <div class="eyebrow">Private compute / USA</div>
-            <h1 id="hero-title">Make room for the work.</h1>
-            <p class="hero-lede">A private Windows or Linux VPS for work that needs its own machine — remote access, automation, development, and everything between.</p>
-            <div class="hero-actions"><a class="button button-primary" href="#machines">Choose a machine <span class="arrow">↘</span></a><a class="button button-quiet" href="#why">See why it works <span class="arrow">↓</span></a></div>
-            <div class="hero-caption micro"><span class="signal" aria-hidden="true"></span> USA location · pricing confirmed at checkout</div>
-          </div>
-          <div class="hero-art" aria-label="Abstract original illustration of a private server machine">
-            <div class="art-index micro"><strong>01</strong> / the machine</div>
-            <div class="art-rule" aria-hidden="true"></div>
-            <svg class="machine-svg" viewBox="0 0 680 540" role="img" aria-label="A dark server slab with three quiet processing layers">
-              <path d="M112 162 485 64l111 67-375 108z" fill="#263844" stroke="#718c98" stroke-width="1.5"/>
-              <path d="M221 239 596 131v180L221 425z" fill="#101a23" stroke="#718c98" stroke-width="1.5"/>
-              <path d="M112 162v180l109 83V239z" fill="#172832" stroke="#718c98" stroke-width="1.5"/>
-              <path d="m221 239 375-108v29L221 269z" fill="#0b1118"/>
-              <path d="m221 300 375-108v30L221 331z" fill="#0b1118"/>
-              <path d="m221 361 375-108v30L221 392z" fill="#0b1118"/>
-              <path d="m247 258 323-92" stroke="#d5a84d" stroke-width="3"/>
-              <path d="m247 319 323-92" stroke="#8db5c4" stroke-width="2" opacity=".75"/>
-              <path d="m247 380 323-92" stroke="#8db5c4" stroke-width="2" opacity=".45"/>
-              <circle cx="186" cy="213" r="6" fill="#91b99a"/><circle cx="186" cy="249" r="6" fill="#d5a84d"/><circle cx="186" cy="285" r="6" fill="#718c98"/>
-              <path d="M132 185 199 230v146l-67-51z" fill="#0d1921" opacity=".8"/>
-              <path d="M152 207 180 226v102l-28-19z" fill="#d5a84d" opacity=".8"/>
-              <path d="M173 348 204 371" stroke="#718c98" stroke-width="2"/>
-              <path d="M250 164 500 91" stroke="#b1c5c9" stroke-width="1" opacity=".5"/>
-              <path d="M286 152 536 79" stroke="#b1c5c9" stroke-width="1" opacity=".22"/>
-            </svg>
-            <div class="art-note"><span aria-hidden="true"></span><div><b>One private machine.</b><span>Yours to configure and run.</span></div></div>
-          </div>
-        </section>
-        <div class="proof-strip" aria-label="Included with every machine">
-          <div class="proof-intro micro">The essentials, included.</div>
-          <div class="proof-item">Windows + Linux</div><div class="proof-item">NVMe storage</div><div class="proof-item">Full admin rights</div><div class="proof-item">Unlimited bandwidth</div>
-        </div>
-      </main>
-    </div>
+<main>
+<section class="hero">
+  <div class="eyebrow">Private compute / USA</div>
+  <h1 class="hero-title">Make room for the work.</h1>
+  <p class="lede">A private Windows or Linux VPS for work that needs its own machine — remote access, automation, development, and everything between.</p>
+  <div class="hero-actions"><a class="btn btn-primary" href="#machines">Choose a machine <span aria-hidden="true">→</span></a><a class="btn btn-ghost" href="#why">See why it works <span aria-hidden="true">↓</span></a></div>
+  <div class="hero-caption mono"><span class="signal" aria-hidden="true"></span>USA location · pricing confirmed at checkout</div>
+  <div class="hero-art">
+    <div class="art-index mono"><strong>01</strong> / the machine</div>
+    <svg class="machine-soft" viewBox="0 0 540 400" role="img" aria-label="A clean dark server with warm gold details">
+      <defs>
+        <linearGradient id="bodyc" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#151a23"/><stop offset="1" stop-color="#10131a"/>
+        </linearGradient>
+      </defs>
+      <ellipse cx="270" cy="368" rx="200" ry="18" fill="#000" opacity=".4"/>
+      <rect x="90" y="60" width="360" height="280" rx="22" fill="url(#bodyc)" stroke="#1d2430" stroke-width="2"/>
+      <rect x="90" y="60" width="360" height="66" rx="22" fill="#1c2330"/>
+      <rect x="90" y="92" width="360" height="34" fill="#1c2330"/>
+      <circle cx="122" cy="109" r="6" fill="#f5b93b"/>
+      <circle cx="142" cy="109" r="6" fill="#2fd47c"/>
+      <rect x="170" y="103" width="56" height="12" rx="6" fill="#2b3547"/>
+      <rect x="236" y="103" width="56" height="12" rx="6" fill="#2b3547" opacity=".7"/>
+      <rect x="122" y="148" width="296" height="10" rx="5" fill="#1c2330"/>
+      <rect x="122" y="172" width="296" height="10" rx="5" fill="#1c2330"/>
+      <rect x="122" y="196" width="296" height="10" rx="5" fill="#1c2330"/>
+      <rect x="122" y="220" width="180" height="10" rx="5" fill="#1c2330"/>
+      <rect x="318" y="220" width="100" height="10" rx="5" fill="#151a23"/>
+      <circle cx="150" cy="258" r="7" fill="#2fd47c"/>
+      <circle cx="178" cy="258" r="7" fill="#f5b93b"/>
+      <circle cx="206" cy="258" r="7" fill="#2b3547"/>
+      <path d="M122 296 h296" stroke="#1d2430" stroke-width="2"/>
+      <text x="122" y="326" font-family="monospace" font-size="12" fill="#5f6a7d">WINDOWS · LINUX · NVMe · FULL ADMIN</text>
+    </svg>
+    <div class="art-note"><span aria-hidden="true"></span><div><b>One private machine.</b>&nbsp;<span>Yours to configure and run.</span></div></div>
   </div>
+</section>
 
-  <section class="machines-section" id="machines" aria-labelledby="machines-title">
-    <div class="wrap">
-      <div class="section-heading"><div><div class="eyebrow">The machine room</div><h2 id="machines-title">Choose the headroom you need.</h2></div><p>Start with a real configuration. Change it when your work changes. Every USA plan below is shown with its monthly price and actual resources.</p></div>
-      <div class="machines-layout">
-        <div>
-          <div class="machine-list" role="group" aria-label="USA VPS plans">
-            <button class="machine-row" type="button" aria-pressed="false" data-plan="Bronze"><span class="machine-name">Bronze <small>For a focused workspace</small></span><span class="machine-spec">2 CORE</span><span class="machine-spec">4 GB RAM</span><span class="machine-price">$10 <span>/ mo</span></span><span class="machine-select" aria-hidden="true">↗</span></button>
-            <button class="machine-row" type="button" aria-pressed="false" data-plan="Silver"><span class="machine-name">Silver <small>For heavier daily work</small></span><span class="machine-spec">2 CORE</span><span class="machine-spec">8 GB RAM</span><span class="machine-price">$19 <span>/ mo</span></span><span class="machine-select" aria-hidden="true">↗</span></button>
-            <button class="machine-row" type="button" aria-pressed="true" data-plan="Gold"><span class="machine-name">Gold <small>For work with room to move</small></span><span class="machine-spec">4 CORE</span><span class="machine-spec">16 GB RAM</span><span class="machine-price">$27.99 <span>/ mo</span></span><span class="machine-select" aria-hidden="true">↗</span></button>
-            <button class="machine-row" type="button" aria-pressed="false" data-plan="Platinum"><span class="machine-name">Platinum <small>For sustained workloads</small></span><span class="machine-spec">6 CORE</span><span class="machine-spec">16 GB RAM</span><span class="machine-price">$34.99 <span>/ mo</span></span><span class="machine-select" aria-hidden="true">↗</span></button>
-            <button class="machine-row" type="button" aria-pressed="false" data-plan="Diamond"><span class="machine-name">Diamond <small>For demanding environments</small></span><span class="machine-spec">6 CORE</span><span class="machine-spec">32 GB RAM</span><span class="machine-price">$45 <span>/ mo</span></span><span class="machine-select" aria-hidden="true">↗</span></button>
-            <button class="machine-row" type="button" aria-pressed="false" data-plan="Emerald"><span class="machine-name">Emerald <small>For the most headroom</small></span><span class="machine-spec">8 CORE</span><span class="machine-spec">32 GB RAM</span><span class="machine-price">$54 <span>/ mo</span></span><span class="machine-select" aria-hidden="true">↗</span></button>
-          </div>
-          <div class="machine-list-note"><span>Every plan includes 100% dedicated CPU resources.</span><span>Storage: NVMe · Bandwidth: Unlimited</span></div>
-        </div>
-        <aside class="machine-detail" aria-live="polite" aria-label="Selected plan summary">
-          <div class="detail-top"><span class="micro">Selected machine</span><span class="detail-badge" id="detail-badge">Recommended</span></div>
-          <h3 class="detail-title" id="detail-title">Gold</h3>
-          <p class="detail-description" id="detail-description">The balanced choice for remote work, automation, and development.</p>
-          <div class="detail-price"><span id="detail-price">$27.99</span><small>per month · USA</small></div>
-          <div class="detail-bars">
-            <div class="bar-row"><span>CPU</span><div class="bar-track"><div class="bar-fill" id="bar-cpu" style="width:50%"></div></div><strong id="detail-cpu">4 core</strong></div>
-            <div class="bar-row"><span>Memory</span><div class="bar-track"><div class="bar-fill" id="bar-ram" style="width:50%"></div></div><strong id="detail-ram">16 GB</strong></div>
-            <div class="bar-row"><span>Storage</span><div class="bar-track"><div class="bar-fill" id="bar-storage" style="width:67%"></div></div><strong id="detail-storage">100 GB</strong></div>
-          </div>
-          <div class="detail-cta"><a class="button button-primary" id="checkout-link" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/gold-usa&amp;billingcycle=monthly" target="_blank" rel="noopener noreferrer">Continue with Gold <span class="arrow">↗</span></a><span class="micro">Checkout confirms availability</span></div>
-          <p class="detail-foot">Windows or Linux. Full administrative privileges.</p>
-        </aside>
+<section class="proof">
+  <span class="proof-item">Windows + Linux</span><span class="proof-item">NVMe storage</span><span class="proof-item">Full admin rights</span><span class="proof-item">Unlimited bandwidth</span>
+</section>
+
+<section class="machines" id="machines">
+  <div class="head">
+    <h2>Choose the headroom you need.</h2>
+    <p class="head-note">Start with a real configuration. Change it when your work changes. Every USA plan below is shown with its monthly price and actual resources.</p>
+  </div>
+  <div class="machine-layout">
+    <div>
+      <div class="machine-list" role="group" aria-label="USA VPS plans">
+        <button class="plan-row" type="button" aria-pressed="false" data-name="Bronze"><span class="plan-name">Bronze<small>For a focused workspace</small></span><span class="plan-spec">2 CORE</span><span class="plan-spec">4 GB RAM</span><span class="plan-price">$10<small>/mo</small></span><span class="plan-arrow">→</span></button>
+        <button class="plan-row" type="button" aria-pressed="false" data-name="Silver"><span class="plan-name">Silver<small>For heavier daily work</small></span><span class="plan-spec">2 CORE</span><span class="plan-spec">8 GB RAM</span><span class="plan-price">$19<small>/mo</small></span><span class="plan-arrow">→</span></button>
+        <button class="plan-row" type="button" aria-pressed="true" data-name="Gold"><span class="plan-name">Gold<small>For work with room to move</small></span><span class="plan-spec">4 CORE</span><span class="plan-spec">16 GB RAM</span><span class="plan-price">$27.99<small>/mo</small></span><span class="plan-arrow">→</span></button>
+        <button class="plan-row" type="button" aria-pressed="false" data-name="Platinum"><span class="plan-name">Platinum<small>For sustained workloads</small></span><span class="plan-spec">6 CORE</span><span class="plan-spec">16 GB RAM</span><span class="plan-price">$34.99<small>/mo</small></span><span class="plan-arrow">→</span></button>
+        <button class="plan-row" type="button" aria-pressed="false" data-name="Diamond"><span class="plan-name">Diamond<small>For demanding environments</small></span><span class="plan-spec">6 CORE</span><span class="plan-spec">32 GB RAM</span><span class="plan-price">$45<small>/mo</small></span><span class="plan-arrow">→</span></button>
+        <button class="plan-row" type="button" aria-pressed="false" data-name="Emerald"><span class="plan-name">Emerald<small>For the most headroom</small></span><span class="plan-spec">8 CORE</span><span class="plan-spec">32 GB RAM</span><span class="plan-price">$54<small>/mo</small></span><span class="plan-arrow">→</span></button>
       </div>
+      <div class="list-note"><span>Every plan includes 100% dedicated CPU resources.</span><span>Storage: NVMe · Bandwidth: Unlimited</span></div>
     </div>
-  </section>
-
-  <section class="story-section" id="why" aria-labelledby="why-title">
-    <div class="wrap story-layout">
-      <div class="story-intro"><div class="eyebrow">Why a private machine</div><h2 id="why-title">Your work gets a room of its own.</h2><p>Not another tab. Not another shared surface. A machine with its own resources, its own access, and a clear job.</p><div class="story-aside">Less noise / more control</div></div>
-      <div class="story-list">
-        <article class="story-item"><span class="story-number">01</span><div><h3>Remote work that stays together.</h3><p>Keep the desktop, tools, files, and routine in one place you can reach from anywhere.</p></div></article>
-        <article class="story-item"><span class="story-number">02</span><div><h3>Automation with somewhere to run.</h3><p>Give services, scheduled jobs, and development environments a machine instead of your laptop.</p></div></article>
-        <article class="story-item"><span class="story-number">03</span><div><h3>Control that does not disappear.</h3><p>Full administrative rights let you configure the operating system around the work you actually do.</p></div></article>
+    <aside class="detail-card" aria-live="polite">
+      <div class="detail-top"><span class="mono">Selected machine</span><span class="detail-badge" id="b-badge">Recommended</span></div>
+      <h3 class="detail-title" id="b-name">Gold</h3>
+      <p class="detail-desc" id="b-desc">The balanced choice for remote work, automation, and development.</p>
+      <div class="detail-price"><span id="b-price">$27.99</span><small>per month · USA</small></div>
+      <div class="detail-bars">
+        <div class="bar-row"><span>CPU</span><div class="bar-track"><div class="bar-fill" id="b-bar-cpu" style="width:50%"></div></div><strong id="b-cpu">4 core</strong></div>
+        <div class="bar-row"><span>Memory</span><div class="bar-track"><div class="bar-fill" id="b-bar-ram" style="width:50%"></div></div><strong id="b-ram">16 GB</strong></div>
+        <div class="bar-row"><span>Storage</span><div class="bar-track"><div class="bar-fill" id="b-bar-storage" style="width:67%"></div></div><strong id="b-storage">100 GB</strong></div>
       </div>
-    </div>
-  </section>
-
-  <section class="details-section" id="details" aria-labelledby="details-title">
-    <div class="wrap">
-      <div class="details-head"><div><div class="eyebrow">The useful details</div><h2 id="details-title">Simple on purpose.</h2></div><p>The important parts are visible before checkout. The billing system confirms price and availability when you continue.</p></div>
-      <div class="detail-rows">
-        <div class="detail-row"><span class="micro">Operating system</span><strong>Windows or Linux</strong><p>Choose the environment that matches your work. The machine is yours to configure.</p></div>
-        <div class="detail-row"><span class="micro">Resources</span><strong>2–8 cores · 4–32 GB RAM</strong><p>Plans scale from a focused workspace to a high-headroom machine, with NVMe storage on every USA plan.</p></div>
-        <div class="detail-row"><span class="micro">Access</span><strong>Full admin rights</strong><p>Install the tools you need, shape the environment, and keep the operating boundary clear.</p></div>
-        <div class="detail-row"><span class="micro">Location</span><strong>USA machines</strong><p>This page shows the USA range. Additional locations can be added as the range expands.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="close-section" aria-labelledby="close-title"><div class="wrap close-layout"><div><div class="eyebrow">Start with the machine</div><h2 id="close-title">Leave the noise outside.</h2><a class="button button-dark" href="#machines">Choose your machine <span class="arrow">↗</span></a></div><p>Pick a plan above, then continue to secure checkout. Pricing and availability are confirmed there.</p></div></section>
-  <footer><div class="wrap footer-inner"><a class="brand footer-brand" href="#top"><span class="brand-mark" aria-hidden="true"></span><span>STEALTHRDP</span></a><div class="footer-links"><a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Support</a><a href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client area</a><a href="#top">Back to top ↑</a></div></div></footer>
-
-  <script>
-    const plans = {
-      Bronze:{price:'$10',cpu:'2 core',ram:'4 GB',storage:'60 GB',cpuWidth:'25%',ramWidth:'25%',storageWidth:'40%',description:'A focused starting point for one clear workspace.',url:'https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/bronze-usa2&billingcycle=monthly',badge:'Entry'},
-      Silver:{price:'$19',cpu:'2 core',ram:'8 GB',storage:'80 GB',cpuWidth:'25%',ramWidth:'25%',storageWidth:'53%',description:'More memory for heavier daily work and multitasking.',url:'https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/silver-usa&billingcycle=monthly',badge:'Balanced'},
-      Gold:{price:'$27.99',cpu:'4 core',ram:'16 GB',storage:'100 GB',cpuWidth:'50%',ramWidth:'50%',storageWidth:'67%',description:'The balanced choice for remote work, automation, and development.',url:'https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/gold-usa&billingcycle=monthly',badge:'Recommended'},
-      Platinum:{price:'$34.99',cpu:'6 core',ram:'16 GB',storage:'100 GB',cpuWidth:'75%',ramWidth:'50%',storageWidth:'67%',description:'Sustained headroom for workloads that stay busy.',url:'https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/platinum-usa&billingcycle=monthly',badge:'More headroom'},
-      Diamond:{price:'$45',cpu:'6 core',ram:'32 GB',storage:'150 GB',cpuWidth:'75%',ramWidth:'100%',storageWidth:'100%',description:'A demanding environment with room for more services.',url:'https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/diamond-usa&billingcycle=monthly',badge:'High headroom'},
-      Emerald:{price:'$54',cpu:'8 core',ram:'32 GB',storage:'150 GB',cpuWidth:'100%',ramWidth:'100%',storageWidth:'100%',description:'The largest USA configuration shown.',url:'https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/emerald-usa&billingcycle=monthly',badge:'Maximum shown'}
-    };
-    const els = {
-      title:document.getElementById('detail-title'), description:document.getElementById('detail-description'), price:document.getElementById('detail-price'), cpu:document.getElementById('detail-cpu'), ram:document.getElementById('detail-ram'), storage:document.getElementById('detail-storage'), badge:document.getElementById('detail-badge'), link:document.getElementById('checkout-link'), cpuBar:document.getElementById('bar-cpu'), ramBar:document.getElementById('bar-ram'), storageBar:document.getElementById('bar-storage')
-    };
-    function selectPlan(name){
-      const plan=plans[name];
-      if(!plan)return;
-      document.querySelectorAll('.machine-row').forEach(row=>row.setAttribute('aria-pressed',row.dataset.plan===name?'true':'false'));
-      els.title.textContent=name;els.description.textContent=plan.description;els.price.textContent=plan.price;els.cpu.textContent=plan.cpu;els.ram.textContent=plan.ram;els.storage.textContent=plan.storage;els.badge.textContent=plan.badge;els.link.href=plan.url;els.link.firstChild.textContent='Continue with '+name+' ';
-      els.cpuBar.style.width=plan.cpuWidth;els.ramBar.style.width=plan.ramWidth;els.storageBar.style.width=plan.storageWidth;
-    }
-    document.querySelectorAll('.machine-row').forEach(row=>row.addEventListener('click',()=>selectPlan(row.dataset.plan)));
-
-    const menuToggle=document.querySelector('.menu-toggle');
-    const mobileMenu=document.getElementById('mobile-menu');
-    function closeMenu(){menuToggle.setAttribute('aria-expanded','false');mobileMenu.dataset.open='false';}
-    menuToggle.addEventListener('click',()=>{const open=menuToggle.getAttribute('aria-expanded')==='true';menuToggle.setAttribute('aria-expanded',String(!open));mobileMenu.dataset.open=String(!open)});
-    mobileMenu.querySelectorAll('a').forEach(link=>link.addEventListener('click',closeMenu));
-  </script>
+      <div class="detail-cta"><a class="btn btn-primary" id="b-link" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/gold-usa&billingcycle=monthly" target="_blank" rel="noopener noreferrer">Continue with Gold <span aria-hidden="true">→</span></a></div>
+      <p class="detail-foot">Windows or Linux · full admin rights · checkout confirms pricing and availability.</p>
+    </aside>
+  </div>
+</section>
+</main>
+</div>
+<script>
+const D={Bronze:{price:'$10',cpu:'2 core',ram:'4 GB',storage:'60 GB',cw:'25%',rw:'25%',sw:'40%',badge:'Entry',desc:'A focused starting point for one clear workspace.',url:'https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/bronze-usa2&billingcycle=monthly'},
+Silver:{price:'$19',cpu:'2 core',ram:'8 GB',storage:'80 GB',cw:'25%',rw:'25%',sw:'53%',badge:'Balanced',desc:'More memory for heavier daily work and multitasking.',url:'https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/silver-usa&billingcycle=monthly'},
+Gold:{price:'$27.99',cpu:'4 core',ram:'16 GB',storage:'100 GB',cw:'50%',rw:'50%',sw:'67%',badge:'Recommended',desc:'The balanced choice for remote work, automation, and development.',url:'https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/gold-usa&billingcycle=monthly'},
+Platinum:{price:'$34.99',cpu:'6 core',ram:'16 GB',storage:'100 GB',cw:'75%',rw:'50%',sw:'67%',badge:'More headroom',desc:'Sustained headroom for workloads that stay busy.',url:'https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/platinum-usa&billingcycle=monthly'},
+Diamond:{price:'$45',cpu:'6 core',ram:'32 GB',storage:'150 GB',cw:'75%',rw:'100%',sw:'100%',badge:'High headroom',desc:'A demanding environment with room for more services.',url:'https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/diamond-usa&billingcycle=monthly'},
+Emerald:{price:'$54',cpu:'8 core',ram:'32 GB',storage:'150 GB',cw:'100%',rw:'100%',sw:'100%',badge:'Maximum shown',desc:'The largest USA configuration shown.',url:'https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/emerald-usa&billingcycle=monthly'}};
+document.querySelectorAll('.plan-row').forEach(r=>r.addEventListener('click',()=>{
+  const d=D[r.dataset.name];if(!d)return;
+  document.querySelectorAll('.plan-row').forEach(x=>x.setAttribute('aria-pressed',x===r?'true':'false'));
+  document.getElementById('b-name').textContent=r.dataset.name;
+  document.getElementById('b-desc').textContent=d.desc;
+  document.getElementById('b-price').textContent=d.price;
+  document.getElementById('b-cpu').textContent=d.cpu;
+  document.getElementById('b-ram').textContent=d.ram;
+  document.getElementById('b-storage').textContent=d.storage;
+  document.getElementById('b-badge').textContent=d.badge;
+  document.getElementById('b-bar-cpu').style.width=d.cw;
+  document.getElementById('b-bar-ram').style.width=d.rw;
+  document.getElementById('b-bar-storage').style.width=d.sw;
+  document.getElementById('b-link').href=d.url;
+  document.getElementById('b-link').firstChild.textContent='Continue with '+r.dataset.name+' ';
+}));
+</script>
 </body>
 </html>
