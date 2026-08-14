@@ -76,7 +76,7 @@ test("public chrome has no legacy docs host, countdown, or fake live deployment 
   const mainJs = HTML("js/main.js");
   assert.doesNotMatch(mainJs, /srdp_offer_end|COUNTDOWN_MS|setInterval\(tick/);
   const home = HTML("index.html");
-  assert.match(home, /Make room for the work/);
+  assert.match(home, /Choose a server/);
   assert.doesNotMatch(home, /WHMCS/i);
   assert.doesNotMatch(home, /server online|Live deploy console|fake provisioning/i);
 });
@@ -141,19 +141,19 @@ test("promotion chrome is stable and does not invent an expiry", () => {
 test("homepage plan handoff is an honest handoff without fake completion state", () => {
   const home = HTML("index.html");
   const mainJs = HTML("js/main.js");
-  assert.match(home, /cq-handoff/);
+  assert.match(home, /premium-detail-foot/);
   assert.match(home, /Prices and stock are shown on the order page/i);
   assert.doesNotMatch(home, /server online|deployed in \\d+s|demo complete|provisioning virtual machine[^<]*ok/i);
   assert.doesNotMatch(mainJs, /deployBar|deployPct|consoleOnline|Math\\.random|setInterval/);
 });
 
-test("homepage uses the approved warm-instrument composition", () => {
+test("homepage uses the premium technical-editorial composition", () => {
   const home = HTML("index.html");
-  assert.match(home, /class="cq-home"/);
-  assert.match(home, /class="cq-hero"/);
+  assert.match(home, /class="cq-home(?:\s|["])/);
+  assert.match(home, /class="cq-hero(?:\s|["])/);
   assert.match(home, /class="cq-machines(?:\s|["])/);
   assert.match(home, /class="cq-machine-list"/);
-  assert.match(home, /class="cq-detail-card"/);
+  assert.match(home, /class="cq-detail-card(?:\s|["])/);
   assert.match(home, /class="cq-plan-row"/);
   assert.match(home, /id="selectorCta"/);
   assert.match(home, /id="selectedName"/);
@@ -162,9 +162,9 @@ test("homepage uses the approved warm-instrument composition", () => {
   assert.doesNotMatch(home, /WHMCS/i);
 });
 
-test("homepage follows the Warm Instrument brand contract", () => {
+test("homepage follows the premium technical-editorial brand contract", () => {
   const home = HTML("index.html");
-  assert.match(home, /Make room for the work\./);
+  assert.match(home, /Choose a server/);
   assert.match(home, /cq-machine/);
   assert.match(home, /Windows \+ Linux/i);
   assert.match(home, /NVMe storage/i);

@@ -687,6 +687,65 @@ function page({ active, title, description, canonical, pageType = "website", jso
 }
 
 /* ---------- 1. index ---------- */
+function buildIndexPremium() {
+  const plans = USA;
+  const initial = plans[0];
+  const planRows = plans.map((p, i) => {
+    const name = esc(planName(p));
+    const cpu = esc(p.specs && p.specs.cpu || "");
+    const ram = esc(p.specs && p.specs.ram || "");
+    const storage = esc(p.specs && p.specs.storage || "");
+    const bandwidth = esc(p.specs && p.specs.bandwidth || "Unlimited");
+    const price = currencySymbol(p) + monthlyPrice(p).toFixed(2);
+    return `<button type="button" class="cq-plan-row" aria-pressed="${i === 0 ? "true" : "false"}" aria-disabled="false" data-available="true" data-name="${name}" data-price="${price}" data-cpu="${cpu}" data-ram="${ram}" data-storage="${storage}" data-url="${esc(planUrl(p))}" data-desc="${esc(planDescription(p))}" data-badge="${p.popular ? "Recommended" : "Available"}"><span class="cq-plan-name"><b>${name}</b><small>${bandwidth} bandwidth</small></span><span class="cq-plan-spec"><small>CPU</small>${cpu}</span><span class="cq-plan-spec"><small>Memory</small>${ram}</span><span class="cq-plan-spec"><small>Storage</small>${storage}</span><span class="cq-plan-price">${price}<small>/ month</small></span><span class="cq-plan-arrow" aria-hidden="true">↗</span></button>`;
+  }).join("");
+  const initialName = esc(planName(initial));
+  const initialPrice = currencySymbol(initial) + monthlyPrice(initial).toFixed(2);
+  const initialUrl = esc(planUrl(initial));
+  const initialCpu = esc(initial.specs && initial.specs.cpu || "");
+  const initialRam = esc(initial.specs && initial.specs.ram || "");
+  const initialStorage = esc(initial.specs && initial.specs.storage || "");
+  const machineSvg = `<svg class="cq-machine" viewBox="0 0 360 220" role="img" aria-label="A compact private server specimen"><rect x="34" y="28" width="292" height="164" rx="6" fill="var(--premium-navy-2)" stroke="var(--premium-line-light)"/><path d="M58 72h244M58 111h244M58 150h244" stroke="var(--premium-line-light)"/><circle cx="75" cy="51" r="5" fill="var(--premium-gold)"/><circle cx="92" cy="51" r="5" fill="var(--premium-green)"/><circle cx="109" cy="51" r="5" fill="var(--premium-blue)"/><path d="M76 92h110M76 131h154M76 170h76" stroke="var(--premium-muted)" stroke-width="3" stroke-linecap="round"/></svg>`;
+  const osGrid = OS_LIST.map((os, i) => {
+    const mark = osMarkSvg(os).replace(/(<svg[^>]*viewBox=")[^"]*(")/, `$1${OS_VIEWBOX[os]}$2`);
+    return `<div class="cq-os-tile" data-reveal="${i % 3}">${mark}<span class="cq-os-name">${esc(os)}</span></div>`;
+  }).join("");
+  const body = `
+  <main class="cq-home premium-home">
+    <div class="cq-wrap premium-wrap">
+      <section class="cq-hero cq-premium-hero" aria-labelledby="home-title">
+        <div class="premium-kicker"><span>StealthRDP / USA</span><span>Windows + Linux VPS</span><span>Private machine / full access</span></div>
+        <div class="premium-opening">
+          <div class="premium-opening-copy"><div class="cq-eyebrow">The machine comes first.</div><h1 id="home-title" aria-label="Choose a server and get on with it.">Choose a server<br><em>and get on with it.</em></h1><p class="premium-lede">Six USA configurations with real CPU, memory, and storage. Pick the one that fits your work.</p></div>
+          <div class="premium-note"><span class="premium-note-rule"></span><p><b>What you get</b>Windows or Linux, NVMe storage, unlimited bandwidth, and administrator or root access.</p></div>
+        </div>
+      </section>
+      <section class="cq-machines cq-premium-machines" id="machines" aria-labelledby="machines-title">
+        <div class="premium-section-head"><div><div class="cq-eyebrow">USA configurations</div><h2 id="machines-title">Find the right amount of room.</h2></div><p>Compare the hardware. Select a plan. Prices and stock are shown on the order page.</p></div>
+        <div class="cq-machine-layout premium-machine-layout">
+          <div class="premium-catalog"><div class="premium-catalog-head"><span>Plan</span><span>Resources</span><span>Monthly price</span></div><div class="cq-machine-list" role="group" aria-label="USA VPS plans">${planRows}</div></div>
+          <aside class="cq-detail-card premium-detail-card" aria-live="polite" aria-label="Selected plan summary">
+            <div class="premium-detail-top"><span class="cq-mono">Your selection</span><span class="cq-detail-badge" id="selectedBadge">${initial.popular ? "Recommended" : "Available"}</span></div>
+            <div class="premium-detail-main"><div><h3 class="cq-detail-title" id="selectedName">${initialName}</h3><p class="cq-detail-desc" id="selectedDesc">${esc(planDescription(initial))}</p></div>${machineSvg}</div>
+            <div class="premium-detail-facts"><div><span>CPU</span><b id="selectedCpu">${initialCpu}</b></div><div><span>Memory</span><b id="selectedRam">${initialRam}</b></div><div><span>Storage</span><b id="selectedStorage">${initialStorage}</b></div></div>
+            <div class="premium-detail-price"><span id="selectedPrice">${initialPrice}</span><small>per month · USA</small></div>
+            <a class="premium-order" id="selectorCta" href="${initialUrl}" target="_blank" rel="noopener noreferrer"><span id="selectorCtaLabel">Order ${initialName}</span><span aria-hidden="true">↗</span></a>
+            <p class="premium-detail-foot">Checkout shows the current price and stock.</p>
+          </aside>
+        </div>
+      </section>
+      <section class="premium-proof cq-reveal" aria-label="Included with every plan"><span><b>01</b> Windows + Linux</span><span><b>02</b> NVMe storage</span><span><b>03</b> Full admin rights</span><span><b>04</b> Unlimited bandwidth</span></section>
+      <section class="premium-operating cq-reveal" id="why" aria-labelledby="why-title"><div><div class="cq-eyebrow">A private machine is useful when</div><h2 id="why-title">Your work should keep running when your laptop does not.</h2></div><div class="premium-operating-copy"><p>Use the desktop from another location. Leave scripts and services running. Install the tools you need without sharing the machine with someone else.</p><a class="premium-text-link" href="/docs.html">Read the getting started guide <span aria-hidden="true">↗</span></a></div></section>
+      <section class="cq-os premium-os cq-reveal" aria-labelledby="os-title"><div class="premium-os-head"><div><div class="cq-eyebrow">Operating systems</div><h2 id="os-title">Bring the setup you already use.</h2></div><p>Windows Server and the Linux distributions people already know. Choose after ordering and configure the machine yourself.</p></div><div class="cq-os-grid">${osGrid}</div></section>
+      <section class="premium-last cq-reveal"><div class="premium-status-copy"><div class="cq-eyebrow">Service status</div><h2>Check the feed when you need it.</h2><p>We show current monitoring data when the feed responds. We show a dash when it does not.</p><a class="premium-text-link" href="/status.html">Open server status <span aria-hidden="true">↗</span></a></div><div class="premium-status" aria-live="polite"><div><span>StealthRDP / monitoring</span><i id="homeStatusDot"></i></div><section id="homeStatusSummary"><strong>—</strong><span>Live data unavailable</span></section><p id="homeStatusNote">No live data right now.</p></div></section>
+      <section class="cq-faq premium-faq cq-reveal" aria-labelledby="faq-title"><div class="premium-faq-head"><div><div class="cq-eyebrow">Before you order</div><h2 id="faq-title">The useful answers.</h2></div><p>The order page has the current price and stock. These are the parts worth knowing first.</p></div><div class="cq-faq-list">${HOME_FAQS.slice(0, 4).map((f, i) => `<details class="cq-faq-item"${i === 0 ? " open" : ""}><summary>${esc(f.question)}</summary><p>${esc(f.answer)}</p></details>`).join("")}</div></section>
+      <section class="premium-close cq-reveal" aria-labelledby="close-title"><div><div class="cq-eyebrow">Start with a plan</div><h2 id="close-title">Choose the machine that fits.</h2></div><a class="premium-order" href="#machines">See the six plans <span aria-hidden="true">↓</span></a></section>
+    </div>
+  </main>`;
+  const jsonLd = [{ "@context": "https://schema.org", "@graph": [ORG, websiteLd(), { "@type": "WebPage", "@id": "__SRDP_BASE__/#webpage", name: "Windows and Linux VPS hosting in the USA", url: "__SRDP_BASE__/", description: "Private Windows and Linux VPS hosting in the USA for remote access, automation, and development.", isPartOf: { "@id": "__SRDP_BASE__/#website" }, about: { "@id": "__SRDP_BASE__/#service" } }, { "@type": "Service", "@id": "__SRDP_BASE__/#service", name: "USA Windows and Linux VPS hosting", serviceType: "Windows and Linux VPS hosting", description: "Private USA VPS plans with dedicated CPU resources, NVMe storage, unlimited bandwidth, and full administrative access.", provider: { "@id": "__SRDP_BASE__/#organization" }, areaServed: { "@type": "Country", name: "United States" }, hasOfferCatalog: { "@type": "OfferCatalog", name: "USA VPS plans", itemListElement: plans.map(serviceLd) } }, faqLdFrom(HOME_FAQS) ] }];
+  return page({ active: "home", title: "Windows & Linux VPS Hosting in the USA | StealthRDP", description: "Private Windows and Linux VPS hosting in the USA with NVMe storage, dedicated CPU resources, full admin rights, and secure checkout.", canonical: "__SRDP_BASE__/", jsonLd, body });
+}
+
 function buildIndex() {
   const plans = USA; /* real USA plans from data/plans_usa.json */
   const initial = plans[0];
@@ -1230,7 +1289,7 @@ ${items}
 /* ---------- write ---------- */
 fs.mkdirSync(path.join(ROOT, "docs"), { recursive: true });
 const OUT = {
-  "index.html": buildIndex(),
+  "index.html": buildIndexPremium(),
   "plans.html": buildPlans(),
   "features.html": buildFeatures(),
   "status.html": buildStatus(),
