@@ -971,9 +971,8 @@ function buildIndex() {
         <div class="cq-os-head"><div><div class="cq-eyebrow">Works with your operating system</div><h2 id="os-title">Windows or Linux. Your choice.</h2></div><p>Every machine runs with full admin rights, so the operating system is the starting point — not the ceiling.</p></div>
         <div class="cq-os-grid">
           ${OS_LIST.map((os, i) => {
-            const [family, ver] = os.split(" ");
             const mark = osMarkSvg(os).replace(/(<svg[^>]*viewBox=")[^"]*(")/, `$1${OS_VIEWBOX[os]}$2`);
-            return `<div class="cq-os-tile" data-reveal="${i % 3}">${mark}<span class="cq-os-name">${esc(os)}</span>${ver ? `<span class="cq-os-note">${esc(ver)}</span>` : ""}</div>`;
+            return `<div class="cq-os-tile" data-reveal="${i % 3}">${mark}<span class="cq-os-name">${esc(os)}</span></div>`;
           }).join("")}
         </div>
       </section>

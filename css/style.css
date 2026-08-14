@@ -1442,7 +1442,6 @@ a.cq-review-card:hover { border-color: var(--accent); transform: translateY(-2px
 .cq-os-tile:hover { border-color: var(--border-strong); transform: translateY(-3px); box-shadow: 0 14px 30px rgba(0, 0, 0, .18); }
 .cq-os-tile svg { width: 44px; height: 44px; flex: none; display: block; }
 .cq-os-name { font-size: 15.5px; font-weight: 600; }
-.cq-os-note { margin-left: auto; color: var(--text-dim); font-size: 11px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .08em; }
 @media (max-width: 900px) {
   .cq-os-head { grid-template-columns: 1fr; gap: 16px; margin-bottom: 32px; }
   .cq-os-grid { grid-template-columns: 1fr 1fr; }
