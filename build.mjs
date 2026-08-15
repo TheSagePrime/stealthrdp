@@ -23,6 +23,7 @@ const USA = DATA("plans_usa.json");
 const EU = DATA("plans_eu.json");
 const FAQS = DATA("faqs.json");
 const TESTIMONIALS = DATA("testimonials.json");
+const REVIEWS = DATA("reviews.json");
 const UPTIME = DATA("uptime.json");
 const BLOG = require(path.join(ROOT, "js", "blog-data.js")).SRDP_BLOG;
 const DOCS = DATA("docs-articles.json");
@@ -130,16 +131,11 @@ function head({ title, description, canonical, pageType = "website", jsonLd = []
 </head>`;
 }
 
-/* ---------- shared chrome (header + footer + ticker) ---------- */
+/* ---------- shared chrome (header + footer) ---------- */
 const LOGO_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>';
-
-function tickerHtml() {
-  return `<div class="ticker"><div class="ticker-inner">
-    <span class="left"><span class="dot" id="tickerDot"></span><span id="tickerStatus">Checking live status…</span></span>
-    <span class="right"><span class="promotion-note">Pricing and availability shown at checkout</span></span>
-  </div></div>`;
-}
-
+const ARROW_SVG = '<svg class="inline-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>';
+const EXTERNAL_SVG = '<svg class="inline-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 5h5v5"/><path d="M19 5 11 13"/><path d="M19 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg>';
+const CHEVRON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
 function navHtml(active) {
   const items = [
     ["home", "/", "Home"], ["plans", "/plans.html", "Plans"],
@@ -165,8 +161,7 @@ function paletteLabHtml() {
 }
 
 function headerHtml(active) {
-  return `${tickerHtml()}
-  <header class="header"><div class="container header-inner">
+  return `<header class="header"><div class="container header-inner">
     <a href="/" class="logo" aria-label="StealthRDP home">
       <span class="logo-mark">${LOGO_SVG}</span><span>Stealth<em>RDP</em></span>
     </a>
@@ -270,7 +265,7 @@ function compareRowHtml(p) {
 }
 
 function faqItemHtml(f, i) {
-  return `<div class="faq-item${i === 0 ? " open" : ""}">
+  return `<div class="faq-item${i === 0 ? " open" : ""}" data-faq-category="${esc(f.category || "General")}" data-faq-question="${esc(f.question)}">
     <button class="faq-q" aria-expanded="${i === 0 ? "true" : "false"}"><span>${esc(f.question)}</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">${esc(f.answer)}</div></div>
   </div>`;
@@ -321,8 +316,31 @@ function testimonialHtml() {
   return `<div class="q-mark">“</div><p class="q-text">${esc(t.quote || t.testimonial || t.content || "")}</p><p class="q-who"><b>${esc(name)}</b>${role ? " · " + esc(role) : ""}</p>`;
 }
 
-function blogCardHtml(p) {
-  return `<article class="blog-card"><div class="bc-body">
+function reviewCardHtml(review, extraClass = "") {
+  const source = review.sourceUrl
+    ? `<a href="${esc(review.sourceUrl)}" target="_blank" rel="noopener noreferrer">${esc(review.sourceLabel || "Public review")}</a>`
+    : `<span>${esc(review.sourceLabel || "Customer story")}</span>`;
+  const author = review.authorName ? `<b>${esc(review.authorName)}</b>` : `<b>Verified source</b>`;
+  return `<article class="review-card review-${esc(review.sentiment || "neutral")}${extraClass}">
+    <div class="review-card-meta"><span class="review-mark" aria-hidden="true">“</span><span class="review-source">${source}</span></div>
+    <blockquote>${esc(review.quote || "")}</blockquote>
+    <footer>${author}<time>${esc(review.publishedOn || "Published review")}</time></footer>
+  </article>`;
+}
+
+function reviewWallHtml() {
+  // These are public-source excerpts, not claims that the authors use StealthRDP.
+  const items = REVIEWS.filter((item) => item && item.quote && item.sourceUrl);
+  if (!items.length) return '<div class="quote-empty">Public community feedback is being collected.</div>';
+  const columns = [0, 1, 2].map((column) => items.filter((_, index) => index % 3 === column));
+  return `<div class="review-wall" data-review-count="${items.length}" aria-label="Public community review excerpts">
+    ${columns.map((column, index) => `<div class="review-column review-column-${index + 1}"><div class="review-track">${column.concat(column).map((review, reviewIndex) => reviewCardHtml(review, reviewIndex >= column.length ? " review-card-copy" : "")).join("")}</div></div>`).join("")}
+  </div>
+  <p class="review-disclosure">${items.length} public-source excerpts are shown with neutral attribution. They describe the named provider or community topic, not StealthRDP.</p>`;
+}
+
+function blogCardHtml(p, extraClass = "") {
+  return `<article class="blog-card${extraClass}" data-blog-category="${esc(p.category || "Insights")}" data-blog-title="${esc(p.title)}"><div class="bc-body">
     <span class="bc-cat">${esc(p.category)}</span>
     <h3>${esc(p.title)}</h3>
     <p>${esc(p.excerpt || "")}</p>
@@ -770,41 +788,36 @@ function buildIndex() {
     </div>
   </div>
 
-  <!-- ============ Section 01 — Why (bento) ============ -->
-  <section class="section" id="why">
+  <!-- ============ Section 01 — Infrastructure ============ -->
+  <section class="section infrastructure-section" id="why">
     <div class="container">
-      <div class="section-head">
-        <span class="sec-index fade-up">01 / Why StealthRDP</span>
-        <h2 class="fade-up d1">Infrastructure that doesn't flinch</h2>
-        <p class="fade-up d2">Built for speed, secured for production, and priced for growth.</p>
+      <div class="compact-section-head">
+        <div><h2>Infrastructure that doesn't flinch</h2><p>Speed, protection, and visibility without the extra surface area.</p></div>
+        <a class="text-link" href="/status.html">View server status ${ARROW_SVG}</a>
       </div>
-      <div class="bento">
-        <article class="bento-card bento-2"><span class="bic">${LOGO_SVG}</span><h3>NVMe SSD Storage</h3><p>6x faster than traditional SSDs. Applications, databases, and trading terminals load instantly — no waiting on slow disk I/O.</p></article>
-        <article class="bento-card bento-2"><span class="bic">${LOGO_SVG}</span><h3>Enterprise-Grade Security</h3><p>DDoS protection and isolated VM instances for maximum privacy. Your infrastructure stays up even while others are under attack.</p></article>
-        <article class="bento-card bento-2"><span class="bic">${LOGO_SVG}</span><h3>Global Network</h3><p>Strategically located data centers with 1Gbps network speeds — deploy close to your users, anywhere in the world.</p></article>
-        <article class="bento-card bento-wide">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
-            <div><h3>Live-monitored, always-on</h3><p style="max-width:560px">Every node is watched 24/7 by automated monitors. See the current state of all ${TOTAL} production nodes in real time — transparency you can verify, not just claim.</p></div>
-            <a class="btn btn-ghost btn-sm" href="/status.html">View live status</a>
-          </div>
-        </article>
+      <div class="infrastructure-board">
+        <div class="infrastructure-intro"><span class="infra-signal" aria-hidden="true"></span><span>Core infrastructure</span><span class="infra-count">${TOTAL || "—"} monitored nodes</span></div>
+        <ul class="infra-list">
+          <li><strong>NVMe SSD storage</strong><span>Fast disk I/O for applications, databases, and terminals.</span><b>Performance</b></li>
+          <li><strong>DDoS protection</strong><span>Isolated VM instances and protection for production workloads.</span><b>Protection</b></li>
+          <li><strong>Global network</strong><span>Strategic locations with 1Gbps network speeds.</span><b>Reach</b></li>
+          <li><strong>24/7 monitoring</strong><span>Automated monitoring with a public status page.</span><b>Visibility</b></li>
+        </ul>
       </div>
     </div>
   </section>
 
   <!-- ============ Section 02 — Use cases ============ -->
-  <section class="section section-tight" id="usecases">
+  <section class="section section-tight outcomes-section" id="usecases">
     <div class="container">
-      <div class="section-head">
-        <span class="sec-index fade-up">02 / Who it's for</span>
-        <h2 class="fade-up d1">Stop struggling with server problems</h2>
-        <p class="fade-up d2">Our customers come to us when traditional hosting limits their work. Here's how StealthRDP changes that.</p>
+      <div class="compact-section-head">
+        <div><h2>Stop struggling with server problems</h2><p>Move the workload off your laptop and into infrastructure built to stay available.</p></div>
       </div>
-      <div class="uc-list">
-        <div class="uc-row fade-up"><div class="uc-num">01</div><div class="uc-main"><h3>Remote Work Freedom</h3><p>Your full desktop, from any device, anywhere.</p></div><div class="uc-cols"><div class="uc-col before"><div class="uc-tag">Before</div><p>"I'm tied to my office computer and can't access my work when traveling or at home."</p></div><div class="uc-col after"><div class="uc-tag">With StealthRDP</div><p>"I access my full desktop from any device — with all my files and applications."</p></div></div></div>
-        <div class="uc-row fade-up d1"><div class="uc-num">02</div><div class="uc-main"><h3>Reliable Web Hosting</h3><p>Stay up under traffic spikes, get real support.</p></div><div class="uc-cols"><div class="uc-col before"><div class="uc-tag">Before</div><p>"My website keeps going down during traffic spikes and support tickets go unanswered."</p></div><div class="uc-col after"><div class="uc-tag">With StealthRDP</div><p>"My site stays up under heavy traffic, and support responds within 2 hours."</p></div></div></div>
-        <div class="uc-row fade-up d2"><div class="uc-num">03</div><div class="uc-main"><h3>Trading &amp; Automation</h3><p>24/7 uptime for terminals, bots, and scripts.</p></div><div class="uc-cols"><div class="uc-col before"><div class="uc-tag">Before</div><p>"My automation scripts only run when my laptop is on, and they're unreliable."</p></div><div class="uc-col after"><div class="uc-tag">With StealthRDP</div><p>"My scripts and trading terminals run 24/7 on low-latency infrastructure."</p></div></div></div>
-        <div class="uc-row fade-up d3"><div class="uc-num">04</div><div class="uc-main"><h3>Secure Data Storage</h3><p>Backed up, protected, and always available.</p></div><div class="uc-cols"><div class="uc-col before"><div class="uc-tag">Before</div><p>"I worry about data loss from hardware failures and have no reliable backup system."</p></div><div class="uc-col after"><div class="uc-tag">With StealthRDP</div><p>"My data is securely backed up with automated disaster recovery on enterprise hardware."</p></div></div></div>
+      <div class="outcome-list">
+        <details class="outcome-row" open><summary><span class="outcome-name">Remote work</span><span class="outcome-result">Access your full desktop from anywhere</span><span class="outcome-arrow">${CHEVRON_SVG}</span></summary><div class="outcome-detail"><span>Before</span><p>Tied to one office computer.</p><span>With StealthRDP</span><p>Your files and applications stay available from any device.</p></div></details>
+        <details class="outcome-row"><summary><span class="outcome-name">Web hosting</span><span class="outcome-result">Stay online through traffic spikes</span><span class="outcome-arrow">${CHEVRON_SVG}</span></summary><div class="outcome-detail"><span>Before</span><p>Traffic spikes turn into downtime and unanswered tickets.</p><span>With StealthRDP</span><p>Your site runs on dedicated VPS resources with support when needed.</p></div></details>
+        <details class="outcome-row"><summary><span class="outcome-name">Automation</span><span class="outcome-result">Keep terminals, bots, and scripts running</span><span class="outcome-arrow">${CHEVRON_SVG}</span></summary><div class="outcome-detail"><span>Before</span><p>Scripts stop when your laptop sleeps or loses power.</p><span>With StealthRDP</span><p>Run your workloads continuously on a remote server.</p></div></details>
+        <details class="outcome-row"><summary><span class="outcome-name">Data</span><span class="outcome-result">Keep important files available and protected</span><span class="outcome-arrow">${CHEVRON_SVG}</span></summary><div class="outcome-detail"><span>Before</span><p>Hardware failure leaves your data exposed to loss.</p><span>With StealthRDP</span><p>Keep storage on protected infrastructure with a clear recovery path.</p></div></details>
       </div>
     </div>
   </section>
@@ -830,11 +843,14 @@ function buildIndex() {
     </div>
   </section>
 
-  <!-- ============ Testimonial ============ -->
-  <section class="section" id="testimonials">
+  <!-- ============ Reviews ============ -->
+  <section class="section reviews-section" id="testimonials">
     <div class="container">
-      <div class="section-head center"><span class="sec-index" style="justify-content:center">04 / Customer stories</span><h2 class="fade-up d1">Trusted by server owners</h2></div>
-      <div id="testimonialQuote" class="quote-block" aria-live="polite">${testimonialHtml()}</div>
+      <div class="compact-section-head reviews-head">
+        <div><h2>Community feedback, in context</h2><p>Short public excerpts from RDP, VPS, hosting, and remote-desktop discussions. Each card names its provider or topic and links to the original source.</p></div>
+        <a class="text-link" href="https://www.trustpilot.com/review/stealthrdp.com" target="_blank" rel="noopener noreferrer">Browse StealthRDP feedback on Trustpilot ${EXTERNAL_SVG}</a>
+      </div>
+      ${reviewWallHtml()}
     </div>
   </section>
 
@@ -869,30 +885,37 @@ function buildPlans() {
   const cards = USA.map((p) => planCardHtml(p)).join("");
   const compare = USA.concat(EU).map(compareRowHtml).join("");
   const body = `
-  <section class="page-hero">
-    <div class="container"><span class="eyebrow">Pricing</span><h1>StealthRDP VPS Plans</h1><p>High-performance virtual private servers with unparalleled speed, security, and reliability. Choose the plan that fits your needs.</p></div>
+  <section class="page-hero page-hero-plans">
+    <div class="container page-hero-grid"><div>
+      <div class="page-hero-kicker"><span class="eyebrow">Compare / Deploy</span><span class="page-hero-meta">USA + EU locations · monthly to biannual</span></div>
+      <h1>A clear path to the right server</h1><p>Compare the resource levels side by side, choose the region closest to your users, and continue to secure checkout when the fit is clear.</p>
+    </div><div class="page-hero-aside" aria-label="Plan selection summary"><span class="mono">PLAN INDEX</span><strong>${USA.length} USA tiers</strong><strong>${EU.length} EU tiers</strong><a href="#plan-grid">Jump to plans <span aria-hidden="true">↓</span></a></div></div>
   </section>
-  <section class="section" style="padding-top:0">
+  <section class="section plans-page-section" style="padding-top:0">
     <div class="container">
-      <div style="display:flex;justify-content:center;margin-bottom:42px" class="billing-toggle" id="billingToggle" role="tablist" aria-label="Billing cycle">
-        <button role="tab" data-cycle="monthly" class="active">Monthly</button>
-        <button role="tab" data-cycle="quarterly">Quarterly <span class="off">−10%</span></button>
-        <button role="tab" data-cycle="annual">Annual <span class="off">−20%</span></button>
-        <button role="tab" data-cycle="biannual">Biannual <span class="off">−30%</span></button>
+      <div class="plans-context"><div><span class="sec-index">01 / Choose your lane</span><h2>Start with the workload, then tune the commitment.</h2><p>Monthly is the simplest way to start. Longer cycles apply the published discount at checkout.</p></div><a class="text-link" href="#build-your-own">Need a custom shape? <span aria-hidden="true">→</span></a></div>
+      <div class="plans-controls">
+        <div class="billing-control"><span class="control-label">Billing cycle</span><div class="billing-toggle" id="billingToggle" role="tablist" aria-label="Billing cycle">
+          <button role="tab" aria-selected="true" data-cycle="monthly" class="active">Monthly</button>
+          <button role="tab" aria-selected="false" data-cycle="quarterly">Quarterly <span class="off">−10%</span></button>
+          <button role="tab" aria-selected="false" data-cycle="annual">Annual <span class="off">−20%</span></button>
+          <button role="tab" aria-selected="false" data-cycle="biannual">Biannual <span class="off">−30%</span></button>
+        </div></div>
+        <div class="location-control"><span class="control-label">Deployment region</span><div id="locationTabs" class="location-tabs" role="tablist" aria-label="Deployment region">
+          <button role="tab" aria-selected="true" data-location="USA" class="active">USA</button>
+          <button role="tab" aria-selected="false" data-location="EU">EU</button>
+        </div></div>
+        <a class="btn btn-sm btn-ghost plans-byo-link" href="https://dash.stealthrdp.com/index.php?rp=/store/build-your-own-rdp-vps" target="_blank" rel="noopener noreferrer">Build Your Own VPS</a>
       </div>
-      <div id="locationTabs" style="display:flex;justify-content:center;gap:8px;margin-bottom:38px;flex-wrap:wrap">
-        <button data-location="USA" class="btn btn-sm btn-primary">USA Plans</button>
-        <button data-location="EU" class="btn btn-sm btn-ghost">EU Plans</button>
-        <a class="btn btn-sm btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/build-your-own-rdp-vps" target="_blank" rel="noopener noreferrer">Build Your Own VPS</a>
-      </div>
-      <div class="plan-grid" id="planGrid" aria-live="polite">${cards}</div>
+      <div class="plans-grid-head"><div><span class="mono">STANDARD PLANS</span><h2 id="plan-grid">Choose your resource level</h2></div><span id="planGridNote">6 USA plans · prices shown monthly</span></div>
+      <div class="plan-grid plans-page-grid" id="planGrid" aria-live="polite">${cards}</div>
       ${includedFeaturesHtml()}
-      <div id="build-your-own" style="margin-top:64px;background:linear-gradient(180deg,var(--surface-1),var(--bg-elev));border:1px solid var(--border);border-radius:var(--radius-lg);padding:40px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
-        <div><h2 style="font-size:24px;margin-bottom:8px">Need something custom?</h2><p style="color:var(--text-muted);max-width:520px">Build a tailor-made VPS with flexible resources to match your exact requirements — CPU, RAM, storage, location, and more.</p></div>
+      <div id="build-your-own" class="byo-panel">
+        <div><span class="included-label">For workloads between the lines</span><h2>Build a server around your exact brief.</h2><p>Choose your own CPU, RAM, storage, location, and billing cycle in the WHMCS configurator.</p></div>
         <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/build-your-own-rdp-vps" target="_blank" rel="noopener noreferrer">Configure &amp; Deploy</a>
       </div>
-      <div style="margin-top:72px">
-        <h2 style="font-size:clamp(24px,3vw,32px);margin-bottom:24px">VPS Features Comparison</h2>
+      <div class="comparison-section">
+        <div class="comparison-head"><div><span class="sec-index">02 / Compare precisely</span><h2>See the difference in one view.</h2></div><p>Use this table for a quick resource check. Checkout confirms the current price and availability.</p></div>
         <div class="compare-wrap">
           <table class="compare-table">
             <thead><tr><th>Plan</th><th>CPU</th><th>RAM</th><th>Storage</th><th>Bandwidth</th><th>Price/mo</th><th></th></tr></thead>

@@ -134,7 +134,7 @@
     });
   }());
 
-  /* ---------- Live status (ticker + footer + status page) ---------- */
+  /* ---------- Live status (footer + status page) ---------- */
   var PLAN_SLUGS = {
     "Bronze USA": "bronze-usa2", "Silver USA": "silver-usa", "Gold USA": "gold-usa",
     "Platinum USA": "platinum-usa", "Diamond USA": "diamond-usa", "Emerald USA": "emerald-usa",
@@ -165,8 +165,6 @@
         var up = monitors.filter(isMonitorUp).length;
         var total = monitors.length;
         var msg = total && up === total ? "All systems operational — " + up + "/" + total + " nodes online" : total ? "Service state requires attention — " + up + "/" + total + " nodes online" : "Live status unavailable";
-        var tickerStatus = $("#tickerStatus");
-        if (tickerStatus) tickerStatus.textContent = msg;
         var footerStatus = $("#footerStatus");
         if (footerStatus) footerStatus.textContent = msg;
         var heroNodeStatus = $("#heroNodeStatus");
@@ -180,8 +178,6 @@
       })
       .catch(function () {
         // The baked snapshot remains, but a failed live call must be visibly distinct.
-        var tickerStatus = $("#tickerStatus");
-        if (tickerStatus) tickerStatus.textContent = "Live status unavailable";
         var footerStatus = $("#footerStatus");
         if (footerStatus) footerStatus.textContent = "Live status unavailable";
         var heroNodeStatus = $("#heroNodeStatus");
