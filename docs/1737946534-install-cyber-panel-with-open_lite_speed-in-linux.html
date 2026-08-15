@@ -20,6 +20,17 @@
   <meta name="twitter:title" content="Install Cyber Panel With OpenLiteSpeed in Linux — StealthRDP Docs" />
   <meta name="twitter:description" content="In this tutorial, we will be installing a cyber panel in a Linux server and I will try to make the tutorial as easy as possible, we are going to use the free plan wh" />
   <meta name="twitter:image" content="__SRDP_BASE__/assets/og-cover.png" />
+  <script>
+    (function () {
+      try {
+        var host = window.location.hostname;
+        var preview = host === "preview.antah.de" || host === "localhost";
+        var saved = preview ? window.localStorage.getItem("stealthrdp-preview-palette") : "";
+        var allowed = ["cobalt","gold","cyan","violet","coral","mint","rose","orange","indigo","ice"];
+        if (preview && allowed.indexOf(saved) !== -1) document.documentElement.setAttribute("data-palette", saved);
+      } catch (e) {}
+    }());
+  </script>
   <link rel="stylesheet" href="/css/style.css" />
   <!-- Google Tag Manager (real container from live site) -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -45,6 +56,36 @@
     </a>
     <nav class="nav" aria-label="Main navigation"><a href="/">Home</a><a href="/plans.html">Plans</a><a href="/features.html">Features</a><a href="/status.html">Server Status</a><a href="/docs.html" class="active">Docs</a><a href="/blog.html">Blog</a><a href="/faq.html">FAQ</a></nav>
     <div class="header-actions">
+      <div class="palette-lab" id="paletteLab">
+      <button type="button" class="palette-trigger" id="paletteTrigger" aria-expanded="false" aria-controls="palettePanel">
+        <span class="palette-trigger-swatch" id="paletteTriggerSwatch" style="--swatch: #5b8cff" aria-hidden="true"></span><span>Palette</span><span class="palette-trigger-chevron" aria-hidden="true">⌄</span>
+      </button>
+      <div class="palette-panel" id="palettePanel" role="region" aria-label="Preview palette chooser" hidden>
+        <div class="palette-panel-head"><div><span class="palette-kicker">Preview lab</span><strong>Choose an accent</strong></div><span class="palette-current" id="paletteCurrent">Cobalt</span></div>
+        <div class="palette-options" role="group" aria-label="Accent palettes"><button type="button" class="palette-option active" data-palette="cobalt" aria-pressed="true">
+      <span class="palette-swatch" style="--swatch: #5b8cff" aria-hidden="true"></span><span>Cobalt</span>
+    </button><button type="button" class="palette-option" data-palette="gold" aria-pressed="false">
+      <span class="palette-swatch" style="--swatch: #f5b93b" aria-hidden="true"></span><span>Gold</span>
+    </button><button type="button" class="palette-option" data-palette="cyan" aria-pressed="false">
+      <span class="palette-swatch" style="--swatch: #3dd6d0" aria-hidden="true"></span><span>Cyan</span>
+    </button><button type="button" class="palette-option" data-palette="violet" aria-pressed="false">
+      <span class="palette-swatch" style="--swatch: #a78bfa" aria-hidden="true"></span><span>Violet</span>
+    </button><button type="button" class="palette-option" data-palette="coral" aria-pressed="false">
+      <span class="palette-swatch" style="--swatch: #ff7a66" aria-hidden="true"></span><span>Coral</span>
+    </button><button type="button" class="palette-option" data-palette="mint" aria-pressed="false">
+      <span class="palette-swatch" style="--swatch: #4ade80" aria-hidden="true"></span><span>Mint</span>
+    </button><button type="button" class="palette-option" data-palette="rose" aria-pressed="false">
+      <span class="palette-swatch" style="--swatch: #f472b6" aria-hidden="true"></span><span>Rose</span>
+    </button><button type="button" class="palette-option" data-palette="orange" aria-pressed="false">
+      <span class="palette-swatch" style="--swatch: #ff9f43" aria-hidden="true"></span><span>Orange</span>
+    </button><button type="button" class="palette-option" data-palette="indigo" aria-pressed="false">
+      <span class="palette-swatch" style="--swatch: #818cf8" aria-hidden="true"></span><span>Indigo</span>
+    </button><button type="button" class="palette-option" data-palette="ice" aria-pressed="false">
+      <span class="palette-swatch" style="--swatch: #7dd3fc" aria-hidden="true"></span><span>Ice</span>
+    </button></div>
+        <p class="palette-note">10 variants · saved in this browser</p>
+      </div>
+    </div>
       <a class="btn btn-sm btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client Area</a>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     </div>

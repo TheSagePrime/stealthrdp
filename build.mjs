@@ -60,6 +60,21 @@ const planUrl = (p) => {
 };
 const planName = (p) => p.name.replace(" USA", "").replace(" EU", "");
 
+const PALETTES = [
+  { key: "cobalt", label: "Cobalt", accent: "#5b8cff", hover: "#7aa5ff", deep: "#3f6fe0", rgb: "91, 140, 255", ink: "#07111f" },
+  { key: "gold", label: "Gold", accent: "#f5b93b", hover: "#ffc94d", deep: "#d99a24", rgb: "245, 185, 59", ink: "#171204" },
+  { key: "cyan", label: "Cyan", accent: "#3dd6d0", hover: "#67e5df", deep: "#1da9a5", rgb: "61, 214, 208", ink: "#062426" },
+  { key: "violet", label: "Violet", accent: "#a78bfa", hover: "#c4b5fd", deep: "#7956d8", rgb: "167, 139, 250", ink: "#160b2d" },
+  { key: "coral", label: "Coral", accent: "#ff7a66", hover: "#ff9a8a", deep: "#db4d3d", rgb: "255, 122, 102", ink: "#2a0c08" },
+  { key: "mint", label: "Mint", accent: "#4ade80", hover: "#72f0a0", deep: "#22a85a", rgb: "74, 222, 128", ink: "#062313" },
+  { key: "rose", label: "Rose", accent: "#f472b6", hover: "#fb8ec4", deep: "#d1428d", rgb: "244, 114, 182", ink: "#2a0a1b" },
+  { key: "orange", label: "Orange", accent: "#ff9f43", hover: "#ffb86b", deep: "#d87720", rgb: "255, 159, 67", ink: "#2a1304" },
+  { key: "indigo", label: "Indigo", accent: "#818cf8", hover: "#a5b4fc", deep: "#5864d2", rgb: "129, 140, 248", ink: "#0d102d" },
+  { key: "ice", label: "Ice", accent: "#7dd3fc", hover: "#a5e3ff", deep: "#43a8da", rgb: "125, 211, 252", ink: "#062034" },
+];
+const PALETTE_KEYS = PALETTES.map((palette) => palette.key);
+const PALETTE_STORAGE_KEY = "stealthrdp-preview-palette";
+
 const SOCIAL = [
   { href: "https://x.com/stealthrdp", label: "X / Twitter" },
   { href: "https://www.instagram.com/stealth_rdp", label: "Instagram" },
@@ -93,6 +108,17 @@ function head({ title, description, canonical, pageType = "website", jsonLd = []
   <meta name="twitter:title" content="${esc(title)}" />
   <meta name="twitter:description" content="${esc(description)}" />
   <meta name="twitter:image" content="__SRDP_BASE__/assets/og-cover.png" />
+  <script>
+    (function () {
+      try {
+        var host = window.location.hostname;
+        var preview = host === "preview.antah.de" || host === "localhost";
+        var saved = preview ? window.localStorage.getItem("${PALETTE_STORAGE_KEY}") : "";
+        var allowed = ${JSON.stringify(PALETTE_KEYS)};
+        if (preview && allowed.indexOf(saved) !== -1) document.documentElement.setAttribute("data-palette", saved);
+      } catch (e) {}
+    }());
+  </script>
   <link rel="stylesheet" href="/css/style.css" />
   <!-- Google Tag Manager (real container from live site) -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -123,6 +149,22 @@ function navHtml(active) {
   return items.map(([k, href, label]) => `<a href="${href}"${k === active ? ' class="active"' : ""}>${label}</a>`).join("");
 }
 
+function paletteLabHtml() {
+  const options = PALETTES.map((palette, index) => `<button type="button" class="palette-option${index === 0 ? " active" : ""}" data-palette="${palette.key}" aria-pressed="${index === 0 ? "true" : "false"}">
+      <span class="palette-swatch" style="--swatch: ${palette.accent}" aria-hidden="true"></span><span>${palette.label}</span>
+    </button>`).join("");
+  return `<div class="palette-lab" id="paletteLab">
+      <button type="button" class="palette-trigger" id="paletteTrigger" aria-expanded="false" aria-controls="palettePanel">
+        <span class="palette-trigger-swatch" id="paletteTriggerSwatch" style="--swatch: ${PALETTES[0].accent}" aria-hidden="true"></span><span>Palette</span><span class="palette-trigger-chevron" aria-hidden="true">⌄</span>
+      </button>
+      <div class="palette-panel" id="palettePanel" role="region" aria-label="Preview palette chooser" hidden>
+        <div class="palette-panel-head"><div><span class="palette-kicker">Preview lab</span><strong>Choose an accent</strong></div><span class="palette-current" id="paletteCurrent">${PALETTES[0].label}</span></div>
+        <div class="palette-options" role="group" aria-label="Accent palettes">${options}</div>
+        <p class="palette-note">10 variants · saved in this browser</p>
+      </div>
+    </div>`;
+}
+
 function headerHtml(active) {
   return `${tickerHtml()}
   <header class="header"><div class="container header-inner">
@@ -131,6 +173,7 @@ function headerHtml(active) {
     </a>
     <nav class="nav" aria-label="Main navigation">${navHtml(active)}</nav>
     <div class="header-actions">
+      ${paletteLabHtml()}
       <a class="btn btn-sm btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client Area</a>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     </div>

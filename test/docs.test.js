@@ -137,6 +137,22 @@ test("promotion chrome is stable and does not invent an expiry", () => {
   assert.match(HTML("index.html"), /pricing and availability shown at checkout/i);
 });
 
+test("preview palette lab exposes ten named variants with persistence", () => {
+  const build = HTML("build.mjs");
+  const css = HTML("css/style.css");
+  const mainJs = HTML("js/main.js");
+  const home = HTML("index.html");
+  const keys = ["cobalt", "gold", "cyan", "violet", "coral", "mint", "rose", "orange", "indigo", "ice"];
+  for (const key of keys) {
+    assert.match(build, new RegExp(`key: "${key}"`), `${key}: source palette`);
+    assert.match(css, new RegExp(`data-palette="${key}"`), `${key}: CSS palette`);
+    assert.match(home, new RegExp(`data-palette="${key}"`), `${key}: generated swatch`);
+  }
+  assert.match(home, /id="paletteLab"/);
+  assert.match(mainJs, /stealthrdp-preview-palette/);
+  assert.match(mainJs, /event\.key === "Escape"/);
+});
+
 test("hero console is an honest demonstration without fake completion state", () => {
   const home = HTML("index.html");
   const mainJs = HTML("js/main.js");

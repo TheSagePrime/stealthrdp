@@ -54,6 +54,86 @@
     });
   }
 
+  /* ---------- Preview palette lab ---------- */
+  (function initPaletteLab() {
+    var lab = $("#paletteLab");
+    if (!lab) return;
+    var host = window.location.hostname;
+    var isPreview = host === "preview.antah.de" || host === "localhost";
+    if (!isPreview) {
+      if (lab.parentNode) lab.parentNode.removeChild(lab);
+      return;
+    }
+    var trigger = $("#paletteTrigger", lab);
+    var panel = $("#palettePanel", lab);
+    var currentLabel = $("#paletteCurrent", lab);
+    var triggerSwatch = $("#paletteTriggerSwatch", lab);
+    var options = $$("[data-palette]", lab);
+    var palettes = {
+      cobalt: { label: "Cobalt", accent: "#5b8cff" },
+      gold: { label: "Gold", accent: "#f5b93b" },
+      cyan: { label: "Cyan", accent: "#3dd6d0" },
+      violet: { label: "Violet", accent: "#a78bfa" },
+      coral: { label: "Coral", accent: "#ff7a66" },
+      mint: { label: "Mint", accent: "#4ade80" },
+      rose: { label: "Rose", accent: "#f472b6" },
+      orange: { label: "Orange", accent: "#ff9f43" },
+      indigo: { label: "Indigo", accent: "#818cf8" },
+      ice: { label: "Ice", accent: "#7dd3fc" }
+    };
+    var storageKey = "stealthrdp-preview-palette";
+    var current = document.documentElement.getAttribute("data-palette") || "cobalt";
+    if (!palettes[current]) current = "cobalt";
+
+    function setPalette(key) {
+      if (!palettes[key]) return;
+      current = key;
+      document.documentElement.setAttribute("data-palette", key);
+      try { window.localStorage.setItem(storageKey, key); } catch (e) {}
+      var palette = palettes[key];
+      if (currentLabel) currentLabel.textContent = palette.label;
+      if (triggerSwatch) triggerSwatch.style.setProperty("--swatch", palette.accent);
+      options.forEach(function (option) {
+        var selected = option.getAttribute("data-palette") === key;
+        option.classList.toggle("active", selected);
+        option.setAttribute("aria-pressed", selected ? "true" : "false");
+      });
+    }
+    function closePanel() {
+      if (!panel) return;
+      panel.hidden = true;
+      trigger.setAttribute("aria-expanded", "false");
+      lab.classList.remove("open");
+    }
+    function openPanel() {
+      if (!panel) return;
+      panel.hidden = false;
+      trigger.setAttribute("aria-expanded", "true");
+      lab.classList.add("open");
+    }
+
+    setPalette(current);
+    if (trigger) {
+      trigger.addEventListener("click", function () {
+        if (panel.hidden) openPanel(); else closePanel();
+      });
+    }
+    options.forEach(function (option) {
+      option.addEventListener("click", function () {
+        setPalette(option.getAttribute("data-palette"));
+      });
+    });
+    document.addEventListener("click", function (event) {
+      if (!lab.contains(event.target)) closePanel();
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && panel && !panel.hidden) {
+        closePanel();
+        if (trigger) trigger.focus();
+      }
+    });
+  }());
+
   /* ---------- Live status (ticker + footer + status page) ---------- */
   var PLAN_SLUGS = {
     "Bronze USA": "bronze-usa2", "Silver USA": "silver-usa", "Gold USA": "gold-usa",
