@@ -54,6 +54,24 @@
     });
   }
 
+  /* ---------- Theme toggle ---------- */
+  var themeToggle = $("#themeToggle");
+  function setTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    if (themeToggle) themeToggle.setAttribute("aria-pressed", theme === "light" ? "true" : "false");
+    var themeColor = $("meta[name=theme-color]");
+    if (themeColor) themeColor.setAttribute("content", theme === "light" ? "#f7f4ee" : "#08090c");
+    try { localStorage.setItem("srdp-theme", theme); } catch (e) {}
+  }
+  if (themeToggle) {
+    var initialTheme = document.documentElement.getAttribute("data-theme") || "dark";
+    setTheme(initialTheme);
+    themeToggle.addEventListener("click", function () {
+      var current = document.documentElement.getAttribute("data-theme") || "dark";
+      setTheme(current === "light" ? "dark" : "light");
+    });
+  }
+
   /* ---------- Live status (ticker + footer + status page) ---------- */
   var PLAN_SLUGS = {
     "Bronze USA": "bronze-usa2", "Silver USA": "silver-usa", "Gold USA": "gold-usa",
