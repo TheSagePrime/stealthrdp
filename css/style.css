@@ -543,6 +543,7 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
 /* ---------- Blog ---------- */
 .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
 .blog-card { display: flex; flex-direction: column; background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: border-color 0.2s var(--ease), transform 0.2s var(--ease); }
+.blog-card[hidden] { display: none; }
 .blog-card:hover { border-color: var(--border-strong); transform: translateY(-3px); }
 .blog-card .bc-body { padding: 24px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
 .blog-card .bc-cat { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
@@ -729,6 +730,7 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
 .docs-results-bar { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 17px 0; color: var(--text-dim); font: 11px var(--font-mono); }
 .docs-results-bar span:first-child { color: var(--text-muted); }
 .docs-card-grid { display: grid; gap: 26px; }
+.docs-group[hidden] { display: none; }
 .docs-group-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 11px; }
 .docs-group-head h3 { color: var(--text); font: 600 15px var(--font-body); }
 .docs-group-head span { color: var(--text-dim); font: 10px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
