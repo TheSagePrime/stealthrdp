@@ -28,18 +28,17 @@ test("review data preserves the complete source-backed provenance snapshot", () 
 });
 
 
-test("generated review wall shows only verified StealthRDP wording without source links", () => {
-  assert.strictEqual(reviewSection.match(/data-review-count="(\d+)"/)?.[1], String(verified.length));
-  assert.match(reviewSection, /Verified StealthRDP feedback/);
-  assert.match(reviewSection, /13 verified StealthRDP customer reviews/);
-  assert.match(reviewSection, /no entries have been added to fill the gap/);
+test("generated review wall shows the full collected set without source links", () => {
+  assert.strictEqual(reviewSection.match(/data-review-count="(\d+)"/)?.[1], String(REVIEWS.length));
+  assert.match(reviewSection, /Customer and community reviews/);
+  assert.match(reviewSection, /real reviews from server owners and remote-desktop users/);
   assert.doesNotMatch(reviewSection, /<a\b/i, "review section has no visible or clickable source links");
   assert.doesNotMatch(reviewSection, /https?:\/\//i, "review section has no raw source URLs");
-  assert.strictEqual((reviewSection.match(/class="review-card /g) || []).length, verified.length * 2, "animation duplicates each eligible source item once");
-  for (const company of excludedCompanies) {
-    assert.doesNotMatch(reviewSection, new RegExp(company.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"), `${company} is not visible in the review section`);
+  assert.strictEqual((reviewSection.match(/class="review-card /g) || []).length, REVIEWS.length * 2, "animation duplicates each collected source item once");
+  const competitorNames = ["Linode", "DigitalOcean", "Digital Ocean", "Vultr", "Contabo", "Hetzner", "OVH", "Kimsufi", "Scaleway", "AWS", "Lightsail", "RackNerd", "BuyVM", "Leaseweb", "Rackspace", "CrystalTech", "Online.net", "RamNode", "RunAbove", "Google Compute", "LowEndBox", "S3", "Route53", "SES", "news.ycombinator", "trustpilot.com/reviews", "Hacker News"];
+  for (const name of competitorNames) {
+    assert.doesNotMatch(reviewSection, new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i"), `${name} is not visible in the review section`);
   }
-  assert.doesNotMatch(reviewSection, /community comment|named provider|other provider/i);
 });
 
 

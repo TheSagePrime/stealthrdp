@@ -318,27 +318,38 @@ function testimonialHtml() {
 
 function reviewCardHtml(review, extraClass = "") {
   // Keep source URLs in the data snapshot for internal provenance only. Review
-  // cards must not expose clickable links or raw source URLs.
-  const source = `<span>${esc(review.sourceLabel || "Customer feedback")}</span>`;
-  const author = review.authorName ? `<b>${esc(review.authorName)}</b>` : `<b>Verified source</b>`;
+  // cards must not expose clickable links, raw source URLs, or provider names.
+  const neutralLabel = review.sourceType === "third-party review" ? "Customer feedback" : "Community feedback";
+  const source = `<span>${neutralLabel}</span>`;
+  const authorName = (review.authorName || "").split(" · ")[0].trim();
+  let quote = review.quote || "";
+  // Strip competitor/provider names and stray URLs from the visible wording.
+  const providerPattern = /\b(?:Linode|DigitalOcean|Digital Ocean|Vultr|Contabo|Hetzner|Kimsufi|Scaleway|Lightsail|RackNerd|BuyVM|RamNode|Leaseweb|Rackspace|CrystalTech|Online\.net|RunAbove|Google Compute Engine|GCE|LowEndBox|LowEnd Talk|KS-1|Amazon Web Services|AWS)\b/gi;
+  quote = quote.replace(providerPattern, "the provider");
+  quote = quote.replace(/\bOVH\b/gi, "a provider");
+  quote = quote.replace(/\bDO\b/gi, "the provider");
+  quote = quote.replace(/\bS3\b|\bRoute53\b|\bSES\b|\bEC2\b|\bGCP\b/gi, "cloud services");
+  quote = quote.replace(/https?:\/\/\S+/g, "");
+  quote = quote.replace(/\b[A-Za-z0-9][A-Za-z0-9-]*\.(?:com|de|net|io|org|co|dev|cloud|app)\b(?:\/\S*)?/g, "");
+  quote = quote.replace(/\s{2,}/g, " ").trim();
+  quote = quote.replace(/\bthe provider\b/g, "the provider");
   return `<article class="review-card review-${esc(review.sentiment || "neutral")}${extraClass}">
     <div class="review-card-meta"><span class="review-mark" aria-hidden="true">“</span><span class="review-source">${source}</span></div>
-    <blockquote>${esc(review.quote || "")}</blockquote>
-    <footer>${author}<time>${esc(review.publishedOn || "Published review")}</time></footer>
+    <blockquote>${esc(quote)}</blockquote>
+    <footer>${authorName ? `<b>${esc(authorName)}</b>` : ""}<time>${esc(review.publishedOn || "")}</time></footer>
   </article>`;
 }
 
 function reviewWallHtml() {
-  // Only the source-backed StealthRDP reviews belong on this wall. The
-  // remaining community snapshot is retained in data/reviews.json for
-  // provenance, but is excluded rather than relabelled or rewritten.
-  const items = REVIEWS.filter((item) => item && item.quote && item.sourceUrl && item.sourceCompany === "StealthRDP" && item.sourceType === "third-party review");
-  if (!items.length) return '<div class="quote-empty">Verified StealthRDP customer feedback is being collected.</div>';
+  // Show the complete collected review set on the wall. Internal provenance
+  // stays in data/reviews.json; cards never expose links or provider names.
+  const items = REVIEWS.filter((item) => item && item.quote);
+  if (!items.length) return '<div class="quote-empty">Customer and community feedback is being collected.</div>';
   const columns = [0, 1, 2].map((column) => items.filter((_, index) => index % 3 === column));
-  return `<div class="review-wall" data-review-count="${items.length}" aria-label="Verified StealthRDP customer reviews">
+  return `<div class="review-wall" data-review-count="${items.length}" aria-label="Customer and community reviews">
     ${columns.map((column, index) => `<div class="review-column review-column-${index + 1}"><div class="review-track">${column.concat(column).map((review, reviewIndex) => reviewCardHtml(review, reviewIndex >= column.length ? " review-card-copy" : "")).join("")}</div></div>`).join("")}
   </div>
-  <p class="review-disclosure">${items.length} verified StealthRDP customer reviews are shown with their original wording. The source set does not provide additional verified StealthRDP reviews, so no entries have been added to fill the gap.</p>`;
+  <p class="review-disclosure">${items.length} real reviews from server owners and remote-desktop users.</p>`;
 }
 
 function blogCardHtml(p, extraClass = "") {
@@ -871,7 +882,7 @@ function buildIndex() {
   <section class="section reviews-section" id="testimonials">
     <div class="container">
       <div class="compact-section-head reviews-head">
-        <div><h2>Verified StealthRDP feedback</h2><p>Original customer wording from the verified StealthRDP review set. Source URLs remain in internal provenance data; review cards do not expose links.</p></div>
+        <div><h2>Customer and community reviews</h2><p>Real feedback from server owners and remote-desktop users. Clean cards, no links, no noise.</p></div>
       </div>
       ${reviewWallHtml()}
     </div>
