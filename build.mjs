@@ -119,7 +119,7 @@ function head({ title, description, canonical, pageType = "website", jsonLd = []
       } catch (e) {}
     }());
   </script>
-  <link rel="stylesheet" href="/css/style.css?v=os-logos-1" />
+  <link rel="stylesheet" href="/css/style.css?v=${ASSET_STAMP}" />
   <!-- Google Tag Manager (real container from live site) -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -224,8 +224,9 @@ function footerHtml() {
   </div></footer>`;
 }
 
+const ASSET_STAMP = new Date().toISOString().replace(/[:.]/g, "-");
 function scripts(extra = []) {
-  return `<script src="/js/main.js"></script>${extra.map((s) => `<script src="${s}"></script>`).join("")}`;
+  return `<script src="/js/main.js?v=${ASSET_STAMP}"></script>${extra.map((s) => `<script src="${s}?v=${ASSET_STAMP}"></script>`).join("")}`;
 }
 
 /* ---------- baked content ---------- */
