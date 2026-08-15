@@ -350,9 +350,141 @@
       .catch(function () { /* baked features remain */ });
   }
 
-  /* ---------- Static deployment demonstration ---------- */
-  // The hero console is intentionally static. It never claims that a server
-  // was provisioned and does not simulate progress or completion.
+  /* ---------- Interactive deployment demonstration ---------- */
+  // This preview changes only local interface state. It never provisions a server.
+  function initDeploymentDemo() {
+    var demo = $("[data-demo-console]");
+    if (!demo) return;
+    var planButtons = $$("[data-demo-plan]", demo);
+    var osButtons = $$("[data-demo-os]", demo);
+    var runButton = $("[data-demo-run]", demo);
+    var progress = $("[data-demo-progress]", demo);
+    var status = $("[data-demo-status]", demo);
+    var planValue = $("[data-demo-plan-value]", demo);
+    var osValue = $("[data-demo-os-value]", demo);
+    var stageDetail = $("[data-demo-stage-detail]", demo);
+    var checkout = $("[data-demo-checkout]", demo);
+    var stages = $$("[data-demo-stage]", demo);
+    var selectedPlan = planButtons[0];
+    var selectedOs = osButtons[0];
+    var runTimer = null;
+    var currentStage = 0;
 
+    function setPressed(buttons, selected) {
+      buttons.forEach(function (button) {
+        var active = button === selected;
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+    }
+
+    function updatePlan(button) {
+      selectedPlan = button;
+      setPressed(planButtons, button);
+      var plan = button.getAttribute("data-demo-plan");
+      var slug = button.getAttribute("data-demo-slug");
+      var cpu = button.getAttribute("data-demo-cpu");
+      var ram = button.getAttribute("data-demo-ram");
+      var storage = button.getAttribute("data-demo-storage");
+      var price = button.getAttribute("data-demo-price");
+      if (planValue) planValue.textContent = plan + "-usa";
+      if (stageDetail) stageDetail.textContent = button.textContent.trim() + " · " + cpu + " CPU · " + ram + " GB RAM";
+      $$(".demo-specs [data-demo-cpu]", demo).forEach(function (el) { el.textContent = cpu; });
+      $$(".demo-specs [data-demo-ram]", demo).forEach(function (el) { el.textContent = ram + " GB"; });
+      $$(".demo-specs [data-demo-storage]", demo).forEach(function (el) { el.textContent = storage; });
+      $$(".demo-specs [data-demo-price]", demo).forEach(function (el) { el.textContent = price; });
+      if (checkout) checkout.href = "https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/" + slug + "&billingcycle=monthly";
+      resetDemo("Setup preview updated for " + button.textContent.trim() + ".");
+    }
+
+    function updateOs(button) {
+      selectedOs = button;
+      setPressed(osButtons, button);
+      if (osValue) osValue.textContent = button.getAttribute("data-demo-os");
+      resetDemo("Setup preview updated for " + button.textContent.trim() + ".");
+    }
+
+    function resetDemo(message) {
+      window.clearTimeout(runTimer);
+      currentStage = 0;
+      stages.forEach(function (stage, index) {
+        stage.classList.toggle("active", index === 0);
+        stage.classList.remove("complete");
+        var state = $("[data-demo-stage-state]", stage);
+        if (state) state.textContent = index === 0 ? "ready" : index === 1 ? "waiting" : "next";
+      });
+      if (progress) {
+        progress.style.transform = "scaleX(.24)";
+        progress.parentElement.setAttribute("aria-valuenow", "24");
+      }
+      if (status) status.textContent = message || "Choose a plan, then run the setup preview.";
+      if (runButton) {
+        runButton.disabled = false;
+        runButton.textContent = "Run setup preview";
+      }
+    }
+
+    function finishStage(index) {
+      var stage = stages[index];
+      if (!stage) return;
+      stage.classList.remove("active");
+      stage.classList.add("complete");
+      var state = $("[data-demo-stage-state]", stage);
+      if (state) state.textContent = "done";
+      var next = stages[index + 1];
+      if (next) {
+        next.classList.add("active");
+        var nextState = $("[data-demo-stage-state]", next);
+        if (nextState) nextState.textContent = "ready";
+      }
+    }
+
+    function runDemo() {
+      window.clearTimeout(runTimer);
+      if (runButton) {
+        runButton.disabled = true;
+        runButton.textContent = "Preview running…";
+      }
+      currentStage = 0;
+      stages.forEach(function (stage, index) {
+        stage.classList.toggle("active", index === 0);
+        stage.classList.remove("complete");
+        var state = $("[data-demo-stage-state]", stage);
+        if (state) state.textContent = index === 0 ? "running" : index === 1 ? "waiting" : "next";
+      });
+      if (status) status.textContent = "Reading the selected setup. No infrastructure request is made.";
+      if (progress) {
+        progress.style.transform = "scaleX(.24)";
+        progress.parentElement.setAttribute("aria-valuenow", "24");
+      }
+      function advance() {
+        finishStage(currentStage);
+        currentStage += 1;
+        var value = currentStage === 1 ? 58 : currentStage === 2 ? 86 : 100;
+        if (progress) {
+          progress.style.transform = "scaleX(" + (value / 100) + ")";
+          progress.parentElement.setAttribute("aria-valuenow", String(value));
+        }
+        if (currentStage < stages.length) {
+          if (status) status.textContent = currentStage === 1 ? "Configuration is ready for review." : "Checkout is ready. Pricing is confirmed there.";
+          runTimer = window.setTimeout(advance, 720);
+        } else {
+          if (status) status.textContent = "Preview complete. Continue to checkout to see live pricing and availability.";
+          if (runButton) {
+            runButton.disabled = false;
+            runButton.textContent = "Run again";
+          }
+        }
+      }
+      runTimer = window.setTimeout(advance, 720);
+    }
+
+    planButtons.forEach(function (button) { button.addEventListener("click", function () { updatePlan(button); }); });
+    osButtons.forEach(function (button) { button.addEventListener("click", function () { updateOs(button); }); });
+    if (runButton) runButton.addEventListener("click", runDemo);
+    resetDemo();
+  }
+
+  initDeploymentDemo();
   fetchUptime();
 })();

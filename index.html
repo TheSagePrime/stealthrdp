@@ -71,20 +71,33 @@
           <div class="hero-stat"><div class="num">99.9<span class="plus">%</span></div><div class="lbl">Uptime SLA</div></div>
         </div>
       </div>
-      <div class="hero-console fade-up d2" aria-label="Deployment demonstration">
-        <div class="console-card">
-          <div class="console-head"><span class="c-dot r"></span><span class="c-dot y"></span><span class="c-dot g"></span><span class="c-title">stealth-deploy — demonstration</span></div>
+      <div class="hero-console fade-up d2" aria-label="Interactive deployment demonstration">
+        <div class="console-card demo-console" data-demo-console>
+          <div class="console-head"><span class="c-dot r"></span><span class="c-dot y"></span><span class="c-dot g"></span><span class="c-title">stealth-deploy — setup preview</span><span class="demo-head-state">PREVIEW ONLY</span></div>
           <div class="console-body">
-            <div class="console-demo-note"><span class="warn">DEMONSTRATION</span> This is not a live deployment. No server is provisioned.</div>
-            <div class="console-line"><span class="cmd">$ stealth deploy --plan bronze-usa --region us-east</span></div>
-            <div class="console-line"><span class="dim">▸ plan selected for illustration</span></div>
-            <div class="console-line"><span class="dim">▸ region selected for illustration</span></div>
-            <div class="console-line"><span class="warn">▸ pricing and availability shown at checkout</span></div>
-            <div class="console-line"><span class="dim">▸ no infrastructure request is made by this preview</span></div>
-            <div class="console-progress"><div class="bar" style="width:42%"></div></div>
-            <div class="console-line"><span class="pct">illustration only</span></div>
+            <div class="console-demo-note"><span class="warn">DEMO ONLY</span><span>Choose a setup. No server request is made.</span></div>
+            <div class="demo-toolbar">
+              <div class="demo-control"><span class="demo-label">PLAN</span><div class="demo-options" data-demo-plans>
+                <button type="button" class="demo-option active" data-demo-plan="bronze" data-demo-slug="bronze-usa2" data-demo-price="$9.50" data-demo-cpu="2" data-demo-ram="4" data-demo-storage="60 GB NVMe" aria-pressed="true">Bronze</button>
+                <button type="button" class="demo-option" data-demo-plan="silver" data-demo-slug="silver-usa" data-demo-price="$18.04" data-demo-cpu="2" data-demo-ram="8" data-demo-storage="80 GB NVMe" aria-pressed="false">Silver</button>
+                <button type="button" class="demo-option" data-demo-plan="gold" data-demo-slug="gold-usa" data-demo-price="$26.59" data-demo-cpu="4" data-demo-ram="16" data-demo-storage="100 GB NVMe" aria-pressed="false">Gold</button>
+              </div></div>
+              <div class="demo-control"><span class="demo-label">OS</span><div class="demo-options" data-demo-os-options>
+                <button type="button" class="demo-option active" data-demo-os="windows" aria-pressed="true">Windows</button>
+                <button type="button" class="demo-option" data-demo-os="linux" aria-pressed="false">Linux</button>
+              </div></div>
+            </div>
+            <div class="demo-command"><span class="prompt">$</span> stealth deploy --plan <b data-demo-plan-value>bronze-usa</b> --region <b>us-east</b> --os <b data-demo-os-value>windows</b></div>
+            <ol class="demo-stages" aria-label="Setup preview stages">
+              <li class="demo-stage active" data-demo-stage="0"><span class="stage-index">01</span><span><b>Choose capacity</b><small data-demo-stage-detail>Bronze · 2 CPU · 4 GB RAM</small></span><i data-demo-stage-state>ready</i></li>
+              <li class="demo-stage" data-demo-stage="1"><span class="stage-index">02</span><span><b>Review configuration</b><small>OS, region, storage, and access</small></span><i data-demo-stage-state>waiting</i></li>
+              <li class="demo-stage" data-demo-stage="2"><span class="stage-index">03</span><span><b>Continue to checkout</b><small>Pricing and availability are confirmed there</small></span><i data-demo-stage-state>next</i></li>
+            </ol>
+            <div class="console-progress demo-progress" role="progressbar" aria-label="Setup preview progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="24"><div class="bar" data-demo-progress></div></div>
+            <div class="demo-result"><span class="demo-result-label">PREVIEW STATE</span><span data-demo-status>Choose a plan, then run the setup preview.</span></div>
           </div>
-          <div class="console-foot"><span class="chip">2 <b>vCPU</b></span><span class="chip">4 <b>GB RAM</b></span><span class="chip">60 <b>GB NVMe</b></span><span class="chip">1 <b>Gbps</b></span></div>
+          <div class="console-foot demo-foot"><div class="demo-specs"><span><b data-demo-cpu>2</b> CPU</span><span><b data-demo-ram>4 GB</b> RAM</span><span><b data-demo-storage>60 GB NVMe</b></span><span><b data-demo-price>$9.50</b> / month</span></div><div class="demo-actions"><button type="button" class="demo-run" data-demo-run>Run setup preview</button><a class="btn btn-primary btn-sm demo-checkout" data-demo-checkout href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/bronze-usa2&amp;billingcycle=monthly" target="_blank" rel="noopener noreferrer">Continue to checkout <span aria-hidden="true">↗</span></a></div></div>
+          <div class="demo-disclaimer">This animation is a product demonstration. It never provisions a server or submits an order.</div>
         </div>
       </div>
     </div>
