@@ -746,14 +746,25 @@ function buildIndex() {
     <div class="container">
       <div class="section-head">
         <span class="sec-index fade-up">02 / Who it's for</span>
-        <h2 class="fade-up d1">Stop struggling with server problems</h2>
-        <p class="fade-up d2">Our customers come to us when traditional hosting limits their work. Here's how StealthRDP changes that.</p>
+        <h2 class="fade-up d1">One machine for the work that matters.</h2>
+        <p class="fade-up d2">Choose a workload. The drawer keeps the detail focused while you move through the page.</p>
       </div>
-      <div class="uc-list">
-        <div class="uc-row fade-up"><div class="uc-num">01</div><div class="uc-main"><h3>Remote Work Freedom</h3><p>Your full desktop, from any device, anywhere.</p></div><div class="uc-cols"><div class="uc-col before"><div class="uc-tag">Before</div><p>"I'm tied to my office computer and can't access my work when traveling or at home."</p></div><div class="uc-col after"><div class="uc-tag">With StealthRDP</div><p>"I access my full desktop from any device — with all my files and applications."</p></div></div></div>
-        <div class="uc-row fade-up d1"><div class="uc-num">02</div><div class="uc-main"><h3>Reliable Web Hosting</h3><p>Stay up under traffic spikes, get real support.</p></div><div class="uc-cols"><div class="uc-col before"><div class="uc-tag">Before</div><p>"My website keeps going down during traffic spikes and support tickets go unanswered."</p></div><div class="uc-col after"><div class="uc-tag">With StealthRDP</div><p>"My site stays up under heavy traffic, and support responds within 2 hours."</p></div></div></div>
-        <div class="uc-row fade-up d2"><div class="uc-num">03</div><div class="uc-main"><h3>Trading &amp; Automation</h3><p>24/7 uptime for terminals, bots, and scripts.</p></div><div class="uc-cols"><div class="uc-col before"><div class="uc-tag">Before</div><p>"My automation scripts only run when my laptop is on, and they're unreliable."</p></div><div class="uc-col after"><div class="uc-tag">With StealthRDP</div><p>"My scripts and trading terminals run 24/7 on low-latency infrastructure."</p></div></div></div>
-        <div class="uc-row fade-up d3"><div class="uc-num">04</div><div class="uc-main"><h3>Secure Data Storage</h3><p>Backed up, protected, and always available.</p></div><div class="uc-cols"><div class="uc-col before"><div class="uc-tag">Before</div><p>"I worry about data loss from hardware failures and have no reliable backup system."</p></div><div class="uc-col after"><div class="uc-tag">With StealthRDP</div><p>"My data is securely backed up with automated disaster recovery on enterprise hardware."</p></div></div></div>
+      <div class="usecase-drawer" data-usecase-drawer>
+        <div class="drawer-tabs" role="tablist" aria-label="StealthRDP workloads">
+          <button class="drawer-tab active" type="button" role="tab" aria-selected="true" aria-controls="drawer-panel-0" data-drawer-tab="0"><span class="drawer-tab-num">01</span><span><b>Remote Work Freedom</b><small>Your full desktop, from any device.</small></span></button>
+          <button class="drawer-tab" type="button" role="tab" aria-selected="false" aria-controls="drawer-panel-1" data-drawer-tab="1"><span class="drawer-tab-num">02</span><span><b>Reliable Web Hosting</b><small>Stay up under traffic spikes.</small></span></button>
+          <button class="drawer-tab" type="button" role="tab" aria-selected="false" aria-controls="drawer-panel-2" data-drawer-tab="2"><span class="drawer-tab-num">03</span><span><b>Trading &amp; Automation</b><small>Run terminals, bots, and scripts.</small></span></button>
+          <button class="drawer-tab" type="button" role="tab" aria-selected="false" aria-controls="drawer-panel-3" data-drawer-tab="3"><span class="drawer-tab-num">04</span><span><b>Secure Data Storage</b><small>Keep data backed up and protected.</small></span></button>
+        </div>
+        <div class="drawer-stage">
+          <div class="drawer-stage-head"><span>WORKLOADS / 04 FILES</span><span data-drawer-count>01 / 04</span></div>
+          <div class="drawer-card">
+            <article class="drawer-panel active" id="drawer-panel-0" role="tabpanel" data-drawer-panel="0"><span class="drawer-panel-kicker">REMOTE ACCESS</span><h3>Remote Work Freedom</h3><p>Your full desktop, from any device, anywhere.</p><div class="drawer-panel-meta"><span>Windows + Linux</span><span>Full admin access</span></div></article>
+            <article class="drawer-panel" id="drawer-panel-1" role="tabpanel" data-drawer-panel="1" hidden><span class="drawer-panel-kicker">WEB HOSTING</span><h3>Reliable Web Hosting</h3><p>Stay up under traffic spikes, get real support.</p><div class="drawer-panel-meta"><span>DDoS protection</span><span>24/7 support</span></div></article>
+            <article class="drawer-panel" id="drawer-panel-2" role="tabpanel" data-drawer-panel="2" hidden><span class="drawer-panel-kicker">AUTOMATION</span><h3>Trading &amp; Automation</h3><p>24/7 uptime for terminals, bots, and scripts.</p><div class="drawer-panel-meta"><span>Dedicated CPU</span><span>Low-latency infrastructure</span></div></article>
+            <article class="drawer-panel" id="drawer-panel-3" role="tabpanel" data-drawer-panel="3" hidden><span class="drawer-panel-kicker">DATA STORAGE</span><h3>Secure Data Storage</h3><p>Backed up, protected, and always available.</p><div class="drawer-panel-meta"><span>NVMe storage</span><span>Isolated VM instance</span></div></article>
+          </div>
+        </div>
       </div>
     </div>
   </section>

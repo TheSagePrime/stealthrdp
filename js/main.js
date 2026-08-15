@@ -503,6 +503,54 @@
     resetDemo();
   }
 
+  function initUsecaseDrawer() {
+    var root = $("[data-usecase-drawer]");
+    if (!root) return;
+    var tabs = $$('[data-drawer-tab]', root);
+    var panels = $$('[data-drawer-panel]', root);
+    var count = $("[data-drawer-count]", root);
+    if (!tabs.length || !panels.length) return;
+
+    function setActive(index) {
+      index = Math.max(0, Math.min(index, tabs.length - 1));
+      tabs.forEach(function (tab, i) {
+        var active = i === index;
+        tab.classList.toggle("active", active);
+        tab.setAttribute("aria-selected", active ? "true" : "false");
+      });
+      panels.forEach(function (panel, i) {
+        var active = i === index;
+        panel.classList.toggle("active", active);
+        panel.hidden = !active;
+      });
+      if (count) count.textContent = String(index + 1).padStart(2, "0") + " / " + String(tabs.length).padStart(2, "0");
+    }
+
+    tabs.forEach(function (tab, index) {
+      tab.addEventListener("click", function () { setActive(index); });
+      tab.addEventListener("keydown", function (event) {
+        var next = index;
+        if (event.key === "ArrowDown" || event.key === "ArrowRight") next = (index + 1) % tabs.length;
+        if (event.key === "ArrowUp" || event.key === "ArrowLeft") next = (index - 1 + tabs.length) % tabs.length;
+        if (next !== index) {
+          event.preventDefault();
+          tabs[next].focus();
+          setActive(next);
+        }
+      });
+    });
+
+    if ("IntersectionObserver" in window) {
+      var observer = new IntersectionObserver(function (entries) {
+        var visible = entries.filter(function (entry) { return entry.isIntersecting; }).sort(function (a, b) { return b.intersectionRatio - a.intersectionRatio; });
+        if (visible[0]) setActive(Number(visible[0].target.getAttribute("data-drawer-tab")));
+      }, { threshold: [0.45, 0.7], rootMargin: "-28% 0px -42% 0px" });
+      tabs.forEach(function (tab) { observer.observe(tab); });
+    }
+    setActive(0);
+  }
+
+  initUsecaseDrawer();
   initDeploymentDemo();
   fetchUptime();
 })();
