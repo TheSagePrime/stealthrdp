@@ -659,158 +659,109 @@ function page({ active, title, description, canonical, pageType = "website", jso
 function buildIndex() {
   const preview = USA.slice(0, 3).map((p) => planCardHtml(p)).join("");
   const body = `
-  <!-- ============ Hero ============ -->
-  <section class="hero">
-    <div class="container hero-grid">
-      <div class="hero-copy">
-        <span class="eyebrow fade-up">Windows &amp; Linux VPS · Instant Setup</span>
-        <h1 class="fade-up d1">Your server. <span class="gold">Live in 60 seconds.</span></h1>
-        <p class="sub fade-up d2">High-performance remote desktop infrastructure without the complexity. Enterprise hardware, DDoS protection, and a 99.9% uptime SLA — online the moment you pay.</p>
+  <!-- DESIGN-CONTRACT
+       THESIS: One server adapts to real work. Refuses the generic hero-plus-card stack.
+       OWN-WORLD: Near-black or warm paper, hairline rules, restrained gold, technical sans, and mono metadata.
+       STORY: Understand the service, inspect the honest setup demonstration, choose a workload, select a plan, and continue to checkout.
+       FIRST VIEWPORT: Copy on the left. One interactive server control surface on the right. The primary action sits below the statement.
+       FORM: Refero-informed precision instrument; Linear, Auros, Apple, and Lamborghini used for principles only.
+       FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance.
+  -->
+  <!-- ============ Hero stage ============ -->
+  <section class="hero hero-stage" id="hero">
+    <div class="container hero-stage-grid">
+      <div class="hero-copy hero-stage-copy">
+        <span class="hero-kicker fade-up">Windows &amp; Linux VPS <i>/</i> Instant setup</span>
+        <h1 class="fade-up d1">Infrastructure for the work you actually do.</h1>
+        <p class="sub fade-up d2">High-performance remote desktop infrastructure without the complexity. Enterprise hardware, DDoS protection, and a 99.9% uptime SLA.</p>
         <div class="hero-cta fade-up d3">
           <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Deploy Your Server Now
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           <a class="btn btn-ghost" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Ask a Pre-Sales Question</a>
         </div>
-        <p class="hero-micro fade-up d3">Starting at only <b>$9.50/month</b> · No hidden fees · Cancel anytime · 7-day money-back</p>
-        <div class="hero-stats fade-up d4">
-          <div class="hero-stat"><div class="num">10,877<span class="plus">+</span></div><div class="lbl">Customers</div></div>
-          <div class="hero-stat"><div class="num">25,000<span class="plus">+</span></div><div class="lbl">Servers deployed</div></div>
-          <div class="hero-stat"><div class="num">99.9<span class="plus">%</span></div><div class="lbl">Uptime SLA</div></div>
-        </div>
+        <p class="hero-micro fade-up d3">Starting at only <b>$9.50/month</b> · No hidden fees · Cancel anytime</p>
+        <div class="hero-proof-line fade-up d4"><span>Full admin access</span><span>USA + EU locations</span><span>Secure checkout</span></div>
       </div>
-      <div class="hero-console fade-up d2" aria-label="Deployment demonstration">
-        <div class="console-card">
-          <div class="console-head"><span class="c-dot r"></span><span class="c-dot y"></span><span class="c-dot g"></span><span class="c-title">stealth-deploy — demonstration</span></div>
-          <div class="console-body">
-            <div class="console-demo-note"><span class="warn">DEMONSTRATION</span> This is not a live deployment. No server is provisioned.</div>
-            <div class="console-line"><span class="cmd">$ stealth deploy --plan bronze-usa --region us-east</span></div>
-            <div class="console-line"><span class="dim">▸ plan selected for illustration</span></div>
-            <div class="console-line"><span class="dim">▸ region selected for illustration</span></div>
-            <div class="console-line"><span class="warn">▸ pricing and availability shown at checkout</span></div>
-            <div class="console-line"><span class="dim">▸ no infrastructure request is made by this preview</span></div>
-            <div class="console-progress"><div class="bar" style="width:42%"></div></div>
-            <div class="console-line"><span class="pct">illustration only</span></div>
+      <div class="hero-product fade-up d2" data-demo-console aria-label="Server setup demonstration">
+        <div class="product-surface">
+          <div class="product-topbar"><span class="window-dots"><i class="c-dot r"></i><i class="c-dot y"></i><i class="c-dot g"></i></span><span class="product-title">server-control / demonstration</span><span class="product-demo-label">DEMO ONLY</span></div>
+          <div class="product-body">
+            <div class="product-kicker"><span>SERVER / <b data-demo-plan-value>bronze-usa</b></span><span>ILLUSTRATION</span></div>
+            <div class="product-heading"><div><h2>Prepare a server</h2><p data-demo-stage-detail>Bronze · 2 CPU · 4 GB RAM</p></div><span class="product-state"><i></i>LOCAL PREVIEW</span></div>
+            <div class="product-command"><span>$</span> prepare server --region us-east</div>
+            <div class="demo-choice-group"><span class="choice-label">Plan</span><div class="demo-choices" role="group" aria-label="Choose a demonstration plan"><button type="button" class="demo-choice active" data-demo-plan="bronze" data-demo-slug="bronze-usa2" data-demo-cpu="2" data-demo-ram="4" data-demo-storage="60 GB NVMe" data-demo-price="$9.50" aria-pressed="true">Bronze</button><button type="button" class="demo-choice" data-demo-plan="silver" data-demo-slug="silver-usa" data-demo-cpu="2" data-demo-ram="8" data-demo-storage="80 GB NVMe" data-demo-price="$18.04" aria-pressed="false">Silver</button><button type="button" class="demo-choice" data-demo-plan="gold" data-demo-slug="gold-usa" data-demo-cpu="4" data-demo-ram="16" data-demo-storage="100 GB NVMe" data-demo-price="$26.59" aria-pressed="false">Gold</button></div></div>
+            <div class="demo-choice-group"><span class="choice-label">Operating system</span><div class="demo-choices" role="group" aria-label="Choose a demonstration operating system"><button type="button" class="demo-choice active" data-demo-os="windows" aria-pressed="true">Windows</button><button type="button" class="demo-choice" data-demo-os="linux" aria-pressed="false">Linux</button></div></div>
+            <div class="deploy-steps" aria-label="Demonstration steps"><div class="deploy-step active" data-demo-stage="0"><span class="step-icon">1</span><span><b>Review setup</b><small>Check the selected configuration</small></span><em data-demo-stage-state>ready</em></div><div class="deploy-step" data-demo-stage="1"><span class="step-icon">2</span><span><b>Confirm availability</b><small>Pricing is shown at checkout</small></span><em data-demo-stage-state>waiting</em></div><div class="deploy-step" data-demo-stage="2"><span class="step-icon">3</span><span><b>Continue to checkout</b><small>No server is provisioned here</small></span><em data-demo-stage-state>next</em></div></div>
+            <div class="product-progress" role="progressbar" aria-label="Demonstration progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="24"><span data-demo-progress></span></div>
+            <div class="product-status" data-demo-status>Choose a plan, then run the setup preview.</div>
+            <button class="btn btn-primary product-run" type="button" data-demo-run>Run setup preview</button>
           </div>
-          <div class="console-foot"><span class="chip">2 <b>vCPU</b></span><span class="chip">4 <b>GB RAM</b></span><span class="chip">60 <b>GB NVMe</b></span><span class="chip">1 <b>Gbps</b></span></div>
+          <div class="product-footer"><div class="demo-specs"><span><i>CPU</i><b data-demo-cpu>2</b></span><span><i>RAM</i><b data-demo-ram>4 GB</b></span><span><i>STORAGE</i><b data-demo-storage>60 GB NVMe</b></span><span><i>PRICE</i><b data-demo-price>$9.50</b></span></div><a data-demo-checkout href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/bronze-usa2&amp;billingcycle=monthly" target="_blank" rel="noopener noreferrer">View checkout path <span aria-hidden="true">↗</span></a></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ OS marquee ============ -->
-  <div class="marquee">
-    <div class="marquee-track" id="osTrack">
-      <span class="marquee-label">Works with your OS</span>
-      <span class="marquee-item">Debian</span><span class="marquee-item">CentOS</span><span class="marquee-item">Rocky Linux</span><span class="marquee-item">Ubuntu</span><span class="marquee-item">Fedora</span><span class="marquee-item">FreeBSD</span><span class="marquee-item">Alpine Linux</span><span class="marquee-item">AlmaLinux</span><span class="marquee-item">Windows</span>
-      <span class="marquee-label">Works with your OS</span>
-      <span class="marquee-item">Debian</span><span class="marquee-item">CentOS</span><span class="marquee-item">Rocky Linux</span><span class="marquee-item">Ubuntu</span><span class="marquee-item">Fedora</span><span class="marquee-item">FreeBSD</span><span class="marquee-item">Alpine Linux</span><span class="marquee-item">AlmaLinux</span><span class="marquee-item">Windows</span>
+  <!-- ============ Product proof rail ============ -->
+  <section class="proof-rail" aria-label="StealthRDP capabilities">
+    <div class="container proof-rail-grid">
+      <div class="proof-item"><span class="proof-mark">01</span><span><b>Windows + Linux</b><small>Choose the environment</small></span></div>
+      <div class="proof-item"><span class="proof-mark">02</span><span><b>Dedicated CPU</b><small>Resources that stay yours</small></span></div>
+      <div class="proof-item"><span class="proof-mark">03</span><span><b>Full admin access</b><small>Control your server</small></span></div>
+      <div class="proof-item"><span class="proof-mark">04</span><span><b>USA + EU locations</b><small>Pick the right region</small></span></div>
     </div>
-  </div>
+  </section>
 
-  <!-- ============ Trust strip ============ -->
-  <div class="trust-bar" style="padding:22px 0;border-bottom:1px solid var(--border)">
-    <div class="container" style="display:flex;align-items:center;gap:8px 32px;flex-wrap:wrap;font-size:13.5px;color:var(--text-muted)">
-      <span style="color:var(--text);font-weight:600">Trusted by</span>
-      <span><b style="color:var(--text)">10,877+</b> customers</span><span style="color:var(--border-strong)">/</span>
-      <span><b style="color:var(--text)">25,000+</b> servers deployed</span><span style="color:var(--border-strong)">/</span>
-      <span><b style="color:var(--text)">99.9%</b> uptime SLA</span><span style="color:var(--border-strong)">/</span>
-      <span>Support <b style="color:var(--text)">&lt; 2hr</b> response</span><span style="color:var(--border-strong)">/</span>
-      <span><b style="color:var(--text)">7-day</b> money-back guarantee</span>
-    </div>
-  </div>
-
-  <!-- ============ Section 01 — Why (bento) ============ -->
-  <section class="section" id="why">
+  <!-- ============ Section 01 — Product path ============ -->
+  <section class="section product-path" id="why">
     <div class="container">
-      <div class="section-head">
-        <span class="sec-index fade-up">01 / Why StealthRDP</span>
-        <h2 class="fade-up d1">Infrastructure that doesn't flinch</h2>
-        <p class="fade-up d2">Built for speed, secured for production, and priced for growth.</p>
-      </div>
-      <div class="bento">
-        <article class="bento-card bento-2"><span class="bic">${LOGO_SVG}</span><h3>NVMe SSD Storage</h3><p>6x faster than traditional SSDs. Applications, databases, and trading terminals load instantly — no waiting on slow disk I/O.</p></article>
-        <article class="bento-card bento-2"><span class="bic">${LOGO_SVG}</span><h3>Enterprise-Grade Security</h3><p>DDoS protection and isolated VM instances for maximum privacy. Your infrastructure stays up even while others are under attack.</p></article>
-        <article class="bento-card bento-2"><span class="bic">${LOGO_SVG}</span><h3>Global Network</h3><p>Strategically located data centers with 1Gbps network speeds — deploy close to your users, anywhere in the world.</p></article>
-        <article class="bento-card bento-wide">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
-            <div><h3>Live-monitored, always-on</h3><p style="max-width:560px">Every node is watched 24/7 by automated monitors. See the current state of all ${TOTAL} production nodes in real time — transparency you can verify, not just claim.</p></div>
-            <a class="btn btn-ghost btn-sm" href="/status.html">View live status</a>
-          </div>
-        </article>
+      <div class="section-head"><h2 class="fade-up">One server. Four ways to use it.</h2><p class="fade-up d1">Start with the work you need to do. The same infrastructure adapts around it.</p></div>
+      <div class="path-layout" data-usecase-drawer>
+        <div class="path-index" role="tablist" aria-label="StealthRDP workloads">
+          <button class="path-tab active" type="button" role="tab" aria-selected="true" aria-controls="drawer-panel-0" data-drawer-tab="0"><span>01</span><b>Remote work</b><small>Your full desktop, from any device.</small></button>
+          <button class="path-tab" type="button" role="tab" aria-selected="false" aria-controls="drawer-panel-1" data-drawer-tab="1"><span>02</span><b>Web hosting</b><small>Stay up under traffic spikes.</small></button>
+          <button class="path-tab" type="button" role="tab" aria-selected="false" aria-controls="drawer-panel-2" data-drawer-tab="2"><span>03</span><b>Trading and automation</b><small>Run terminals, bots, and scripts.</small></button>
+          <button class="path-tab" type="button" role="tab" aria-selected="false" aria-controls="drawer-panel-3" data-drawer-tab="3"><span>04</span><b>Secure storage</b><small>Keep data backed up and protected.</small></button>
+        </div>
+        <div class="path-stage"><div class="path-stage-head"><span>WORKLOAD / ACTIVE</span><span data-drawer-count>01 / 04</span></div><div class="path-panel-wrap">
+          <article class="path-panel active" id="drawer-panel-0" role="tabpanel" data-drawer-panel="0"><span class="path-panel-kicker">REMOTE ACCESS</span><h3>Remote work without the office.</h3><p>Your full desktop, from any device, anywhere. Keep the files and tools you need close to the work.</p><div class="path-panel-meta"><span>Windows + Linux</span><span>Full admin access</span></div></article>
+          <article class="path-panel" id="drawer-panel-1" role="tabpanel" data-drawer-panel="1" hidden><span class="path-panel-kicker">WEB HOSTING</span><h3>A stable home for your sites.</h3><p>Keep web projects available under traffic spikes with the control to tune the server around them.</p><div class="path-panel-meta"><span>NVMe storage</span><span>1Gbps network</span></div></article>
+          <article class="path-panel" id="drawer-panel-2" role="tabpanel" data-drawer-panel="2" hidden><span class="path-panel-kicker">AUTOMATION</span><h3>Run the jobs that cannot wait.</h3><p>Keep terminals, bots, and scripts running on a dedicated environment with full access.</p><div class="path-panel-meta"><span>Dedicated CPU</span><span>Always-on environment</span></div></article>
+          <article class="path-panel" id="drawer-panel-3" role="tabpanel" data-drawer-panel="3" hidden><span class="path-panel-kicker">DATA STORAGE</span><h3>Keep important data close.</h3><p>Use isolated VM storage for the files and services that need a dependable place to run.</p><div class="path-panel-meta"><span>Isolated VM</span><span>NVMe storage</span></div></article>
+        </div></div>
       </div>
     </div>
   </section>
 
-  <!-- ============ Section 02 — Use cases ============ -->
-  <section class="section section-tight" id="usecases">
-    <div class="container">
-      <div class="section-head">
-        <span class="sec-index fade-up">02 / Who it's for</span>
-        <h2 class="fade-up d1">One machine for the work that matters.</h2>
-        <p class="fade-up d2">Choose a workload. The drawer keeps the detail focused while you move through the page.</p>
-      </div>
-      <div class="usecase-drawer" data-usecase-drawer>
-        <div class="drawer-tabs" role="tablist" aria-label="StealthRDP workloads">
-          <button class="drawer-tab active" type="button" role="tab" aria-selected="true" aria-controls="drawer-panel-0" data-drawer-tab="0"><span class="drawer-tab-num">01</span><span><b>Remote Work Freedom</b><small>Your full desktop, from any device.</small></span></button>
-          <button class="drawer-tab" type="button" role="tab" aria-selected="false" aria-controls="drawer-panel-1" data-drawer-tab="1"><span class="drawer-tab-num">02</span><span><b>Reliable Web Hosting</b><small>Stay up under traffic spikes.</small></span></button>
-          <button class="drawer-tab" type="button" role="tab" aria-selected="false" aria-controls="drawer-panel-2" data-drawer-tab="2"><span class="drawer-tab-num">03</span><span><b>Trading &amp; Automation</b><small>Run terminals, bots, and scripts.</small></span></button>
-          <button class="drawer-tab" type="button" role="tab" aria-selected="false" aria-controls="drawer-panel-3" data-drawer-tab="3"><span class="drawer-tab-num">04</span><span><b>Secure Data Storage</b><small>Keep data backed up and protected.</small></span></button>
-        </div>
-        <div class="drawer-stage">
-          <div class="drawer-stage-head"><span>WORKLOADS / 04 FILES</span><span data-drawer-count>01 / 04</span></div>
-          <div class="drawer-card">
-            <article class="drawer-panel active" id="drawer-panel-0" role="tabpanel" data-drawer-panel="0"><span class="drawer-panel-kicker">REMOTE ACCESS</span><h3>Remote Work Freedom</h3><p>Your full desktop, from any device, anywhere.</p><div class="drawer-panel-meta"><span>Windows + Linux</span><span>Full admin access</span></div></article>
-            <article class="drawer-panel" id="drawer-panel-1" role="tabpanel" data-drawer-panel="1" hidden><span class="drawer-panel-kicker">WEB HOSTING</span><h3>Reliable Web Hosting</h3><p>Stay up under traffic spikes, get real support.</p><div class="drawer-panel-meta"><span>DDoS protection</span><span>24/7 support</span></div></article>
-            <article class="drawer-panel" id="drawer-panel-2" role="tabpanel" data-drawer-panel="2" hidden><span class="drawer-panel-kicker">AUTOMATION</span><h3>Trading &amp; Automation</h3><p>24/7 uptime for terminals, bots, and scripts.</p><div class="drawer-panel-meta"><span>Dedicated CPU</span><span>Low-latency infrastructure</span></div></article>
-            <article class="drawer-panel" id="drawer-panel-3" role="tabpanel" data-drawer-panel="3" hidden><span class="drawer-panel-kicker">DATA STORAGE</span><h3>Secure Data Storage</h3><p>Backed up, protected, and always available.</p><div class="drawer-panel-meta"><span>NVMe storage</span><span>Isolated VM instance</span></div></article>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Section 03 — Plans ============ -->
+  <!-- ============ Section 02 — Plans ============ -->
   <section class="section plans-preview" id="plans">
     <div class="container">
-      <div class="section-head">
-        <span class="sec-index fade-up">03 / Pick your power</span>
-        <h2 class="fade-up d1">Select your performance level</h2>
-        <p class="fade-up d2">All plans include free migration assistance, 24/7 support, and our industry-leading uptime guarantee.</p>
-      </div>
-      <div style="text-align:center" class="fade-up d2">
-        <div class="billing-toggle" id="billingToggle" role="tablist" aria-label="Billing cycle">
-          <button role="tab" data-cycle="monthly" class="active">Monthly</button>
-          <button role="tab" data-cycle="quarterly">Quarterly <span class="off">−10%</span></button>
-          <button role="tab" data-cycle="annual">Annual <span class="off">−20%</span></button>
-          <button role="tab" data-cycle="biannual">Biannual <span class="off">−30%</span></button>
-        </div>
-      </div>
+      <div class="section-head"><h2 class="fade-up">Choose your working level.</h2><p class="fade-up d1">Start with a focused configuration. Move to the full comparison when you need more room.</p></div>
+      <div class="billing-row fade-up d2"><span class="billing-label">Billing cycle</span><div class="billing-toggle" id="billingToggle" role="tablist" aria-label="Billing cycle">
+        <button role="tab" data-cycle="monthly" class="active">Monthly</button><button role="tab" data-cycle="quarterly">Quarterly <span class="off">−10%</span></button><button role="tab" data-cycle="annual">Annual <span class="off">−20%</span></button><button role="tab" data-cycle="biannual">Biannual <span class="off">−30%</span></button>
+      </div></div>
       <div class="plan-grid" id="planGrid" aria-live="polite">${preview}</div>
-      <div class="all-link"><a class="btn btn-ghost" href="/plans.html">View All ${USA.length + EU.length} Plans</a></div>
+      <div class="all-link"><a class="btn btn-ghost" href="/plans.html">View All ${USA.length + EU.length} Plans</a><span>USA + EU locations · Secure checkout</span></div>
     </div>
   </section>
 
-  <!-- ============ Testimonial ============ -->
-  <section class="section" id="testimonials">
-    <div class="container">
-      <div class="section-head center"><span class="sec-index" style="justify-content:center">04 / Customer stories</span><h2 class="fade-up d1">Trusted by server owners</h2></div>
-      <div id="testimonialQuote" class="quote-block" aria-live="polite">${testimonialHtml()}</div>
+  <!-- ============ Section 03 — Control ============ -->
+  <section class="section control-section" id="control">
+    <div class="container control-layout">
+      <div class="section-head"><h2 class="fade-up">Keep the important parts visible.</h2><p class="fade-up d1">The public site explains the path. Your client area keeps billing and server controls where they belong.</p><a class="text-link fade-up d2" href="/status.html">Check current service status <span aria-hidden="true">↗</span></a></div>
+      <div class="control-list" aria-label="StealthRDP service details">
+        <div class="control-row"><span class="control-index">01</span><span><b>Performance</b><small>NVMe storage, dedicated CPU options, and 1Gbps network speeds.</small></span></div>
+        <div class="control-row"><span class="control-index">02</span><span><b>Access</b><small>Windows and Linux environments with full administrative access.</small></span></div>
+        <div class="control-row"><span class="control-index">03</span><span><b>Support</b><small>24/7 support with live status shown separately when available.</small></span></div>
+      </div>
     </div>
   </section>
 
   <!-- ============ CTA band ============ -->
   <section class="cta-band">
     <div class="container cta-grid">
-      <div class="cta-copy">
-        <span class="eyebrow fade-up">Join 10,877+ server owners</span>
-        <h2 class="fade-up d1">Ready to stop wasting time on server management?</h2>
-        <p class="fade-up d2">Deploy your high-performance VPS in the next 60 seconds and focus on what matters — your actual work.</p>
-        <p class="micro fade-up d3">Starting at just <b>$9.50/month</b> · 7-day money-back guarantee · Cancel anytime</p>
-      </div>
-      <div class="cta-actions fade-up d3">
-        <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Deploy Your Server Now</a>
-        <a class="btn btn-ghost" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Ask a Pre-Sales Question</a>
-      </div>
+      <div class="cta-copy"><h2 class="fade-up">Ready to make the server yours?</h2><p class="fade-up d1">Choose a plan, review the real price at checkout, and keep your work moving.</p><p class="micro fade-up d2">Starting at just <b>$9.50/month</b> · Cancel anytime</p></div>
+      <div class="cta-actions fade-up d2"><a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Deploy Your Server Now</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Ask a Pre-Sales Question</a></div>
     </div>
   </section>`;
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [ORG, websiteLd()] }];

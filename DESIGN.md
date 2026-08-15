@@ -60,6 +60,16 @@ Use gradients only when they reinforce depth or a state.
 Do not use purple-blue gradient chrome, glass orbs, neon decoration, or generic SaaS blobs.
 Do not nest cards without a clear information relationship.
 
+For the homepage redesign approved on 2026-08-15, use a precision-instrument composition:
+- Copy and one honest interactive server surface share the first viewport.
+- The product surface is the visual centerpiece, not a decorative terminal.
+- Use a proof rail, a workload selector, focused plan choices, and a quiet final CTA.
+- Use hairline rules and whitespace instead of repeated rounded cards.
+- Keep the gold accent for actions and active states.
+- Keep the server setup surface explicitly marked `DEMO ONLY`.
+
+Refero research informs the composition only. Linear contributes precision and hairline geometry. Auros contributes sparse atmospheric depth. Apple contributes whitespace and product focus. Lamborghini contributes restrained yellow pacing. Do not copy their assets, branding, fonts, or page layouts.
+
 ## Composition rules
 
 The first viewport must answer three questions:
@@ -156,6 +166,11 @@ Selected references were accessed on 2026-08-13:
 - Hetzner: expose prerequisites, destructive consequences, and the next connection step.
 - Vultr: organise the index by product task and surface search before browsing depth.
 - Statuspage: separate current component state from incident updates and history.
+- Refero Styles catalog: https://styles.refero.design/
+- Refero Linear style system: https://styles.refero.design/style/90ce5883-bb24-4466-93f7-801cd617b0d1
+- Refero Auros style system: https://styles.refero.design/style/21cfe0c1-778d-4613-9f47-a5718eb929b3
+- Refero Apple style system: https://styles.refero.design/style/aecac5da-f397-4ddf-b71f-de1efc434cb8
+- Refero Lamborghini style system: https://styles.refero.design/style/c9c5be5a-aaa1-4338-9681-8378d2e24fbd
 
 ## Review gate
 
