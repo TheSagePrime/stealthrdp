@@ -68,6 +68,7 @@
   --ambient-gold: rgba(245, 185, 59, 0.09);
   --ambient-blue: rgba(127, 169, 255, 0.07);
   --ambient-green: rgba(47, 212, 124, 0.045);
+  --network-mesh: radial-gradient(circle, var(--network-node) 0 1px, transparent 1.35px), linear-gradient(30deg, transparent 49.5%, var(--network-line) 49.8%, var(--network-line) 50.2%, transparent 50.5%), linear-gradient(150deg, transparent 49.5%, var(--network-line) 49.8%, var(--network-line) 50.2%, transparent 50.5%);
   --green: #2fd47c;
   --green-soft: rgba(47, 212, 124, 0.12);
   --red: #e5484d;
@@ -98,9 +99,7 @@ body {
     radial-gradient(ellipse 55% 38% at 8% 0%, var(--ambient-gold), transparent 70%),
     radial-gradient(ellipse 48% 36% at 92% 14%, var(--ambient-blue), transparent 72%),
     radial-gradient(ellipse 42% 32% at 50% 100%, var(--ambient-green), transparent 75%),
-    radial-gradient(circle, var(--network-node) 0 1px, transparent 1.35px),
-    linear-gradient(30deg, transparent 49.5%, var(--network-line) 49.8%, var(--network-line) 50.2%, transparent 50.5%),
-    linear-gradient(150deg, transparent 49.5%, var(--network-line) 49.8%, var(--network-line) 50.2%, transparent 50.5%);
+    var(--network-mesh);
   background-size: auto, auto, auto, 72px 72px, 144px 144px, 144px 144px;
   background-attachment: scroll, scroll, scroll, fixed, fixed, fixed;
   -webkit-font-smoothing: antialiased;
@@ -911,6 +910,7 @@ body[data-page="home"] .d4 { animation-delay: .2s; }
   --ambient-gold: rgba(245,185,59,.12);
   --ambient-blue: rgba(75,112,180,.08);
   --ambient-green: rgba(31,157,85,.045);
+  --network-mesh: radial-gradient(circle, var(--network-node) 0 1px, transparent 1.35px), linear-gradient(30deg, transparent 49.5%, var(--network-line) 49.8%, var(--network-line) 50.2%, transparent 50.5%), linear-gradient(150deg, transparent 49.5%, var(--network-line) 49.8%, var(--network-line) 50.2%, transparent 50.5%);
   --green: #1f9d55;
   --green-soft: rgba(31,157,85,.12);
   --red: #c43b40;
@@ -938,4 +938,15 @@ body[data-page="home"] .d4 { animation-delay: .2s; }
   body[data-page="home"] #usecases .sec-index,
   body[data-page="home"] .plans-preview .sec-index { display: none; }
   body[data-page="home"] .demo-command { white-space: normal; overflow: visible; word-break: break-word; }
+}
+
+/* Shared technical backdrop for filled site surfaces. */
+.marquee,
+.trust-bar,
+.proof-rail,
+.plans-preview,
+.footer,
+.docs-surface {
+  background-image: var(--network-mesh);
+  background-size: 72px 72px, 144px 144px, 144px 144px;
 }
