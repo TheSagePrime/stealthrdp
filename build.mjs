@@ -317,9 +317,9 @@ function testimonialHtml() {
 }
 
 function reviewCardHtml(review, extraClass = "") {
-  const source = review.sourceUrl
-    ? `<a href="${esc(review.sourceUrl)}" target="_blank" rel="noopener noreferrer">${esc(review.sourceLabel || "Public review")}</a>`
-    : `<span>${esc(review.sourceLabel || "Customer story")}</span>`;
+  // Keep source URLs in the data snapshot for internal provenance only. Review
+  // cards must not expose clickable links or raw source URLs.
+  const source = `<span>${esc(review.sourceLabel || "Customer feedback")}</span>`;
   const author = review.authorName ? `<b>${esc(review.authorName)}</b>` : `<b>Verified source</b>`;
   return `<article class="review-card review-${esc(review.sentiment || "neutral")}${extraClass}">
     <div class="review-card-meta"><span class="review-mark" aria-hidden="true">“</span><span class="review-source">${source}</span></div>
@@ -329,14 +329,16 @@ function reviewCardHtml(review, extraClass = "") {
 }
 
 function reviewWallHtml() {
-  // These are public-source excerpts, not claims that the authors use StealthRDP.
-  const items = REVIEWS.filter((item) => item && item.quote && item.sourceUrl);
-  if (!items.length) return '<div class="quote-empty">Public community feedback is being collected.</div>';
+  // Only the source-backed StealthRDP reviews belong on this wall. The
+  // remaining community snapshot is retained in data/reviews.json for
+  // provenance, but is excluded rather than relabelled or rewritten.
+  const items = REVIEWS.filter((item) => item && item.quote && item.sourceUrl && item.sourceCompany === "StealthRDP" && item.sourceType === "third-party review");
+  if (!items.length) return '<div class="quote-empty">Verified StealthRDP customer feedback is being collected.</div>';
   const columns = [0, 1, 2].map((column) => items.filter((_, index) => index % 3 === column));
-  return `<div class="review-wall" data-review-count="${items.length}" aria-label="Public community review excerpts">
+  return `<div class="review-wall" data-review-count="${items.length}" aria-label="Verified StealthRDP customer reviews">
     ${columns.map((column, index) => `<div class="review-column review-column-${index + 1}"><div class="review-track">${column.concat(column).map((review, reviewIndex) => reviewCardHtml(review, reviewIndex >= column.length ? " review-card-copy" : "")).join("")}</div></div>`).join("")}
   </div>
-  <p class="review-disclosure">${items.length} public-source excerpts are shown with neutral attribution. They describe the named provider or community topic, not StealthRDP.</p>`;
+  <p class="review-disclosure">${items.length} verified StealthRDP customer reviews are shown with their original wording. The source set does not provide additional verified StealthRDP reviews, so no entries have been added to fill the gap.</p>`;
 }
 
 function blogCardHtml(p, extraClass = "") {
@@ -605,12 +607,13 @@ function buildDocsIndex() {
   const categories = [...new Set(DOCS.map((article) => article.category))].sort((a, b) => a.localeCompare(b));
   const options = categories.map((category) => `<option value="${esc(category)}">${esc(category)}</option>`).join("");
   const cards = DOCS.map(docCardHtml).join("");
+  const quickPaths = DOCS.slice(0, 4).map((article, index) => `<a class="docs-quick-link" href="/docs/${esc(article.slug)}.html"><span>0${index + 1}</span><strong>${esc(article.title)}</strong><b aria-hidden="true">→</b></a>`).join("");
   const body = `<main class="docs-index docs-surface">
-    <section class="docs-index-hero"><div class="container">
+    <section class="docs-index-hero"><div class="container docs-hero-grid"><div>
       <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>Docs</span></nav>
-      <span class="eyebrow">Read / Explore</span><h1>StealthRDP Documentation</h1>
-      <p>Task-focused guides from the verified StealthRDP documentation snapshot. Search first, then follow the prerequisites and commands that fit your server.</p>
-    </div></section>
+      <div class="page-hero-kicker"><span class="eyebrow">Read / Explore</span><span class="page-hero-meta">${DOCS.length} verified guides · source-labelled</span></div><h1>Find the next safe step.</h1>
+      <p>Task-focused guides for Windows, Linux, networking, panels, server management, and account questions. Search first, then follow the prerequisites and commands that fit your server.</p>
+    </div><aside class="docs-hero-rail"><span class="mono">START HERE</span>${quickPaths}</aside></div></section>
     <section class="section docs-index-section"><div class="container docs-index-layout">
       <aside class="docs-index-intro"><span class="sec-index">Knowledge base</span><h2>Find the next safe step</h2><p>Browse by task or search exact terms. The articles below are preserved source material, not new product claims.</p><a class="btn btn-ghost btn-sm" href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">Ask support</a></aside>
       <div class="docs-results"><div class="docs-controls"><label class="docs-search-label" for="docsSearch">Search guides</label><input id="docsSearch" type="search" placeholder="Try: rebuild, VPN, PowerShell…" autocomplete="off" /><label class="docs-category-label" for="docsCategory">Category</label><select id="docsCategory"><option value="all">All categories</option>${options}</select></div><div class="docs-results-bar"><span id="docsResultsCount">${DOCS.length} guides</span><span>Verified source snapshot · ${DOCS.length} articles</span></div><div class="docs-card-grid" id="docsResults" data-docs-index>${cards}</div><p class="docs-empty" id="docsEmpty" hidden>No guides match that search. Try a broader term or another category.</p></div>
@@ -709,9 +712,10 @@ function articleLd(post) {
 }
 
 /* ---------- page builders ---------- */
-function page({ active, title, description, canonical, pageType = "website", jsonLd = [], body, extraScripts = [] }) {
+function page({ active, title, description, canonical, pageType = "website", jsonLd = [], body, extraScripts = [], planLocation = "", planLimit = "" }) {
+  const pageData = `${planLocation ? ` data-plan-location="${esc(planLocation)}"` : ""}${planLimit ? ` data-plan-limit="${esc(planLimit)}"` : ""}`;
   return `${head({ title, description, canonical, pageType, jsonLd })}
-<body data-page="${active}">
+<body data-page="${active}"${pageData}>
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NS397SS9"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -867,8 +871,7 @@ function buildIndex() {
   <section class="section reviews-section" id="testimonials">
     <div class="container">
       <div class="compact-section-head reviews-head">
-        <div><h2>Community feedback, in context</h2><p>Short public excerpts from RDP, VPS, hosting, and remote-desktop discussions. Each card names its provider or topic and links to the original source.</p></div>
-        <a class="text-link" href="https://www.trustpilot.com/review/stealthrdp.com" target="_blank" rel="noopener noreferrer">Browse StealthRDP feedback on Trustpilot ${EXTERNAL_SVG}</a>
+        <div><h2>Verified StealthRDP feedback</h2><p>Original customer wording from the verified StealthRDP review set. Source URLs remain in internal provenance data; review cards do not expose links.</p></div>
       </div>
       ${reviewWallHtml()}
     </div>
@@ -935,7 +938,7 @@ function buildPlans() {
         <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/build-your-own-rdp-vps" target="_blank" rel="noopener noreferrer">Configure &amp; Deploy</a>
       </div>
       <div class="comparison-section">
-        <div class="comparison-head"><div><span class="sec-index">02 / Compare precisely</span><h2>See the difference in one view.</h2></div><p>Use this table for a quick resource check. Checkout confirms the current price and availability.</p></div>
+        <div class="comparison-head"><div><span class="sec-index">02 / Compare precisely</span><h2>See the difference in one view. <span class="visually-hidden">VPS Features Comparison</span></h2></div><p>Use this table for a quick resource check. Checkout confirms the current price and availability.</p></div>
         <div class="compare-wrap">
           <table class="compare-table">
             <thead><tr><th>Plan</th><th>CPU</th><th>RAM</th><th>Storage</th><th>Bandwidth</th><th>Price/mo</th><th></th></tr></thead>
@@ -961,6 +964,8 @@ function buildPlans() {
     canonical: "__SRDP_BASE__/plans.html",
     jsonLd,
     body,
+    planLocation: "USA",
+    planLimit: USA.length,
   });
 }
 
@@ -971,19 +976,25 @@ function buildStatus() {
     <div class="ss-card"><div class="ss-num ${ALL_UP ? "good" : "warn"}">24/7</div><div class="ss-lbl">Automated monitoring</div></div>`;
   const nodes = MONITORS.map(nodeCardHtml).join("");
   const body = `
-  <section class="page-hero">
-    <div class="container"><span class="eyebrow">Live Monitoring</span><h1>StealthRDP Server Status</h1><p>Real-time monitoring of our server infrastructure. Check the current status and historical uptime of all StealthRDP services.</p></div>
+  <section class="page-hero page-hero-status">
+    <div class="container page-hero-grid"><div>
+      <div class="page-hero-kicker"><span class="eyebrow">Live monitoring</span><span class="page-hero-meta">Logical nodes only · no host details exposed</span></div>
+      <h1>Know what is happening before you connect.</h1><p>One calm view of the current service state, region by region. The page shows logical components and uptime history — never raw targets or management details.</p>
+    </div><div class="page-hero-aside status-hero-aside" aria-label="Baked status snapshot"><span class="mono">STATUS SNAPSHOT</span><strong>${UP}/${TOTAL} nodes online</strong><span class="status-hero-state ${ALL_UP ? "healthy" : "attention"}"><span aria-hidden="true"></span>${ALL_UP ? "All systems operational" : "Attention required"}</span></div></div>
   </section>
-  <section class="section" style="padding-top:0">
+  <section class="section status-page-section" style="padding-top:0">
     <div class="container">
-      <div class="status-summary" id="statusSummary" aria-live="polite">${summary}</div>
-      <p class="status-source-note" id="statusSourceNote">Baked uptime snapshot · live refresh is attempted when this page loads.</p>
-      <h2 style="font-size:22px;margin-bottom:18px">Production nodes</h2>
+      <div class="status-shell">
+        <div class="status-shell-head"><div><span class="mono">OPERATIONS / CURRENT</span><h2>Current service state</h2></div><p>Live refresh is attempted on load. If the monitoring endpoint is unavailable, the verified snapshot stays visible and is labelled below.</p></div>
+        <div class="status-summary" id="statusSummary" aria-live="polite">${summary}</div>
+        <div class="status-meta"><p class="status-source-note" id="statusSourceNote">Baked uptime snapshot · live refresh is attempted when this page loads.</p><div class="status-legend"><span><i class="status-key healthy" aria-hidden="true"></i>Healthy</span><span><i class="status-key unknown" aria-hidden="true"></i>Unknown / attention</span></div></div>
+      </div>
+      <div class="status-section-head"><div><span class="mono">COMPONENTS</span><h2>Production nodes</h2></div><span class="status-count">${TOTAL} logical components</span></div>
       <div class="node-list" id="nodeList" aria-live="polite">${nodes}</div>
       <div class="status-info-grid">
-        <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px"><h3 style="font-size:18px;margin-bottom:10px">Service Level Agreement</h3><p style="color:var(--text-muted);font-size:14px">StealthRDP is committed to maintaining a 99.9% uptime for all our VPS services. Our monitoring system alerts us instantly of any service disruptions.</p></div>
-        <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px"><h3 style="font-size:18px;margin-bottom:10px">Uptime Guarantee</h3><p style="color:var(--text-muted);font-size:14px">We offer compensation credits for any monthly uptime percentage below our guaranteed 99.9%. The real-time data above shows our actual performance.</p></div>
-        <div style="background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px"><h3 style="font-size:18px;margin-bottom:10px">Incident Response</h3><p style="color:var(--text-muted);font-size:14px">Our technical team is available 24/7 to respond to service disruptions. Most issues are detected and resolved before they affect your experience.</p></div>
+        <div class="status-info-card"><span class="info-index">01</span><h3>Service level</h3><p>StealthRDP is committed to maintaining a 99.9% uptime for VPS services. Monitoring alerts the team when a component changes state.</p></div>
+        <div class="status-info-card"><span class="info-index">02</span><h3>Uptime history</h3><p>The node rows show the last 90-day uptime ratio available in the monitoring snapshot. Checkout and account data remain in WHMCS.</p></div>
+        <div class="status-info-card"><span class="info-index">03</span><h3>Incident response</h3><p>When a service disruption is detected, the technical team investigates and communicates through the support channel.</p></div>
       </div>
     </div>
   </section>`;
@@ -1005,13 +1016,22 @@ function buildStatus() {
 
 /* ---------- 5. blog index ---------- */
 function buildBlog() {
-  const cards = BLOG.map(blogCardHtml).join("");
+  const cards = BLOG.map((post, index) => blogCardHtml(post, index === 0 ? " blog-card-featured" : "")).join("");
+  const categories = [...new Set(BLOG.map((post) => post.category).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+  const categoryOptions = categories.map((category) => `<option value="${esc(category)}">${esc(category)}</option>`).join("");
   const body = `
-  <section class="page-hero">
-    <div class="container"><span class="eyebrow">Insights &amp; Tutorials</span><h1>StealthRDP Blog</h1><p>Expert insights, tutorials, and updates on remote desktop security and management.</p></div>
+  <section class="page-hero blog-page-hero">
+    <div class="container page-hero-grid"><div>
+      <div class="page-hero-kicker"><span class="eyebrow">Read / Operate</span><span class="page-hero-meta">${BLOG.length} field notes · updated from the content pipeline</span></div>
+      <h1>Practical notes for servers in motion.</h1><p>Short, useful guidance for running remote desktops, VPS workloads, and the systems around them. Start with a topic, then take the next safe step.</p>
+    </div><div class="page-hero-aside blog-hero-aside"><span class="mono">LATEST NOTE</span><strong>${esc(BLOG[0].title)}</strong><a href="/blog/${esc(BLOG[0].slug)}.html">Read the latest <span aria-hidden="true">→</span></a></div></div>
   </section>
-  <section class="section" style="padding-top:0">
-    <div class="container"><div class="blog-grid" id="blogGrid">${cards}</div></div>
+  <section class="section blog-index-section" style="padding-top:0">
+    <div class="container">
+      <div class="blog-toolbar"><div><span class="sec-index">Browse the library</span><h2>Find the note that matches the work.</h2></div><div class="blog-filters"><label for="blogSearch">Search articles</label><input id="blogSearch" type="search" placeholder="Try: backups, RDP, uptime…" autocomplete="off" /><label for="blogCategory">Topic</label><select id="blogCategory"><option value="all">All topics</option>${categoryOptions}</select></div></div>
+      <div class="blog-results-bar"><span id="blogResultsCount">${BLOG.length} articles</span><span>Technical guides · tutorials · infrastructure notes</span></div>
+      <div class="blog-grid" id="blogGrid">${cards}</div><p class="blog-empty" id="blogEmpty" hidden>No articles match that search. Try a broader topic.</p>
+    </div>
   </section>`;
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [
     breadcrumbLd("Blog", [
@@ -1033,18 +1053,12 @@ function buildBlog() {
 /* ---------- 6. blog post ---------- */
 function buildBlogPost(post) {
   const body = `
-  <section class="section" style="padding-top:72px">
-    <div class="container">
-      <article class="prose" id="blogPost">
-        <span class="bc-cat">${esc(post.category)}</span>
-        <h1 style="font-size:clamp(28px,4vw,40px);margin:14px 0">${esc(post.title)}</h1>
-        <div class="bc-meta" style="margin-bottom:26px"><span>${esc(post.author)}</span><span>${esc(post.date)}</span></div>
-        <p>${esc(post.excerpt || "")}</p>
-        <div class="note">Full article content is managed by our content pipeline and will appear here automatically. Need help now? <a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">Contact support</a>.</div>
-        <p><a href="/blog.html" style="color:var(--accent)">← Back to blog</a></p>
-      </article>
-    </div>
-  </section>`;
+  <main class="blog-article-page"><div class="container"><article class="blog-article" id="blogPost">
+    <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blog.html">Blog</a><span aria-hidden="true">/</span><span>${esc(post.category)}</span></nav>
+    <header class="blog-article-header"><span class="bc-cat">${esc(post.category)}</span><h1>${esc(post.title)}</h1><div class="bc-meta"><span>${esc(post.author)}</span><span>${esc(post.date)}</span></div></header>
+    <div class="blog-article-body"><p class="blog-lede">${esc(post.excerpt || "")}</p><div class="note">Full article content is managed by our content pipeline and will appear here automatically. Need help now? <a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact support</a>.</div></div>
+    <footer class="blog-article-footer"><a href="/blog.html">← Back to all articles</a><a class="btn btn-primary btn-sm" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Ask support</a></footer>
+  </article></div></main>`;
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [
     breadcrumbLd(post.title, [
       { name: "Home", url: "__SRDP_BASE__/" },
@@ -1070,18 +1084,19 @@ function buildBlogPost(post) {
 /* ---------- 7. faq ---------- */
 function buildFaq() {
   const items = FAQS.map(faqItemHtml).join("");
+  const categories = [...new Set(FAQS.map((item) => item.category).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+  const categoryOptions = categories.map((category) => `<option value="${esc(category)}">${esc(category)}</option>`).join("");
   const body = `
-  <section class="page-hero">
-    <div class="container"><span class="eyebrow">Support</span><h1>Frequently Asked Questions</h1><p>Everything you need to know before deploying your server. Can't find an answer? Our team responds within 2 hours.</p></div>
+  <section class="page-hero faq-page-hero">
+    <div class="container page-hero-grid"><div>
+      <div class="page-hero-kicker"><span class="eyebrow">Support / Answers</span><span class="page-hero-meta">${FAQS.length} verified questions · quick to scan</span></div>
+      <h1>Good answers before you deploy.</h1><p>Start with a question or browse by topic. For account-specific help, move directly to the support portal without losing your place.</p>
+    </div><div class="page-hero-aside faq-hero-aside"><span class="mono">NEED A HUMAN?</span><strong>Support is available 24/7</strong><a href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">Open support <span aria-hidden="true">↗</span></a></div></div>
   </section>
-  <section class="section" style="padding-top:0">
-    <div class="container">
-      <div class="faq-list" id="faqList" aria-live="polite">${items}</div>
-      <div style="margin-top:56px;text-align:center">
-        <h2 style="font-size:22px;margin-bottom:10px">Still have questions?</h2>
-        <p style="color:var(--text-muted);margin-bottom:22px">Our support team is available 24/7 with an average response under 2 hours.</p>
-        <a class="btn btn-primary" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact Support</a>
-      </div>
+  <section class="section faq-page-section" style="padding-top:0">
+    <div class="container faq-layout">
+      <aside class="faq-aside"><span class="sec-index">Browse by topic</span><h2>Make the next decision with confidence.</h2><p>These answers cover plans, setup, billing, access, security, and support. Search works across questions and answers.</p><div class="faq-topic-list">${categories.map((category) => `<button type="button" data-faq-topic="${esc(category)}">${esc(category)}<span>${FAQS.filter((item) => item.category === category).length}</span></button>`).join("")}<button type="button" data-faq-topic="all" class="active">All questions<span>${FAQS.length}</span></button></div></aside>
+      <div class="faq-results"><div class="faq-controls"><label for="faqSearch">Search questions</label><input id="faqSearch" type="search" placeholder="Try: refund, Windows, upgrade…" autocomplete="off" /><label for="faqCategory">Topic</label><select id="faqCategory"><option value="all">All topics</option>${categoryOptions}</select></div><div class="faq-results-bar"><span id="faqResultsCount">${FAQS.length} questions</span><span>Source-backed answers · updated with the site snapshot</span></div><div class="faq-list" id="faqList" aria-live="polite">${items}</div><p class="faq-empty" id="faqEmpty" hidden>No questions match that search. Try another phrase or choose all topics.</p><div class="faq-support"><div><span class="sec-index">Still need a hand?</span><h2>Take the question to support.</h2><p>Account, billing, and server-specific requests are handled in the client portal.</p></div><a class="btn btn-primary" href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">Contact support</a></div></div>
     </div>
   </section>`;
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [

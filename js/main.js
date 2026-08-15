@@ -156,6 +156,13 @@
     return "https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps";
   }
 
+  function setFooterStatusTone(tone) {
+    var footerDot = $(".footer-status .dot");
+    if (!footerDot) return;
+    footerDot.classList.remove("status-healthy", "status-attention", "status-unknown");
+    footerDot.classList.add("status-" + tone);
+  }
+
   function fetchUptime() {
     fetch(API + "/uptime", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" })
       .then(function (r) { if (!r.ok) throw new Error("bad status"); return r.json(); })
@@ -167,6 +174,7 @@
         var msg = total && up === total ? "All systems operational — " + up + "/" + total + " nodes online" : total ? "Service state requires attention — " + up + "/" + total + " nodes online" : "Live status unavailable";
         var footerStatus = $("#footerStatus");
         if (footerStatus) footerStatus.textContent = msg;
+        setFooterStatusTone(total && up === total ? "healthy" : "attention");
         var heroNodeStatus = $("#heroNodeStatus");
         if (heroNodeStatus) {
           heroNodeStatus.innerHTML = '<span class="' + (total && up === total ? "live" : "status-failed") + '"></span> ' + up + "/" + total + (total && up === total ? " nodes operational" : " nodes require attention");
@@ -180,6 +188,7 @@
         // The baked snapshot remains, but a failed live call must be visibly distinct.
         var footerStatus = $("#footerStatus");
         if (footerStatus) footerStatus.textContent = "Live status unavailable";
+        setFooterStatusTone("unknown");
         var heroNodeStatus = $("#heroNodeStatus");
         if (heroNodeStatus) {
           heroNodeStatus.innerHTML = '<span class="status-failed"></span> Live status unavailable';
@@ -269,6 +278,8 @@
       );
     }).join("");
     planGrid.innerHTML = html || '<div style="grid-column:1/-1;text-align:center;color:var(--text-dim);padding:40px">Plans are being updated — check back shortly.</div>';
+    var planGridNote = $("#planGridNote");
+    if (planGridNote) planGridNote.textContent = plans.length + " " + PLAN_LOCATION + " plans · " + (currentCycle === "monthly" ? "prices shown monthly" : currentCycle + " discount applied");
   }
 
   function specRow(k, v) {
@@ -294,7 +305,7 @@
       var btn = e.target.closest("button[data-cycle]");
       if (!btn) return;
       currentCycle = btn.getAttribute("data-cycle");
-      $$("button", billingToggle).forEach(function (b) { b.classList.toggle("active", b === btn); });
+      $$("button", billingToggle).forEach(function (b) { var selected = b === btn; b.classList.toggle("active", selected); b.setAttribute("aria-selected", selected ? "true" : "false"); });
       if (cachedPlans.length) renderPlans(cachedPlans.slice(0, PLAN_LIMIT));
     });
   }
@@ -307,7 +318,7 @@
       var btn = e.target.closest("button[data-location]");
       if (!btn) return;
       PLAN_LOCATION = btn.getAttribute("data-location");
-      $$("button", locTabs).forEach(function (b) { b.classList.toggle("active", b === btn); });
+      $$("button", locTabs).forEach(function (b) { var selected = b === btn; b.classList.toggle("active", selected); b.setAttribute("aria-selected", selected ? "true" : "false"); });
       cachedPlans = [];
       planGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--text-dim);padding:40px">Loading plans…</div>';
       loadPlans();
@@ -391,7 +402,7 @@
           if (!list.length) throw new Error("empty");
           faqList.innerHTML = list.map(function (f, i) {
             return (
-              '<div class="faq-item' + (i === 0 ? " open" : "") + '">' +
+              '<div class="faq-item' + (i === 0 ? " open" : "") + '" data-faq-category="' + esc(f.category || "General") + '" data-faq-question="' + esc(f.question) + '">' +
                 '<button class="faq-q" aria-expanded="' + (i === 0 ? "true" : "false") + '">' +
                   "<span>" + esc(f.question) + '</span><span class="icon">+</span>' +
                 "</button>" +
@@ -403,6 +414,63 @@
         })
         .catch(function () { /* baked FAQ remains */ });
     }
+  }
+
+  /* ---------- FAQ search + topic filters ---------- */
+  if (faqList) {
+    var faqSearch = $("#faqSearch");
+    var faqCategory = $("#faqCategory");
+    var faqEmpty = $("#faqEmpty");
+    var faqResultsCount = $("#faqResultsCount");
+    var faqTopicButtons = $$("[data-faq-topic]");
+    function filterFaqs() {
+      var query = faqSearch ? faqSearch.value.trim().toLowerCase() : "";
+      var category = faqCategory ? faqCategory.value : "all";
+      var visible = 0;
+      $$(".faq-item", faqList).forEach(function (item) {
+        var haystack = ((item.getAttribute("data-faq-question") || "") + " " + (item.querySelector(".faq-a-inner") || {}).textContent || "").toLowerCase();
+        var matches = (!query || haystack.indexOf(query) !== -1) && (category === "all" || item.getAttribute("data-faq-category") === category);
+        item.hidden = !matches;
+        if (matches) visible += 1;
+      });
+      if (faqResultsCount) faqResultsCount.textContent = visible + " question" + (visible === 1 ? "" : "s");
+      if (faqEmpty) faqEmpty.hidden = visible !== 0;
+    }
+    function setFaqTopic(value) {
+      if (faqCategory) faqCategory.value = value;
+      faqTopicButtons.forEach(function (button) { button.classList.toggle("active", button.getAttribute("data-faq-topic") === value); });
+      filterFaqs();
+    }
+    if (faqSearch) faqSearch.addEventListener("input", filterFaqs);
+    if (faqCategory) faqCategory.addEventListener("change", function () { setFaqTopic(faqCategory.value); });
+    faqTopicButtons.forEach(function (button) { button.addEventListener("click", function () { setFaqTopic(button.getAttribute("data-faq-topic")); }); });
+    filterFaqs();
+  }
+
+  /* ---------- Blog search + topic filters ---------- */
+  var blogGrid = $("#blogGrid");
+  if (blogGrid) {
+    var blogSearch = $("#blogSearch");
+    var blogCategory = $("#blogCategory");
+    var blogEmpty = $("#blogEmpty");
+    var blogResultsCount = $("#blogResultsCount");
+    function filterBlog() {
+      var query = blogSearch ? blogSearch.value.trim().toLowerCase() : "";
+      var category = blogCategory ? blogCategory.value : "all";
+      var visible = 0;
+      $$(".blog-card", blogGrid).forEach(function (card) {
+        var title = card.getAttribute("data-blog-title") || "";
+        var text = (title + " " + (card.textContent || "")).toLowerCase();
+        var matches = (!query || text.indexOf(query) !== -1) && (category === "all" || card.getAttribute("data-blog-category") === category);
+        card.hidden = !matches;
+        if (matches) visible += 1;
+      });
+      if (blogResultsCount) blogResultsCount.textContent = visible + " article" + (visible === 1 ? "" : "s");
+      if (blogEmpty) blogEmpty.hidden = visible !== 0;
+    }
+    if (blogSearch) blogSearch.addEventListener("input", filterBlog);
+    if (blogCategory) blogCategory.addEventListener("change", filterBlog);
+    filterBlog();
   }
 
   /* ---------- Features grid (baked cards stay on API failure) ---------- */

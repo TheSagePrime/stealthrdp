@@ -31,7 +31,7 @@
       } catch (e) {}
     }());
   </script>
-  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/style.css?v=os-logos-1" />
   <!-- Google Tag Manager (real container from live site) -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -89,45 +89,49 @@
   <div class="mobile-nav" id="mobileNav"><a href="/">Home</a><a href="/plans.html">Plans</a><a href="/status.html">Server Status</a><a href="/docs.html">Docs</a><a href="/blog.html">Blog</a><a href="/faq.html" class="active">FAQ</a><a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client Area</a></div>
   </header>
   
-  <section class="page-hero">
-    <div class="container"><span class="eyebrow">Support</span><h1>Frequently Asked Questions</h1><p>Everything you need to know before deploying your server. Can't find an answer? Our team responds within 2 hours.</p></div>
+  <section class="page-hero faq-page-hero">
+    <div class="container page-hero-grid"><div>
+      <div class="page-hero-kicker"><span class="eyebrow">Support / Answers</span><span class="page-hero-meta">21 verified questions · quick to scan</span></div>
+      <h1>Good answers before you deploy.</h1><p>Start with a question or browse by topic. For account-specific help, move directly to the support portal without losing your place.</p>
+    </div><div class="page-hero-aside faq-hero-aside"><span class="mono">NEED A HUMAN?</span><strong>Support is available 24/7</strong><a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Open support <span aria-hidden="true">↗</span></a></div></div>
   </section>
-  <section class="section" style="padding-top:0">
-    <div class="container">
-      <div class="faq-list" id="faqList" aria-live="polite"><div class="faq-item open">
+  <section class="section faq-page-section" style="padding-top:0">
+    <div class="container faq-layout">
+      <aside class="faq-aside"><span class="sec-index">Browse by topic</span><h2>Make the next decision with confidence.</h2><p>These answers cover plans, setup, billing, access, security, and support. Search works across questions and answers.</p><div class="faq-topic-list"><button type="button" data-faq-topic="Account Management">Account Management<span>4</span></button><button type="button" data-faq-topic="Pricing &amp; Billing">Pricing &amp; Billing<span>5</span></button><button type="button" data-faq-topic="Services &amp; Plans">Services &amp; Plans<span>6</span></button><button type="button" data-faq-topic="Technical Support &amp; Security">Technical Support &amp; Security<span>6</span></button><button type="button" data-faq-topic="all" class="active">All questions<span>21</span></button></div></aside>
+      <div class="faq-results"><div class="faq-controls"><label for="faqSearch">Search questions</label><input id="faqSearch" type="search" placeholder="Try: refund, Windows, upgrade…" autocomplete="off" /><label for="faqCategory">Topic</label><select id="faqCategory"><option value="all">All topics</option><option value="Account Management">Account Management</option><option value="Pricing &amp; Billing">Pricing &amp; Billing</option><option value="Services &amp; Plans">Services &amp; Plans</option><option value="Technical Support &amp; Security">Technical Support &amp; Security</option></select></div><div class="faq-results-bar"><span id="faqResultsCount">21 questions</span><span>Source-backed answers · updated with the site snapshot</span></div><div class="faq-list" id="faqList" aria-live="polite"><div class="faq-item open" data-faq-category="Services &amp; Plans" data-faq-question="What services does StealthRDP offer?">
     <button class="faq-q" aria-expanded="true"><span>What services does StealthRDP offer?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">StealthRDP specializes in providing robust Remote Desktop Protocol (RDP) servers, Virtual Private Servers (VPS), and dedicated hosting solutions. We offer pre-configured plans in the USA and EU regions, as well as a &#39;Build Your Own&#39; custom VPS option that allows you to select your exact specifications.</div></div>
-  </div><div class="faq-item">
+  </div><div class="faq-item" data-faq-category="Services &amp; Plans" data-faq-question="Where are your data centers located?">
     <button class="faq-q" aria-expanded="false"><span>Where are your data centers located?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">We currently operate data centers in the United States (for USA plans) and the Netherlands (for EU plans). All our data centers feature state-of-the-art infrastructure with redundant power supplies, cooling systems, and network connections to ensure maximum reliability and uptime.</div></div>
-  </div><div class="faq-item">
+  </div><div class="faq-item" data-faq-category="Services &amp; Plans" data-faq-question="What is the difference between USA and EU plans?">
     <button class="faq-q" aria-expanded="false"><span>What is the difference between USA and EU plans?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">USA and EU plans offer similar specifications but are hosted in different geographic locations. USA plans are hosted in our US-based data centers, while EU plans are hosted in the Netherlands. The main difference is latency - choose the region closest to your location or target audience for optimal performance. Resource allocations and pricing may vary slightly between equivalent tiers in different regions.</div></div>
-  </div><div class="faq-item">
+  </div><div class="faq-item" data-faq-category="Services &amp; Plans" data-faq-question="What is the &#39;Build Your Own VPS&#39; option?">
     <button class="faq-q" aria-expanded="false"><span>What is the &#39;Build Your Own VPS&#39; option?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">Our Build Your Own VPS option allows complete customization of your server resources. You can select your preferred CPU cores (1-32), RAM (1GB-128GB), and SSD storage (20GB-2TB) based on your specific needs. You can also choose your preferred operating system, data center location (USA or EU), and billing cycle. This option provides maximum flexibility and ensures you only pay for exactly what you need.</div></div>
-  </div><div class="faq-item">
+  </div><div class="faq-item" data-faq-category="Services &amp; Plans" data-faq-question="What operating systems are available?">
     <button class="faq-q" aria-expanded="false"><span>What operating systems are available?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">We offer a wide range of Windows and Linux operating systems. For Windows, we support Windows Server 2016, 2019, 2022, as well as Windows 10 and 11. For Linux, we offer Ubuntu (18.04, 20.04, 22.04), CentOS (7, 8, Stream), Debian (10, 11), and other popular distributions. Custom OS installations may be available upon request.</div></div>
-  </div><div class="faq-item">
+  </div><div class="faq-item" data-faq-category="Services &amp; Plans" data-faq-question="What features are included with StealthRDP plans?">
     <button class="faq-q" aria-expanded="false"><span>What features are included with StealthRDP plans?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">All our plans include: dedicated IPv4 addresses, high-speed network connections (1Gbps standard), unlimited bandwidth (fair usage policy applies), full Administrator/Root access, 99.99% uptime guarantee, DDoS protection, and responsive technical support. Higher-tier plans include additional features like priority support, enhanced DDoS protection, and faster provisioning times.</div></div>
-  </div><div class="faq-item">
+  </div><div class="faq-item" data-faq-category="Pricing &amp; Billing" data-faq-question="What billing cycles do you offer?">
     <button class="faq-q" aria-expanded="false"><span>What billing cycles do you offer?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">We offer flexible billing cycles to suit different needs: Monthly (5% discount compared to standard rates), Quarterly (10% discount), Annual (20% discount), and BiAnnual/2-year (30% discount). The longer the billing cycle you choose, the greater your savings.</div></div>
-  </div><div class="faq-item">
+  </div><div class="faq-item" data-faq-category="Pricing &amp; Billing" data-faq-question="How do the discounts work?">
     <button class="faq-q" aria-expanded="false"><span>How do the discounts work?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">Discounts are automatically applied based on your selected billing cycle. For example, if a plan costs $100/month at standard rates, you would pay $95/month on the monthly cycle (5% off), $90/month on the quarterly cycle (10% off), $80/month on the annual cycle (20% off), or $70/month on the biannual cycle (30% off). The total amount charged will be for the entire period (e.g., 3 months for quarterly billing).</div></div>
-  </div><div class="faq-item">
+  </div><div class="faq-item" data-faq-category="Pricing &amp; Billing" data-faq-question="What payment methods are accepted?">
     <button class="faq-q" aria-expanded="false"><span>What payment methods are accepted?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">We accept all major credit and debit cards (Visa, MasterCard, American Express, Discover), as well as select cryptocurrencies. For enterprise customers, we may offer additional payment options including wire transfers and purchase orders. Contact our sales team for more information about payment options for your specific location.</div></div>
-  </div><div class="faq-item">
+  </div><div class="faq-item" data-faq-category="Pricing &amp; Billing" data-faq-question="Is there a trial period for your services?">
     <button class="faq-q" aria-expanded="false"><span>Is there a trial period for your services?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">We do not currently offer a free trial period. However, we provide a 48-hour satisfaction guarantee on new accounts. If you&#39;re not completely satisfied with our service within the first 48 hours, contact our support team to discuss your concerns. We&#39;re confident in the quality of our services and work hard to ensure customer satisfaction.</div></div>
-  </div><div class="faq-item">
+  </div><div class="faq-item" data-faq-category="Pricing &amp; Billing" data-faq-question="Can I get a refund if I&#39;m not satisfied?">
     <button class="faq-q" aria-expanded="false"><span>Can I get a refund if I&#39;m not satisfied?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">Our services are generally non-refundable after the 48-hour satisfaction guarantee period. Refunds may be considered on a case-by-case basis for significant service disruptions caused by our infrastructure, subject to review. Please refer to our Terms of Service for detailed information about our refund policy.</div></div>
-  </div><div class="faq-item">
+  </div><div class="faq-item" data-faq-category="Account Management" data-faq-question="How do I sign up for StealthRDP services?">
     <button class="faq-q" aria-expanded="false"><span>How do I sign up for StealthRDP services?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">Signing up is simple: 
 1) Choose your desired service (USA RDP/VPS, EU RDP/VPS, or Build Your Own) on our website
@@ -135,22 +139,22 @@
 3) Complete the checkout process with your payment information
 4) Receive your service credentials via email within minutes of payment confirmation
 5) Log in and start using your new server!</div></div>
-  </div><div class="faq-item">
+  </div><div class="faq-item" data-faq-category="Account Management" data-faq-question="How quickly are services activated?">
     <button class="faq-q" aria-expanded="false"><span>How quickly are services activated?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">Most services are activated within 5-10 minutes after payment confirmation. The exact time depends on the operating system being installed and current system load. For standard Windows and Linux installations, activation is typically completed within 5 minutes. For custom configurations or during peak periods, it may take up to 15 minutes. You&#39;ll receive an email with your login credentials as soon as your server is ready.</div></div>
-  </div><div class="faq-item">
+  </div><div class="faq-item" data-faq-category="Account Management" data-faq-question="Can I upgrade or downgrade my service plan?">
     <button class="faq-q" aria-expanded="false"><span>Can I upgrade or downgrade my service plan?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">Yes, you can upgrade your plan at any time through your client area. When upgrading, you&#39;ll only be charged the prorated difference between your current plan and the new plan for the remaining billing period. Downgrades are typically processed at the end of your current billing cycle. Please contact our support team for assistance with plan changes.</div></div>
-  </div><div class="faq-item">
+  </div><div class="faq-item" data-faq-category="Account Management" data-faq-question="Can I cancel my service at any time?">
     <button class="faq-q" aria-expanded="false"><span>Can I cancel my service at any time?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">Yes, you can cancel your service at any time through your client area. For monthly plans, service will continue until the end of the current paid period. For longer billing cycles, please review our Terms of Service regarding potential refunds for unused service time. To retain your data, make sure to back up all important information before cancellation, as all data is permanently deleted upon service termination.</div></div>
-  </div><div class="faq-item">
+  </div><div class="faq-item" data-faq-category="Technical Support &amp; Security" data-faq-question="What kind of access do I get with RDP/VPS plans?">
     <button class="faq-q" aria-expanded="false"><span>What kind of access do I get with RDP/VPS plans?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">All our RDP and VPS plans include full Administrator (Windows) or Root (Linux) access, giving you complete control over your server environment. This allows you to install software, configure settings, and manage users according to your requirements. We do not impose any restrictions on legitimate software installations or configurations.</div></div>
-  </div><div class="faq-item">
+  </div><div class="faq-item" data-faq-category="Technical Support &amp; Security" data-faq-question="What should I do if I experience technical issues?">
     <button class="faq-q" aria-expanded="false"><span>What should I do if I experience technical issues?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">If you encounter technical problems, you can contact our support team via the ticketing system in your client area or by emailing support@stealthrdp.com. Our technical support team is available 24/7, with typical response times of 10-30 minutes during business hours and within 2 hours outside business hours. For critical issues affecting service availability, we offer priority support for enterprise customers.</div></div>
-  </div><div class="faq-item">
+  </div><div class="faq-item" data-faq-category="Technical Support &amp; Security" data-faq-question="How is my data protected with StealthRDP?">
     <button class="faq-q" aria-expanded="false"><span>How is my data protected with StealthRDP?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">We implement multiple security measures to protect your data:
 1) Physical security at our data centers including biometric access controls and 24/7 surveillance
@@ -159,21 +163,16 @@
 4) Encrypted storage options available on request
 
 However, we recommend maintaining your own regular backups of critical data as an additional precaution.</div></div>
-  </div><div class="faq-item">
+  </div><div class="faq-item" data-faq-category="Technical Support &amp; Security" data-faq-question="Do you provide backup services?">
     <button class="faq-q" aria-expanded="false"><span>Do you provide backup services?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">We perform weekly backups of our entire server infrastructure for disaster recovery purposes. However, PLEASE DO NOT use your server as a storage solution for critically important data. While we take all precautions, servers can experience hardware issues or become unresponsive. It is your responsibility to perform regular backups of your important data. We cannot restore individual files if hardware issues occur. Remember: Your data&#39;s safety is ultimately your responsibility. We recommend implementing your own backup strategy for any data you cannot afford to lose.</div></div>
-  </div><div class="faq-item">
+  </div><div class="faq-item" data-faq-category="Technical Support &amp; Security" data-faq-question="What happens if I violate the Terms of Service?">
     <button class="faq-q" aria-expanded="false"><span>What happens if I violate the Terms of Service?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">Violations of our Terms of Service may result in immediate suspension or termination of your services without refund. Prohibited activities include illegal content distribution, unauthorized scanning or hacking attempts, spamming, operating botnets, and resource abuse affecting other customers. We strictly enforce these policies to maintain network integrity, service quality, and legal compliance. Minor violations may receive a warning, while serious violations will result in immediate account termination.</div></div>
-  </div><div class="faq-item">
+  </div><div class="faq-item" data-faq-category="Technical Support &amp; Security" data-faq-question="Is DDoS protection included with all plans?">
     <button class="faq-q" aria-expanded="false"><span>Is DDoS protection included with all plans?</span><span class="icon">+</span></button>
     <div class="faq-a"><div class="faq-a-inner">Yes, all our plans include basic DDoS protection that mitigates common attacks up to 10Gbps. Higher-tier plans include enhanced DDoS protection with coverage up to 50Gbps. For customers requiring additional protection, we offer premium DDoS mitigation as an add-on service, providing coverage up to 100Gbps with advanced traffic filtering capabilities.</div></div>
-  </div></div>
-      <div style="margin-top:56px;text-align:center">
-        <h2 style="font-size:22px;margin-bottom:10px">Still have questions?</h2>
-        <p style="color:var(--text-muted);margin-bottom:22px">Our support team is available 24/7 with an average response under 2 hours.</p>
-        <a class="btn btn-primary" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact Support</a>
-      </div>
+  </div></div><p class="faq-empty" id="faqEmpty" hidden>No questions match that search. Try another phrase or choose all topics.</p><div class="faq-support"><div><span class="sec-index">Still need a hand?</span><h2>Take the question to support.</h2><p>Account, billing, and server-specific requests are handled in the client portal.</p></div><a class="btn btn-primary" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact support</a></div></div>
     </div>
   </section>
   <footer class="footer"><div class="container">

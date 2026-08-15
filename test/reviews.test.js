@@ -8,10 +8,16 @@ const path = require("path");
 const ROOT = path.join(__dirname, "..");
 const read = (file) => fs.readFileSync(path.join(ROOT, file), "utf8");
 const REVIEWS = JSON.parse(read("data/reviews.json"));
+const HTML = read("index.html");
+const CSS = read("css/style.css");
+const reviewSection = HTML.match(/<section class="section reviews-section"[\s\S]*?<\/section>/)?.[0] || "";
+const verified = REVIEWS.filter((item) => item.sourceCompany === "StealthRDP" && item.sourceType === "third-party review");
+const excludedCompanies = [...new Set(REVIEWS.filter((item) => item.sourceCompany !== "StealthRDP").map((item) => item.sourceCompany))];
 
 
-test("review data contains 40-50 unique source-backed excerpts", () => {
-  assert.ok(REVIEWS.length >= 40 && REVIEWS.length <= 50, `expected 40-50 reviews, got ${REVIEWS.length}`);
+test("review data preserves the complete source-backed provenance snapshot", () => {
+  assert.strictEqual(REVIEWS.length, 48, "the internal provenance snapshot remains complete");
+  assert.strictEqual(verified.length, 13, "exactly 13 verified StealthRDP reviews remain eligible");
   assert.strictEqual(new Set(REVIEWS.map((item) => item.id)).size, REVIEWS.length, "review IDs are unique");
   for (const review of REVIEWS) {
     assert.ok(review.quote && review.quote.trim(), `${review.id}: quote`);
@@ -22,12 +28,27 @@ test("review data contains 40-50 unique source-backed excerpts", () => {
 });
 
 
-test("generated review wall keeps provenance visible and does not imply StealthRDP customers", () => {
-  const html = read("index.html");
-  assert.strictEqual(html.match(/data-review-count="(\d+)"/)?.[1], String(REVIEWS.length));
-  assert.match(html, /aria-label="Public community review excerpts"/);
-  assert.match(html, /Community feedback, in context/);
-  assert.match(html, /They describe the named provider or community topic, not StealthRDP/);
-  assert.doesNotMatch(html, /aria-label="Customer reviews"|First-party customer story|StealthRDP Customer/);
-  assert.strictEqual((html.match(/class="review-card /g) || []).length, REVIEWS.length * 2, "animation duplicates each source item once");
+test("generated review wall shows only verified StealthRDP wording without source links", () => {
+  assert.strictEqual(reviewSection.match(/data-review-count="(\d+)"/)?.[1], String(verified.length));
+  assert.match(reviewSection, /Verified StealthRDP feedback/);
+  assert.match(reviewSection, /13 verified StealthRDP customer reviews/);
+  assert.match(reviewSection, /no entries have been added to fill the gap/);
+  assert.doesNotMatch(reviewSection, /<a\b/i, "review section has no visible or clickable source links");
+  assert.doesNotMatch(reviewSection, /https?:\/\//i, "review section has no raw source URLs");
+  assert.strictEqual((reviewSection.match(/class="review-card /g) || []).length, verified.length * 2, "animation duplicates each eligible source item once");
+  for (const company of excludedCompanies) {
+    assert.doesNotMatch(reviewSection, new RegExp(company.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"), `${company} is not visible in the review section`);
+  }
+  assert.doesNotMatch(reviewSection, /community comment|named provider|other provider/i);
+});
+
+
+test("review wall keeps animation, mobile stacking, pause, and reduced-motion safeguards", () => {
+  assert.match(CSS, /\.review-track \{[^}]*min-width: 0;[^}]*width: 100%;/);
+  assert.match(CSS, /\.review-card \{[^}]*width: 100%;[^}]*min-width: 0;/);
+  assert.match(CSS, /\.review-column:hover \.review-track, \.review-column:focus-within \.review-track \{[^}]*animation-play-state: paused;/);
+  assert.match(CSS, /@media \(max-width: 700px\)[\s\S]*?\.review-wall \{[^}]*grid-template-columns: 1fr;/);
+  assert.match(CSS, /@media \(max-width: 700px\)[\s\S]*?\.review-track \{ animation: none;/);
+  assert.match(CSS, /@media \(max-width: 700px\)[\s\S]*?\.review-card-copy \{ display: none;/);
+  assert.match(CSS, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.review-track[^}]*animation: none;/);
 });
