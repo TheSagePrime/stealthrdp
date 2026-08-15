@@ -619,6 +619,8 @@ function buildDocsIndex() {
   const categories = [...new Set(DOCS.map((article) => article.category))].sort((a, b) => a.localeCompare(b));
   const options = categories.map((category) => `<option value="${esc(category)}">${esc(category)}</option>`).join("");
   const cards = DOCS.map(docCardHtml).join("");
+  const topicChips = `<button type="button" class="topic-chip active" data-docs-topic="all">All<span>${DOCS.length}</span></button>` + categories.map((category) => `<button type="button" class="topic-chip" data-docs-topic="${esc(category)}">${esc(category)}<span>${DOCS.filter((article) => article.category === category).length}</span></button>`).join("");
+  const groupedCards = categories.map((category) => `<div class="docs-group" data-docs-group="${esc(category)}"><div class="docs-group-head"><h3>${esc(category)}</h3><span>${DOCS.filter((article) => article.category === category).length} guides</span></div><div class="docs-group-grid">${DOCS.filter((article) => article.category === category).map(docCardHtml).join("")}</div></div>`).join("");
   const body = `<main class="docs-index docs-surface">
     <section class="page-head docs-page-head">
       <div class="container">
@@ -628,7 +630,12 @@ function buildDocsIndex() {
       </div>
     </section>
     <section class="section docs-index-section"><div class="container">
-      <div class="docs-results"><div class="docs-controls"><label class="docs-search-label" for="docsSearch">Search guides</label><input id="docsSearch" type="search" placeholder="Try: rebuild, VPN, PowerShell…" autocomplete="off" /><label class="docs-category-label" for="docsCategory">Category</label><select id="docsCategory"><option value="all">All categories</option>${options}</select></div><div class="docs-results-bar"><span id="docsResultsCount">${DOCS.length} guides</span><span>Verified source snapshot · ${DOCS.length} articles</span></div><div class="docs-card-grid" id="docsResults" data-docs-index>${cards}</div><p class="docs-empty" id="docsEmpty" hidden>No guides match that search. Try a broader term or another category.</p></div>
+      <div class="docs-results">
+        <div class="docs-controls"><label class="docs-search-label" for="docsSearch">Search guides</label><input id="docsSearch" type="search" placeholder="Try: rebuild, VPN, PowerShell…" autocomplete="off" /><select id="docsCategory" hidden><option value="all">All categories</option>${options}</select></div>
+        <div class="topic-chips docs-topics" role="group" aria-label="Filter by category">${topicChips}</div>
+        <div class="docs-results-bar"><span id="docsResultsCount">${DOCS.length} guides</span><span>Verified source snapshot · ${DOCS.length} articles</span></div>
+        <div class="docs-card-grid" id="docsResults" data-docs-index>${groupedCards}</div><p class="docs-empty" id="docsEmpty" hidden>No guides match that search. Try a broader term or another category.</p>
+      </div>
     </div></section>
   </main>`;
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [breadcrumbLd("Docs", [{ name: "Home", url: "__SRDP_BASE__/" }, { name: "Docs", url: "__SRDP_BASE__/docs.html" }]), { "@type": "ItemList", name: "StealthRDP Documentation", itemListElement: DOCS.map((article, index) => ({ "@type": "ListItem", position: index + 1, item: { "@type": "TechArticle", headline: article.title, url: `__SRDP_BASE__/docs/${article.slug}.html` } })) }] }];
@@ -1040,16 +1047,18 @@ function buildStatus() {
 
 /* ---------- 5. blog index ---------- */
 function buildBlog() {
-  const cards = BLOG.map((post, index) => blogCardHtml(post, index === 0 ? " blog-card-featured" : "")).join("");
+  const cards = BLOG.map(blogCardHtml).join("");
   const categories = [...new Set(BLOG.map((post) => post.category).filter(Boolean))].sort((a, b) => a.localeCompare(b));
   const categoryOptions = categories.map((category) => `<option value="${esc(category)}">${esc(category)}</option>`).join("");
+  const topicChips = `<button type="button" class="topic-chip active" data-blog-topic="all">All<span>${BLOG.length}</span></button>` + categories.map((category) => `<button type="button" class="topic-chip" data-blog-topic="${esc(category)}">${esc(category)}<span>${BLOG.filter((post) => post.category === category).length}</span></button>`).join("");
   const body = `
   <section class="page-head">
     <div class="container"><span class="eyebrow">Blog</span><h1>Field notes for servers in motion</h1><p>Short, practical guidance on remote desktops, VPS workloads, and the systems around them.</p></div>
   </section>
   <section class="section blog-index-section" style="padding-top:0">
     <div class="container">
-      <div class="blog-toolbar"><div><span class="sec-index">Browse the library</span><h2>Find the note that matches the work.</h2></div><div class="blog-filters"><label for="blogSearch">Search articles</label><input id="blogSearch" type="search" placeholder="Try: backups, RDP, uptime…" autocomplete="off" /><label for="blogCategory">Topic</label><select id="blogCategory"><option value="all">All topics</option>${categoryOptions}</select></div></div>
+      <div class="blog-toolbar"><div class="blog-filters"><label for="blogSearch">Search articles</label><input id="blogSearch" type="search" placeholder="Try: backups, RDP, uptime…" autocomplete="off" /><select id="blogCategory" hidden><option value="all">All topics</option>${categoryOptions}</select></div></div>
+      <div class="topic-chips blog-topics" role="group" aria-label="Filter by topic">${topicChips}</div>
       <div class="blog-results-bar"><span id="blogResultsCount">${BLOG.length} articles</span><span>Technical guides · tutorials · infrastructure notes</span></div>
       <div class="blog-grid" id="blogGrid">${cards}</div><p class="blog-empty" id="blogEmpty" hidden>No articles match that search. Try a broader topic.</p>
     </div>
@@ -1107,14 +1116,20 @@ function buildFaq() {
   const items = FAQS.map(faqItemHtml).join("");
   const categories = [...new Set(FAQS.map((item) => item.category).filter(Boolean))].sort((a, b) => a.localeCompare(b));
   const categoryOptions = categories.map((category) => `<option value="${esc(category)}">${esc(category)}</option>`).join("");
+  const topicChips = `<button type="button" class="topic-chip active" data-faq-topic="all">All<span>${FAQS.length}</span></button>` + categories.map((category) => `<button type="button" class="topic-chip" data-faq-topic="${esc(category)}">${esc(category)}<span>${FAQS.filter((item) => item.category === category).length}</span></button>`).join("");
   const body = `
   <section class="page-head">
     <div class="container"><span class="eyebrow">FAQ</span><h1>Answers before you deploy</h1><p>Plans, setup, billing, security, and support — search or browse by topic below.</p></div>
   </section>
   <section class="section faq-page-section" style="padding-top:0">
     <div class="container faq-layout">
-      <aside class="faq-aside"><span class="sec-index">Browse by topic</span><h2>Make the next decision with confidence.</h2><p>These answers cover plans, setup, billing, access, security, and support. Search works across questions and answers.</p><div class="faq-topic-list">${categories.map((category) => `<button type="button" data-faq-topic="${esc(category)}">${esc(category)}<span>${FAQS.filter((item) => item.category === category).length}</span></button>`).join("")}<button type="button" data-faq-topic="all" class="active">All questions<span>${FAQS.length}</span></button></div></aside>
-      <div class="faq-results"><div class="faq-controls"><label for="faqSearch">Search questions</label><input id="faqSearch" type="search" placeholder="Try: refund, Windows, upgrade…" autocomplete="off" /><label for="faqCategory">Topic</label><select id="faqCategory"><option value="all">All topics</option>${categoryOptions}</select></div><div class="faq-results-bar"><span id="faqResultsCount">${FAQS.length} questions</span><span>Source-backed answers · updated with the site snapshot</span></div><div class="faq-list" id="faqList" aria-live="polite">${items}</div><p class="faq-empty" id="faqEmpty" hidden>No questions match that search. Try another phrase or choose all topics.</p><div class="faq-support"><div><span class="sec-index">Still need a hand?</span><h2>Take the question to support.</h2><p>Account, billing, and server-specific requests are handled in the client portal.</p></div><a class="btn btn-primary" href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">Contact support</a></div></div>
+      <div class="faq-results">
+        <div class="faq-controls"><label for="faqSearch">Search questions</label><input id="faqSearch" type="search" placeholder="Try: refund, Windows, upgrade…" autocomplete="off" /><select id="faqCategory" hidden><option value="all">All topics</option>${categoryOptions}</select></div>
+        <div class="topic-chips faq-topics" role="group" aria-label="Filter by topic">${topicChips}</div>
+        <div class="faq-results-bar"><span id="faqResultsCount">${FAQS.length} questions</span><span>Source-backed answers · updated with the site snapshot</span></div>
+        <div class="faq-list" id="faqList" aria-live="polite">${items}</div><p class="faq-empty" id="faqEmpty" hidden>No questions match that search. Try another phrase or choose all topics.</p>
+        <div class="faq-support"><div><span class="sec-index">Still need a hand?</span><h2>Take the question to support.</h2><p>Account, billing, and server-specific requests are handled in the client portal.</p></div><a class="btn btn-primary" href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">Contact support</a></div>
+      </div>
     </div>
   </section>`;
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [

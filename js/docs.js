@@ -49,6 +49,7 @@
     var items = cards.map(function (card) {
       return {
         element: card,
+        card: card,
         title: card.getAttribute("data-doc-title") || "",
         summary: card.getAttribute("data-doc-summary") || "",
         category: card.getAttribute("data-doc-category") || "",
@@ -56,14 +57,34 @@
     });
     var count = document.querySelector("#docsResultsCount");
     var empty = document.querySelector("#docsEmpty");
+    var topicButtons = Array.prototype.slice.call(document.querySelectorAll("[data-docs-topic]"));
+    var groups = Array.prototype.slice.call(results.querySelectorAll(".docs-group"));
+
+    function syncChips() {
+      var value = normalize(category.value);
+      topicButtons.forEach(function (button) {
+        button.classList.toggle("active", normalize(button.getAttribute("data-docs-topic")) === value);
+      });
+    }
 
     function render() {
       var visible = filterItems(items, search.value, category.value);
       items.forEach(function (item) { item.element.hidden = visible.indexOf(item) === -1; });
+      groups.forEach(function (group) {
+        var visibleInGroup = items.some(function (item) { return item.category === group.getAttribute("data-docs-group") && !item.element.hidden; });
+        group.hidden = !visibleInGroup;
+      });
+      syncChips();
       if (count) count.textContent = visible.length + (visible.length === 1 ? " guide" : " guides");
       if (empty) empty.hidden = visible.length !== 0;
     }
 
+    topicButtons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        category.value = button.getAttribute("data-docs-topic");
+        render();
+      });
+    });
     search.addEventListener("input", render);
     category.addEventListener("change", render);
   }

@@ -470,6 +470,14 @@
     }
     if (blogSearch) blogSearch.addEventListener("input", filterBlog);
     if (blogCategory) blogCategory.addEventListener("change", filterBlog);
+    var blogTopicButtons = $$("[data-blog-topic]");
+    blogTopicButtons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        if (blogCategory) blogCategory.value = button.getAttribute("data-blog-topic");
+        blogTopicButtons.forEach(function (b) { b.classList.toggle("active", b === button); });
+        filterBlog();
+      });
+    });
     filterBlog();
   }
 
