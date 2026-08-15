@@ -312,10 +312,14 @@ code, .mono { font-family: var(--font-mono); }
 /* ---------- Marquee OS strip ---------- */
 .marquee { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--bg-elev); overflow: hidden; padding: 22px 0; }
 .marquee-track { display: flex; gap: 44px; width: max-content; animation: scrollx 32s linear infinite; }
+.marquee-set { display: contents; }
 .marquee:hover .marquee-track { animation-play-state: paused; }
 @keyframes scrollx { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .marquee-item { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: var(--text-muted); white-space: nowrap; }
 .marquee-item svg { width: 17px; height: 17px; color: var(--text-dim); }
+.marquee-item .os-logo { display: block; width: 24px; height: 24px; flex: 0 0 24px; object-fit: contain; filter: brightness(0) invert(1); opacity: .88; }
+html[data-theme="light"] .marquee-item .os-logo,
+html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); }
 .marquee-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); margin-right: 8px; }
 @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; flex-wrap: wrap; gap: 24px; } .console-card { animation: none; } }
 

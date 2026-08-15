@@ -767,12 +767,32 @@ function buildIndex() {
   </section>
 
   <!-- ============ OS marquee ============ -->
-  <div class="marquee">
+  <div class="marquee" role="region" aria-label="Supported operating systems">
     <div class="marquee-track" id="osTrack">
-      <span class="marquee-label">Works with your OS</span>
-      <span class="marquee-item">Debian</span><span class="marquee-item">CentOS</span><span class="marquee-item">Rocky Linux</span><span class="marquee-item">Ubuntu</span><span class="marquee-item">Fedora</span><span class="marquee-item">FreeBSD</span><span class="marquee-item">Alpine Linux</span><span class="marquee-item">AlmaLinux</span><span class="marquee-item">Windows</span>
-      <span class="marquee-label">Works with your OS</span>
-      <span class="marquee-item">Debian</span><span class="marquee-item">CentOS</span><span class="marquee-item">Rocky Linux</span><span class="marquee-item">Ubuntu</span><span class="marquee-item">Fedora</span><span class="marquee-item">FreeBSD</span><span class="marquee-item">Alpine Linux</span><span class="marquee-item">AlmaLinux</span><span class="marquee-item">Windows</span>
+      <div class="marquee-set" role="list" aria-label="Supported operating systems">
+        <span class="marquee-label" aria-hidden="true">Works with your OS</span>
+        <span class="marquee-item" role="listitem"><img class="os-logo" src="/assets/os-logos/debian.svg" alt="Debian" width="24" height="24" decoding="async"><span aria-hidden="true">Debian</span></span>
+        <span class="marquee-item" role="listitem"><img class="os-logo" src="/assets/os-logos/centos.svg" alt="CentOS" width="24" height="24" decoding="async"><span aria-hidden="true">CentOS</span></span>
+        <span class="marquee-item" role="listitem"><img class="os-logo" src="/assets/os-logos/rockylinux.svg" alt="Rocky Linux" width="24" height="24" decoding="async"><span aria-hidden="true">Rocky Linux</span></span>
+        <span class="marquee-item" role="listitem"><img class="os-logo" src="/assets/os-logos/ubuntu.svg" alt="Ubuntu" width="24" height="24" decoding="async"><span aria-hidden="true">Ubuntu</span></span>
+        <span class="marquee-item" role="listitem"><img class="os-logo" src="/assets/os-logos/fedora.svg" alt="Fedora" width="24" height="24" decoding="async"><span aria-hidden="true">Fedora</span></span>
+        <span class="marquee-item" role="listitem"><img class="os-logo" src="/assets/os-logos/freebsd.svg" alt="FreeBSD" width="24" height="24" decoding="async"><span aria-hidden="true">FreeBSD</span></span>
+        <span class="marquee-item" role="listitem"><img class="os-logo" src="/assets/os-logos/alpinelinux.svg" alt="Alpine Linux" width="24" height="24" decoding="async"><span aria-hidden="true">Alpine Linux</span></span>
+        <span class="marquee-item" role="listitem"><img class="os-logo" src="/assets/os-logos/almalinux.svg" alt="AlmaLinux" width="24" height="24" decoding="async"><span aria-hidden="true">AlmaLinux</span></span>
+        <span class="marquee-item" role="listitem"><img class="os-logo" src="/assets/os-logos/windows.svg" alt="Windows" width="24" height="24" decoding="async"><span aria-hidden="true">Windows</span></span>
+      </div>
+      <div class="marquee-set" aria-hidden="true">
+        <span class="marquee-label">Works with your OS</span>
+        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/debian.svg" alt="" width="24" height="24" decoding="async"><span>Debian</span></span>
+        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/centos.svg" alt="" width="24" height="24" decoding="async"><span>CentOS</span></span>
+        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/rockylinux.svg" alt="" width="24" height="24" decoding="async"><span>Rocky Linux</span></span>
+        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/ubuntu.svg" alt="" width="24" height="24" decoding="async"><span>Ubuntu</span></span>
+        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/fedora.svg" alt="" width="24" height="24" decoding="async"><span>Fedora</span></span>
+        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/freebsd.svg" alt="" width="24" height="24" decoding="async"><span>FreeBSD</span></span>
+        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/alpinelinux.svg" alt="" width="24" height="24" decoding="async"><span>Alpine Linux</span></span>
+        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/almalinux.svg" alt="" width="24" height="24" decoding="async"><span>AlmaLinux</span></span>
+        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/windows.svg" alt="" width="24" height="24" decoding="async"><span>Windows</span></span>
+      </div>
     </div>
   </div>
 
