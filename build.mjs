@@ -321,7 +321,7 @@ function reviewCardHtml(review, extraClass = "") {
   // cards must not expose clickable links, raw source URLs, or provider names.
   const neutralLabel = review.sourceType === "third-party review" ? "Customer feedback" : "Community feedback";
   const source = `<span>${neutralLabel}</span>`;
-  const authorName = (review.authorName || "").split(" · ")[0].trim();
+  const authorName = (review.authorName || "").split(" · ")[0].trim().replace(/Trustpilot reviewer/i, "Verified customer");
   let quote = review.quote || "";
   // Strip competitor/provider names and stray URLs from the visible wording.
   const providerPattern = /\b(?:Linode|DigitalOcean|Digital Ocean|Vultr|Contabo|Hetzner|Kimsufi|Scaleway|Lightsail|RackNerd|BuyVM|RamNode|Leaseweb|Rackspace|CrystalTech|Online\.net|RunAbove|Google Compute Engine|GCE|LowEndBox|LowEnd Talk|KS-1|Amazon Web Services|AWS)\b/gi;
