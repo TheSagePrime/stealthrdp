@@ -1047,7 +1047,7 @@ function buildStatus() {
 
 /* ---------- 5. blog index ---------- */
 function buildBlog() {
-  const cards = BLOG.map(blogCardHtml).join("");
+  const cards = BLOG.map((post) => blogCardHtml(post)).join("");
   const categories = [...new Set(BLOG.map((post) => post.category).filter(Boolean))].sort((a, b) => a.localeCompare(b));
   const categoryOptions = categories.map((category) => `<option value="${esc(category)}">${esc(category)}</option>`).join("");
   const topicChips = `<button type="button" class="topic-chip active" data-blog-topic="all">All<span>${BLOG.length}</span></button>` + categories.map((category) => `<button type="button" class="topic-chip" data-blog-topic="${esc(category)}">${esc(category)}<span>${BLOG.filter((post) => post.category === category).length}</span></button>`).join("");
