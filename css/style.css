@@ -875,3 +875,8 @@ body[data-page="home"] .d4 { animation-delay: .2s; }
   body[data-page="home"] .demo-actions { flex-direction: column; }
   body[data-page="home"] .demo-actions > * { width: 100%; }
 }
+@media (max-width: 620px) {
+  body[data-page="home"] #usecases .sec-index,
+  body[data-page="home"] .plans-preview .sec-index { display: none; }
+  body[data-page="home"] .demo-command { white-space: normal; overflow: visible; word-break: break-word; }
+}
