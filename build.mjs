@@ -619,15 +619,15 @@ function buildDocsIndex() {
   const categories = [...new Set(DOCS.map((article) => article.category))].sort((a, b) => a.localeCompare(b));
   const options = categories.map((category) => `<option value="${esc(category)}">${esc(category)}</option>`).join("");
   const cards = DOCS.map(docCardHtml).join("");
-  const quickPaths = DOCS.slice(0, 4).map((article, index) => `<a class="docs-quick-link" href="/docs/${esc(article.slug)}.html"><span>0${index + 1}</span><strong>${esc(article.title)}</strong><b aria-hidden="true">→</b></a>`).join("");
   const body = `<main class="docs-index docs-surface">
-    <section class="docs-index-hero"><div class="container docs-hero-grid"><div>
-      <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>Docs</span></nav>
-      <div class="page-hero-kicker"><span class="eyebrow">Read / Explore</span><span class="page-hero-meta">${DOCS.length} verified guides · source-labelled</span></div><h1>Find the next safe step.</h1>
-      <p>Task-focused guides for Windows, Linux, networking, panels, server management, and account questions. Search first, then follow the prerequisites and commands that fit your server.</p>
-    </div><aside class="docs-hero-rail"><span class="mono">START HERE</span>${quickPaths}</aside></div></section>
-    <section class="section docs-index-section"><div class="container docs-index-layout">
-      <aside class="docs-index-intro"><span class="sec-index">Knowledge base</span><h2>Find the next safe step</h2><p>Browse by task or search exact terms. The articles below are preserved source material, not new product claims.</p><a class="btn btn-ghost btn-sm" href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">Ask support</a></aside>
+    <section class="page-head docs-page-head">
+      <div class="container">
+        <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>Docs</span></nav>
+        <span class="eyebrow">Documentation</span><h1>Find the next safe step</h1>
+        <p>Task-focused guides for Windows, Linux, networking, panels, and server management. Search first, then follow the prerequisites that fit your server.</p>
+      </div>
+    </section>
+    <section class="section docs-index-section"><div class="container">
       <div class="docs-results"><div class="docs-controls"><label class="docs-search-label" for="docsSearch">Search guides</label><input id="docsSearch" type="search" placeholder="Try: rebuild, VPN, PowerShell…" autocomplete="off" /><label class="docs-category-label" for="docsCategory">Category</label><select id="docsCategory"><option value="all">All categories</option>${options}</select></div><div class="docs-results-bar"><span id="docsResultsCount">${DOCS.length} guides</span><span>Verified source snapshot · ${DOCS.length} articles</span></div><div class="docs-card-grid" id="docsResults" data-docs-index>${cards}</div><p class="docs-empty" id="docsEmpty" hidden>No guides match that search. Try a broader term or another category.</p></div>
     </div></section>
   </main>`;
@@ -939,15 +939,11 @@ function buildPlans() {
   const cards = USA.map((p) => planCardHtml(p)).join("");
   const compare = USA.concat(EU).map(compareRowHtml).join("");
   const body = `
-  <section class="page-hero page-hero-plans">
-    <div class="container page-hero-grid"><div>
-      <div class="page-hero-kicker"><span class="eyebrow">Compare / Deploy</span><span class="page-hero-meta">USA + EU locations · monthly to biannual</span></div>
-      <h1>A clear path to the right server</h1><p>Compare the resource levels side by side, choose the region closest to your users, and continue to secure checkout when the fit is clear.</p>
-    </div><div class="page-hero-aside" aria-label="Plan selection summary"><span class="mono">PLAN INDEX</span><strong>${USA.length} USA tiers</strong><strong>${EU.length} EU tiers</strong><a href="#plan-grid">Jump to plans <span aria-hidden="true">↓</span></a></div></div>
+  <section class="page-head">
+    <div class="container"><span class="eyebrow">VPS plans</span><h1>Plans priced for the work.</h1><p>Pick a resource level, choose your region and billing cycle, and deploy in seconds.</p></div>
   </section>
   <section class="section plans-page-section" style="padding-top:0">
     <div class="container">
-      <div class="plans-context"><div><span class="sec-index">01 / Choose your lane</span><h2>Start with the workload, then tune the commitment.</h2><p>Monthly is the simplest way to start. Longer cycles apply the published discount at checkout.</p></div><a class="text-link" href="#build-your-own">Need a custom shape? <span aria-hidden="true">→</span></a></div>
       <div class="plans-controls">
         <div class="billing-control"><span class="control-label">Billing cycle</span><div class="billing-toggle" id="billingToggle" role="tablist" aria-label="Billing cycle">
           <button role="tab" aria-selected="true" data-cycle="monthly" class="active">Monthly</button>
@@ -1007,11 +1003,8 @@ function buildStatus() {
     <div class="ss-card"><div class="ss-num ${ALL_UP ? "good" : "warn"}">24/7</div><div class="ss-lbl">Automated monitoring</div></div>`;
   const nodes = MONITORS.map(nodeCardHtml).join("");
   const body = `
-  <section class="page-hero page-hero-status">
-    <div class="container page-hero-grid"><div>
-      <div class="page-hero-kicker"><span class="eyebrow">Live monitoring</span><span class="page-hero-meta">Logical nodes only · no host details exposed</span></div>
-      <h1>Know what is happening before you connect.</h1><p>One calm view of the current service state, region by region. The page shows logical components and uptime history — never raw targets or management details.</p>
-    </div><div class="page-hero-aside status-hero-aside" aria-label="Baked status snapshot"><span class="mono">STATUS SNAPSHOT</span><strong>${UP}/${TOTAL} nodes online</strong><span class="status-hero-state ${ALL_UP ? "healthy" : "attention"}"><span aria-hidden="true"></span>${ALL_UP ? "All systems operational" : "Attention required"}</span></div></div>
+  <section class="page-head">
+    <div class="container"><span class="eyebrow">Server status</span><h1>Service status at a glance.</h1><p>Live state of every logical node. The monitoring endpoint updates this page when available; the verified snapshot stays visible otherwise.</p></div>
   </section>
   <section class="section status-page-section" style="padding-top:0">
     <div class="container">
@@ -1051,11 +1044,8 @@ function buildBlog() {
   const categories = [...new Set(BLOG.map((post) => post.category).filter(Boolean))].sort((a, b) => a.localeCompare(b));
   const categoryOptions = categories.map((category) => `<option value="${esc(category)}">${esc(category)}</option>`).join("");
   const body = `
-  <section class="page-hero blog-page-hero">
-    <div class="container page-hero-grid"><div>
-      <div class="page-hero-kicker"><span class="eyebrow">Read / Operate</span><span class="page-hero-meta">${BLOG.length} field notes · updated from the content pipeline</span></div>
-      <h1>Practical notes for servers in motion.</h1><p>Short, useful guidance for running remote desktops, VPS workloads, and the systems around them. Start with a topic, then take the next safe step.</p>
-    </div><div class="page-hero-aside blog-hero-aside"><span class="mono">LATEST NOTE</span><strong>${esc(BLOG[0].title)}</strong><a href="/blog/${esc(BLOG[0].slug)}.html">Read the latest <span aria-hidden="true">→</span></a></div></div>
+  <section class="page-head">
+    <div class="container"><span class="eyebrow">Blog</span><h1>Field notes for servers in motion</h1><p>Short, practical guidance on remote desktops, VPS workloads, and the systems around them.</p></div>
   </section>
   <section class="section blog-index-section" style="padding-top:0">
     <div class="container">
@@ -1118,11 +1108,8 @@ function buildFaq() {
   const categories = [...new Set(FAQS.map((item) => item.category).filter(Boolean))].sort((a, b) => a.localeCompare(b));
   const categoryOptions = categories.map((category) => `<option value="${esc(category)}">${esc(category)}</option>`).join("");
   const body = `
-  <section class="page-hero faq-page-hero">
-    <div class="container page-hero-grid"><div>
-      <div class="page-hero-kicker"><span class="eyebrow">Support / Answers</span><span class="page-hero-meta">${FAQS.length} verified questions · quick to scan</span></div>
-      <h1>Good answers before you deploy.</h1><p>Start with a question or browse by topic. For account-specific help, move directly to the support portal without losing your place.</p>
-    </div><div class="page-hero-aside faq-hero-aside"><span class="mono">NEED A HUMAN?</span><strong>Support is available 24/7</strong><a href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">Open support <span aria-hidden="true">↗</span></a></div></div>
+  <section class="page-head">
+    <div class="container"><span class="eyebrow">FAQ</span><h1>Answers before you deploy</h1><p>Plans, setup, billing, security, and support — search or browse by topic below.</p></div>
   </section>
   <section class="section faq-page-section" style="padding-top:0">
     <div class="container faq-layout">
