@@ -9,7 +9,7 @@ const ROOT = path.join(__dirname, "..");
 const HTML = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 const DOCS = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "docs-articles.json"), "utf8"));
 const publicRoutes = [
-  "index.html", "plans.html", "features.html", "status.html", "blog.html", "faq.html", "about.html", "privacy.html", "docs.html",
+  "index.html", "plans.html", "status.html", "blog.html", "faq.html", "about.html", "privacy.html", "docs.html",
   ...DOCS.map((article) => `docs/${article.slug}.html`),
   ...fs.readdirSync(path.join(ROOT, "blog")).map((file) => `blog/${file}`),
 ];
@@ -151,6 +151,25 @@ test("preview palette lab exposes ten named variants with persistence", () => {
   assert.match(home, /id="paletteLab"/);
   assert.match(mainJs, /stealthrdp-preview-palette/);
   assert.match(mainJs, /event\.key === "Escape"/);
+});
+
+test("Features catalog is consolidated into Plans and the old route redirects", () => {
+  const build = HTML("build.mjs");
+  const server = HTML("server.js");
+  const home = HTML("index.html");
+  const plans = HTML("plans.html");
+  const sitemap = HTML("sitemap.xml");
+  assert.ok(!fs.existsSync(path.join(ROOT, "features.html")), "Features page is removed from the generated surface");
+  assert.doesNotMatch(build, /buildFeatures|featureCardHtml|href="\/features\.html"/);
+  assert.doesNotMatch(home, /href="\/features\.html"/);
+  assert.doesNotMatch(plans, /href="\/features\.html"/);
+  assert.match(plans, /class="included-rail"/);
+  assert.match(plans, /Included with every plan/);
+  assert.match(plans, /Full admin access/);
+  assert.match(plans, /NVMe SSD storage/);
+  assert.match(server, /url\.pathname === "\/features\.html"/);
+  assert.match(server, /Location: "\/#why"/);
+  assert.doesNotMatch(sitemap, /features\.html/);
 });
 
 test("hero console is an honest demonstration without fake completion state", () => {

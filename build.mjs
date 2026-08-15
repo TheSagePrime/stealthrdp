@@ -21,7 +21,6 @@ const DATA = (f) => JSON.parse(fs.readFileSync(path.join(ROOT, "data", f), "utf8
 
 const USA = DATA("plans_usa.json");
 const EU = DATA("plans_eu.json");
-const FEATURES = DATA("features.json");
 const FAQS = DATA("faqs.json");
 const TESTIMONIALS = DATA("testimonials.json");
 const UPTIME = DATA("uptime.json");
@@ -143,7 +142,7 @@ function tickerHtml() {
 
 function navHtml(active) {
   const items = [
-    ["home", "/", "Home"], ["plans", "/plans.html", "Plans"], ["features", "/features.html", "Features"],
+    ["home", "/", "Home"], ["plans", "/plans.html", "Plans"],
     ["status", "/status.html", "Server Status"], ["docs", "/docs.html", "Docs"], ["blog", "/blog.html", "Blog"], ["faq", "/faq.html", "FAQ"],
   ];
   return items.map(([k, href, label]) => `<a href="${href}"${k === active ? ' class="active"' : ""}>${label}</a>`).join("");
@@ -202,7 +201,6 @@ function footerHtml() {
       </div>
       <div class="footer-col"><h4>Products</h4><ul>
         <li><a href="/plans.html">RDP Plans</a></li>
-        <li><a href="/features.html">Features</a></li>
         <li><a href="/plans.html#build-your-own">Build Your Own VPS</a></li>
         <li><a href="/plans.html">Pricing</a></li>
       </ul></div>
@@ -278,12 +276,25 @@ function faqItemHtml(f, i) {
   </div>`;
 }
 
-function featureCardHtml(f) {
-  return `<article class="bento-card bento-2">
-    <span class="bic">${LOGO_SVG}</span>
-    <h3>${esc(f.title)}</h3>
-    <p>${esc((f.description || "").split("\n")[0])}</p>
-  </article>`;
+function includedFeaturesHtml() {
+  const items = [
+    ["Full admin access", "Control your server from day one"],
+    ["NVMe SSD storage", "Fast disk for everyday workloads"],
+    ["DDoS protection", "Protection at the network edge"],
+    ["Instant activation", "Ready after checkout"],
+    ["24/7 support", "Help when you need it"],
+  ];
+  const check = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>';
+  return `<section class="included-rail" aria-labelledby="included-heading">
+    <div class="included-copy">
+      <span class="included-label">Included with every plan</span>
+      <h2 id="included-heading">The essentials are already covered.</h2>
+      <p>Choose a plan by resource level. These service basics stay with every server.</p>
+    </div>
+    <ul class="included-list">
+      ${items.map(([title, description]) => `<li class="included-item"><span class="included-mark">${check}</span><span><strong>${title}</strong><small>${description}</small></span></li>`).join("")}
+    </ul>
+  </section>`;
 }
 
 function nodeCardHtml(m) {
@@ -875,6 +886,7 @@ function buildPlans() {
         <a class="btn btn-sm btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/build-your-own-rdp-vps" target="_blank" rel="noopener noreferrer">Build Your Own VPS</a>
       </div>
       <div class="plan-grid" id="planGrid" aria-live="polite">${cards}</div>
+      ${includedFeaturesHtml()}
       <div id="build-your-own" style="margin-top:64px;background:linear-gradient(180deg,var(--surface-1),var(--bg-elev));border:1px solid var(--border);border-radius:var(--radius-lg);padding:40px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
         <div><h2 style="font-size:24px;margin-bottom:8px">Need something custom?</h2><p style="color:var(--text-muted);max-width:520px">Build a tailor-made VPS with flexible resources to match your exact requirements — CPU, RAM, storage, location, and more.</p></div>
         <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/build-your-own-rdp-vps" target="_blank" rel="noopener noreferrer">Configure &amp; Deploy</a>
@@ -904,38 +916,6 @@ function buildPlans() {
     title: "VPS Plans & Pricing — StealthRDP",
     description: "Compare StealthRDP VPS plans: USA and EU locations, NVMe storage, DDoS protection, 99.9% uptime. From $9.50/month with 7-day money-back guarantee.",
     canonical: "__SRDP_BASE__/plans.html",
-    jsonLd,
-    body,
-  });
-}
-
-/* ---------- 3. features ---------- */
-function buildFeatures() {
-  const grid = FEATURES.map(featureCardHtml).join("");
-  const body = `
-  <section class="page-hero">
-    <div class="container"><span class="eyebrow">Capabilities</span><h1>Everything your workload needs</h1><p>From instant activation to enterprise-grade protection — every StealthRDP server ships with the features that matter.</p></div>
-  </section>
-  <section class="section" style="padding-top:0">
-    <div class="container"><div class="bento" id="featureGrid">${grid}</div></div>
-  </section>
-  <section class="cta-band">
-    <div class="container cta-grid">
-      <div class="cta-copy"><span class="eyebrow">Ready when you are</span><h2>Put these features to work</h2><p>Deploy a server in 60 seconds and get full admin access, DDoS protection, and 24/7 support from day one.</p></div>
-      <div class="cta-actions"><a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Deploy Your Server Now</a><a class="btn btn-ghost" href="/plans.html">Compare Plans</a></div>
-    </div>
-  </section>`;
-  const jsonLd = [{ "@context": "https://schema.org", "@graph": [
-    breadcrumbLd("Features", [
-      { name: "Home", url: "__SRDP_BASE__/" },
-      { name: "Features", url: "__SRDP_BASE__/features.html" },
-    ]),
-  ]}];
-  return page({
-    active: "features",
-    title: "Features — StealthRDP",
-    description: "Explore StealthRDP features: NVMe storage, DDoS protection, instant activation, 24/7 support, trading-ready low latency, and more.",
-    canonical: "__SRDP_BASE__/features.html",
     jsonLd,
     body,
   });
@@ -1180,7 +1160,6 @@ function buildSitemap() {
   const staticRoutes = [
     ["/", "2026-08-06"],
     ["/plans.html", "2026-08-06"],
-    ["/features.html", "2026-08-06"],
     ["/status.html", "2026-08-06"],
     ["/blog.html", "2026-08-06"],
     ["/faq.html", "2026-08-06"],
@@ -1206,7 +1185,6 @@ fs.mkdirSync(path.join(ROOT, "docs"), { recursive: true });
 const OUT = {
   "index.html": buildIndex(),
   "plans.html": buildPlans(),
-  "features.html": buildFeatures(),
   "status.html": buildStatus(),
   "blog.html": buildBlog(),
   "faq.html": buildFaq(),
@@ -1216,6 +1194,8 @@ const OUT = {
   "robots.txt": buildRobots(),
   "sitemap.xml": buildSitemap(),
 };
+
+fs.rmSync(path.join(ROOT, "features.html"), { force: true });
 
 fs.mkdirSync(path.join(ROOT, "blog"), { recursive: true });
 for (const post of BLOG) {

@@ -237,6 +237,12 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  if (url.pathname === "/features.html") {
+    res.writeHead(301, { Location: "/#why", ...SECURITY_HEADERS });
+    res.end();
+    return;
+  }
+
   if (BLOCKED.some((item) => url.pathname.startsWith(item) || url.pathname === item.slice(0, -1))) {
     res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8", ...SECURITY_HEADERS });
     res.end("Not found");

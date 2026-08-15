@@ -15,7 +15,6 @@ const DOCS = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "docs-articles.j
 const ROUTES = [
   "index.html",
   "plans.html",
-  "features.html",
   "status.html",
   "blog.html",
   "faq.html",
@@ -120,14 +119,12 @@ test("AI-readable guide exists and source templates stay free of raw infrastruct
   }
 });
 
-test("baked content is present in raw HTML (plans, features, faq, status, blog)", () => {
+test("baked content is present in raw HTML (plans, faq, status, blog)", () => {
   const plans = HTML("plans.html");
   assert.ok(plans.includes("Bronze USA"), "plans: baked Bronze card");
   assert.ok(plans.includes("VPS Features Comparison"), "plans: compare table");
+  assert.ok(plans.includes("Included with every plan"), "plans: included essentials rail");
   assert.ok((plans.match(/<article class="plan-card/g) || []).length === 6, "plans: 6 baked USA cards");
-
-  const features = HTML("features.html");
-  assert.ok(features.includes("Remote Desktop Protocol (RDP) Services"), "features: baked first feature");
 
   const faq = HTML("faq.html");
   assert.ok(faq.includes("What services does StealthRDP offer?"), "faq: baked first question");

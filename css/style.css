@@ -430,6 +430,23 @@ code, .mono { font-family: var(--font-mono); }
 .plan-spec .sep { flex: 1; margin: 0 10px; border-bottom: 1px dashed var(--border); }
 .plan-card .btn { margin-top: auto; width: 100%; }
 .plans-preview .all-link { text-align: center; margin-top: 38px; }
+.included-rail {
+  max-width: 1040px; margin: 56px auto 0; display: grid;
+  grid-template-columns: minmax(240px, .72fr) minmax(0, 1.28fr); gap: 28px;
+  align-items: center; padding: 28px;
+  background: linear-gradient(135deg, rgba(var(--accent-rgb), .055), var(--surface-1) 48%, var(--bg-elev));
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+}
+.included-label { color: var(--accent); font: 600 10px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
+.included-copy h2 { font-size: clamp(22px, 2.4vw, 30px); margin: 10px 0 8px; }
+.included-copy p { color: var(--text-muted); font-size: 14px; line-height: 1.6; max-width: 360px; }
+.included-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; list-style: none; margin: 0; padding: 0; }
+.included-item { display: flex; align-items: flex-start; gap: 10px; min-width: 0; padding: 12px; background: rgba(0,0,0,.12); border: 1px solid var(--border); border-radius: var(--radius); }
+.included-mark { flex: 0 0 19px; width: 19px; height: 19px; display: grid; place-items: center; color: var(--accent); background: var(--accent-soft); border: 1px solid rgba(var(--accent-rgb), .3); border-radius: 50%; }
+.included-mark svg { width: 12px; height: 12px; }
+.included-item strong, .included-item small { display: block; }
+.included-item strong { color: var(--text); font-size: 13px; line-height: 1.35; }
+.included-item small { margin-top: 3px; color: var(--text-dim); font-size: 11.5px; line-height: 1.4; }
 
 /* ---------- Quote / testimonial ---------- */
 .quote-block { max-width: 780px; margin: 0 auto; text-align: center; }
@@ -583,12 +600,15 @@ code, .mono { font-family: var(--font-mono); }
   .bento-2, .bento-3 { grid-column: span 6; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
   .status-info-grid { grid-template-columns: 1fr; }
+  .included-rail { grid-template-columns: 1fr; gap: 22px; padding: 24px; }
 }
 @media (max-width: 480px) {
   .footer-grid { grid-template-columns: 1fr; }
   .billing-toggle { flex-wrap: wrap; justify-content: center; }
   .palette-panel { width: min(286px, calc(100vw - 32px)); }
   .palette-trigger { padding-left: 9px; padding-right: 9px; }
+  .included-rail { margin-top: 44px; padding: 20px; }
+  .included-list { grid-template-columns: 1fr; }
 }
 
 /* ============================================================
