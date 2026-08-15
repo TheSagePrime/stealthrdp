@@ -341,9 +341,10 @@ function reviewCardHtml(review, extraClass = "") {
 }
 
 function reviewWallHtml() {
-  // Show the complete collected review set on the wall. Internal provenance
-  // stays in data/reviews.json; cards never expose links or provider names.
-  const items = REVIEWS.filter((item) => item && item.quote);
+  // Show the collected positive and neutral reviews on the wall. Critical
+  // entries stay in the data snapshot but are not surfaced. Internal
+  // provenance stays in data/reviews.json; cards never expose links or provider names.
+  const items = REVIEWS.filter((item) => item && item.quote && item.sentiment !== "critical");
   if (!items.length) return '<div class="quote-empty">Customer and community feedback is being collected.</div>';
   const columns = [0, 1, 2].map((column) => items.filter((_, index) => index % 3 === column));
   return `<div class="review-wall" data-review-count="${items.length}" aria-label="Customer and community reviews">

@@ -28,13 +28,18 @@ test("review data preserves the complete source-backed provenance snapshot", () 
 });
 
 
-test("generated review wall shows the full collected set without source links", () => {
-  assert.strictEqual(reviewSection.match(/data-review-count="(\d+)"/)?.[1], String(REVIEWS.length));
+test("generated review wall shows positive and neutral reviews without source links", () => {
+  const expected = REVIEWS.filter((item) => item.quote && item.sentiment !== "critical").length;
+  assert.strictEqual(reviewSection.match(/data-review-count="(\d+)"/)?.[1], String(expected));
   assert.match(reviewSection, /Customer and community reviews/);
   assert.match(reviewSection, /real reviews from server owners and remote-desktop users/);
   assert.doesNotMatch(reviewSection, /<a\b/i, "review section has no visible or clickable source links");
   assert.doesNotMatch(reviewSection, /https?:\/\//i, "review section has no raw source URLs");
-  assert.strictEqual((reviewSection.match(/class="review-card /g) || []).length, REVIEWS.length * 2, "animation duplicates each collected source item once");
+  const criticalQuotes = REVIEWS.filter((item) => item.sentiment === "critical").map((item) => item.quote);
+  for (const quote of criticalQuotes) {
+    const snippet = quote.split(/\s+/).slice(0, 12).join(" ");
+    assert.doesNotMatch(reviewSection, new RegExp(snippet.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"), "critical wording is not rendered");
+  }
   const competitorNames = ["Linode", "DigitalOcean", "Digital Ocean", "Vultr", "Contabo", "Hetzner", "OVH", "Kimsufi", "Scaleway", "AWS", "Lightsail", "RackNerd", "BuyVM", "Leaseweb", "Rackspace", "CrystalTech", "Online.net", "RamNode", "RunAbove", "Google Compute", "LowEndBox", "S3", "Route53", "SES", "Trustpilot", "news.ycombinator", "trustpilot.com/reviews", "Hacker News"];
   for (const name of competitorNames) {
     assert.doesNotMatch(reviewSection, new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i"), `${name} is not visible in the review section`);
