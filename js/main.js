@@ -26,6 +26,15 @@
     return status === "up" || status === 2 || status === "2";
   }
 
+  function setStatusDots(state) {
+    var dots = $$("#tickerDot, .footer-status .dot");
+    dots.forEach(function (dot) {
+      dot.classList.remove("dim", "warn");
+      if (state === "dim") dot.classList.add("dim");
+      if (state === "warn") dot.classList.add("warn");
+    });
+  }
+
   /* ---------- Analytics (real GTM container from live site, no PII) ---------- */
   function dl(event, props) {
     try {
@@ -103,6 +112,7 @@
         var up = monitors.filter(isMonitorUp).length;
         var total = monitors.length;
         var msg = total && up === total ? "All systems operational — " + up + "/" + total + " nodes online" : total ? "Service state requires attention — " + up + "/" + total + " nodes online" : "Live status unavailable";
+        setStatusDots(total && up === total ? "up" : total ? "warn" : "dim");
         var tickerStatus = $("#tickerStatus");
         if (tickerStatus) tickerStatus.textContent = msg;
         var footerStatus = $("#footerStatus");
@@ -118,6 +128,7 @@
       })
       .catch(function () {
         // The baked snapshot remains, but a failed live call must be visibly distinct.
+        setStatusDots("dim");
         var tickerStatus = $("#tickerStatus");
         if (tickerStatus) tickerStatus.textContent = "Live status unavailable";
         var footerStatus = $("#footerStatus");
