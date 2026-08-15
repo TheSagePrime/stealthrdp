@@ -888,8 +888,8 @@ body[data-page="home"] .d4 { animation-delay: .2s; }
   --text: #16130d;
   --text-muted: #5f5a50;
   --text-dim: #746c60;
-  --accent: #8b5e00;
-  --accent-hover: #744d00;
+  --accent: #f5b93b;
+  --accent-hover: #ffc94d;
   --accent-soft: rgba(139,94,0,.10);
   --accent-glow: rgba(139,94,0,.16);
   --green: #1f9d55;
