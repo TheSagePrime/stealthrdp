@@ -950,3 +950,6 @@ body[data-page="home"] .d4 { animation-delay: .2s; }
   background-image: var(--network-mesh);
   background-size: 72px 72px, 144px 144px, 144px 144px;
 }
+body[data-page="home"] .plans-preview {
+  background-image: var(--network-mesh);
+}
