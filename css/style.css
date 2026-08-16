@@ -1105,3 +1105,89 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
 @media (max-width: 768px) and (prefers-reduced-motion: reduce) {
   .marquee-track, .review-mobile-track { animation: none; }
 }
+
+/* ---------- Compact content layout ---------- */
+.usecases-section { padding: 50px 0 54px; }
+.usecases-section > .container { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); align-items: center; gap: 28px 42px; }
+.usecases-section .compact-section-head { margin-bottom: 0; }
+.usecases-section .compact-section-head h2 { font-size: clamp(32px, 3.2vw, 42px); }
+.usecase-chips { justify-content: flex-end; margin: 0; }
+.plans-preview { padding: 68px 0 72px; }
+.plans-preview .section-head { margin-bottom: 24px; }
+.plans-preview .section-head h2 { margin-bottom: 8px; }
+.plans-preview .plan-finder { padding: 14px 18px; gap: 14px 18px; margin-bottom: 18px; }
+.plans-preview .billing-toggle { margin-bottom: 24px; }
+.plans-preview .plan-card { padding: 28px 26px 24px; }
+.plans-preview .plan-price { margin: 14px 0 4px; }
+.plans-preview .plan-specs { margin: 14px 0 18px; gap: 8px; }
+.plans-preview .all-link { margin-top: 24px; }
+
+@media (max-width: 768px) {
+  .usecases-section { padding: 30px 0 28px; }
+  .usecases-section > .container { display: block; }
+  .usecases-section .compact-section-head { margin-bottom: 14px; }
+  .usecases-section .compact-section-head h2 { max-width: none; font-size: 32px; line-height: 1.08; }
+  .usecases-section .compact-section-head p { font-size: 14px; line-height: 1.45; }
+  .usecase-chips {
+    display: flex; flex-wrap: nowrap; justify-content: flex-start; gap: 7px;
+    margin: 0 -24px; padding: 2px 24px 8px; overflow-x: auto; scrollbar-width: none;
+  }
+  .usecase-chips::-webkit-scrollbar { display: none; }
+  .usecase-chips .topic-chip, .usecase-chips .topic-chip:last-child { flex: 0 0 auto; width: auto; min-height: 34px; white-space: nowrap; }
+
+  .plans-preview { padding: 36px 0 44px; }
+  .plans-preview .section-head { margin-bottom: 16px; }
+  .plans-preview .section-head h2 { font-size: 32px; line-height: 1.08; }
+  .plans-preview .section-head p { font-size: 14px; line-height: 1.45; }
+  .plans-preview .plan-finder {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start;
+    gap: 10px 12px; margin-bottom: 14px; padding: 12px 14px;
+  }
+  .plans-preview .plan-finder .location-control, .plans-preview .plan-finder .finder-note { grid-column: 1 / -1; }
+  .plans-preview .plan-finder .finder-field { min-width: 0; }
+  .plans-preview .plan-finder .finder-field select { width: 100%; min-width: 0; }
+  .plans-preview .finder-note { font-size: 11.5px; line-height: 1.45; }
+  .plans-preview .billing-toggle { margin-bottom: 16px; }
+  .plans-preview .plan-grid { padding-top: 4px; padding-bottom: 12px; }
+  .plans-preview .plan-grid .plan-card { padding: 16px; }
+  .plans-preview .plan-grid .plan-price { margin: 10px 0 2px; }
+  .plans-preview .plan-grid .plan-specs { margin: 10px 0 14px; gap: 7px; }
+  .plans-preview .all-link { margin-top: 18px; }
+
+  .footer { padding: 28px 0 22px; }
+  .footer-status { margin-bottom: 20px; padding: 7px 12px; }
+  .footer-grid { gap: 22px 16px; margin-bottom: 22px; }
+  .footer h4 { margin-bottom: 11px; font-size: 12px; }
+  .footer-col ul { gap: 8px; }
+  .footer-col:last-child { display: grid; grid-column: 1 / -1; grid-template-columns: 82px minmax(0, 1fr); gap: 12px; align-items: start; }
+  .footer-col:last-child h4 { margin-bottom: 0; }
+  .footer-col:last-child ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; }
+  .footer-social { margin-top: 14px; }
+  .footer-social a { width: 34px; height: 34px; }
+  .footer-bottom { gap: 10px; padding-top: 16px; }
+}
+
+/* ---------- Blog reading index ---------- */
+.blog-page-head { padding-bottom: 22px; }
+.blog-index-section .blog-grid { gap: 16px; }
+@media (max-width: 768px) {
+  .blog-page-head { padding: 28px 0 18px; }
+  .blog-page-head h1 { font-size: 34px; line-height: 1.06; margin: 8px 0 8px; }
+  .blog-page-head p { font-size: 14px; line-height: 1.45; }
+  .blog-index-section { padding-bottom: 44px !important; }
+  .blog-index-section .blog-toolbar { padding: 0 0 8px; }
+  .blog-index-section .blog-filters { display: block; max-width: none; }
+  .blog-index-section .blog-filters label { display: block; margin-bottom: 6px; }
+  .blog-index-section .blog-filters input { width: 100%; min-height: 44px; }
+  .blog-index-section .blog-topics { flex-wrap: nowrap; gap: 7px; margin: 0 -24px; padding: 9px 24px 8px; overflow-x: auto; scrollbar-width: none; }
+  .blog-index-section .blog-topics::-webkit-scrollbar { display: none; }
+  .blog-index-section .blog-topics .topic-chip { flex: 0 0 auto; white-space: nowrap; }
+  .blog-index-section .blog-results-bar { flex-direction: row; align-items: center; gap: 10px; padding: 10px 0; font-size: 10px; }
+  .blog-index-section .blog-results-bar span:last-child { max-width: 52%; text-align: right; font-size: 9px; line-height: 1.3; }
+  .blog-index-section .blog-grid { grid-template-columns: 1fr; gap: 10px; }
+  .blog-index-section .blog-card .bc-body { padding: 16px; gap: 8px; }
+  .blog-index-section .blog-card h3 { font-size: 18px; line-height: 1.25; }
+  .blog-index-section .blog-card p { font-size: 13px; line-height: 1.5; }
+  .blog-index-section .blog-card .bc-meta { font-size: 11px; gap: 8px; }
+  .blog-index-section .blog-card .bc-link { font-size: 13px; }
+}

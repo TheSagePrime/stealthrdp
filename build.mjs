@@ -846,7 +846,7 @@ function buildIndex() {
   <section class="section section-tight usecases-section" id="usecases">
     <div class="container">
       <div class="compact-section-head">
-        <div><h2>What are you running?</h2><p>Pick a workload and jump straight to the plan that fits.</p></div>
+        <div><h2>What are you running?</h2><p>Pick a workload to see its best-fit plan.</p></div>
       </div>
       <div class="topic-chips usecase-chips" role="group" aria-label="Choose a workload">${useCaseChips}</div>
     </div>
@@ -1048,14 +1048,14 @@ function buildBlog() {
   const categoryOptions = categories.map((category) => `<option value="${esc(category)}">${esc(category)}</option>`).join("");
   const topicChips = `<button type="button" class="topic-chip active" data-blog-topic="all">All<span>${BLOG.length}</span></button>` + categories.map((category) => `<button type="button" class="topic-chip" data-blog-topic="${esc(category)}">${esc(category)}<span>${BLOG.filter((post) => post.category === category).length}</span></button>`).join("");
   const body = `
-  <section class="page-head">
-    <div class="container"><span class="eyebrow">Blog</span><h1>Field notes for servers in motion</h1><p>Short, practical guidance on remote desktops, VPS workloads, and the systems around them.</p></div>
+  <section class="page-head blog-page-head">
+    <div class="container"><span class="eyebrow">Blog</span><h1>Field notes for servers in motion</h1><p>Practical guidance for remote desktops, VPS workloads, and the systems around them.</p></div>
   </section>
   <section class="section blog-index-section" style="padding-top:0">
     <div class="container">
       <div class="blog-toolbar"><div class="blog-filters"><label for="blogSearch">Search articles</label><input id="blogSearch" type="search" placeholder="Try: backups, RDP, uptime…" autocomplete="off" /><select id="blogCategory" hidden><option value="all">All topics</option>${categoryOptions}</select></div></div>
       <div class="topic-chips blog-topics" role="group" aria-label="Filter by topic">${topicChips}</div>
-      <div class="blog-results-bar"><span id="blogResultsCount">${BLOG.length} articles</span><span>Technical guides · tutorials · infrastructure notes</span></div>
+      <div class="blog-results-bar"><span id="blogResultsCount">${BLOG.length} articles</span><span>Guides · tutorials · infrastructure notes</span></div>
       <div class="blog-grid" id="blogGrid">${cards}</div><p class="blog-empty" id="blogEmpty" hidden>No articles match that search. Try a broader topic.</p>
     </div>
   </section>`;
