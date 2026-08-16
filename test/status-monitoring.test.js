@@ -73,6 +73,9 @@ test("status page documents detailed monitoring windows and privacy", () => {
   const css = fs.readFileSync(path.join(ROOT, "css/style.css"), "utf8");
   assert.match(css, /html\[data-theme="light"\] \.btn-primary/);
   assert.match(css, /background: #07111f/);
+  assert.match(css, /html\[data-theme="light"\] \.eyebrow/);
+  assert.match(css, /html\[data-theme="light"\] \.billing-toggle button\.active/);
+  assert.match(css, /decision-entry \.usecase-chips \.topic-chip\.active/);
   assert.match(css, /history-bar\.history-up[\s\S]*var\(--green\)/);
   assert.match(css, /history-bar\.history-degraded[\s\S]*var\(--red\)/);
   assert.match(css, /history-bar\.history-down[\s\S]*var\(--red\)/);

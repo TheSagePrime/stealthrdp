@@ -1512,3 +1512,15 @@ html[data-theme="light"] .btn-primary:hover {
 html[data-theme="light"] .btn-primary:hover {
   background: #0d1a2c;
 }
+html[data-theme="light"] .eyebrow { color: var(--accent-deep); background: rgba(var(--accent-rgb), 0.14); border-color: rgba(var(--accent-rgb), 0.45); }
+html[data-theme="light"] .eyebrow::before { background: var(--accent-deep); box-shadow: none; }
+html[data-theme="light"] .billing-toggle button,
+html[data-theme="light"] .location-tabs button { color: #4c5a72; }
+html[data-theme="light"] .billing-toggle button:hover,
+html[data-theme="light"] .location-tabs button:hover { color: var(--accent-deep); }
+html[data-theme="light"] .location-tabs button:hover { background: rgba(var(--accent-rgb), 0.14); }
+html[data-theme="light"] .billing-toggle button.active,
+html[data-theme="light"] .location-tabs button.active,
+html[data-theme="light"] .decision-entry .usecase-chips .topic-chip.active { background: #07111f; color: #ffffff; border-color: #07111f; box-shadow: 0 6px 18px rgba(7, 17, 31, 0.18); }
+html[data-theme="light"] .billing-toggle button.active .off,
+html[data-theme="light"] .location-tabs button.active .off { color: rgba(255, 255, 255, 0.75); }
