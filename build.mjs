@@ -190,12 +190,12 @@ function footerHtml() {
     return `<a href="${s.href}" target="_blank" rel="noopener noreferrer" aria-label="${s.label}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${svgs[s.label] || ""}</svg></a>`;
   }).join("");
   return `<footer class="footer"><div class="container">
-    <div class="footer-status"><span class="dot"></span><span id="footerStatus">Checking live status…</span></div>
     <div class="footer-grid">
       <div class="footer-about">
         <a href="/" class="logo" aria-label="StealthRDP home"><span class="logo-mark">${LOGO_SVG}</span><span>Stealth<em>RDP</em></span></a>
         <p>Enterprise-grade remote desktop infrastructure with unmatched security and performance.</p>
         <div class="footer-social">${social}</div>
+        <div class="footer-status"><span class="dot"></span><span id="footerStatus">Checking live status…</span></div>
       </div>
       <div class="footer-col"><h4>Products</h4><ul>
         <li><a href="/plans.html">RDP Plans</a></li>
@@ -859,7 +859,10 @@ function buildIndex() {
       <div class="compact-section-head">
         <div><h2>Choose a workload</h2><p>Your choice highlights the plan that fits.</p></div>
       </div>
-      <div class="topic-chips usecase-chips" role="group" aria-label="Choose a workload">${useCaseChips}</div>
+      <div class="usecase-rail">
+        <div class="topic-chips usecase-chips" role="group" aria-label="Choose a workload">${useCaseChips}</div>
+        <button type="button" class="usecase-rail-next" aria-label="Show more workloads"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+      </div>
     </div>
   </section>
 
@@ -889,6 +892,7 @@ function buildIndex() {
         </div>
       </div>
       <div class="plan-grid" id="planGrid" aria-live="polite">${preview}</div>
+      <div class="plan-rail-cue" aria-live="polite"><span id="planRailStatus">Plan 1 of 3</span><span class="plan-rail-line" aria-hidden="true"><i></i></span><span>Swipe to compare plans</span></div>
       <div class="all-link"><a class="btn btn-ghost" href="/plans.html">View All ${USA.length + EU.length} Plans</a></div>
     </div>
   </section>

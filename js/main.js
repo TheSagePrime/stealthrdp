@@ -322,11 +322,30 @@
   useCaseChips.forEach(function (chip) {
     chip.addEventListener("click", function () { pickUseCase(chip.getAttribute("data-use-case")); });
   });
+  var useCaseRail = $(".usecase-chips");
+  var useCaseRailNext = $(".usecase-rail-next");
+  if (useCaseRail && useCaseRailNext) {
+    useCaseRailNext.addEventListener("click", function () { useCaseRail.scrollBy({ left: 180, behavior: "smooth" }); });
+  }
   if (useCaseSelect) useCaseSelect.addEventListener("change", function () { pickUseCase(useCaseSelect.value); });
   if (osSelect) osSelect.addEventListener("change", function () { highlightRecommended(currentTier()); });
 
   /* ---------- Plans (baked cards stay; toggles re-render from cache) ---------- */
   var planGrid = $("#planGrid");
+  var planRailCue = $(".plan-rail-cue");
+  function syncPlanRail() {
+    if (!planGrid || !planRailCue || !planGrid.children.length) return;
+    var first = planGrid.children[0];
+    var gap = parseFloat(getComputedStyle(planGrid).gap) || 0;
+    var step = first.getBoundingClientRect().width + gap;
+    var index = step ? Math.round(planGrid.scrollLeft / step) : 0;
+    var total = planGrid.children.length;
+    index = Math.max(0, Math.min(index, total - 1));
+    var status = $("#planRailStatus");
+    if (status) status.textContent = "Plan " + (index + 1) + " of " + total;
+    planRailCue.style.setProperty("--plan-progress", ((index + 1) / total * 100) + "%");
+  }
+  if (planGrid) planGrid.addEventListener("scroll", syncPlanRail, { passive: true });
   var billingToggle = $("#billingToggle");
   var currentCycle = "monthly";
   var cachedPlans = [];
@@ -360,6 +379,7 @@
       );
     }).join("");
     planGrid.innerHTML = html || '<div style="grid-column:1/-1;text-align:center;color:var(--text-dim);padding:40px">Plans are being updated — check back shortly.</div>';
+    syncPlanRail();
     var planGridNote = $("#planGridNote");
     if (planGridNote) planGridNote.textContent = plans.length + " " + PLAN_LOCATION + " plans · " + (currentCycle === "monthly" ? "prices shown monthly" : currentCycle + " discount applied");
     highlightRecommended(currentTier());
