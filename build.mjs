@@ -216,6 +216,17 @@ function footerHtml() {
         <li><a href="${TERMS_URL}">Terms of Service</a></li>
       </ul></div>
     </div>
+    <div class="footer-mobile-nav" aria-label="Footer navigation">
+      <details class="footer-mobile-group"><summary>Products</summary><ul>
+        <li><a href="/plans.html">RDP Plans</a></li><li><a href="/plans.html#build-your-own">Build Your Own VPS</a></li><li><a href="/plans.html">Pricing</a></li>
+      </ul></details>
+      <details class="footer-mobile-group"><summary>Resources</summary><ul>
+        <li><a href="/docs.html">Documentation</a></li><li><a href="/blog.html">Tutorials</a></li><li><a href="/faq.html">FAQ</a></li><li><a href="/blog.html">Blog</a></li><li><a href="/status.html">Server Status</a></li>
+      </ul></details>
+      <details class="footer-mobile-group"><summary>Company</summary><ul>
+        <li><a href="/about.html">About Us</a></li><li><a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact Support</a></li><li><a href="/privacy.html">Privacy Policy</a></li><li><a href="${TERMS_URL}">Terms of Service</a></li>
+      </ul></details>
+    </div>
     <div class="footer-bottom">
       <span>© 2026 StealthRDP. All rights reserved.</span>
       <span class="links">
