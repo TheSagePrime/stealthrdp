@@ -83,4 +83,6 @@ test("status page documents detailed monitoring windows and privacy", () => {
   assert.match(build, /cart\.php\?a=view/);
   assert.doesNotMatch(build, /class=\\"btn \$\{isPop \? \\"btn-primary\\" : \\"btn-ghost\\"\}/);
   assert.doesNotMatch(build, /class=\\"btn btn-sm \$\{p\.popular \? \\"btn-primary\\" : \\"btn-ghost\\"\}/);
+  assert.match(build, />Buy Now<\/a>/);
+  assert.doesNotMatch(build, />Deploy Now<\/a>/);
 });
