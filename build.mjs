@@ -907,6 +907,7 @@ function buildIndex() {
         <div><h2>Customer and community reviews</h2><p>Real feedback from server owners and remote-desktop users. Clean cards, no links, no noise.</p></div>
       </div>
       ${reviewWallHtml()}
+      <button type="button" class="btn btn-ghost btn-sm reviews-more" id="reviewsMore">Show all reviews</button>
     </div>
   </section>
 

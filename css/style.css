@@ -588,7 +588,14 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
   .hero-stats { flex-direction: column; }
   .hero-stat { border-right: none; border-bottom: 1px solid var(--border); padding: 16px 20px; }
   .hero-stat:last-child { border-bottom: none; }
-  .plan-grid { grid-template-columns: 1fr; max-width: 460px; }
+  .plan-grid { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 14px; max-width: none; margin: 0 -20px; padding: 4px 20px 18px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .plan-grid::-webkit-scrollbar { display: none; }
+  .plan-grid .plan-card { flex: 0 0 86%; scroll-snap-align: center; min-height: 0; padding: 20px 18px 18px; }
+  .plans-page-grid .plan-card { min-height: 0; }
+  .plan-grid .plan-card .p-desc { display: none; }
+  .plan-grid .plan-card .plan-price { margin: 14px 0 2px; }
+  .plan-grid .plan-card .plan-price .cur { font-size: 28px; }
+  .plan-grid .plan-card .plan-specs { margin: 12px 0 16px; gap: 8px; }
   .bento-2, .bento-3 { grid-column: span 6; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
   .status-info-grid { grid-template-columns: 1fr; }
@@ -895,6 +902,15 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
   .review-column { height: auto; overflow: visible; }
   .review-track { animation: none; gap: 12px; }
   .review-card-copy { display: none; }
+  .review-card { min-height: 0; padding: 16px; }
+  .review-card-meta { margin-bottom: 12px; }
+  .review-card blockquote { font-size: 14px; }
+  .review-column .review-track .review-card:nth-child(n+4) { display: none; }
+  .review-wall.expanded .review-column .review-track .review-card { display: flex; }
+  .reviews-more { display: block; margin: 20px auto 0; }
+}
+@media (min-width: 701px) {
+  .reviews-more { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .review-track, .review-column-2 .review-track, .review-column-3 .review-track { animation: none; }

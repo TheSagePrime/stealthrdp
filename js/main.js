@@ -243,6 +243,16 @@
     }
   }
 
+  /* ---------- Reviews wall expand (mobile cap) ---------- */
+  var reviewsMore = $("#reviewsMore");
+  var reviewWallEl = document.querySelector(".review-wall");
+  if (reviewsMore && reviewWallEl) {
+    reviewsMore.addEventListener("click", function () {
+      var expanded = reviewWallEl.classList.toggle("expanded");
+      reviewsMore.textContent = expanded ? "Show fewer reviews" : "Show all reviews";
+    });
+  }
+
   /* ---------- Homepage plan finder ---------- */
   var USE_CASE_TIERS = {
     "remote-desktop": "Bronze",
