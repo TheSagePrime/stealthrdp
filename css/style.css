@@ -1485,5 +1485,5 @@ html[data-theme="light"] .plan-card, html[data-theme="light"] .docs-card, html[d
   .node-card .n-state { grid-column: 1; grid-row: 2; padding-left: 24px; }
   .node-card .n-uptime { grid-column: 2; grid-row: 1 / span 2; align-self: center; min-width: 0; }
   .node-history { grid-column: 1 / -1; }
-  .history-bars { gap: 2px; height: 25px; }
+  .history-bars { gap: 2px; height: 25px; grid-template-columns: repeat(90, minmax(0, 1fr)); }
 }
