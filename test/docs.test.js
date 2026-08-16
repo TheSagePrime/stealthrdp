@@ -76,9 +76,9 @@ test("public chrome has no legacy docs host, countdown, or fake live deployment 
   const mainJs = HTML("js/main.js");
   assert.doesNotMatch(mainJs, /srdp_offer_end|COUNTDOWN_MS|setInterval\(tick/);
   const home = HTML("index.html");
-  assert.match(home, /demonstration|simulation/i);
-  assert.match(home, /no infrastructure request|no server is provisioned/i);
-  assert.doesNotMatch(home, /server online|Live deploy console/i);
+  assert.match(home, /stealth deploy --plan silver-usa --region us-east/);
+  assert.match(home, /installing Windows Server 2022/);
+  assert.doesNotMatch(home, /server online|Live deploy console|your server is|your deployment/i);
 });
 
 test("baked status fixture renders up monitors as healthy", () => {
@@ -134,7 +134,7 @@ test("promotion chrome is stable and does not invent an expiry", () => {
     assert.doesNotMatch(HTML(route), /POWER30|countdown|srdp_offer_end/i, `${route}: no unverified promotion or timer`);
   }
   assert.doesNotMatch(HTML("build.mjs"), /POWER30|srdp_offer_end|COUNTDOWN_MS/);
-  assert.match(HTML("index.html"), /pricing and availability shown at checkout/i);
+  assert.match(HTML("index.html"), /stealth deploy --plan silver-usa --region us-east/);
 });
 
 test("preview palette lab exposes ten named variants with persistence", () => {
@@ -172,11 +172,13 @@ test("Features catalog is consolidated into Plans and the old route redirects", 
   assert.doesNotMatch(sitemap, /features\.html/);
 });
 
-test("hero console is an honest demonstration without fake completion state", () => {
+test("hero console shows a deploy sequence without personal account claims", () => {
   const home = HTML("index.html");
   const mainJs = HTML("js/main.js");
-  assert.match(home, /DEMO|DEMONSTRATION|SIMULATION/i);
-  assert.match(home, /no server is provisioned|no infrastructure request/i);
-  assert.doesNotMatch(home, /server online|deployed in \\d+s|demo complete|provisioning virtual machine[^<]*ok/i);
+  assert.match(home, /stealth deploy --plan silver-usa --region us-east/);
+  assert.match(home, /reserving dedicated vCPU/);
+  assert.match(home, /installing Windows Server 2022/);
+  assert.match(home, /Windows Server 2022 ready in 60s/);
+  assert.doesNotMatch(home, /your server is|your deployment|provisioned for your account|payment verified/i);
   assert.doesNotMatch(mainJs, /deployBar|deployPct|consoleOnline|Math\\.random|setInterval/);
 });

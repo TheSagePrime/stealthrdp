@@ -301,6 +301,15 @@ code, .mono { font-family: var(--font-mono); }
 .console-line .dim { color: var(--text-dim); }
 .console-progress { height: 6px; border-radius: 3px; background: var(--surface-3); margin: 14px 0 6px; overflow: hidden; position: relative; }
 .console-progress .bar { height: 100%; width: 0%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--accent-hover)); transition: width 0.4s var(--ease); }
+.console-progress .bar[data-con-bar] { animation: con-bar 2.7s 0.35s var(--ease) forwards; }
+.console-line.con-1, .console-line.con-2, .console-line.con-3, .console-line.con-4, .console-line.con-5 { opacity: 0; animation: con-reveal .45s var(--ease) forwards; }
+.console-line.con-1 { animation-delay: .8s; }
+.console-line.con-2 { animation-delay: 1.5s; }
+.console-line.con-3 { animation-delay: 2.2s; }
+.console-line.con-4 { animation-delay: 2.9s; }
+.console-line.con-5 { animation-delay: 3.6s; }
+@keyframes con-reveal { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+@keyframes con-bar { to { width: 100%; } }
 .console-progress .pct { font-size: 11px; color: var(--accent); }
 .console-foot {
   display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
@@ -569,6 +578,7 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
   .hero-stat { border-right: none; border-bottom: 1px solid var(--border); padding: 16px 20px; }
   .hero-stat:last-child { border-bottom: none; }
   .plan-grid { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 14px; max-width: none; margin: 0 -20px; padding: 4px 20px 18px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .hero-console { display: none; }
   .plan-grid::-webkit-scrollbar { display: none; }
   .plan-grid .plan-card { flex: 0 0 86%; scroll-snap-align: center; min-height: 0; padding: 20px 18px 18px; }
   .plans-page-grid .plan-card { min-height: 0; }
@@ -881,6 +891,8 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
 @media (prefers-reduced-motion: reduce) {
   .review-track, .review-column-2 .review-track, .review-column-3 .review-track { animation: none; }
   .text-link .inline-arrow, .outcome-arrow { transition: none; }
+  .console-line.con-1, .console-line.con-2, .console-line.con-3, .console-line.con-4, .console-line.con-5 { opacity: 1; animation: none; }
+  .console-progress .bar[data-con-bar] { width: 100%; animation: none; }
 }
 
 /* ============================================================

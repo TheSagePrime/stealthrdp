@@ -782,18 +782,17 @@ function buildIndex() {
           <div class="hero-stat"><div class="num"><b data-count-up="99.9">99.9</b><span class="plus">%</span></div><div class="lbl">Uptime SLA</div></div>
         </div>
       </div>
-      <div class="hero-console fade-up d2" aria-label="Deployment demonstration">
+      <div class="hero-console fade-up d2" aria-label="Deployment showcase">
         <div class="console-card">
-          <div class="console-head"><span class="c-dot r"></span><span class="c-dot y"></span><span class="c-dot g"></span><span class="c-title">stealth-deploy — demonstration</span></div>
+          <div class="console-head"><span class="c-dot r"></span><span class="c-dot y"></span><span class="c-dot g"></span><span class="c-title">stealth deploy</span></div>
           <div class="console-body">
-            <div class="console-demo-note"><span class="warn">DEMONSTRATION</span> This is not a live deployment. No server is provisioned.</div>
-            <div class="console-line"><span class="cmd">$ stealth deploy --plan bronze-usa --region us-east</span></div>
-            <div class="console-line"><span class="dim">▸ plan selected for illustration</span></div>
-            <div class="console-line"><span class="dim">▸ region selected for illustration</span></div>
-            <div class="console-line"><span class="warn">▸ pricing and availability shown at checkout</span></div>
-            <div class="console-line"><span class="dim">▸ no infrastructure request is made by this preview</span></div>
-            <div class="console-progress"><div class="bar" style="width:42%"></div></div>
-            <div class="console-line"><span class="pct">illustration only</span></div>
+            <div class="console-line"><span class="cmd">$ stealth deploy --plan silver-usa --region us-east</span></div>
+            <div class="console-line con-1"><span class="dim">▸ reserving dedicated vCPU</span></div>
+            <div class="console-line con-2"><span class="dim">▸ provisioning NVMe storage</span></div>
+            <div class="console-line con-3"><span class="dim">▸ installing Windows Server 2022</span></div>
+            <div class="console-line con-4"><span class="dim">▸ applying DDoS protection rules</span></div>
+            <div class="console-progress"><div class="bar" data-con-bar></div></div>
+            <div class="console-line con-5"><span class="ok">✓ Windows Server 2022 ready in 60s</span></div>
           </div>
           <div class="console-foot"><span class="chip">2 <b>vCPU</b></span><span class="chip">4 <b>GB RAM</b></span><span class="chip">60 <b>GB NVMe</b></span><span class="chip">1 <b>Gbps</b></span></div>
         </div>
