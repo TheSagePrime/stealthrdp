@@ -125,8 +125,8 @@ function refreshDailyHistory() {
 
 function historyState(value) {
   if (!Number.isFinite(Number(value))) return "unknown";
-  if (Number(value) >= 100) return "up";
-  if (Number(value) > 0) return "degraded";
+  if (Number(value) >= 99) return "up";
+  if (Number(value) >= 95) return "degraded";
   return "down";
 }
 

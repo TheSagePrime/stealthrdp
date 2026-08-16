@@ -77,8 +77,10 @@ test("status page documents detailed monitoring windows and privacy", () => {
   assert.match(css, /html\[data-theme="light"\] \.billing-toggle button\.active/);
   assert.match(css, /decision-entry \.usecase-chips \.topic-chip\.active/);
   assert.match(css, /history-bar\.history-up[\s\S]*var\(--green\)/);
-  assert.match(css, /history-bar\.history-degraded[\s\S]*var\(--red\)/);
+  assert.match(css, /history-bar\.history-degraded[\s\S]*var\(--orange\)/);
   assert.match(css, /history-bar\.history-down[\s\S]*var\(--red\)/);
+  assert.match(server, /Number\(value\) >= 99\) return "up"/);
+  assert.match(server, /Number\(value\) >= 95\) return "degraded"/);
   assert.match(server, /safeMonitorSnapshot/);
   assert.match(css, /history-bar:hover::after/);
   assert.match(fs.readFileSync(path.join(ROOT, "build.mjs"), "utf8"), /data-tooltip/);
