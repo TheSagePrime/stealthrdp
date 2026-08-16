@@ -86,4 +86,9 @@ test("status page documents detailed monitoring windows and privacy", () => {
   assert.match(build, />Buy Now<\/a>/);
   assert.doesNotMatch(build, />Deploy Now<\/a>/);
   assert.match(fs.readFileSync(path.join(ROOT, "server.js"), "utf8"), /: "no-store";/);
+  const main = fs.readFileSync(path.join(ROOT, "js/main.js"), "utf8");
+  assert.doesNotMatch(main, /Deploy Now/);
+  assert.doesNotMatch(main, /"btn-ghost"/);
+  assert.match(main, />Buy Now<\/a>/);
+  assert.match(main, /indexOf\(" EU"\) !== -1 \? "eu"/);
 });
