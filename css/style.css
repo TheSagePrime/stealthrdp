@@ -1065,6 +1065,10 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
 @media (max-width: 600px) {
   .hero-copy h1 { font-size: clamp(34px, 9.2vw, 40px); line-height: 1.08; margin-bottom: 16px; letter-spacing: -.03em; }
   .hero-copy h1 .gold { display: block; }
+  .marquee { overflow-x: auto; padding: 16px 0; scrollbar-width: none; }
+  .marquee::-webkit-scrollbar { display: none; }
+  .marquee-track { width: max-content; gap: 24px; padding: 0 24px; animation: none; }
+  .marquee-set[aria-hidden="true"] { display: none; }
   .billing-toggle { gap: 3px; }
   .billing-toggle button { padding: 6px 2px; font-size: 11px; line-height: 1.2; }
   .billing-toggle button .off { display: block; margin-top: 1px; font-size: 9px; line-height: 1.15; }
