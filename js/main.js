@@ -238,6 +238,22 @@
     var date = new Date(value);
     return Number.isNaN(date.getTime()) ? "Recent incident recorded" : "Last incident " + date.toLocaleDateString([], { dateStyle: "medium" });
   }
+  function historyState(value) {
+    if (!Number.isFinite(Number(value))) return "unknown";
+    if (Number(value) >= 100) return "up";
+    if (Number(value) > 0) return "degraded";
+    return "down";
+  }
+  function historyBarMarkup(history) {
+    if (!Array.isArray(history) || !history.length) return '<div class="node-history node-history-empty"><span>Daily 90-day history appears after live monitoring connects.</span></div>';
+    var bars = history.map(function (item) {
+      var state = item.state || historyState(item.uptime);
+      var uptime = Number.isFinite(Number(item.uptime)) ? Number(item.uptime).toFixed(2) + "% uptime" : "No data";
+      return '<span class="history-bar history-' + stateClass(state) + '" title="' + esc((item.date || "Unknown date") + ": " + uptime) + '" aria-hidden="true"></span>';
+    }).join("");
+    var available = history.filter(function (item) { return item && item.state !== "unknown"; }).length;
+    return '<div class="node-history"><div class="history-head"><span>90-day history</span><span>' + esc(history[0].date || "90 days ago") + " · " + esc(history[history.length - 1].date || "Today") + '</span></div><div class="history-bars" role="img" aria-label="90-day uptime history with ' + available + ' days of returned data">' + bars + '</div><div class="history-axis"><span>90 days ago</span><span>Today</span></div></div>';
+  }
   function stateClass(status) {
     return ["up", "down", "degraded", "paused", "pending"].indexOf(status) !== -1 ? status : "unknown";
   }
@@ -334,7 +350,7 @@
               '<div class="node-metric"><b>' + formatPercent(m.uptime90) + '</b><small>90-day uptime</small></div>' +
               '<div class="node-metric"><b>' + formatDuration(m.downtime30) + '</b><small>Downtime / 30d</small></div>' +
               '<div class="node-metric"><b>' + incidentCount + '</b><small>Recent incidents</small></div>' +
-            "</div></article>"
+            "</div>" + historyBarMarkup(m.history90) + "</article>"
           );
       }).join("");
     }

@@ -14,6 +14,7 @@ const HOST = process.env.HOST || "127.0.0.1";
 const UPTIME_API_KEY = process.env.UPTIMEROBOT_API_KEY || "";
 const ALLOW_UPTIME_FIXTURE = process.env.ALLOW_UPTIME_FIXTURE === "true";
 const UPTIME_CACHE_MS = 60 * 1000;
+const DAILY_HISTORY_DAYS = 90;
 let uptimeCache = { expiresAt: 0, result: null };
 let uptimeInFlight = null;
 
@@ -86,6 +87,36 @@ function numberList(value) {
   });
 }
 
+function dailyHistoryRanges(days) {
+  const dates = [];
+  const ranges = [];
+  const today = new Date();
+  const endToday = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() + 1) / 1000;
+  for (let offset = days - 1; offset >= 0; offset -= 1) {
+    const end = endToday - (offset * 86400);
+    const start = end - 86400;
+    dates.push(new Date(start * 1000).toISOString().slice(0, 10));
+    ranges.push(`${start}_${end}`);
+  }
+  return { dates, query: ranges.join("-") };
+}
+
+const DAILY_HISTORY = dailyHistoryRanges(DAILY_HISTORY_DAYS);
+
+function historyState(value) {
+  if (!Number.isFinite(Number(value))) return "unknown";
+  if (Number(value) >= 100) return "up";
+  if (Number(value) > 0) return "degraded";
+  return "down";
+}
+
+function dailyHistorySnapshot(values) {
+  return numberList(values).slice(0, DAILY_HISTORY_DAYS).map((uptime, index) => ({
+    date: DAILY_HISTORY.dates[index] || null,
+    uptime,
+    state: historyState(uptime),
+  })).filter((item) => item.date);
+}
 function ratioValues(monitor) {
   return numberList(monitor.custom_uptime_ratio || monitor.custom_uptime_ratios);
 }
@@ -178,6 +209,7 @@ function safeMonitorSnapshot(monitor, index) {
     recentIncidents: monitor.recentIncidents == null ? null : (Number.isFinite(Number(monitor.recentIncidents)) ? Number(monitor.recentIncidents) : null),
     lastIncidentAt: monitor.lastIncidentAt || null,
     lastIncidentDuration: monitor.lastIncidentDuration == null ? null : (Number.isFinite(Number(monitor.lastIncidentDuration)) ? Number(monitor.lastIncidentDuration) : null),
+    history90: Array.isArray(monitor.history90) ? monitor.history90.slice(0, DAILY_HISTORY_DAYS) : [],
   };
 }
 
@@ -210,6 +242,7 @@ function safeUptimePayload(body) {
     counters[region] = (counters[region] || 0) + 1;
     const allTime = numberList(monitor.all_time_uptime_ratio);
     const incidents = safeIncidentSummary(monitor.logs);
+    const history90 = dailyHistorySnapshot(monitor.custom_uptime_ranges);
     return safeMonitorSnapshot({
       label: region + " Node " + String(counters[region]).padStart(2, "0"),
       region,
@@ -220,6 +253,7 @@ function safeUptimePayload(body) {
       recentIncidents: incidents.recentIncidents,
       lastIncidentAt: incidents.lastIncidentAt,
       lastIncidentDuration: incidents.lastIncidentDuration,
+      history90,
     });
   }) : [];
 
@@ -239,6 +273,7 @@ function loadUptime() {
     format: "json",
     custom_uptime_ratios: "7-30-90",
     custom_down_durations: "7-30-90",
+    custom_uptime_ranges: DAILY_HISTORY.query,
     all_time_uptime_ratio: "1",
     logs: "1",
     logs_limit: "20",

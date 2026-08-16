@@ -327,6 +327,19 @@ const fmtDuration = (seconds) => {
   return `${(value / 86400).toFixed(1)}d`;
 };
 
+function historyBarHtml(history) {
+  if (!Array.isArray(history) || !history.length) {
+    return `<div class="node-history node-history-empty"><span>Daily 90-day history appears after live monitoring connects.</span></div>`;
+  }
+  const bars = history.map((item) => {
+    const uptime = Number.isFinite(Number(item.uptime)) ? Number(item.uptime).toFixed(2) + "% uptime" : "No data";
+    const state = item.state || "unknown";
+    return `<span class="history-bar history-${esc(state)}" title="${esc(item.date || "Unknown date")}: ${esc(uptime)}" aria-hidden="true"></span>`;
+  }).join("");
+  const available = history.filter((item) => item && item.state !== "unknown").length;
+  return `<div class="node-history"><div class="history-head"><span>90-day history</span><span>${esc(history[0].date || "90 days ago")} · ${esc(history[history.length - 1].date || "Today")}</span></div><div class="history-bars" role="img" aria-label="90-day uptime history with ${available} days of returned data">${bars}</div><div class="history-axis"><span>90 days ago</span><span>Today</span></div></div>`;
+}
+
 function nodeCardHtml(m) {
   const legacyRatio = Number.isFinite(Number(m.uptimeRatio)) ? Number(m.uptimeRatio) : null;
   const uptime7 = Number.isFinite(Number(m.uptime7)) ? Number(m.uptime7) : null;
@@ -351,6 +364,7 @@ function nodeCardHtml(m) {
       <div class="node-metric"><b>${fmtDuration(m.downtime30)}</b><small>Downtime / 30d</small></div>
       <div class="node-metric"><b>${incidents}</b><small>Recent incidents</small></div>
     </div>
+    ${historyBarHtml(m.history90)}
   </article>`;
 }
 
@@ -1060,7 +1074,7 @@ function buildStatus() {
       <div class="status-shell">
         <div class="status-shell-head"><div><span class="mono">OPERATIONS / CURRENT</span><h2>Current service state</h2></div><p>Live refresh is attempted on load. Rolling windows show how each component has performed. If the endpoint is unavailable, the verified snapshot stays visible and is labelled below.</p></div>
         <div class="status-summary" id="statusSummary" aria-live="polite">${summary}</div>
-        <div class="status-meta"><p class="status-source-note" id="statusSourceNote">Baked uptime snapshot · live refresh is attempted when this page loads.</p><div class="status-legend"><span><i class="status-key healthy" aria-hidden="true"></i>Healthy</span><span><i class="status-key unknown" aria-hidden="true"></i>Unknown / attention</span></div></div>
+        <div class="status-meta"><p class="status-source-note" id="statusSourceNote">Baked uptime snapshot · live refresh is attempted when this page loads.</p><div class="status-legend"><span><i class="status-key healthy" aria-hidden="true"></i>Healthy</span><span><i class="status-key degraded" aria-hidden="true"></i>Partial availability</span><span><i class="status-key unknown" aria-hidden="true"></i>Unknown / attention</span></div></div>
       </div>
       <div class="status-section-head"><div><span class="mono">COMPONENTS</span><h2>Production nodes</h2></div><span class="status-count">${TOTAL} logical components</span></div>
       <div class="node-list" id="nodeList" aria-live="polite">${nodes}</div>
