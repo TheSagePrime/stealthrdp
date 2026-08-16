@@ -32,6 +32,8 @@ const MIME = {
   ".txt": "text/plain; charset=utf-8",
 };
 
+const { isPublicIndexHost, PUBLIC_CANONICAL_ORIGIN, previewRobotsTxt, applyPreviewHtml } = require("./lib/index-policy");
+
 const SECURITY_HEADERS = {
   "X-Content-Type-Options": "nosniff",
   "Referrer-Policy": "strict-origin-when-cross-origin",
@@ -45,8 +47,17 @@ function originFor(req) {
   return proto + "://" + host;
 }
 
+function tokenOrigin(req) {
+  return isPublicIndexHost(req.headers.host) ? originFor(req) : PUBLIC_CANONICAL_ORIGIN;
+}
+
 function resolveTokens(body, origin) {
   return body.split("__SRDP_BASE__").join(origin);
+}
+
+function extraHeaders(req) {
+  if (isPublicIndexHost(req.headers.host)) return {};
+  return { "X-Robots-Tag": "noindex, nofollow" };
 }
 
 function sendJson(res, status, value) {
@@ -396,9 +407,32 @@ const server = http.createServer((req, res) => {
   const origin = originFor(req);
 
   if (url.pathname === "/healthz") {
-    res.writeHead(200, { "Content-Type": "application/json", ...SECURITY_HEADERS });
+    res.writeHead(200, { "Content-Type": "application/json", ...SECURITY_HEADERS, ...extraHeaders(req) });
     res.end('{"status":"ok"}');
     return;
+  }
+
+  if (!isPublicIndexHost(req.headers.host)) {
+    if (url.pathname === "/robots.txt") {
+      res.writeHead(200, {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "no-store",
+        ...SECURITY_HEADERS,
+        ...extraHeaders(req),
+      });
+      res.end(previewRobotsTxt());
+      return;
+    }
+    if (url.pathname === "/sitemap.xml") {
+      res.writeHead(404, {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "no-store",
+        ...SECURITY_HEADERS,
+        ...extraHeaders(req),
+      });
+      res.end("Not found");
+      return;
+    }
   }
 
   if (url.pathname.startsWith("/api/")) {
@@ -456,8 +490,17 @@ const server = http.createServer((req, res) => {
       "Content-Type": MIME[ext] || "application/octet-stream",
       "Cache-Control": cacheControl,
       ...SECURITY_HEADERS,
+      ...extraHeaders(req),
     });
-    res.end(isMarkup ? resolveTokens(data.toString(), origin) : data);
+    if (!isMarkup) {
+      res.end(data);
+      return;
+    }
+    let text = resolveTokens(data.toString(), tokenOrigin(req));
+    if (!isPublicIndexHost(req.headers.host) && ext === ".html") {
+      text = applyPreviewHtml(text);
+    }
+    res.end(text);
   });
 });
 
