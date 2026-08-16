@@ -93,24 +93,35 @@ function numberList(value) {
 function dailyHistoryRanges(days) {
   const dates = [];
   const ranges = [];
-  const today = new Date();
-  const endToday = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()) / 1000;
-  for (let offset = days - 1; offset >= 0; offset -= 1) {
-    const end = endToday - (offset * 86400);
+  const now = new Date();
+  const todayStart = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) / 1000;
+  for (let offset = days - 2; offset >= 0; offset -= 1) {
+    const end = todayStart - (offset * 86400);
     const start = end - 86400;
     dates.push(new Date(start * 1000).toISOString().slice(0, 10));
     ranges.push(`${start}_${end}`);
   }
+  const nowSeconds = Math.floor(now.getTime() / 1000);
+  dates.push(new Date(todayStart * 1000).toISOString().slice(0, 10));
+  ranges.push(`${todayStart}_${nowSeconds}`);
   return { dates, query: ranges.join("-") };
 }
 
-const DAILY_HISTORY = dailyHistoryRanges(DAILY_HISTORY_DAYS);
 const DAILY_HISTORY_CHUNK_SIZE = 10;
-const DAILY_HISTORY_QUERIES = DAILY_HISTORY.query.split("-").reduce((chunks, range, index) => {
-  const chunkIndex = Math.floor(index / DAILY_HISTORY_CHUNK_SIZE);
-  chunks[chunkIndex] = chunks[chunkIndex] ? `${chunks[chunkIndex]}-${range}` : range;
-  return chunks;
-}, []);
+function chunkDailyRanges(query) {
+  return query.split("-").reduce((chunks, range, index) => {
+    const chunkIndex = Math.floor(index / DAILY_HISTORY_CHUNK_SIZE);
+    chunks[chunkIndex] = chunks[chunkIndex] ? `${chunks[chunkIndex]}-${range}` : range;
+    return chunks;
+  }, []);
+}
+let DAILY_HISTORY = dailyHistoryRanges(DAILY_HISTORY_DAYS);
+let DAILY_HISTORY_QUERIES = chunkDailyRanges(DAILY_HISTORY.query);
+
+function refreshDailyHistory() {
+  DAILY_HISTORY = dailyHistoryRanges(DAILY_HISTORY_DAYS);
+  DAILY_HISTORY_QUERIES = chunkDailyRanges(DAILY_HISTORY.query);
+}
 
 function historyState(value) {
   if (!Number.isFinite(Number(value))) return "unknown";
@@ -308,6 +319,7 @@ function requestUptime(body, options = {}) {
 }
 
 function loadUptime() {
+  refreshDailyHistory();
   if (!UPTIME_API_KEY) {
     return Promise.resolve({
       status: ALLOW_UPTIME_FIXTURE ? 200 : 503,

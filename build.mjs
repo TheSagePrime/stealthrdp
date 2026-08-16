@@ -1067,6 +1067,7 @@ function buildPlans() {
 function buildStatus() {
   const headline = ALL_UP ? "All services are online" : "Service status needs attention";
   const nodes = MONITORS.map(nodeCardHtml).join("");
+  const downCount = Math.max(0, TOTAL - UP);
   const body = `
   <section class="page-head">
     <div class="container"><span class="eyebrow">Server status</span><h1>${headline}</h1><p>Live service status and 90-day uptime history.</p></div>
@@ -1074,7 +1075,13 @@ function buildStatus() {
   <section class="section status-page-section" style="padding-top:0">
     <div class="container">
       <div class="status-shell">
-        <div class="status-shell-head"><div><span class="mono">LIVE STATUS</span><h2>All services</h2></div><p>Current availability for the StealthRDP service layer.</p></div>
+        <div class="status-shell-head"><div><span class="mono">LIVE STATUS</span><h2>All services</h2><p>Current availability for the StealthRDP service layer.</p></div>
+          <div class="status-summary" id="statusSummary" aria-label="Server count summary">
+            <span class="status-total"><b>${TOTAL}</b> servers</span>
+            <span class="status-up"><i class="status-key healthy" aria-hidden="true"></i><b>${UP}</b> up</span>
+            <span class="status-down"><i class="status-key unknown" aria-hidden="true"></i><b>${downCount}</b> down</span>
+          </div>
+        </div>
         <div class="status-meta"><p class="status-source-note" id="statusSourceNote">Live refresh is attempted when this page loads.</p><div class="status-legend"><span><i class="status-key healthy" aria-hidden="true"></i>Operational</span><span><i class="status-key degraded" aria-hidden="true"></i>Partial availability</span><span><i class="status-key unknown" aria-hidden="true"></i>Downtime / unknown</span></div></div>
       </div>
       <div class="status-section-head"><div><span class="mono">SERVICES</span><h2>Service components</h2></div><span class="status-count">${TOTAL} services</span></div>

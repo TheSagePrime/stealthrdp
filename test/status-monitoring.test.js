@@ -55,15 +55,19 @@ test("uptime proxy exposes rolling aggregates without monitor targets", async ()
 test("status page documents detailed monitoring windows and privacy", () => {
   const html = fs.readFileSync(path.join(ROOT, "status.html"), "utf8");
   const server = fs.readFileSync(path.join(ROOT, "server.js"), "utf8");
-  for (const label of ["All services are online", "90-day uptime", "90-day history", "Operational"]) {
+  for (const label of ["All services are online", "90-day uptime", "90-day history", "Operational", "servers"]) {
     assert.ok(html.includes(label), `missing ${label}`);
   }
+  assert.match(html, /status-summary/);
+  assert.match(html, /<b>\d+<\/b> servers/);
   assert.doesNotMatch(html, /Recent incidents|Rolling windows|Incident context|Downtime \/ 30d/);
   assert.match(server, /custom_uptime_ratios: "7-30-90"/);
   assert.match(server, /function durationValues\(monitor\)/);
   assert.doesNotMatch(server, /custom_down_durations: "7-30-90"/);
   assert.match(server, /custom_uptime_ranges: query/);
   assert.match(server, /DAILY_HISTORY_CHUNK_SIZE = 10/);
+  assert.match(server, /todayStart}_/);
+  assert.match(server, /function refreshDailyHistory/);
   assert.match(server, /const metricsBody = querystring\.stringify/);
   assert.match(server, /const historyBodies = DAILY_HISTORY_QUERIES\.map/);
   const css = fs.readFileSync(path.join(ROOT, "css/style.css"), "utf8");

@@ -96,7 +96,7 @@ test("status rows keep the page simple and responsive", () => {
   const build = HTML("build.mjs");
   const css = HTML("css/style.css");
   assert.match(build, /class="node-list"/);
-  assert.doesNotMatch(build, /status-info-grid|status-summary|Recent incidents|Rolling windows/);
+  assert.doesNotMatch(build, /status-info-grid|Recent incidents|Rolling windows/);
   assert.match(css, /\.node-card \{[\s\S]*grid-template-columns/);
   assert.match(css, /\.history-bars \{[\s\S]*grid-template-columns: repeat\(90/);
 });
