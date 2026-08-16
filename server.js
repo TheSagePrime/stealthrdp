@@ -257,7 +257,9 @@ function safeUptimePayload(body) {
     });
   }) : [];
 
-  return { stat: source.stat === "ok" ? "ok" : "error", checkedAt: source.stat === "ok" ? new Date().toISOString() : null, monitors };
+  const result = { stat: source.stat === "ok" ? "ok" : "error", checkedAt: source.stat === "ok" ? new Date().toISOString() : null, monitors };
+  if (source.stat !== "ok" && source.error) result.providerError = String(source.error.message || source.error).slice(0, 240);
+  return result;
 }
 
 function requestUptime(body) {
