@@ -105,6 +105,8 @@ test("status page documents detailed monitoring windows and privacy", () => {
   assert.match(main, /cur">€'/);
   assert.doesNotMatch(main, /Deploy Now/);
   assert.match(fs.readFileSync(path.join(ROOT, "vercel.json"), "utf8"), /vercel-build/);
+  assert.match(fs.readFileSync(path.join(ROOT, "vercel.json"), "utf8"), /"outputDirectory": "public"/);
+  assert.match(fs.readFileSync(path.join(ROOT, "package.json"), "utf8"), /stage-vercel-public/);
   const uptimeFn = fs.readFileSync(path.join(ROOT, "api/uptime.js"), "utf8");
   assert.match(uptimeFn, /UPTIMEROBOT_API_KEY/);
   assert.match(uptimeFn, /custom_uptime_ranges/);

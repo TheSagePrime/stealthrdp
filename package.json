@@ -6,7 +6,7 @@
   "type": "commonjs",
   "scripts": {
     "build": "node build.mjs",
-    "vercel-build": "node build.mjs && node scripts/bake-base.mjs",
+    "vercel-build": "node build.mjs && node scripts/bake-base.mjs && node scripts/stage-vercel-public.mjs",
     "test": "node --test test/*.test.js",
     "start": "node server.js",
     "check": "node --test test/*.test.js"

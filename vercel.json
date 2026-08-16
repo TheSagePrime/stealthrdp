@@ -1,6 +1,7 @@
 {
   "buildCommand": "npm run vercel-build",
-  "outputDirectory": ".",
+  "outputDirectory": "public",
+  "framework": null,
   "functions": {
     "api/uptime.js": { "maxDuration": 30 },
     "api/plans.js": { "maxDuration": 10 },
