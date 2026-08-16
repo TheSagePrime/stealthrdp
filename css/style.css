@@ -980,3 +980,104 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
 @media (max-width: 620px) {
   .page-hero { padding: 52px 0 43px; }.page-hero-grid { gap: 24px; }.page-hero h1 { font-size: clamp(34px, 11vw, 48px); }.page-hero-aside { min-height: 0 !important; }.page-head { padding: 34px 0 20px; }.page-head h1 { font-size: clamp(30px, 9vw, 40px); }.plan-finder { align-items: stretch; flex-direction: column; }.finder-field select { width: 100%; min-width: 0; }.plans-controls { grid-template-columns: 1fr; gap: 16px; }.plans-byo-link { grid-column: auto; width: fit-content; }.plans-grid-head { align-items: flex-start; flex-direction: column; margin-top: 34px; }.byo-panel, .faq-support, .blog-article-footer { align-items: flex-start; flex-direction: column; }.byo-panel .btn, .faq-support .btn { width: 100%; }.status-shell { padding: 18px; }.status-summary { grid-template-columns: 1fr !important; }.status-meta { align-items: flex-start; flex-direction: column; }.status-legend { padding-bottom: 3px; }.status-section-head { align-items: flex-start; flex-direction: column; margin-top: 36px; }.status-info-grid { margin-top: 40px; }.blog-filters, .faq-controls { grid-template-columns: 1fr; }.blog-filters input, .blog-filters select, .blog-filters label, .faq-controls input, .faq-controls select, .faq-controls label { grid-column: 1; grid-row: auto; }.blog-results-bar, .faq-results-bar { align-items: flex-start; flex-direction: column; gap: 6px; }.faq-support .btn { min-width: 0; }
 }
+
+/* ---------- Mobile composition audit (homepage only) ---------- */
+@media (max-width: 768px) {
+  .hero { padding: 32px 0; }
+  .hero-stats {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px;
+    margin-top: 10px; max-width: 100%; border: 0; border-radius: 0;
+    background: transparent; overflow: visible;
+  }
+  .hero-stat, .hero-stat:last-child {
+    min-width: 0; padding: 7px 4px; text-align: center;
+    border: 0; border-radius: 0;
+  }
+  .hero-stat .num { font-size: 21px; line-height: 1.2; white-space: nowrap; }
+  .hero-stat .lbl { margin-top: 3px; font-size: 10px; line-height: 1.25; white-space: nowrap; }
+  .trust-bar { padding: 16px 0 !important; }
+  .trust-bar .container {
+    display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start; gap: 4px; font-size: 12px; line-height: 1.35; text-align: center;
+  }
+  .trust-bar .container > .trust-heading,
+  .trust-bar .container > .trust-divider { display: none; }
+  .trust-bar .container > .trust-item { display: block; min-width: 0; }
+  .trust-bar .trust-item b { display: block; }
+  .usecases-section { padding-top: 28px; padding-bottom: 34px; }
+  .plans-preview { padding-top: 48px; padding-bottom: 48px; }
+  .plan-finder { gap: 12px; margin-bottom: 20px; padding: 14px 16px; }
+  .plan-finder .location-control, .plan-finder .finder-field { gap: 6px; }
+  .finder-field select { min-height: 40px; padding: 8px 10px; }
+  .finder-note { margin: 2px 0 0; }
+  .billing-wrap { width: 100%; overflow: hidden; }
+  .billing-toggle {
+    width: 100%; max-width: 100%; justify-content: space-between; flex-wrap: nowrap;
+    gap: 2px; margin-bottom: 28px;
+  }
+  .billing-toggle button { flex: 1 1 0; min-width: 0; padding: 7px 4px; font-size: 11.5px; }
+  .billing-toggle button .off { font-size: 10px; }
+  .plan-grid {
+    gap: 8px; margin: 0 -24px; padding: 8px 24px 16px;
+    scroll-padding-inline: 24px;
+  }
+  .plan-grid .plan-card {
+    flex: 0 0 100%; min-height: 0; padding: 20px 18px 18px;
+    scroll-snap-align: start; transform: none;
+  }
+  .plan-grid .plan-card:hover, .plan-grid .plan-card.popular:hover { transform: none; }
+  .plan-grid .plan-card .p-desc {
+    display: block; min-height: 0; margin-top: 3px; font-size: 12px; line-height: 1.4;
+  }
+  .plan-grid .plan-card .plan-price { margin: 14px 0 2px; }
+  .plan-grid .plan-card .plan-price .cur { font-size: 28px; }
+  .plan-grid .plan-card .plan-specs { margin: 12px 0 16px; gap: 8px; }
+  .infra-list li { gap: 6px 12px; padding: 12px 14px; }
+  .infra-list strong { font-size: 14px; }
+  .infra-list span { font-size: 12.5px; line-height: 1.4; }
+  .review-wall {
+    max-height: none; overflow: visible; mask-image: none; -webkit-mask-image: none;
+  }
+  .review-column { height: auto; overflow: visible; }
+  .review-track { animation: none; gap: 10px; }
+  .review-card-copy { display: none; }
+  .review-column .review-track .review-card:nth-child(n+4) { display: none; }
+  .review-wall.expanded .review-column .review-track .review-card { display: flex; }
+  .review-card { min-height: 0; padding: 14px; }
+  .review-card-meta { margin-bottom: 9px; }
+  .review-card blockquote { font-size: 13.5px; line-height: 1.5; }
+  .review-card footer { gap: 10px; margin-top: 16px; }
+  .reviews-more { display: block; margin: 16px auto 0; }
+  .cta-band { padding: 64px 0 56px; }
+  .cta-grid { gap: 28px; }
+  .cta-actions { gap: 10px; }
+  .footer { padding: 32px 0 24px; }
+  .footer-status { margin-bottom: 28px; padding: 7px 12px; }
+  .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 20px; margin-bottom: 28px; }
+  .footer-about { grid-column: 1 / -1; }
+  .footer .logo { margin-bottom: 12px; }
+  .footer-about p { font-size: 13px; }
+  .footer-social { margin-top: 16px; }
+  .footer-col ul { gap: 8px; }
+  .footer-bottom { gap: 12px; padding-top: 18px; }
+}
+
+@media (max-width: 600px) {
+  .hero-copy h1 { font-size: clamp(34px, 9.2vw, 40px); line-height: 1.08; margin-bottom: 16px; letter-spacing: -.03em; }
+  .hero-copy h1 .gold { display: block; }
+  .billing-toggle { gap: 3px; }
+  .billing-toggle button { padding: 6px 2px; font-size: 11px; line-height: 1.2; }
+  .billing-toggle button .off { display: block; margin-top: 1px; font-size: 9px; line-height: 1.15; }
+  .hero-copy .sub { font-size: 15.5px; line-height: 1.52; margin-bottom: 22px; }
+  .hero-cta { gap: 10px; margin-bottom: 14px; }
+  .hero-cta .btn { min-height: 46px; padding: 12px 18px; }
+  .hero-micro { margin-bottom: 8px; line-height: 1.5; }
+  .usecase-chips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .usecase-chips .topic-chip { width: 100%; min-height: 34px; justify-content: center; padding: 7px 8px; text-align: center; }
+  .usecase-chips .topic-chip:last-child { grid-column: 1 / -1; width: calc(50% - 4px); justify-self: center; }
+  .review-wall { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .hero .eyebrow { max-width: 100%; padding: 6px 10px; font-size: 10px; letter-spacing: .08em; white-space: nowrap; }
+}

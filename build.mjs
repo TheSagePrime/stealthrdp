@@ -240,7 +240,7 @@ function planCardHtml(p, { showPopular = true } = {}) {
     ${isPop ? '<span class="plan-popular">Most Popular</span>' : ""}
     <div class="p-name">${esc(planName(p))}</div>
     <div class="p-desc">${esc(p.description || "")}</div>
-    <div class="plan-price"><span class="cur">&euro;${fmt(price)}<small>/mo</small></span><span class="was">&euro;${fmt(p.monthlyPrice || 0)}</span></div>
+    <div class="plan-price"><span class="cur">$${fmt(price)}<small>/mo</small></span><span class="was">$${fmt(p.monthlyPrice || 0)}</span></div>
     <div class="plan-specs">
       ${specRow("CPU", p.specs && p.specs.cpu)}
       ${specRow("RAM", p.specs && p.specs.ram)}
@@ -263,7 +263,7 @@ function compareRowHtml(p) {
     <td class="v">${esc((p.specs && p.specs.ram) || "—")}</td>
     <td class="v">${esc((p.specs && p.specs.storage) || "—")}</td>
     <td class="v">${esc((p.specs && p.specs.bandwidth) || "—")}</td>
-    <td class="v">&euro;${fmt(p.monthlyPrice || 0)}</td>
+    <td class="v">$${fmt(p.monthlyPrice || 0)}</td>
     <td><a class="btn btn-sm ${p.popular ? "btn-primary" : "btn-ghost"}" href="${planUrl(p)}" target="_blank" rel="noopener noreferrer">Deploy</a></td>
   </tr>`;
 }
@@ -705,7 +705,7 @@ function serviceLd(p) {
     description: p.description || `${p.name} — ${(p.specs && p.specs.cpu) || ""} CPU, ${(p.specs && p.specs.ram) || ""} RAM, ${(p.specs && p.specs.storage) || ""} NVMe`,
     url: planUrl(p),
     provider: { "@type": "Organization", name: "StealthRDP", url: "__SRDP_BASE__/" },
-    offers: { "@type": "Offer", price: monthlyPrice(p), priceCurrency: "EUR", url: planUrl(p) },
+    offers: { "@type": "Offer", price: monthlyPrice(p), priceCurrency: "USD", url: planUrl(p) },
   };
 }
 
@@ -833,10 +833,10 @@ function buildIndex() {
   <!-- ============ Trust row (3 items) ============ -->
   <div class="trust-bar" style="padding:22px 0;border-bottom:1px solid var(--border)">
     <div class="container" style="display:flex;align-items:center;gap:8px 32px;flex-wrap:wrap;font-size:13.5px;color:var(--text-muted)">
-      <span style="color:var(--text);font-weight:600">By the numbers</span>
-      <span><b style="color:var(--text)">10,000+</b> orders</span><span style="color:var(--border-strong)">/</span>
-      <span><b style="color:var(--text)">USA + EU</b> locations</span><span style="color:var(--border-strong)">/</span>
-      <span><b style="color:var(--text)">60-second</b> setup</span>
+      <span class="trust-heading" style="color:var(--text);font-weight:600">By the numbers</span>
+      <span class="trust-item"><b style="color:var(--text)">10,000+</b> orders</span><span class="trust-divider" style="color:var(--border-strong)">/</span>
+      <span class="trust-item"><b style="color:var(--text)">USA + EU</b> locations</span><span class="trust-divider" style="color:var(--border-strong)">/</span>
+      <span class="trust-item"><b style="color:var(--text)">60-second</b> setup</span>
     </div>
   </div>
 
@@ -867,7 +867,7 @@ function buildIndex() {
         <div class="finder-field"><span class="control-label">Use case</span><select id="useCaseSelect" aria-label="Use case"><option value="remote-desktop">Remote desktop</option><option value="web-hosting">Web hosting</option><option value="automation">Automation &amp; bots</option><option value="trading">Trading</option><option value="storage">Storage &amp; backups</option></select></div>
         <p class="finder-note" id="finderNote">Every plan supports Windows and Linux. Pick a workload to see the recommended tier.</p>
       </div>
-      <div style="text-align:center" class="fade-up d2">
+      <div class="billing-wrap fade-up d2">
         <div class="billing-toggle" id="billingToggle" role="tablist" aria-label="Billing cycle">
           <button role="tab" data-cycle="monthly" class="active">Monthly</button>
           <button role="tab" data-cycle="quarterly">Quarterly <span class="off">−10%</span></button>
