@@ -34,7 +34,7 @@
       } catch (e) {}
     }());
   </script>
-  <link rel="stylesheet" href="/css/style.css?v=2026-08-16T05-30-18-082Z" />
+  <link rel="stylesheet" href="/css/style.css?v=2026-08-16T05-46-34-322Z" />
   <!-- Google Tag Manager (real container from live site) -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -160,77 +160,42 @@
     </div>
   </div>
 
-  <!-- ============ Trust strip ============ -->
+  <!-- ============ Trust row (3 items) ============ -->
   <div class="trust-bar" style="padding:22px 0;border-bottom:1px solid var(--border)">
     <div class="container" style="display:flex;align-items:center;gap:8px 32px;flex-wrap:wrap;font-size:13.5px;color:var(--text-muted)">
       <span style="color:var(--text);font-weight:600">By the numbers</span>
       <span><b style="color:var(--text)">10,000+</b> orders</span><span style="color:var(--border-strong)">/</span>
-      <span><b style="color:var(--text)">99.9%</b> uptime SLA</span><span style="color:var(--border-strong)">/</span>
-      <span>Support <b style="color:var(--text)">&lt; 2hr</b> response</span><span style="color:var(--border-strong)">/</span>
-      <span><b style="color:var(--text)">7-day</b> money-back guarantee</span>
+      <span><b style="color:var(--text)">USA + EU</b> locations</span><span style="color:var(--border-strong)">/</span>
+      <span><b style="color:var(--text)">60-second</b> setup</span>
     </div>
   </div>
 
-  <!-- ============ Section 01 — Infrastructure ============ -->
-  <section class="section infrastructure-section" id="why">
+  <!-- ============ Use-case chips (jump to recommended plan) ============ -->
+  <section class="section section-tight usecases-section" id="usecases">
     <div class="container">
       <div class="compact-section-head">
-        <div><h2>Infrastructure that doesn't flinch</h2><p>Speed, protection, and visibility without the extra surface area.</p></div>
-        <a class="text-link" href="/status.html">View server status <svg class="inline-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a>
+        <div><h2>What are you running?</h2><p>Pick a workload and jump straight to the plan that fits.</p></div>
       </div>
-      <div class="infrastructure-board">
-        <div class="infrastructure-intro"><span class="infra-signal" aria-hidden="true"></span><span>Core infrastructure</span><span class="infra-count">Live monitoring</span></div>
-        <ul class="infra-list">
-          <li><strong>NVMe SSD storage</strong><span>Fast disk I/O for applications, databases, and terminals.</span><b>Performance</b></li>
-          <li><strong>DDoS protection</strong><span>Isolated VM instances and protection for production workloads.</span><b>Protection</b></li>
-          <li><strong>Global network</strong><span>Strategic locations with 1Gbps network speeds.</span><b>Reach</b></li>
-          <li><strong>24/7 monitoring</strong><span>Automated monitoring with a public status page.</span><b>Visibility</b></li>
-        </ul>
-      </div>
+      <div class="topic-chips usecase-chips" role="group" aria-label="Choose a workload"><button type="button" class="topic-chip" data-use-case="remote-desktop" data-tier="Bronze">Remote desktop</button><button type="button" class="topic-chip" data-use-case="web-hosting" data-tier="Silver">Web hosting</button><button type="button" class="topic-chip" data-use-case="automation" data-tier="Gold">Automation & bots</button><button type="button" class="topic-chip" data-use-case="trading" data-tier="Gold">Trading</button><button type="button" class="topic-chip" data-use-case="storage" data-tier="Silver">Storage & backups</button></div>
     </div>
   </section>
 
-  <!-- ============ Section 02 — Use cases ============ -->
-  <section class="section section-tight outcomes-section" id="usecases">
-    <div class="container">
-      <div class="compact-section-head outcomes-head">
-        <div><h2>Stop struggling with server problems</h2><p>Move the workload off your laptop and into infrastructure built to stay available.</p></div>
-      </div>
-      <div class="outcome-panel">
-        <div class="outcome-row outcome-row-head" aria-hidden="true">
-          <span>Workload</span><span>Before StealthRDP</span><span>With StealthRDP</span>
-        </div>
-        <div class="outcome-row">
-          <div class="outcome-name"><span class="outcome-no">01</span><span>Remote work</span></div>
-          <p class="outcome-before">Tied to one office computer.</p>
-          <p class="outcome-after">Your files and applications stay available from any device.</p>
-        </div>
-        <div class="outcome-row">
-          <div class="outcome-name"><span class="outcome-no">02</span><span>Web hosting</span></div>
-          <p class="outcome-before">Traffic spikes turn into downtime and unanswered tickets.</p>
-          <p class="outcome-after">Your site runs on dedicated VPS resources with support when needed.</p>
-        </div>
-        <div class="outcome-row">
-          <div class="outcome-name"><span class="outcome-no">03</span><span>Automation</span></div>
-          <p class="outcome-before">Scripts stop when your laptop sleeps or loses power.</p>
-          <p class="outcome-after">Run your workloads continuously on a remote server.</p>
-        </div>
-        <div class="outcome-row">
-          <div class="outcome-name"><span class="outcome-no">04</span><span>Data</span></div>
-          <p class="outcome-before">Hardware failure leaves your data exposed to loss.</p>
-          <p class="outcome-after">Keep storage on protected infrastructure with a clear recovery path.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Section 03 — Plans ============ -->
+  <!-- ============ Plans + simple builder ============ -->
   <section class="section plans-preview" id="plans">
     <div class="container">
       <div class="section-head">
-        <span class="sec-index fade-up">03 / Pick your power</span>
-        <h2 class="fade-up d1">Select your performance level</h2>
+        <span class="sec-index fade-up">Pick your power</span>
+        <h2 class="fade-up d1">Plans priced for the work</h2>
         <p class="fade-up d2">All plans include free migration assistance, 24/7 support, and our industry-leading uptime guarantee.</p>
+      </div>
+      <div class="plan-finder" aria-label="Plan finder">
+        <div class="location-control"><span class="control-label">Region</span><div id="locationTabs" class="location-tabs" role="tablist" aria-label="Deployment region">
+          <button role="tab" aria-selected="true" data-location="USA" class="active">USA</button>
+          <button role="tab" aria-selected="false" data-location="EU">EU</button>
+        </div></div>
+        <div class="finder-field"><span class="control-label">Operating system</span><select id="osSelect" aria-label="Operating system"><option value="any">Any OS</option><option value="windows">Windows</option><option value="linux">Linux</option></select></div>
+        <div class="finder-field"><span class="control-label">Use case</span><select id="useCaseSelect" aria-label="Use case"><option value="remote-desktop">Remote desktop</option><option value="web-hosting">Web hosting</option><option value="automation">Automation &amp; bots</option><option value="trading">Trading</option><option value="storage">Storage &amp; backups</option></select></div>
+        <p class="finder-note" id="finderNote">Every plan supports Windows and Linux. Pick a workload to see the recommended tier.</p>
       </div>
       <div style="text-align:center" class="fade-up d2">
         <div class="billing-toggle" id="billingToggle" role="tablist" aria-label="Billing cycle">
@@ -278,6 +243,25 @@
     <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/gold-usa&billingcycle=monthly" target="_blank" rel="noopener noreferrer">Deploy Now</a>
   </article></div>
       <div class="all-link"><a class="btn btn-ghost" href="/plans.html">View All 11 Plans</a></div>
+    </div>
+  </section>
+
+  <!-- ============ Infrastructure / Why ============ -->
+  <section class="section infrastructure-section" id="why">
+    <div class="container">
+      <div class="compact-section-head">
+        <div><h2>Infrastructure that doesn't flinch</h2><p>Speed, protection, and visibility without the extra surface area.</p></div>
+        <a class="text-link" href="/status.html">View server status <svg class="inline-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a>
+      </div>
+      <div class="infrastructure-board">
+        <div class="infrastructure-intro"><span class="infra-signal" aria-hidden="true"></span><span>Core infrastructure</span><span class="infra-count">Live monitoring</span></div>
+        <ul class="infra-list">
+          <li><strong>NVMe SSD storage</strong><span>Fast disk I/O for applications, databases, and terminals.</span><b>Performance</b></li>
+          <li><strong>DDoS protection</strong><span>Isolated VM instances and protection for production workloads.</span><b>Protection</b></li>
+          <li><strong>Global network</strong><span>Strategic locations with 1Gbps network speeds.</span><b>Reach</b></li>
+          <li><strong>24/7 monitoring</strong><span>Automated monitoring with a public status page.</span><b>Visibility</b></li>
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -649,6 +633,6 @@
       </span>
     </div>
   </div></footer>
-  <script src="/js/main.js?v=2026-08-16T05-30-18-082Z"></script>
+  <script src="/js/main.js?v=2026-08-16T05-46-34-322Z"></script>
 </body>
 </html>

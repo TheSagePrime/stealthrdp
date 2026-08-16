@@ -754,6 +754,14 @@ function page({ active, title, description, canonical, pageType = "website", jso
 /* ---------- 1. index ---------- */
 function buildIndex() {
   const preview = USA.slice(0, 3).map((p) => planCardHtml(p)).join("");
+  const useCases = [
+    { key: "remote-desktop", label: "Remote desktop", tier: "Bronze" },
+    { key: "web-hosting", label: "Web hosting", tier: "Silver" },
+    { key: "automation", label: "Automation & bots", tier: "Gold" },
+    { key: "trading", label: "Trading", tier: "Gold" },
+    { key: "storage", label: "Storage & backups", tier: "Silver" },
+  ];
+  const useCaseChips = useCases.map((u) => `<button type="button" class="topic-chip" data-use-case="${u.key}" data-tier="${u.tier}">${u.label}</button>`).join("");
   const body = `
   <!-- ============ Hero ============ -->
   <section class="hero">
@@ -823,18 +831,57 @@ function buildIndex() {
     </div>
   </div>
 
-  <!-- ============ Trust strip ============ -->
+  <!-- ============ Trust row (3 items) ============ -->
   <div class="trust-bar" style="padding:22px 0;border-bottom:1px solid var(--border)">
     <div class="container" style="display:flex;align-items:center;gap:8px 32px;flex-wrap:wrap;font-size:13.5px;color:var(--text-muted)">
       <span style="color:var(--text);font-weight:600">By the numbers</span>
       <span><b style="color:var(--text)">10,000+</b> orders</span><span style="color:var(--border-strong)">/</span>
-      <span><b style="color:var(--text)">99.9%</b> uptime SLA</span><span style="color:var(--border-strong)">/</span>
-      <span>Support <b style="color:var(--text)">&lt; 2hr</b> response</span><span style="color:var(--border-strong)">/</span>
-      <span><b style="color:var(--text)">7-day</b> money-back guarantee</span>
+      <span><b style="color:var(--text)">USA + EU</b> locations</span><span style="color:var(--border-strong)">/</span>
+      <span><b style="color:var(--text)">60-second</b> setup</span>
     </div>
   </div>
 
-  <!-- ============ Section 01 — Infrastructure ============ -->
+  <!-- ============ Use-case chips (jump to recommended plan) ============ -->
+  <section class="section section-tight usecases-section" id="usecases">
+    <div class="container">
+      <div class="compact-section-head">
+        <div><h2>What are you running?</h2><p>Pick a workload and jump straight to the plan that fits.</p></div>
+      </div>
+      <div class="topic-chips usecase-chips" role="group" aria-label="Choose a workload">${useCaseChips}</div>
+    </div>
+  </section>
+
+  <!-- ============ Plans + simple builder ============ -->
+  <section class="section plans-preview" id="plans">
+    <div class="container">
+      <div class="section-head">
+        <span class="sec-index fade-up">Pick your power</span>
+        <h2 class="fade-up d1">Plans priced for the work</h2>
+        <p class="fade-up d2">All plans include free migration assistance, 24/7 support, and our industry-leading uptime guarantee.</p>
+      </div>
+      <div class="plan-finder" aria-label="Plan finder">
+        <div class="location-control"><span class="control-label">Region</span><div id="locationTabs" class="location-tabs" role="tablist" aria-label="Deployment region">
+          <button role="tab" aria-selected="true" data-location="USA" class="active">USA</button>
+          <button role="tab" aria-selected="false" data-location="EU">EU</button>
+        </div></div>
+        <div class="finder-field"><span class="control-label">Operating system</span><select id="osSelect" aria-label="Operating system"><option value="any">Any OS</option><option value="windows">Windows</option><option value="linux">Linux</option></select></div>
+        <div class="finder-field"><span class="control-label">Use case</span><select id="useCaseSelect" aria-label="Use case"><option value="remote-desktop">Remote desktop</option><option value="web-hosting">Web hosting</option><option value="automation">Automation &amp; bots</option><option value="trading">Trading</option><option value="storage">Storage &amp; backups</option></select></div>
+        <p class="finder-note" id="finderNote">Every plan supports Windows and Linux. Pick a workload to see the recommended tier.</p>
+      </div>
+      <div style="text-align:center" class="fade-up d2">
+        <div class="billing-toggle" id="billingToggle" role="tablist" aria-label="Billing cycle">
+          <button role="tab" data-cycle="monthly" class="active">Monthly</button>
+          <button role="tab" data-cycle="quarterly">Quarterly <span class="off">−10%</span></button>
+          <button role="tab" data-cycle="annual">Annual <span class="off">−20%</span></button>
+          <button role="tab" data-cycle="biannual">Biannual <span class="off">−30%</span></button>
+        </div>
+      </div>
+      <div class="plan-grid" id="planGrid" aria-live="polite">${preview}</div>
+      <div class="all-link"><a class="btn btn-ghost" href="/plans.html">View All ${USA.length + EU.length} Plans</a></div>
+    </div>
+  </section>
+
+  <!-- ============ Infrastructure / Why ============ -->
   <section class="section infrastructure-section" id="why">
     <div class="container">
       <div class="compact-section-head">
@@ -850,61 +897,6 @@ function buildIndex() {
           <li><strong>24/7 monitoring</strong><span>Automated monitoring with a public status page.</span><b>Visibility</b></li>
         </ul>
       </div>
-    </div>
-  </section>
-
-  <!-- ============ Section 02 — Use cases ============ -->
-  <section class="section section-tight outcomes-section" id="usecases">
-    <div class="container">
-      <div class="compact-section-head outcomes-head">
-        <div><h2>Stop struggling with server problems</h2><p>Move the workload off your laptop and into infrastructure built to stay available.</p></div>
-      </div>
-      <div class="outcome-panel">
-        <div class="outcome-row outcome-row-head" aria-hidden="true">
-          <span>Workload</span><span>Before StealthRDP</span><span>With StealthRDP</span>
-        </div>
-        <div class="outcome-row">
-          <div class="outcome-name"><span class="outcome-no">01</span><span>Remote work</span></div>
-          <p class="outcome-before">Tied to one office computer.</p>
-          <p class="outcome-after">Your files and applications stay available from any device.</p>
-        </div>
-        <div class="outcome-row">
-          <div class="outcome-name"><span class="outcome-no">02</span><span>Web hosting</span></div>
-          <p class="outcome-before">Traffic spikes turn into downtime and unanswered tickets.</p>
-          <p class="outcome-after">Your site runs on dedicated VPS resources with support when needed.</p>
-        </div>
-        <div class="outcome-row">
-          <div class="outcome-name"><span class="outcome-no">03</span><span>Automation</span></div>
-          <p class="outcome-before">Scripts stop when your laptop sleeps or loses power.</p>
-          <p class="outcome-after">Run your workloads continuously on a remote server.</p>
-        </div>
-        <div class="outcome-row">
-          <div class="outcome-name"><span class="outcome-no">04</span><span>Data</span></div>
-          <p class="outcome-before">Hardware failure leaves your data exposed to loss.</p>
-          <p class="outcome-after">Keep storage on protected infrastructure with a clear recovery path.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Section 03 — Plans ============ -->
-  <section class="section plans-preview" id="plans">
-    <div class="container">
-      <div class="section-head">
-        <span class="sec-index fade-up">03 / Pick your power</span>
-        <h2 class="fade-up d1">Select your performance level</h2>
-        <p class="fade-up d2">All plans include free migration assistance, 24/7 support, and our industry-leading uptime guarantee.</p>
-      </div>
-      <div style="text-align:center" class="fade-up d2">
-        <div class="billing-toggle" id="billingToggle" role="tablist" aria-label="Billing cycle">
-          <button role="tab" data-cycle="monthly" class="active">Monthly</button>
-          <button role="tab" data-cycle="quarterly">Quarterly <span class="off">−10%</span></button>
-          <button role="tab" data-cycle="annual">Annual <span class="off">−20%</span></button>
-          <button role="tab" data-cycle="biannual">Biannual <span class="off">−30%</span></button>
-        </div>
-      </div>
-      <div class="plan-grid" id="planGrid" aria-live="polite">${preview}</div>
-      <div class="all-link"><a class="btn btn-ghost" href="/plans.html">View All ${USA.length + EU.length} Plans</a></div>
     </div>
   </section>
 

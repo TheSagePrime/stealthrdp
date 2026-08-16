@@ -243,6 +243,56 @@
     }
   }
 
+  /* ---------- Homepage plan finder ---------- */
+  var USE_CASE_TIERS = {
+    "remote-desktop": "Bronze",
+    "web-hosting": "Silver",
+    "automation": "Gold",
+    "trading": "Gold",
+    "storage": "Silver",
+  };
+  var useCaseChips = $$("[data-use-case]");
+  var osSelect = $("#osSelect");
+  var useCaseSelect = $("#useCaseSelect");
+  var finderNote = $("#finderNote");
+  function currentTier() {
+    if (!useCaseSelect || !USE_CASE_TIERS) return "";
+    return USE_CASE_TIERS[useCaseSelect.value] || "";
+  }
+  function tierLabel(tier) {
+    if (!tier) return "";
+    return tier + (PLAN_LOCATION === "EU" ? " EU" : " USA");
+  }
+  function highlightRecommended(tier) {
+    if (!planGrid) return;
+    var target = tierLabel(tier);
+    var cards = $$(".plan-card", planGrid);
+    cards.forEach(function (card) {
+      var name = (card.querySelector(".p-name") || {}).textContent || "";
+      card.classList.toggle("recommended", !!target && name.indexOf(tier) !== -1);
+    });
+    if (finderNote) {
+      if (tier) {
+        var os = osSelect ? osSelect.value : "any";
+        finderNote.textContent = "Best fit: " + target + " — " + (os === "any" ? "any OS" : os + " OS") + " included on every plan.";
+      } else {
+        finderNote.textContent = "Every plan supports Windows and Linux. Pick a workload to see the recommended tier.";
+      }
+    }
+  }
+  function pickUseCase(key) {
+    if (useCaseSelect) useCaseSelect.value = key;
+    useCaseChips.forEach(function (chip) { chip.classList.toggle("active", chip.getAttribute("data-use-case") === key); });
+    highlightRecommended(USE_CASE_TIERS[key] || "");
+    var plansSection = $("#plans");
+    if (plansSection) plansSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  useCaseChips.forEach(function (chip) {
+    chip.addEventListener("click", function () { pickUseCase(chip.getAttribute("data-use-case")); });
+  });
+  if (useCaseSelect) useCaseSelect.addEventListener("change", function () { pickUseCase(useCaseSelect.value); });
+  if (osSelect) osSelect.addEventListener("change", function () { highlightRecommended(currentTier()); });
+
   /* ---------- Plans (baked cards stay; toggles re-render from cache) ---------- */
   var planGrid = $("#planGrid");
   var billingToggle = $("#billingToggle");
@@ -265,8 +315,8 @@
           (isPop ? '<span class="plan-popular">Most Popular</span>' : "") +
           '<div class="p-name">' + esc(p.name.replace(" USA", "").replace(" EU", "")) + "</div>" +
           '<div class="p-desc">' + esc(p.description || "") + "</div>" +
-          '<div class="plan-price"><span class="cur">&euro;' + fmtPrice(price) + '<small>/mo</small></span>' +
-          '<span class="was">&euro;' + fmtPrice(base) + "</span></div>" +
+          '<div class="plan-price"><span class="cur">$' + fmtPrice(price) + '<small>/mo</small></span>' +
+          '<span class="was">$' + fmtPrice(base) + "</span></div>" +
           '<div class="plan-specs">' +
             specRow("CPU", p.specs && p.specs.cpu) +
             specRow("RAM", p.specs && p.specs.ram) +
@@ -280,6 +330,7 @@
     planGrid.innerHTML = html || '<div style="grid-column:1/-1;text-align:center;color:var(--text-dim);padding:40px">Plans are being updated — check back shortly.</div>';
     var planGridNote = $("#planGridNote");
     if (planGridNote) planGridNote.textContent = plans.length + " " + PLAN_LOCATION + " plans · " + (currentCycle === "monthly" ? "prices shown monthly" : currentCycle + " discount applied");
+    highlightRecommended(currentTier());
   }
 
   function specRow(k, v) {
@@ -343,7 +394,7 @@
               '<td class="v">' + esc(p.specs && p.specs.ram || "—") + "</td>" +
               '<td class="v">' + esc(p.specs && p.specs.storage || "—") + "</td>" +
               '<td class="v">' + esc(p.specs && p.specs.bandwidth || "—") + "</td>" +
-              '<td class="v">&euro;' + fmtPrice(p.monthlyPrice || 0) + "</td>" +
+              '<td class="v">$' + fmtPrice(p.monthlyPrice || 0) + "</td>" +
               '<td><a class="btn btn-sm ' + (p.popular ? "btn-primary" : "btn-ghost") + '" href="' + planUrl(p, "monthly") + '" target="_blank" rel="noopener noreferrer">Deploy</a></td>' +
             "</tr>"
           );
