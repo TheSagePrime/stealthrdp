@@ -1275,14 +1275,24 @@ h1, h2, h3, h4 { text-wrap: balance; }
   .decision-entry .compact-section-head p { font-size: 13px; }
   .decision-entry .usecase-chips { justify-content: flex-start; margin: 0; padding: 4px; -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 30px), transparent 100%); mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 30px), transparent 100%); }
   .decision-entry .usecase-chips .topic-chip { min-height: 36px; padding: 8px 12px; }
-  .decision-surface { padding-top: 30px; }
+  .decision-surface { padding-top: 22px; padding-bottom: 26px; }
   .decision-surface > .container > .section-head, .decision-surface > .container > .plan-finder, .decision-surface > .container > .billing-wrap { max-width: none; }
-  .decision-surface .plan-grid { padding-top: 18px; padding-bottom: 18px; }
-  .plan-grid .plan-card { padding-top: 48px; }
-  .decision-surface .plan-grid .plan-card { min-height: 382px; padding: 48px 22px 24px; }
-  .decision-surface .plan-grid .plan-card .plan-price { margin: 18px 0 4px; }
+  .decision-surface > .container > .section-head { margin-bottom: 10px; }
+  .decision-surface .section-head h2 { font-size: 28px; }
+  .decision-surface .section-head p { font-size: 12.5px; line-height: 1.35; }
+  .decision-surface .plan-finder { padding: 10px 12px; gap: 8px 10px; }
+  .decision-surface .plan-finder .location-control, .decision-surface .plan-finder .finder-field { gap: 4px; }
+  .decision-surface .location-tabs button { min-height: 34px; padding: 6px 14px; font-size: 12px; }
+  .decision-surface .finder-field select { min-height: 38px; padding: 7px 9px; font-size: 12.5px; }
+  .decision-surface .finder-note { margin-top: 0; }
+  .decision-surface .billing-toggle { margin-bottom: 12px; }
+  .decision-surface .plan-grid { padding-top: 14px; padding-bottom: 14px; }
+  .plan-grid .plan-card { padding-top: 42px; }
+  .decision-surface .plan-grid .plan-card { min-height: 370px; padding: 42px 22px 20px; }
+  .decision-surface .plan-grid .plan-card .plan-price { margin: 14px 0 2px; }
   .decision-surface .plan-grid .plan-card .plan-price .cur { font-size: 32px; }
-  .decision-surface .plan-grid .plan-card .plan-specs { margin: 18px 0 22px; gap: 0 16px; }
-  .decision-surface .plan-grid .plan-card .plan-spec { padding: 9px 0 8px; }
+  .decision-surface .plan-grid .plan-card .plan-specs { margin: 14px 0 18px; gap: 0 16px; }
+  .decision-surface .plan-grid .plan-card .plan-spec { padding: 7px 0 6px; }
   .decision-surface .plan-grid .plan-card .plan-spec .v { font-size: 13px; }
+  .decision-surface .all-link { margin-top: 16px; }
 }
