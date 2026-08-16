@@ -351,8 +351,10 @@ function reviewWallHtml() {
   const items = REVIEWS.filter((item) => item && item.quote && item.sentiment !== "critical");
   if (!items.length) return '<div class="quote-empty">Customer and community feedback is being collected.</div>';
   const columns = [0, 1, 2].map((column) => items.filter((_, index) => index % 3 === column));
+  const mobileItems = items.concat(items);
   return `<div class="review-wall" data-review-count="${items.length}" aria-label="Customer and community reviews">
     ${columns.map((column, index) => `<div class="review-column review-column-${index + 1}"><div class="review-track">${column.concat(column).map((review, reviewIndex) => reviewCardHtml(review, reviewIndex >= column.length ? " review-card-copy" : "")).join("")}</div></div>`).join("")}
+    <div class="review-mobile-column"><div class="review-mobile-track">${mobileItems.map((review, reviewIndex) => reviewCardHtml(review, reviewIndex >= items.length ? " review-card-copy" : "")).join("")}</div></div>
   </div>
   <p class="review-disclosure">${items.length} real reviews from server owners and remote-desktop users.</p>`;
 }
@@ -906,7 +908,6 @@ function buildIndex() {
         <div><h2>Customer and community reviews</h2><p>Real feedback from server owners and remote-desktop users. Clean cards, no links, no noise.</p></div>
       </div>
       ${reviewWallHtml()}
-      <button type="button" class="btn btn-ghost btn-sm reviews-more" id="reviewsMore">Show all reviews</button>
     </div>
   </section>
 

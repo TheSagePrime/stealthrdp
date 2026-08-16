@@ -47,12 +47,17 @@ test("generated review wall shows positive and neutral reviews without source li
 });
 
 
-test("review wall keeps animation, mobile stacking, pause, and reduced-motion safeguards", () => {
+test("review wall keeps desktop lanes and uses a mobile vertical reel", () => {
+  assert.match(reviewSection, /review-mobile-track/);
+  assert.doesNotMatch(reviewSection, /reviews-more|Show all reviews/i);
   assert.match(CSS, /\.review-track \{[^}]*min-width: 0;[^}]*width: 100%;/);
   assert.match(CSS, /\.review-card \{[^}]*width: 100%;[^}]*min-width: 0;/);
   assert.match(CSS, /\.review-column:hover \.review-track, \.review-column:focus-within \.review-track \{[^}]*animation-play-state: paused;/);
-  assert.match(CSS, /@media \(max-width: 700px\)[\s\S]*?\.review-wall \{[^}]*grid-template-columns: 1fr;/);
-  assert.match(CSS, /@media \(max-width: 700px\)[\s\S]*?\.review-track \{ animation: none;/);
-  assert.match(CSS, /@media \(max-width: 700px\)[\s\S]*?\.review-card-copy \{ display: none;/);
+  assert.match(CSS, /\.review-mobile-column \{ display: none; \}/);
+  assert.match(CSS, /\.review-mobile-track \{[\s\S]*animation: review-reel-mobile 64s ease-in-out infinite alternate;/);
+  assert.match(CSS, /@media \(max-width: 768px\)[\s\S]*?\.review-wall \{[\s\S]*?height: clamp\(/);
+  assert.match(CSS, /@media \(max-width: 768px\)[\s\S]*?\.review-column \{ display: none; \}/);
+  assert.match(CSS, /@media \(max-width: 768px\)[\s\S]*?\.marquee-track \{[\s\S]*?animation: scrollx 36s linear infinite;/);
+  assert.match(CSS, /@media \(max-width: 768px\) and \(prefers-reduced-motion: reduce\)[\s\S]*?\.marquee-track, \.review-mobile-track \{ animation: none; \}/);
   assert.match(CSS, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.review-track[^}]*animation: none;/);
 });
