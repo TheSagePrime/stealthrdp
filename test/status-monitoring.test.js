@@ -74,4 +74,11 @@ test("status page documents detailed monitoring windows and privacy", () => {
   assert.match(css, /history-bar:hover::after/);
   assert.match(fs.readFileSync(path.join(ROOT, "build.mjs"), "utf8"), /data-tooltip/);
   assert.match(fs.readFileSync(path.join(ROOT, "js/main.js"), "utf8"), /formatHistoryDate/);
+  const build = fs.readFileSync(path.join(ROOT, "build.mjs"), "utf8");
+  assert.match(build, /rp=\/store\/eu/);
+  assert.match(build, /const category = p\.name\.endsWith\(" EU"\) \? "eu"/);
+  assert.match(build, /category \+ "\/" \+ slug/);
+  assert.match(build, /rp=\/store\/standard-usa-rdp-vps/);
+  assert.match(build, /rp=\/store\/build-your-own-rdp-vps/);
+  assert.match(build, /cart\.php\?a=view/);
 });
