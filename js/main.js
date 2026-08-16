@@ -321,14 +321,8 @@
     var nodeList = $("#nodeList");
     if (!nodeList) return;
     var monitors = (d && d.monitors) || [];
-    var upCount = monitors.filter(function (m) { return isMonitorUp(m); }).length;
-    var summary = $("#statusSummary");
-    if (summary) {
-      summary.innerHTML =
-        '<span class="status-total"><b>' + monitors.length + "</b> servers</span>" +
-        '<span class="status-up"><i class="status-key healthy" aria-hidden="true"></i><b>' + upCount + "</b> up</span>" +
-        '<span class="status-down"><i class="status-key unknown" aria-hidden="true"></i><b>' + Math.max(0, monitors.length - upCount) + "</b> down</span>";
-    }
+    var countTotal = $("#statusCountTotal");
+    if (countTotal) countTotal.innerHTML = "<b>" + monitors.length + "</b> services";
     nodeList.innerHTML = monitors.map(function (m) {
       var upNow = isMonitorUp(m);
       var status = m.status || (upNow ? "up" : "down");
