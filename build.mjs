@@ -272,7 +272,7 @@ function planCardHtml(p, { showPopular = true } = {}) {
       ${specRow("Storage", p.specs && p.specs.storage)}
       ${specRow("Bandwidth", p.specs && p.specs.bandwidth)}
     </div>
-    <a class="btn ${isPop ? "btn-primary" : "btn-ghost"}" href="${planUrl(p)}" target="_blank" rel="noopener noreferrer">Deploy Now</a>
+    <a class="btn btn-primary" href="${planUrl(p)}" target="_blank" rel="noopener noreferrer">Deploy Now</a>
   </article>`;
 }
 
@@ -289,7 +289,7 @@ function compareRowHtml(p) {
     <td class="v">${esc((p.specs && p.specs.storage) || "—")}</td>
     <td class="v">${esc((p.specs && p.specs.bandwidth) || "—")}</td>
     <td class="v">$${fmt(p.monthlyPrice || 0)}</td>
-    <td><a class="btn btn-sm ${p.popular ? "btn-primary" : "btn-ghost"}" href="${planUrl(p)}" target="_blank" rel="noopener noreferrer">Deploy</a></td>
+    <td><a class="btn btn-sm btn-primary" href="${planUrl(p)}" target="_blank" rel="noopener noreferrer">Deploy</a></td>
   </tr>`;
 }
 
