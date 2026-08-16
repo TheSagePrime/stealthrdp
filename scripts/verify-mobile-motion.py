@@ -1,15 +1,17 @@
 """Verify mobile OS/review motion and desktop regression on the local build."""
 import asyncio
 import json
+import os
 from pathlib import Path
 
 from playwright.async_api import async_playwright
 
+BASE = os.environ.get("BASE_URL", "http://127.0.0.1:8080/")
 OUT = Path("/opt/data/stealthrdp-mobile-audit")
 
 
 async def probe(page, label):
-    await page.goto("http://127.0.0.1:8080/", wait_until="domcontentloaded")
+    await page.goto(BASE, wait_until="domcontentloaded")
     await page.wait_for_timeout(900)
     before = await page.evaluate("""() => {
       const css = s => getComputedStyle(document.querySelector(s));
@@ -54,7 +56,7 @@ async def main():
 
         reduced = await browser.new_page(viewport={"width": 390, "height": 844})
         await reduced.emulate_media(reduced_motion="reduce")
-        await reduced.goto("http://127.0.0.1:8080/", wait_until="domcontentloaded")
+        await reduced.goto(BASE, wait_until="domcontentloaded")
         await reduced.wait_for_timeout(900)
         results["reducedMotion"] = await reduced.evaluate("""() => ({
           osAnimation: getComputedStyle(document.querySelector('.marquee-track')).animationName,
