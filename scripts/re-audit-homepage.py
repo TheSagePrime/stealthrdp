@@ -125,6 +125,9 @@ MEASURE_JS = r"""() => {
   const grid = q('.plan-grid');
   const cards = grid ? qa('.plan-card', grid).map(rect) : [];
   const gridRect = rect(grid);
+  const popularTag = q('.plan-card.popular .plan-popular');
+  const popularTagRect = rect(popularTag);
+  const popularTagClipped = !!(gridRect && popularTagRect && (popularTagRect.top < gridRect.top || popularTagRect.bottom > gridRect.bottom));
   const carousel = grid ? {
     rect: gridRect, display: getComputedStyle(grid).display, overflowX: getComputedStyle(grid).overflowX,
     snap: getComputedStyle(grid).scrollSnapType, scrollLeft: +grid.scrollLeft.toFixed(2),
@@ -149,7 +152,7 @@ MEASURE_JS = r"""() => {
       finder: finder ? {...rect(finder), scrollWidth: finder.scrollWidth, clientWidth: finder.clientWidth,
         controls: qa('select, #locationTabs, .finder-note', finder).map(rect)} : null,
       billing: q('#billingToggle') ? {...rect(q('#billingToggle')), wrap: getComputedStyle(q('#billingToggle')).flexWrap} : null,
-      carousel, infraRows: qa('.infra-list li').map(rect),
+      carousel, popularTag: popularTagRect, popularTagClipped, infraRows: qa('.infra-list li').map(rect),
       reviews: reviews ? {...rect(reviews), visibleCards: qa('.review-card').filter(visible).length, totalCards: qa('.review-card').length,
         disclosure: rect(q('.review-disclosure')), more: rect(q('#reviewsMore'))} : null,
       cta: rect(q('.cta-band')), footer: footer ? rect(footer) : null

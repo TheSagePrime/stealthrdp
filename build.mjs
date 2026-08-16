@@ -217,13 +217,13 @@ function footerHtml() {
       </ul></div>
     </div>
     <div class="footer-mobile-nav" aria-label="Footer navigation">
-      <details class="footer-mobile-group"><summary>Products</summary><ul>
+      <details class="footer-mobile-group"><summary><span>Products</span><small>RDP plans · pricing</small><b aria-hidden="true">+</b></summary><ul>
         <li><a href="/plans.html">RDP Plans</a></li><li><a href="/plans.html#build-your-own">Build Your Own VPS</a></li><li><a href="/plans.html">Pricing</a></li>
       </ul></details>
-      <details class="footer-mobile-group"><summary>Resources</summary><ul>
+      <details class="footer-mobile-group"><summary><span>Resources</span><small>Docs · blog · status</small><b aria-hidden="true">+</b></summary><ul>
         <li><a href="/docs.html">Documentation</a></li><li><a href="/blog.html">Tutorials</a></li><li><a href="/faq.html">FAQ</a></li><li><a href="/blog.html">Blog</a></li><li><a href="/status.html">Server Status</a></li>
       </ul></details>
-      <details class="footer-mobile-group"><summary>Company</summary><ul>
+      <details class="footer-mobile-group"><summary><span>Company</span><small>About · support · legal</small><b aria-hidden="true">+</b></summary><ul>
         <li><a href="/about.html">About Us</a></li><li><a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact Support</a></li><li><a href="/privacy.html">Privacy Policy</a></li><li><a href="${TERMS_URL}">Terms of Service</a></li>
       </ul></details>
     </div>
@@ -774,7 +774,7 @@ function buildIndex() {
     { key: "trading", label: "Trading", tier: "Gold" },
     { key: "storage", label: "Storage & backups", tier: "Silver" },
   ];
-  const useCaseChips = useCases.map((u) => `<button type="button" class="topic-chip" data-use-case="${u.key}" data-tier="${u.tier}">${u.label}</button>`).join("");
+  const useCaseChips = useCases.map((u, i) => `<button type="button" class="topic-chip${i === 0 ? " active" : ""}" data-use-case="${u.key}" data-tier="${u.tier}" aria-pressed="${i === 0 ? "true" : "false"}">${u.label}</button>`).join("");
   const body = `
   <!-- ============ Hero ============ -->
   <section class="hero">
@@ -854,17 +854,17 @@ function buildIndex() {
   </div>
 
   <!-- ============ Use-case chips (jump to recommended plan) ============ -->
-  <section class="section section-tight usecases-section" id="usecases">
+  <section class="section section-tight usecases-section decision-entry" id="usecases">
     <div class="container">
       <div class="compact-section-head">
-        <div><h2>What are you running?</h2><p>Pick a workload to see its best-fit plan.</p></div>
+        <div><h2>Choose a workload</h2><p>Your choice highlights the plan that fits.</p></div>
       </div>
       <div class="topic-chips usecase-chips" role="group" aria-label="Choose a workload">${useCaseChips}</div>
     </div>
   </section>
 
   <!-- ============ Plans + simple builder ============ -->
-  <section class="section plans-preview" id="plans">
+  <section class="section plans-preview decision-surface" id="plans">
     <div class="container">
       <div class="section-head">
         <span class="sec-index fade-up">Pick your power</span>
@@ -878,7 +878,7 @@ function buildIndex() {
         </div></div>
         <div class="finder-field"><span class="control-label">Operating system</span><select id="osSelect" aria-label="Operating system"><option value="any">Any OS</option><option value="windows">Windows</option><option value="linux">Linux</option></select></div>
         <div class="finder-field"><span class="control-label">Use case</span><select id="useCaseSelect" aria-label="Use case"><option value="remote-desktop">Remote desktop</option><option value="web-hosting">Web hosting</option><option value="automation">Automation &amp; bots</option><option value="trading">Trading</option><option value="storage">Storage &amp; backups</option></select></div>
-        <p class="finder-note" id="finderNote">Every plan supports Windows and Linux. Pick a workload to see the recommended tier.</p>
+        <p class="finder-note" id="finderNote">Best fit: Bronze USA — any OS included on every plan.</p>
       </div>
       <div class="billing-wrap fade-up d2">
         <div class="billing-toggle" id="billingToggle" role="tablist" aria-label="Billing cycle">

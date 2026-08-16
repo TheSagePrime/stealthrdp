@@ -310,7 +310,11 @@
   }
   function pickUseCase(key) {
     if (useCaseSelect) useCaseSelect.value = key;
-    useCaseChips.forEach(function (chip) { chip.classList.toggle("active", chip.getAttribute("data-use-case") === key); });
+    useCaseChips.forEach(function (chip) {
+      var selected = chip.getAttribute("data-use-case") === key;
+      chip.classList.toggle("active", selected);
+      chip.setAttribute("aria-pressed", selected ? "true" : "false");
+    });
     highlightRecommended(USE_CASE_TIERS[key] || "");
     var plansSection = $("#plans");
     if (plansSection) plansSection.scrollIntoView({ behavior: "smooth", block: "start" });

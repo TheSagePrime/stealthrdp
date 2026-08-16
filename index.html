@@ -34,7 +34,7 @@
       } catch (e) {}
     }());
   </script>
-  <link rel="stylesheet" href="/css/style.css?v=2026-08-16T07-42-31-076Z" />
+  <link rel="stylesheet" href="/css/style.css?v=2026-08-16T08-06-14-477Z" />
   <!-- Google Tag Manager (real container from live site) -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -170,17 +170,17 @@
   </div>
 
   <!-- ============ Use-case chips (jump to recommended plan) ============ -->
-  <section class="section section-tight usecases-section" id="usecases">
+  <section class="section section-tight usecases-section decision-entry" id="usecases">
     <div class="container">
       <div class="compact-section-head">
-        <div><h2>What are you running?</h2><p>Pick a workload to see its best-fit plan.</p></div>
+        <div><h2>Choose a workload</h2><p>Your choice highlights the plan that fits.</p></div>
       </div>
-      <div class="topic-chips usecase-chips" role="group" aria-label="Choose a workload"><button type="button" class="topic-chip" data-use-case="remote-desktop" data-tier="Bronze">Remote desktop</button><button type="button" class="topic-chip" data-use-case="web-hosting" data-tier="Silver">Web hosting</button><button type="button" class="topic-chip" data-use-case="automation" data-tier="Gold">Automation & bots</button><button type="button" class="topic-chip" data-use-case="trading" data-tier="Gold">Trading</button><button type="button" class="topic-chip" data-use-case="storage" data-tier="Silver">Storage & backups</button></div>
+      <div class="topic-chips usecase-chips" role="group" aria-label="Choose a workload"><button type="button" class="topic-chip active" data-use-case="remote-desktop" data-tier="Bronze" aria-pressed="true">Remote desktop</button><button type="button" class="topic-chip" data-use-case="web-hosting" data-tier="Silver" aria-pressed="false">Web hosting</button><button type="button" class="topic-chip" data-use-case="automation" data-tier="Gold" aria-pressed="false">Automation & bots</button><button type="button" class="topic-chip" data-use-case="trading" data-tier="Gold" aria-pressed="false">Trading</button><button type="button" class="topic-chip" data-use-case="storage" data-tier="Silver" aria-pressed="false">Storage & backups</button></div>
     </div>
   </section>
 
   <!-- ============ Plans + simple builder ============ -->
-  <section class="section plans-preview" id="plans">
+  <section class="section plans-preview decision-surface" id="plans">
     <div class="container">
       <div class="section-head">
         <span class="sec-index fade-up">Pick your power</span>
@@ -194,7 +194,7 @@
         </div></div>
         <div class="finder-field"><span class="control-label">Operating system</span><select id="osSelect" aria-label="Operating system"><option value="any">Any OS</option><option value="windows">Windows</option><option value="linux">Linux</option></select></div>
         <div class="finder-field"><span class="control-label">Use case</span><select id="useCaseSelect" aria-label="Use case"><option value="remote-desktop">Remote desktop</option><option value="web-hosting">Web hosting</option><option value="automation">Automation &amp; bots</option><option value="trading">Trading</option><option value="storage">Storage &amp; backups</option></select></div>
-        <p class="finder-note" id="finderNote">Every plan supports Windows and Linux. Pick a workload to see the recommended tier.</p>
+        <p class="finder-note" id="finderNote">Best fit: Bronze USA — any OS included on every plan.</p>
       </div>
       <div class="billing-wrap fade-up d2">
         <div class="billing-toggle" id="billingToggle" role="tablist" aria-label="Billing cycle">
@@ -929,13 +929,13 @@
       </ul></div>
     </div>
     <div class="footer-mobile-nav" aria-label="Footer navigation">
-      <details class="footer-mobile-group"><summary>Products</summary><ul>
+      <details class="footer-mobile-group"><summary><span>Products</span><small>RDP plans · pricing</small><b aria-hidden="true">+</b></summary><ul>
         <li><a href="/plans.html">RDP Plans</a></li><li><a href="/plans.html#build-your-own">Build Your Own VPS</a></li><li><a href="/plans.html">Pricing</a></li>
       </ul></details>
-      <details class="footer-mobile-group"><summary>Resources</summary><ul>
+      <details class="footer-mobile-group"><summary><span>Resources</span><small>Docs · blog · status</small><b aria-hidden="true">+</b></summary><ul>
         <li><a href="/docs.html">Documentation</a></li><li><a href="/blog.html">Tutorials</a></li><li><a href="/faq.html">FAQ</a></li><li><a href="/blog.html">Blog</a></li><li><a href="/status.html">Server Status</a></li>
       </ul></details>
-      <details class="footer-mobile-group"><summary>Company</summary><ul>
+      <details class="footer-mobile-group"><summary><span>Company</span><small>About · support · legal</small><b aria-hidden="true">+</b></summary><ul>
         <li><a href="/about.html">About Us</a></li><li><a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact Support</a></li><li><a href="/privacy.html">Privacy Policy</a></li><li><a href="/docs/1737944013-use-of-service.html">Terms of Service</a></li>
       </ul></details>
     </div>
@@ -948,6 +948,6 @@
       </span>
     </div>
   </div></footer>
-  <script src="/js/main.js?v=2026-08-16T07-42-31-076Z"></script>
+  <script src="/js/main.js?v=2026-08-16T08-06-14-477Z"></script>
 </body>
 </html>
