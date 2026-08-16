@@ -1,0 +1,4 @@
+Contact: mailto:support@stealthrdp.com
+Expires: 2027-08-16T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://www.stealthrdp.com/.well-known/security.txt

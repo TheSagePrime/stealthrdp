@@ -780,6 +780,7 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
 .docs-content pre { margin: 0 0 21px; padding: 16px 18px; overflow-x: auto; color: #d7e0ee; background: #080a0e; border: 1px solid var(--border-strong); border-radius: var(--radius); font: 13px/1.75 var(--font-mono); }
 .docs-content iframe { display: none; }
 .blog-article-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 42px; padding-top: 22px; border-top: 1px solid var(--border); }
+.blog-article-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .docs-code-wrap { margin: 21px 0 25px; border: 1px solid var(--border-strong); border-radius: var(--radius); overflow: hidden; background: #080a0e; }
 .docs-code-tools { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 12px; border-bottom: 1px solid var(--border); background: rgba(255,255,255,.025); color: var(--text-dim); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
 .docs-copy { min-height: 30px; padding: 5px 10px; color: var(--text-muted); border: 1px solid var(--border-strong); border-radius: 5px; font: 11px var(--font-mono); }

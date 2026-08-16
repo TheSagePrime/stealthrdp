@@ -105,6 +105,9 @@ function head({ title, description, canonical, pageType = "website", jsonLd = []
   <meta name="author" content="StealthRDP" />
   <link rel="canonical" href="${canonical}" />
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="alternate" type="application/rss+xml" title="StealthRDP Blog" href="__SRDP_BASE__/rss.xml" />
+  <meta name="theme-color" content="#07111f" />
   <meta property="og:title" content="${esc(title)}" />
   <meta property="og:description" content="${esc(description)}" />
   <meta property="og:type" content="${og}" />
@@ -796,6 +799,23 @@ function articleLd(post) {
   };
 }
 
+function howToLd(post, headings) {
+  if (!/how to|tips|checklist|signs|ways/i.test(post.title || "")) return null;
+  const steps = (headings || []).filter((heading) => heading.level === 2).slice(0, 12);
+  if (steps.length < 3) return null;
+  return {
+    "@type": "HowTo",
+    name: post.title,
+    description: post.excerpt || post.title,
+    step: steps.map((heading, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      name: heading.text,
+      url: `__SRDP_BASE__/blog/${post.slug}.html#${heading.id}`,
+    })),
+  };
+}
+
 /* ---------- page builders ---------- */
 function page({ active, title, description, canonical, pageType = "website", jsonLd = [], body, extraScripts = [], planLocation = "", planLimit = "" }) {
   const pageData = `${planLocation ? ` data-plan-location="${esc(planLocation)}"` : ""}${planLimit ? ` data-plan-limit="${esc(planLimit)}"` : ""}`;
@@ -1165,10 +1185,11 @@ function buildBlogPost(post) {
       <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blog.html">Blog</a><span aria-hidden="true">/</span><span>${esc(post.category)}</span></nav>
       <header class="docs-article-header"><span class="docs-category">${esc(post.category)}</span><h1>${esc(post.title)}</h1><p class="docs-summary">${esc(post.excerpt || "")}</p><div class="docs-source-meta"><span>${esc(post.author)}</span><span>${esc(post.date)}</span></div></header>
       <div class="docs-content blog-article-body">${rendered.html || `<p>${esc(post.excerpt || "")}</p>`}</div>
-      <footer class="blog-article-footer"><a href="/blog.html">← Back to all articles</a><a class="btn btn-primary btn-sm" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Ask support</a></footer>
+      <footer class="blog-article-footer"><a href="/blog.html">← Back to all articles</a><span class="blog-article-actions"><a class="btn btn-ghost btn-sm" href="/plans.html">View plans</a><a class="btn btn-primary btn-sm" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Ask support</a></span></footer>
     </article>
     ${toc}
   </div></div></main>`;
+  const howto = howToLd(post, rendered.headings);
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [
     breadcrumbLd(post.title, [
       { name: "Home", url: "__SRDP_BASE__/" },
@@ -1176,6 +1197,7 @@ function buildBlogPost(post) {
       { name: post.title, url: `__SRDP_BASE__/blog/${post.slug}.html` },
     ]),
     articleLd(post),
+    ...(howto ? [howto] : []),
   ]}];
   const fullTitle = `${post.title} — StealthRDP Blog`;
   const shortTitle = `${post.title} — StealthRDP`;
@@ -1324,6 +1346,29 @@ Disallow: /api/
 Disallow: /blog-post.html
 
 Sitemap: __SRDP_BASE__/sitemap.xml
+# AI guide
+llms.txt
+`;
+}
+
+function buildRss() {
+  const items = BLOG.map((post) => `    <item>
+      <title>${esc(post.title)}</title>
+      <link>__SRDP_BASE__/blog/${post.slug}.html</link>
+      <guid>__SRDP_BASE__/blog/${post.slug}.html</guid>
+      <pubDate>${new Date(post.date + "T00:00:00Z").toUTCString()}</pubDate>
+      <description>${esc(post.excerpt || "")}</description>
+    </item>`).join("\n");
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>StealthRDP Blog</title>
+    <link>__SRDP_BASE__/blog.html</link>
+    <description>VPS, RDP, and server operations articles from StealthRDP.</description>
+    <language>en</language>
+${items}
+  </channel>
+</rss>
 `;
 }
 
@@ -1364,6 +1409,7 @@ const OUT = {
   "docs.html": buildDocsIndex(),
   "robots.txt": buildRobots(),
   "sitemap.xml": buildSitemap(),
+  "rss.xml": buildRss(),
 };
 
 fs.rmSync(path.join(ROOT, "features.html"), { force: true });
