@@ -1,0 +1,11 @@
+{
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": ".",
+  "functions": {
+    "api/uptime.js": { "maxDuration": 30 },
+    "api/plans.js": { "maxDuration": 10 },
+    "api/faqs.js": { "maxDuration": 10 },
+    "api/features.js": { "maxDuration": 10 },
+    "api/testimonials.js": { "maxDuration": 10 }
+  }
+}

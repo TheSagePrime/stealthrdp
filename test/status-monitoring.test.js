@@ -104,6 +104,13 @@ test("status page documents detailed monitoring windows and privacy", () => {
   const main = fs.readFileSync(path.join(ROOT, "js/main.js"), "utf8");
   assert.match(main, /cur">€'/);
   assert.doesNotMatch(main, /Deploy Now/);
+  assert.match(fs.readFileSync(path.join(ROOT, "vercel.json"), "utf8"), /vercel-build/);
+  const uptimeFn = fs.readFileSync(path.join(ROOT, "api/uptime.js"), "utf8");
+  assert.match(uptimeFn, /UPTIMEROBOT_API_KEY/);
+  assert.match(uptimeFn, /custom_uptime_ranges/);
+  assert.doesNotMatch(uptimeFn, /friendly_name.*payload|monitor\.url/);
+  assert.match(uptimeFn, /Number\(value\) >= 99\) return "up"/);
+  assert.match(fs.readFileSync(path.join(ROOT, "scripts/bake-base.mjs"), "utf8"), /__SRDP_BASE__/);
   assert.doesNotMatch(main, /"btn-ghost"/);
   assert.match(main, />Buy Now<\/a>/);
   assert.match(main, /indexOf\(" EU"\) !== -1 \? "eu"/);
