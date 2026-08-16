@@ -205,6 +205,43 @@
     return "https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps";
   }
 
+  function formatDuration(seconds) {
+    if (seconds == null || seconds === "" || !Number.isFinite(Number(seconds))) return "—";
+    var value = Math.max(0, Math.round(Number(seconds)));
+    if (value < 60) return value + "s";
+    if (value < 3600) return Math.round(value / 60) + "m";
+    if (value < 86400) return (value / 3600).toFixed(1) + "h";
+    return (value / 86400).toFixed(1) + "d";
+  }
+  function formatPercent(value) {
+    return value == null || value === "" || !Number.isFinite(Number(value)) ? "—" : Number(value).toFixed(2) + "%";
+  }
+  function averageMetric(monitors, key) {
+    var values = monitors.map(function (monitor) { return monitor[key]; }).filter(function (value) { return value != null && value !== "" && Number.isFinite(Number(value)); }).map(Number);
+    if (!values.length) return "—";
+    return (values.reduce(function (sum, value) { return sum + value; }, 0) / values.length).toFixed(2) + "%";
+  }
+  function totalMetric(monitors, key) {
+    var values = monitors.map(function (monitor) { return monitor[key]; }).filter(function (value) { return value != null && value !== "" && Number.isFinite(Number(value)); }).map(Number);
+    return values.length ? values.reduce(function (sum, value) { return sum + value; }, 0) : null;
+  }
+  function statusText(status) {
+    return { up: "Operational", down: "Down", degraded: "Degraded", paused: "Paused", pending: "Not checked", unknown: "Unknown" }[status] || "Unknown";
+  }
+  function formatCheckedAt(value) {
+    if (!value) return "Snapshot data · live refresh is pending";
+    var date = new Date(value);
+    return Number.isNaN(date.getTime()) ? "Live data refreshed" : "Live data refreshed " + date.toLocaleString([], { dateStyle: "medium", timeStyle: "short" });
+  }
+  function formatIncident(value) {
+    if (!value) return "No recent incident in returned history";
+    var date = new Date(value);
+    return Number.isNaN(date.getTime()) ? "Recent incident recorded" : "Last incident " + date.toLocaleDateString([], { dateStyle: "medium" });
+  }
+  function stateClass(status) {
+    return ["up", "down", "degraded", "paused", "pending"].indexOf(status) !== -1 ? status : "unknown";
+  }
+
   function setFooterStatusTone(tone) {
     var footerDot = $(".footer-status .dot");
     if (!footerDot) return;
@@ -230,7 +267,7 @@
           heroNodeStatus.style.color = total && up === total ? "var(--green)" : "var(--red)";
         }
         var sourceNote = $("#statusSourceNote");
-        if (sourceNote) sourceNote.textContent = "Live status refreshed from the monitoring service.";
+        if (sourceNote) sourceNote.textContent = formatCheckedAt(d.checkedAt) + " · IPs and monitoring targets remain private.";
         renderStatusPage(d);
       })
       .catch(function () {
@@ -253,7 +290,8 @@
       summary.innerHTML =
         '<div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">Live status unavailable</div></div>' +
         '<div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">Current availability</div></div>' +
-        '<div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">Check again shortly</div></div>';
+        '<div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">90-day average</div></div>' +
+        '<div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">Incident history</div></div>';
     }
     var sourceNote = $("#statusSourceNote");
     if (sourceNote) {
@@ -269,24 +307,34 @@
     if (!nodeList && !summary) return;
     var monitors = (d && d.monitors) || [];
     var up = monitors.filter(isMonitorUp).length;
+    var activeIncidents = monitors.filter(function (monitor) { return ["down", "degraded"].indexOf(monitor.status) !== -1; }).length;
+    var totalDowntime30 = totalMetric(monitors, "downtime30");
     if (summary) {
       summary.innerHTML =
         '<div class="ss-card"><div class="ss-num ' + (up === monitors.length ? "good" : "warn") + '">' + up + "/" + monitors.length + '</div><div class="ss-lbl">Nodes online</div></div>' +
         '<div class="ss-card"><div class="ss-num ' + (up === monitors.length ? "good" : "warn") + '">' + (monitors.length ? Math.round((up / monitors.length) * 100) : 0) + '%</div><div class="ss-lbl">Current availability</div></div>' +
-        '<div class="ss-card"><div class="ss-num ' + (up === monitors.length ? "good" : "warn") + '">24/7</div><div class="ss-lbl">Automated monitoring</div></div>';
+        '<div class="ss-card"><div class="ss-num good">' + averageMetric(monitors, "uptime90") + '</div><div class="ss-lbl">90-day average</div></div>' +
+        '<div class="ss-card"><div class="ss-num ' + (activeIncidents ? "warn" : "good") + '">' + (activeIncidents || formatDuration(totalDowntime30)) + '</div><div class="ss-lbl">' + (activeIncidents ? "Active incidents" : "Downtime / 30d") + '</div></div>';
     }
     if (nodeList) {
       nodeList.innerHTML = monitors.map(function (m) {
         var upNow = isMonitorUp(m);
+        var status = m.status || (upNow ? "up" : "down");
+        var cls = stateClass(status);
+        var incidentCount = m.recentIncidents == null ? "—" : String(m.recentIncidents);
         return (
-          '<div class="node-card">' +
-            '<div class="n-left"><span class="n-dot ' + (upNow ? "up" : "down") + '"></span>' +
+          '<article class="node-card node-' + cls + '">' +
+            '<div class="n-left"><span class="n-dot ' + cls + '" aria-hidden="true"></span>' +
             "<div><div class=\"n-name\">" + esc(m.label || "Production node") + "</div>" +
             '<div class="n-target">' + esc(m.region || "Protected infrastructure") + "</div></div></div>" +
-            '<div class="n-right"><div class="n-uptime">' +
-              '<div class="u-val ' + (upNow ? "good" : "") + '">' + (m.uptimeRatio != null ? Number(m.uptimeRatio).toFixed(2) : "—") + '%</div>' +
-              '<div class="u-lbl">90-day uptime</div></div>' +
-            "</div></div>"
+            '<div class="n-state"><strong>' + esc(statusText(status)) + '</strong><span>' + esc(formatIncident(m.lastIncidentAt)) + "</span></div>" +
+            '<div class="node-metrics" aria-label="Availability history">' +
+              '<div class="node-metric"><b>' + formatPercent(m.uptime7) + '</b><small>7-day uptime</small></div>' +
+              '<div class="node-metric"><b>' + formatPercent(m.uptime30) + '</b><small>30-day uptime</small></div>' +
+              '<div class="node-metric"><b>' + formatPercent(m.uptime90) + '</b><small>90-day uptime</small></div>' +
+              '<div class="node-metric"><b>' + formatDuration(m.downtime30) + '</b><small>Downtime / 30d</small></div>' +
+              '<div class="node-metric"><b>' + incidentCount + '</b><small>Recent incidents</small></div>' +
+            "</div></article>"
           );
       }).join("");
     }

@@ -43,7 +43,7 @@
       } catch (e) {}
     }());
   </script>
-  <link rel="stylesheet" href="/css/style.css?v=2026-08-16T09-37-07-851Z" />
+  <link rel="stylesheet" href="/css/style.css?v=2026-08-16T12-38-55-885Z" />
   <!-- Google Tag Manager (real container from live site) -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -103,68 +103,132 @@
   </header>
   
   <section class="page-head">
-    <div class="container"><span class="eyebrow">Server status</span><h1>Service status at a glance.</h1><p>Live state of every logical node. The monitoring endpoint updates this page when available; the verified snapshot stays visible otherwise.</p></div>
+    <div class="container"><span class="eyebrow">Server status</span><h1>Service health, with the detail behind it.</h1><p>See current state, rolling availability windows, downtime, and recent incidents for each logical component. Sensitive infrastructure details stay private.</p></div>
   </section>
   <section class="section status-page-section" style="padding-top:0">
     <div class="container">
       <div class="status-shell">
-        <div class="status-shell-head"><div><span class="mono">OPERATIONS / CURRENT</span><h2>Current service state</h2></div><p>Live refresh is attempted on load. If the monitoring endpoint is unavailable, the verified snapshot stays visible and is labelled below.</p></div>
+        <div class="status-shell-head"><div><span class="mono">OPERATIONS / CURRENT</span><h2>Current service state</h2></div><p>Live refresh is attempted on load. Rolling windows show how each component has performed. If the endpoint is unavailable, the verified snapshot stays visible and is labelled below.</p></div>
         <div class="status-summary" id="statusSummary" aria-live="polite"><div class="ss-card"><div class="ss-num good">9/9</div><div class="ss-lbl">Nodes online</div></div>
     <div class="ss-card"><div class="ss-num good">100%</div><div class="ss-lbl">Current availability</div></div>
-    <div class="ss-card"><div class="ss-num good">24/7</div><div class="ss-lbl">Automated monitoring</div></div></div>
+    <div class="ss-card"><div class="ss-num good">99.98%</div><div class="ss-lbl">90-day average</div></div>
+    <div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">Live incident history</div></div></div>
         <div class="status-meta"><p class="status-source-note" id="statusSourceNote">Baked uptime snapshot · live refresh is attempted when this page loads.</p><div class="status-legend"><span><i class="status-key healthy" aria-hidden="true"></i>Healthy</span><span><i class="status-key unknown" aria-hidden="true"></i>Unknown / attention</span></div></div>
       </div>
       <div class="status-section-head"><div><span class="mono">COMPONENTS</span><h2>Production nodes</h2></div><span class="status-count">9 logical components</span></div>
-      <div class="node-list" id="nodeList" aria-live="polite"><div class="node-card">
-    <div class="n-left"><span class="n-dot up"></span>
+      <div class="node-list" id="nodeList" aria-live="polite"><article class="node-card node-up">
+    <div class="n-left"><span class="n-dot up" aria-hidden="true"></span>
       <div><div class="n-name">EU / Netherlands Node 01</div><div class="n-target">EU / Netherlands</div></div>
     </div>
-    <div class="n-right"><div class="n-uptime"><div class="u-val good">100.00%</div><div class="u-lbl">90-day uptime</div></div></div>
-  </div><div class="node-card">
-    <div class="n-left"><span class="n-dot up"></span>
+    <div class="n-state"><strong>Operational</strong><span>Current state</span></div>
+    <div class="node-metrics" aria-label="Availability history">
+      <div class="node-metric"><b>—</b><small>7-day uptime</small></div>
+      <div class="node-metric"><b>—</b><small>30-day uptime</small></div>
+      <div class="node-metric"><b>100.00%</b><small>90-day uptime</small></div>
+      <div class="node-metric"><b>—</b><small>Downtime / 30d</small></div>
+      <div class="node-metric"><b>—</b><small>Recent incidents</small></div>
+    </div>
+  </article><article class="node-card node-up">
+    <div class="n-left"><span class="n-dot up" aria-hidden="true"></span>
       <div><div class="n-name">Control plane Node 01</div><div class="n-target">Control plane</div></div>
     </div>
-    <div class="n-right"><div class="n-uptime"><div class="u-val good">99.92%</div><div class="u-lbl">90-day uptime</div></div></div>
-  </div><div class="node-card">
-    <div class="n-left"><span class="n-dot up"></span>
+    <div class="n-state"><strong>Operational</strong><span>Current state</span></div>
+    <div class="node-metrics" aria-label="Availability history">
+      <div class="node-metric"><b>—</b><small>7-day uptime</small></div>
+      <div class="node-metric"><b>—</b><small>30-day uptime</small></div>
+      <div class="node-metric"><b>99.92%</b><small>90-day uptime</small></div>
+      <div class="node-metric"><b>—</b><small>Downtime / 30d</small></div>
+      <div class="node-metric"><b>—</b><small>Recent incidents</small></div>
+    </div>
+  </article><article class="node-card node-up">
+    <div class="n-left"><span class="n-dot up" aria-hidden="true"></span>
       <div><div class="n-name">USA Node 01</div><div class="n-target">USA</div></div>
     </div>
-    <div class="n-right"><div class="n-uptime"><div class="u-val good">100.00%</div><div class="u-lbl">90-day uptime</div></div></div>
-  </div><div class="node-card">
-    <div class="n-left"><span class="n-dot up"></span>
+    <div class="n-state"><strong>Operational</strong><span>Current state</span></div>
+    <div class="node-metrics" aria-label="Availability history">
+      <div class="node-metric"><b>—</b><small>7-day uptime</small></div>
+      <div class="node-metric"><b>—</b><small>30-day uptime</small></div>
+      <div class="node-metric"><b>100.00%</b><small>90-day uptime</small></div>
+      <div class="node-metric"><b>—</b><small>Downtime / 30d</small></div>
+      <div class="node-metric"><b>—</b><small>Recent incidents</small></div>
+    </div>
+  </article><article class="node-card node-up">
+    <div class="n-left"><span class="n-dot up" aria-hidden="true"></span>
       <div><div class="n-name">USA Node 02</div><div class="n-target">USA</div></div>
     </div>
-    <div class="n-right"><div class="n-uptime"><div class="u-val good">100.00%</div><div class="u-lbl">90-day uptime</div></div></div>
-  </div><div class="node-card">
-    <div class="n-left"><span class="n-dot up"></span>
+    <div class="n-state"><strong>Operational</strong><span>Current state</span></div>
+    <div class="node-metrics" aria-label="Availability history">
+      <div class="node-metric"><b>—</b><small>7-day uptime</small></div>
+      <div class="node-metric"><b>—</b><small>30-day uptime</small></div>
+      <div class="node-metric"><b>100.00%</b><small>90-day uptime</small></div>
+      <div class="node-metric"><b>—</b><small>Downtime / 30d</small></div>
+      <div class="node-metric"><b>—</b><small>Recent incidents</small></div>
+    </div>
+  </article><article class="node-card node-up">
+    <div class="n-left"><span class="n-dot up" aria-hidden="true"></span>
       <div><div class="n-name">USA Node 03</div><div class="n-target">USA</div></div>
     </div>
-    <div class="n-right"><div class="n-uptime"><div class="u-val good">100.00%</div><div class="u-lbl">90-day uptime</div></div></div>
-  </div><div class="node-card">
-    <div class="n-left"><span class="n-dot up"></span>
+    <div class="n-state"><strong>Operational</strong><span>Current state</span></div>
+    <div class="node-metrics" aria-label="Availability history">
+      <div class="node-metric"><b>—</b><small>7-day uptime</small></div>
+      <div class="node-metric"><b>—</b><small>30-day uptime</small></div>
+      <div class="node-metric"><b>100.00%</b><small>90-day uptime</small></div>
+      <div class="node-metric"><b>—</b><small>Downtime / 30d</small></div>
+      <div class="node-metric"><b>—</b><small>Recent incidents</small></div>
+    </div>
+  </article><article class="node-card node-up">
+    <div class="n-left"><span class="n-dot up" aria-hidden="true"></span>
       <div><div class="n-name">USA Node 04</div><div class="n-target">USA</div></div>
     </div>
-    <div class="n-right"><div class="n-uptime"><div class="u-val good">100.00%</div><div class="u-lbl">90-day uptime</div></div></div>
-  </div><div class="node-card">
-    <div class="n-left"><span class="n-dot up"></span>
+    <div class="n-state"><strong>Operational</strong><span>Current state</span></div>
+    <div class="node-metrics" aria-label="Availability history">
+      <div class="node-metric"><b>—</b><small>7-day uptime</small></div>
+      <div class="node-metric"><b>—</b><small>30-day uptime</small></div>
+      <div class="node-metric"><b>100.00%</b><small>90-day uptime</small></div>
+      <div class="node-metric"><b>—</b><small>Downtime / 30d</small></div>
+      <div class="node-metric"><b>—</b><small>Recent incidents</small></div>
+    </div>
+  </article><article class="node-card node-up">
+    <div class="n-left"><span class="n-dot up" aria-hidden="true"></span>
       <div><div class="n-name">USA Node 05</div><div class="n-target">USA</div></div>
     </div>
-    <div class="n-right"><div class="n-uptime"><div class="u-val good">99.98%</div><div class="u-lbl">90-day uptime</div></div></div>
-  </div><div class="node-card">
-    <div class="n-left"><span class="n-dot up"></span>
+    <div class="n-state"><strong>Operational</strong><span>Current state</span></div>
+    <div class="node-metrics" aria-label="Availability history">
+      <div class="node-metric"><b>—</b><small>7-day uptime</small></div>
+      <div class="node-metric"><b>—</b><small>30-day uptime</small></div>
+      <div class="node-metric"><b>99.98%</b><small>90-day uptime</small></div>
+      <div class="node-metric"><b>—</b><small>Downtime / 30d</small></div>
+      <div class="node-metric"><b>—</b><small>Recent incidents</small></div>
+    </div>
+  </article><article class="node-card node-up">
+    <div class="n-left"><span class="n-dot up" aria-hidden="true"></span>
       <div><div class="n-name">USA Node 06</div><div class="n-target">USA</div></div>
     </div>
-    <div class="n-right"><div class="n-uptime"><div class="u-val good">100.00%</div><div class="u-lbl">90-day uptime</div></div></div>
-  </div><div class="node-card">
-    <div class="n-left"><span class="n-dot up"></span>
+    <div class="n-state"><strong>Operational</strong><span>Current state</span></div>
+    <div class="node-metrics" aria-label="Availability history">
+      <div class="node-metric"><b>—</b><small>7-day uptime</small></div>
+      <div class="node-metric"><b>—</b><small>30-day uptime</small></div>
+      <div class="node-metric"><b>100.00%</b><small>90-day uptime</small></div>
+      <div class="node-metric"><b>—</b><small>Downtime / 30d</small></div>
+      <div class="node-metric"><b>—</b><small>Recent incidents</small></div>
+    </div>
+  </article><article class="node-card node-up">
+    <div class="n-left"><span class="n-dot up" aria-hidden="true"></span>
       <div><div class="n-name">Website Node 01</div><div class="n-target">Website</div></div>
     </div>
-    <div class="n-right"><div class="n-uptime"><div class="u-val good">99.92%</div><div class="u-lbl">90-day uptime</div></div></div>
-  </div></div>
+    <div class="n-state"><strong>Operational</strong><span>Current state</span></div>
+    <div class="node-metrics" aria-label="Availability history">
+      <div class="node-metric"><b>—</b><small>7-day uptime</small></div>
+      <div class="node-metric"><b>—</b><small>30-day uptime</small></div>
+      <div class="node-metric"><b>99.92%</b><small>90-day uptime</small></div>
+      <div class="node-metric"><b>—</b><small>Downtime / 30d</small></div>
+      <div class="node-metric"><b>—</b><small>Recent incidents</small></div>
+    </div>
+  </article></div>
       <div class="status-info-grid">
-        <div class="status-info-card"><span class="info-index">01</span><h3>Service level</h3><p>StealthRDP is committed to maintaining a 99.9% uptime for VPS services. Monitoring alerts the team when a component changes state.</p></div>
-        <div class="status-info-card"><span class="info-index">02</span><h3>Uptime history</h3><p>The node rows show the last 90-day uptime ratio available in the monitoring snapshot. Checkout and account data remain in WHMCS.</p></div>
-        <div class="status-info-card"><span class="info-index">03</span><h3>Incident response</h3><p>When a service disruption is detected, the technical team investigates and communicates through the support channel.</p></div>
+        <div class="status-info-card"><span class="info-index">01</span><h3>Rolling windows</h3><p>Each node reports 7-day, 30-day, and 90-day availability. This makes recent changes visible without exposing the monitored address.</p></div>
+        <div class="status-info-card"><span class="info-index">02</span><h3>Incident context</h3><p>Recent incident context is grouped from the provider's returned log window. The page never publishes raw monitoring logs or monitor identifiers.</p></div>
+        <div class="status-info-card"><span class="info-index">03</span><h3>Privacy boundary</h3><p>Users see logical labels, region, health, uptime, downtime, and the last refresh time. Server IPs and monitoring targets stay on the server.</p></div>
       </div>
     </div>
   </section>
@@ -215,6 +279,6 @@
       </span>
     </div>
   </div></footer>
-  <script src="/js/main.js?v=2026-08-16T09-37-07-851Z"></script>
+  <script src="/js/main.js?v=2026-08-16T12-38-55-885Z"></script>
 </body>
 </html>

@@ -318,18 +318,40 @@ function includedFeaturesHtml() {
   </section>`;
 }
 
+const fmtDuration = (seconds) => {
+  if (seconds == null || seconds === "" || !Number.isFinite(Number(seconds))) return "—";
+  const value = Math.max(0, Math.round(Number(seconds)));
+  if (value < 60) return `${value}s`;
+  if (value < 3600) return `${Math.round(value / 60)}m`;
+  if (value < 86400) return `${(value / 3600).toFixed(1)}h`;
+  return `${(value / 86400).toFixed(1)}d`;
+};
+
 function nodeCardHtml(m) {
-  const ratios = m.custom_uptime_ranges ? m.custom_uptime_ranges.split("-") : [];
-  const last = Number.isFinite(Number(m.uptimeRatio)) ? Number(m.uptimeRatio) : (ratios.length ? parseFloat(ratios[ratios.length - 1]) : null);
-  const upNow = isUp(m);
+  const legacyRatio = Number.isFinite(Number(m.uptimeRatio)) ? Number(m.uptimeRatio) : null;
+  const uptime7 = Number.isFinite(Number(m.uptime7)) ? Number(m.uptime7) : null;
+  const uptime30 = Number.isFinite(Number(m.uptime30)) ? Number(m.uptime30) : null;
+  const uptime90 = Number.isFinite(Number(m.uptime90)) ? Number(m.uptime90) : legacyRatio;
+  const status = m.status || (isUp(m) ? "up" : "down");
+  const statusLabel = { up: "Operational", down: "Down", degraded: "Degraded", paused: "Paused", pending: "Not checked", unknown: "Unknown" }[status] || "Unknown";
+  const statusClass = ["up", "down", "degraded", "paused", "pending"].includes(status) ? status : "unknown";
   const label = m.label || m.friendly_name || "Production node";
   const region = m.region || "Protected infrastructure";
-  return `<div class="node-card">
-    <div class="n-left"><span class="n-dot ${upNow ? "up" : "down"}"></span>
+  const metric = (value) => value == null || value === "" || !Number.isFinite(Number(value)) ? "—" : Number(value).toFixed(2) + "%";
+  const incidents = m.recentIncidents == null ? "—" : String(m.recentIncidents);
+  return `<article class="node-card node-${statusClass}">
+    <div class="n-left"><span class="n-dot ${statusClass}" aria-hidden="true"></span>
       <div><div class="n-name">${esc(label)}</div><div class="n-target">${esc(region)}</div></div>
     </div>
-    <div class="n-right"><div class="n-uptime"><div class="u-val ${upNow ? "good" : ""}">${last != null ? last.toFixed(2) : "—"}%</div><div class="u-lbl">90-day uptime</div></div></div>
-  </div>`;
+    <div class="n-state"><strong>${statusLabel}</strong><span>Current state</span></div>
+    <div class="node-metrics" aria-label="Availability history">
+      <div class="node-metric"><b>${metric(uptime7)}</b><small>7-day uptime</small></div>
+      <div class="node-metric"><b>${metric(uptime30)}</b><small>30-day uptime</small></div>
+      <div class="node-metric"><b>${metric(uptime90)}</b><small>90-day uptime</small></div>
+      <div class="node-metric"><b>${fmtDuration(m.downtime30)}</b><small>Downtime / 30d</small></div>
+      <div class="node-metric"><b>${incidents}</b><small>Recent incidents</small></div>
+    </div>
+  </article>`;
 }
 
 function testimonialHtml() {
@@ -1022,27 +1044,30 @@ function buildPlans() {
 
 /* ---------- 4. status ---------- */
 function buildStatus() {
+  const uptime90 = MONITORS.map((m) => Number.isFinite(Number(m.uptime90)) ? Number(m.uptime90) : Number(m.uptimeRatio)).filter(Number.isFinite);
+  const average90 = uptime90.length ? (uptime90.reduce((sum, value) => sum + value, 0) / uptime90.length).toFixed(2) : "—";
   const summary = `<div class="ss-card"><div class="ss-num ${ALL_UP ? "good" : "warn"}">${UP}/${TOTAL}</div><div class="ss-lbl">Nodes online</div></div>
     <div class="ss-card"><div class="ss-num ${ALL_UP ? "good" : "warn"}">${TOTAL ? Math.round((UP / TOTAL) * 100) : 0}%</div><div class="ss-lbl">Current availability</div></div>
-    <div class="ss-card"><div class="ss-num ${ALL_UP ? "good" : "warn"}">24/7</div><div class="ss-lbl">Automated monitoring</div></div>`;
+    <div class="ss-card"><div class="ss-num ${average90 !== "—" ? "good" : "warn"}">${average90}${average90 === "—" ? "" : "%"}</div><div class="ss-lbl">90-day average</div></div>
+    <div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">Live incident history</div></div>`;
   const nodes = MONITORS.map(nodeCardHtml).join("");
   const body = `
   <section class="page-head">
-    <div class="container"><span class="eyebrow">Server status</span><h1>Service status at a glance.</h1><p>Live state of every logical node. The monitoring endpoint updates this page when available; the verified snapshot stays visible otherwise.</p></div>
+    <div class="container"><span class="eyebrow">Server status</span><h1>Service health, with the detail behind it.</h1><p>See current state, rolling availability windows, downtime, and recent incidents for each logical component. Sensitive infrastructure details stay private.</p></div>
   </section>
   <section class="section status-page-section" style="padding-top:0">
     <div class="container">
       <div class="status-shell">
-        <div class="status-shell-head"><div><span class="mono">OPERATIONS / CURRENT</span><h2>Current service state</h2></div><p>Live refresh is attempted on load. If the monitoring endpoint is unavailable, the verified snapshot stays visible and is labelled below.</p></div>
+        <div class="status-shell-head"><div><span class="mono">OPERATIONS / CURRENT</span><h2>Current service state</h2></div><p>Live refresh is attempted on load. Rolling windows show how each component has performed. If the endpoint is unavailable, the verified snapshot stays visible and is labelled below.</p></div>
         <div class="status-summary" id="statusSummary" aria-live="polite">${summary}</div>
         <div class="status-meta"><p class="status-source-note" id="statusSourceNote">Baked uptime snapshot · live refresh is attempted when this page loads.</p><div class="status-legend"><span><i class="status-key healthy" aria-hidden="true"></i>Healthy</span><span><i class="status-key unknown" aria-hidden="true"></i>Unknown / attention</span></div></div>
       </div>
       <div class="status-section-head"><div><span class="mono">COMPONENTS</span><h2>Production nodes</h2></div><span class="status-count">${TOTAL} logical components</span></div>
       <div class="node-list" id="nodeList" aria-live="polite">${nodes}</div>
       <div class="status-info-grid">
-        <div class="status-info-card"><span class="info-index">01</span><h3>Service level</h3><p>StealthRDP is committed to maintaining a 99.9% uptime for VPS services. Monitoring alerts the team when a component changes state.</p></div>
-        <div class="status-info-card"><span class="info-index">02</span><h3>Uptime history</h3><p>The node rows show the last 90-day uptime ratio available in the monitoring snapshot. Checkout and account data remain in WHMCS.</p></div>
-        <div class="status-info-card"><span class="info-index">03</span><h3>Incident response</h3><p>When a service disruption is detected, the technical team investigates and communicates through the support channel.</p></div>
+        <div class="status-info-card"><span class="info-index">01</span><h3>Rolling windows</h3><p>Each node reports 7-day, 30-day, and 90-day availability. This makes recent changes visible without exposing the monitored address.</p></div>
+        <div class="status-info-card"><span class="info-index">02</span><h3>Incident context</h3><p>Recent incident context is grouped from the provider's returned log window. The page never publishes raw monitoring logs or monitor identifiers.</p></div>
+        <div class="status-info-card"><span class="info-index">03</span><h3>Privacy boundary</h3><p>Users see logical labels, region, health, uptime, downtime, and the last refresh time. Server IPs and monitoring targets stay on the server.</p></div>
       </div>
     </div>
   </section>`;

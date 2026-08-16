@@ -13,6 +13,9 @@ const PORT = Number(process.env.PORT || 8080);
 const HOST = process.env.HOST || "127.0.0.1";
 const UPTIME_API_KEY = process.env.UPTIMEROBOT_API_KEY || "";
 const ALLOW_UPTIME_FIXTURE = process.env.ALLOW_UPTIME_FIXTURE === "true";
+const UPTIME_CACHE_MS = 60 * 1000;
+let uptimeCache = { expiresAt: 0, result: null };
+let uptimeInFlight = null;
 
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -64,6 +67,42 @@ function readJson(name, fallback) {
 
 function isUpStatus(status) {
   return status === "up" || status === 2 || status === "2";
+}
+
+function statusKind(status) {
+  const value = Number(status);
+  if (value === 2 || status === "up") return "up";
+  if (value === 0 || status === "paused") return "paused";
+  if (value === 1 || status === "not_checked") return "pending";
+  if (value === 8) return "degraded";
+  if (value === 9 || status === "down") return "down";
+  return "unknown";
+}
+
+function numberList(value) {
+  return String(value == null ? "" : value).split("-").map((item) => {
+    const number = Number.parseFloat(item);
+    return Number.isFinite(number) ? number : null;
+  });
+}
+
+function ratioValues(monitor) {
+  return numberList(monitor.custom_uptime_ratio || monitor.custom_uptime_ratios);
+}
+
+function durationValues(monitor) {
+  return numberList(monitor.custom_down_durations);
+}
+
+function safeIncidentSummary(logs) {
+  const incidents = Array.isArray(logs) ? logs.filter((log) => Number(log && log.type) === 1) : [];
+  const sorted = incidents.slice().sort((a, b) => Number(b.datetime || 0) - Number(a.datetime || 0));
+  const latest = sorted[0];
+  return {
+    recentIncidents: incidents.length,
+    lastIncidentAt: latest && Number.isFinite(Number(latest.datetime)) ? new Date(Number(latest.datetime) * 1000).toISOString() : null,
+    lastIncidentDuration: latest && Number.isFinite(Number(latest.duration)) ? Number(latest.duration) : null,
+  };
 }
 
 function safePlan(plan) {
@@ -122,15 +161,30 @@ function localApi(pathname, url) {
   return null;
 }
 
-function fallbackUptimePayload() {
-  const source = readJson("uptime.json", { stat: "error", monitors: [] });
-  const monitors = Array.isArray(source.monitors) ? source.monitors.map((monitor, index) => ({
+function safeMonitorSnapshot(monitor, index) {
+  const ratios = ratioValues(monitor);
+  const durations = durationValues(monitor);
+  return {
     label: /^\d{1,3}(?:\.\d{1,3}){3}/.test(String(monitor.label || "")) ? "Protected node " + String(index + 1).padStart(2, "0") : String(monitor.label || "Protected node " + String(index + 1).padStart(2, "0")),
     region: String(monitor.region || "Production"),
-    status: isUpStatus(monitor.status) ? "up" : "down",
-    uptimeRatio: Number.isFinite(Number(monitor.uptimeRatio)) ? Number(monitor.uptimeRatio) : null,
-  })) : [];
-  return { stat: source.stat === "ok" ? "ok" : "error", monitors };
+    status: statusKind(monitor.status),
+    uptime7: Number.isFinite(ratios[0]) ? ratios[0] : null,
+    uptime30: Number.isFinite(ratios[1]) ? ratios[1] : null,
+    uptime90: Number.isFinite(ratios[2]) ? ratios[2] : (Number.isFinite(Number(monitor.uptimeRatio)) ? Number(monitor.uptimeRatio) : null),
+    downtime7: Number.isFinite(durations[0]) ? durations[0] : null,
+    downtime30: Number.isFinite(durations[1]) ? durations[1] : null,
+    downtime90: Number.isFinite(durations[2]) ? durations[2] : null,
+    allTimeUptime: monitor.allTimeUptime == null ? null : (Number.isFinite(Number(monitor.allTimeUptime)) ? Number(monitor.allTimeUptime) : null),
+    recentIncidents: monitor.recentIncidents == null ? null : (Number.isFinite(Number(monitor.recentIncidents)) ? Number(monitor.recentIncidents) : null),
+    lastIncidentAt: monitor.lastIncidentAt || null,
+    lastIncidentDuration: monitor.lastIncidentDuration == null ? null : (Number.isFinite(Number(monitor.lastIncidentDuration)) ? Number(monitor.lastIncidentDuration) : null),
+  };
+}
+
+function fallbackUptimePayload() {
+  const source = readJson("uptime.json", { stat: "error", monitors: [] });
+  const monitors = Array.isArray(source.monitors) ? source.monitors.map(safeMonitorSnapshot) : [];
+  return { stat: source.stat === "ok" ? "ok" : "error", checkedAt: null, monitors };
 }
 
 function safeUptimePayload(body) {
@@ -138,7 +192,7 @@ function safeUptimePayload(body) {
   try {
     source = JSON.parse(body);
   } catch (_) {
-    return { stat: "error", monitors: [] };
+    return { stat: "error", checkedAt: null, monitors: [] };
   }
 
   const counters = Object.create(null);
@@ -154,53 +208,82 @@ function safeUptimePayload(body) {
   const monitors = Array.isArray(source.monitors) ? source.monitors.map((monitor) => {
     const region = regionFor(monitor.friendly_name);
     counters[region] = (counters[region] || 0) + 1;
-    const ratios = String(monitor.custom_uptime_ratio || "").split("-").filter(Boolean);
-    const uptimeRatio = ratios.length ? Number.parseFloat(ratios[ratios.length - 1]) : null;
-    return {
+    const allTime = numberList(monitor.all_time_uptime_ratio);
+    const incidents = safeIncidentSummary(monitor.logs);
+    return safeMonitorSnapshot({
       label: region + " Node " + String(counters[region]).padStart(2, "0"),
       region,
-      status: isUpStatus(monitor.status) ? "up" : "down",
-      uptimeRatio: Number.isFinite(uptimeRatio) ? uptimeRatio : null,
-    };
+      status: monitor.status,
+      custom_uptime_ratio: monitor.custom_uptime_ratio || monitor.custom_uptime_ratios,
+      custom_down_durations: monitor.custom_down_durations,
+      allTimeUptime: allTime.length ? allTime[0] : null,
+      recentIncidents: incidents.recentIncidents,
+      lastIncidentAt: incidents.lastIncidentAt,
+      lastIncidentDuration: incidents.lastIncidentDuration,
+    });
   }) : [];
 
-  return { stat: source.stat === "ok" ? "ok" : "error", monitors };
+  return { stat: source.stat === "ok" ? "ok" : "error", checkedAt: new Date().toISOString(), monitors };
 }
 
-function fetchUptime(res) {
+function loadUptime() {
   if (!UPTIME_API_KEY) {
-    if (ALLOW_UPTIME_FIXTURE) return sendJson(res, 200, fallbackUptimePayload());
-    return sendJson(res, 503, { stat: "error", monitors: [] });
+    return Promise.resolve({
+      status: ALLOW_UPTIME_FIXTURE ? 200 : 503,
+      payload: ALLOW_UPTIME_FIXTURE ? fallbackUptimePayload() : { stat: "error", checkedAt: null, monitors: [] },
+    });
   }
 
   const body = querystring.stringify({
     api_key: UPTIME_API_KEY,
     format: "json",
-    custom_uptime_ratios: "90",
+    custom_uptime_ratios: "7-30-90",
+    custom_down_durations: "7-30-90",
+    all_time_uptime_ratio: "1",
+    logs: "1",
+    logs_limit: "20",
   });
-  const request = https.request({
-    hostname: "api.uptimerobot.com",
-    port: 443,
-    path: "/v2/getMonitors",
-    method: "POST",
-    timeout: 15000,
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Content-Length": Buffer.byteLength(body),
-      Accept: "application/json",
-    },
-  }, (upstream) => {
-    let responseBody = "";
-    upstream.on("data", (chunk) => { responseBody += chunk; });
-    upstream.on("end", () => {
-      const payload = safeUptimePayload(responseBody);
-      sendJson(res, upstream.statusCode === 200 ? 200 : 502, payload);
+  return new Promise((resolve) => {
+    const request = https.request({
+      hostname: "api.uptimerobot.com",
+      port: 443,
+      path: "/v2/getMonitors",
+      method: "POST",
+      timeout: 15000,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Length": Buffer.byteLength(body),
+        Accept: "application/json",
+      },
+    }, (upstream) => {
+      let responseBody = "";
+      upstream.on("data", (chunk) => { responseBody += chunk; });
+      upstream.on("end", () => resolve({
+        status: upstream.statusCode === 200 ? 200 : 502,
+        payload: safeUptimePayload(responseBody),
+      }));
     });
+    request.on("timeout", () => request.destroy(new Error("uptime request timeout")));
+    request.on("error", () => resolve({ status: 502, payload: { stat: "error", checkedAt: null, monitors: [] } }));
+    request.write(body);
+    request.end();
   });
-  request.on("timeout", () => request.destroy(new Error("uptime request timeout")));
-  request.on("error", () => sendJson(res, 502, { stat: "error", monitors: [] }));
-  request.write(body);
-  request.end();
+}
+
+function fetchUptime(res) {
+  const now = Date.now();
+  if (uptimeCache.result && uptimeCache.expiresAt > now) {
+    return sendJson(res, uptimeCache.result.status, uptimeCache.result.payload);
+  }
+  if (!uptimeInFlight) {
+    uptimeInFlight = loadUptime().then((result) => {
+      if (result.status === 200 && result.payload.stat === "ok") {
+        uptimeCache = { expiresAt: Date.now() + UPTIME_CACHE_MS, result };
+      }
+      return result;
+    }).finally(() => { uptimeInFlight = null; });
+  }
+  uptimeInFlight.then((result) => sendJson(res, result.status, result.payload));
 }
 
 function handleApi(req, res, url) {
