@@ -360,7 +360,7 @@
       .then(function (data) {
         var list = Array.isArray(data) ? data : [];
         if (!list.length) {
-          testimonialQuote.innerHTML = '<div class="quote-empty">Testimonials are being collected. Our 10,877+ customers trust us — join them today.</div>';
+          testimonialQuote.innerHTML = '<div class="quote-empty">10,000+ orders and counting. Deploy in 60 seconds.</div>';
           return;
         }
         var t = list[0];

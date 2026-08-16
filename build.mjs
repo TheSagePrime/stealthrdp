@@ -312,7 +312,7 @@ function nodeCardHtml(m) {
 
 function testimonialHtml() {
   if (!TESTIMONIALS.length) {
-    return '<div class="quote-empty">Testimonials are being collected. Our 10,877+ customers trust us — join them today.</div>';
+    return '<div class="quote-empty">10,000+ orders and counting. Deploy in 60 seconds.</div>';
   }
   const t = TESTIMONIALS[0];
   const name = t.authorName || t.name || t.customerName || "StealthRDP Customer";
@@ -769,8 +769,8 @@ function buildIndex() {
         </div>
         <p class="hero-micro fade-up d3">Starting at only <b>$9.50/month</b> · No hidden fees · Cancel anytime · 7-day money-back</p>
         <div class="hero-stats fade-up d4">
-          <div class="hero-stat"><div class="num">10,877<span class="plus">+</span></div><div class="lbl">Customers</div></div>
-          <div class="hero-stat"><div class="num">25,000<span class="plus">+</span></div><div class="lbl">Servers deployed</div></div>
+          <div class="hero-stat"><div class="num">10,000<span class="plus">+</span></div><div class="lbl">Orders</div></div>
+          <div class="hero-stat"><div class="num">60<span class="plus">s</span></div><div class="lbl">Average deploy</div></div>
           <div class="hero-stat"><div class="num">99.9<span class="plus">%</span></div><div class="lbl">Uptime SLA</div></div>
         </div>
       </div>
@@ -826,9 +826,8 @@ function buildIndex() {
   <!-- ============ Trust strip ============ -->
   <div class="trust-bar" style="padding:22px 0;border-bottom:1px solid var(--border)">
     <div class="container" style="display:flex;align-items:center;gap:8px 32px;flex-wrap:wrap;font-size:13.5px;color:var(--text-muted)">
-      <span style="color:var(--text);font-weight:600">Trusted by</span>
-      <span><b style="color:var(--text)">10,877+</b> customers</span><span style="color:var(--border-strong)">/</span>
-      <span><b style="color:var(--text)">25,000+</b> servers deployed</span><span style="color:var(--border-strong)">/</span>
+      <span style="color:var(--text);font-weight:600">By the numbers</span>
+      <span><b style="color:var(--text)">10,000+</b> orders</span><span style="color:var(--border-strong)">/</span>
       <span><b style="color:var(--text)">99.9%</b> uptime SLA</span><span style="color:var(--border-strong)">/</span>
       <span>Support <b style="color:var(--text)">&lt; 2hr</b> response</span><span style="color:var(--border-strong)">/</span>
       <span><b style="color:var(--text)">7-day</b> money-back guarantee</span>
@@ -843,7 +842,7 @@ function buildIndex() {
         <a class="text-link" href="/status.html">View server status ${ARROW_SVG}</a>
       </div>
       <div class="infrastructure-board">
-        <div class="infrastructure-intro"><span class="infra-signal" aria-hidden="true"></span><span>Core infrastructure</span><span class="infra-count">${TOTAL || "—"} monitored nodes</span></div>
+        <div class="infrastructure-intro"><span class="infra-signal" aria-hidden="true"></span><span>Core infrastructure</span><span class="infra-count">Live monitoring</span></div>
         <ul class="infra-list">
           <li><strong>NVMe SSD storage</strong><span>Fast disk I/O for applications, databases, and terminals.</span><b>Performance</b></li>
           <li><strong>DDoS protection</strong><span>Isolated VM instances and protection for production workloads.</span><b>Protection</b></li>
@@ -923,7 +922,7 @@ function buildIndex() {
   <section class="cta-band">
     <div class="container cta-grid">
       <div class="cta-copy">
-        <span class="eyebrow fade-up">Join 10,877+ server owners</span>
+        <span class="eyebrow fade-up">Backed by 10,000+ orders</span>
         <h2 class="fade-up d1">Ready to stop wasting time on server management?</h2>
         <p class="fade-up d2">Deploy your high-performance VPS in the next 60 seconds and focus on what matters — your actual work.</p>
         <p class="micro fade-up d3">Starting at just <b>$9.50/month</b> · 7-day money-back guarantee · Cancel anytime</p>
@@ -1172,7 +1171,7 @@ function buildAbout() {
         <li><strong>Flexible plans</strong> — USA and EU locations, monthly to biannual billing, and a build-your-own configurator.</li>
       </ul>
       <h2>Trusted at scale</h2>
-      <p>10,877+ customers and 25,000+ deployed servers rely on StealthRDP for remote work, web hosting, trading infrastructure, and always-on automation. Every new server is backed by our 99.9% uptime SLA and a 7-day money-back guarantee.</p>
+      <p>10,000+ orders and counting for remote work, web hosting, trading infrastructure, and always-on automation. Every new server is backed by our 99.9% uptime SLA and a 7-day money-back guarantee.</p>
       <div class="note">Questions about our infrastructure? <a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">Talk to our team</a> — we respond within 2 hours, 24/7.</div>
     </div>
   </section>`;
@@ -1186,7 +1185,7 @@ function buildAbout() {
   return page({
     active: "about",
     title: "About Us — StealthRDP",
-    description: "StealthRDP provides high-performance remote desktop and VPS infrastructure trusted by 10,877+ customers worldwide.",
+    description: "StealthRDP provides high-performance remote desktop and VPS infrastructure with 10,000+ orders worldwide.",
     canonical: "__SRDP_BASE__/about.html",
     jsonLd,
     body,
