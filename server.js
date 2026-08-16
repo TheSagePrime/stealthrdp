@@ -81,7 +81,10 @@ function statusKind(status) {
 }
 
 function numberList(value) {
-  return String(value == null ? "" : value).split("-").map((item) => {
+  if (Array.isArray(value)) return value.flatMap((item) => numberList(item));
+  const raw = String(value == null ? "" : value);
+  if (!raw) return [];
+  return raw.split(/[-,]/).map((item) => {
     const number = Number.parseFloat(item);
     return Number.isFinite(number) ? number : null;
   });
@@ -248,7 +251,8 @@ function safeUptimePayload(body, options = {}) {
     counters[region] = (counters[region] || 0) + 1;
     const allTime = numberList(monitor.all_time_uptime_ratio);
     const incidents = safeIncidentSummary(monitor.logs);
-    const history90 = options.includeHistory ? dailyHistorySnapshot(monitor.custom_uptime_ratio || monitor.custom_uptime_ratios) : null;
+    const historyValues = monitor.custom_uptime_ranges || monitor.custom_uptime_ratio || monitor.custom_uptime_ratios;
+    const history90 = options.includeHistory ? dailyHistorySnapshot(historyValues) : null;
     return safeMonitorSnapshot({
       label: region + " Node " + String(counters[region]).padStart(2, "0"),
       region,
