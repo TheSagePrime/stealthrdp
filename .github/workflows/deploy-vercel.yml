@@ -3,7 +3,6 @@ name: Deploy to Vercel
 on:
   push:
     branches:
-      - redesign/control-room-preview
       - main
   workflow_dispatch:
 
