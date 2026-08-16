@@ -327,6 +327,12 @@ const fmtDuration = (seconds) => {
   return `${(value / 86400).toFixed(1)}d`;
 };
 
+function formatHistoryDate(value) {
+  if (!value) return "Unknown date";
+  const date = new Date(`${value}T00:00:00Z`);
+  return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+}
+
 function historyBarHtml(history) {
   if (!Array.isArray(history) || !history.length) {
     return `<div class="node-history node-history-empty"><span>90-day history unavailable.</span></div>`;
@@ -334,7 +340,9 @@ function historyBarHtml(history) {
   const bars = history.map((item) => {
     const uptime = Number.isFinite(Number(item.uptime)) ? Number(item.uptime).toFixed(2) + "% uptime" : "No data";
     const state = item.state || "unknown";
-    return `<span class="history-bar history-${esc(state)}" title="${esc(item.date || "Unknown date")}: ${esc(uptime)}" aria-hidden="true"></span>`;
+    const date = formatHistoryDate(item.date);
+    const tooltip = `${date} · ${state === "up" ? "Operational" : state === "down" ? "Downtime" : "Partial availability"} · ${uptime}`;
+    return `<span class="history-bar history-${esc(state)}" title="${esc(tooltip)}" data-tooltip="${esc(tooltip)}" aria-label="${esc(tooltip)}"></span>`;
   }).join("");
   const available = history.filter((item) => item && item.state !== "unknown").length;
   return `<div class="node-history"><div class="history-bars" role="img" aria-label="90-day uptime history with ${available} days of returned data">${bars}</div><div class="history-axis"><span>90 days ago</span><span>Today</span></div></div>`;

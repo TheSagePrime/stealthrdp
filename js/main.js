@@ -244,12 +244,19 @@
     if (Number(value) > 0) return "degraded";
     return "down";
   }
+  function formatHistoryDate(value) {
+    if (!value) return "Unknown date";
+    var date = new Date(String(value) + "T00:00:00Z");
+    return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+  }
   function historyBarMarkup(history) {
     if (!Array.isArray(history) || !history.length) return '<div class="node-history node-history-empty"><span>90-day history unavailable.</span></div>';
     var bars = history.map(function (item) {
       var state = item.state || historyState(item.uptime);
       var uptime = Number.isFinite(Number(item.uptime)) ? Number(item.uptime).toFixed(2) + "% uptime" : "No data";
-      return '<span class="history-bar history-' + stateClass(state) + '" title="' + esc((item.date || "Unknown date") + ": " + uptime) + '" aria-hidden="true"></span>';
+      var date = formatHistoryDate(item.date);
+      var tooltip = date + " · " + (state === "up" ? "Operational" : state === "down" ? "Downtime" : "Partial availability") + " · " + uptime;
+      return '<span class="history-bar history-' + stateClass(state) + '" title="' + esc(tooltip) + '" data-tooltip="' + esc(tooltip) + '" aria-label="' + esc(tooltip) + '"></span>';
     }).join("");
     var available = history.filter(function (item) { return item && item.state !== "unknown"; }).length;
     return '<div class="node-history"><div class="history-bars" role="img" aria-label="90-day uptime history with ' + available + ' days of returned data">' + bars + '</div><div class="history-axis"><span>90 days ago</span><span>Today</span></div></div>';

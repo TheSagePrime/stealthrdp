@@ -70,4 +70,8 @@ test("status page documents detailed monitoring windows and privacy", () => {
   assert.match(css, /history-bar\.history-up[\s\S]*var\(--green\)/);
   assert.match(css, /history-bar\.history-degraded[\s\S]*var\(--red\)/);
   assert.match(css, /history-bar\.history-down[\s\S]*var\(--red\)/);
+  assert.match(server, /safeMonitorSnapshot/);
+  assert.match(css, /history-bar:hover::after/);
+  assert.match(fs.readFileSync(path.join(ROOT, "build.mjs"), "utf8"), /data-tooltip/);
+  assert.match(fs.readFileSync(path.join(ROOT, "js/main.js"), "utf8"), /formatHistoryDate/);
 });
