@@ -413,28 +413,6 @@
       .catch(function () { /* baked compare rows remain */ });
   }
 
-  /* ---------- Testimonials (baked quote stays on API failure) ---------- */
-  var testimonialQuote = $("#testimonialQuote");
-  if (testimonialQuote && !hasBaked(testimonialQuote)) {
-    fetch(API + "/testimonials")
-      .then(function (r) { if (!r.ok) throw new Error("bad status"); return r.json(); })
-      .then(function (data) {
-        var list = Array.isArray(data) ? data : [];
-        if (!list.length) {
-          testimonialQuote.innerHTML = '<div class="quote-empty">10,000+ orders and counting. Deploy in 60 seconds.</div>';
-          return;
-        }
-        var t = list[0];
-        var name = t.authorName || t.name || t.customerName || "StealthRDP Customer";
-        var role = [t.authorPosition, t.authorCompany].filter(Boolean).join(", ");
-        testimonialQuote.innerHTML =
-          '<div class="q-mark">“</div>' +
-          '<p class="q-text">' + esc(t.quote || t.testimonial || t.content || "") + "</p>" +
-          '<p class="q-who"><b>' + esc(name) + "</b>" + (role ? " · " + esc(role) : "") + "</p>";
-      })
-      .catch(function () { /* baked quote remains */ });
-  }
-
   /* ---------- FAQ accordion (baked items get handlers immediately) ---------- */
   var faqList = $("#faqList");
   function bindFaqHandlers() {
@@ -540,27 +518,6 @@
       });
     });
     filterBlog();
-  }
-
-  /* ---------- Features grid (baked cards stay on API failure) ---------- */
-  var featureGrid = $("#featureGrid");
-  if (featureGrid && !hasBaked(featureGrid)) {
-    fetch(API + "/features")
-      .then(function (r) { if (!r.ok) throw new Error("bad status"); return r.json(); })
-      .then(function (data) {
-        var list = Array.isArray(data) ? data : [];
-        if (!list.length) throw new Error("empty");
-        featureGrid.innerHTML = list.map(function (f) {
-          return (
-            '<article class="bento-card bento-2">' +
-              '<span class="bic">' + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></span>' +
-              "<h3>" + esc(f.title) + "</h3>" +
-              "<p>" + esc((f.description || "").split("\n")[0]) + "</p>" +
-            "</article>"
-          );
-        }).join("");
-      })
-      .catch(function () { /* baked features remain */ });
   }
 
   /* ---------- Static deployment demonstration ---------- */
