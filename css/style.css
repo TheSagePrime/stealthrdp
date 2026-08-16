@@ -1131,7 +1131,8 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
   .usecase-chips {
     display: flex; flex-wrap: nowrap; justify-content: flex-start; gap: 7px;
     margin: 0 -24px; padding: 2px 24px 8px; overflow-x: auto; scrollbar-width: none;
-  }
+    -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 28px), transparent 100%);
+    mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 28px), transparent 100%);  }
   .usecase-chips::-webkit-scrollbar { display: none; }
   .usecase-chips .topic-chip, .usecase-chips .topic-chip:last-child { flex: 0 0 auto; width: auto; min-height: 34px; white-space: nowrap; }
 
