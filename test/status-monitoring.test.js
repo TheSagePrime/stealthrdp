@@ -59,7 +59,8 @@ test("status page documents detailed monitoring windows and privacy", () => {
     assert.ok(html.includes(label), `missing ${label}`);
   }
   assert.match(server, /custom_uptime_ratios: "7-30-90"/);
-  assert.match(server, /custom_down_durations: "7-30-90"/);
+  assert.match(server, /function durationValues\(monitor\)/);
+  assert.doesNotMatch(server, /custom_down_durations: "7-30-90"/);
   assert.match(server, /custom_uptime_ranges: DAILY_HISTORY\.query/);
   assert.match(server, /const metricsBody = querystring\.stringify/);
   assert.match(server, /const historyBody = querystring\.stringify/);

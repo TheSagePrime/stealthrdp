@@ -122,7 +122,13 @@ function ratioValues(monitor) {
 }
 
 function durationValues(monitor) {
-  return numberList(monitor.custom_down_durations);
+  const explicit = numberList(monitor.custom_down_durations);
+  if (explicit.some((value) => value !== null)) return explicit;
+  return ratioValues(monitor).map((ratio, index) => {
+    if (ratio === null) return null;
+    const days = [7, 30, 90][index];
+    return Math.round(days * 86400 * Math.max(0, 1 - (ratio / 100)));
+  });
 }
 
 function safeIncidentSummary(logs) {
@@ -257,9 +263,7 @@ function safeUptimePayload(body) {
     });
   }) : [];
 
-  const result = { stat: source.stat === "ok" ? "ok" : "error", checkedAt: source.stat === "ok" ? new Date().toISOString() : null, monitors };
-  if (source.stat !== "ok" && source.error) result.providerError = String(source.error.message || source.error).slice(0, 240);
-  return result;
+  return { stat: source.stat === "ok" ? "ok" : "error", checkedAt: source.stat === "ok" ? new Date().toISOString() : null, monitors };
 }
 
 function requestUptime(body) {
@@ -305,7 +309,6 @@ function loadUptime() {
     api_key: UPTIME_API_KEY,
     format: "json",
     custom_uptime_ratios: "7-30-90",
-    custom_down_durations: "7-30-90",
     all_time_uptime_ratio: "1",
     logs: "1",
     logs_limit: "20",
