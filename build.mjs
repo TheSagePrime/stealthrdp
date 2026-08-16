@@ -1129,14 +1129,46 @@ function buildBlog() {
 }
 
 /* ---------- 6. blog post ---------- */
+function structureBlogHtml(html) {
+  if (!html) return { html: "", headings: [] };
+  let out = String(html)
+    .replace(/<iframe[\s\S]*?<\/iframe>/gi, "")
+    .replace(/\sstyle="[^"]*"/gi, "")
+    .replace(/\sclass="[^"]*"/gi, "")
+    .replace(/<h6[\s\S]*?<\/h6>/gi, "");
+  const headings = [];
+  out = out.replace(/<h([23])([^>]*)>([\s\S]*?)<\/h\1>/gi, (_, level, attrs, inner) => {
+    const text = inner.replace(/<[^>]+>/g, "").trim();
+    const id = ((attrs.match(/\sid="([^"]+)"/) || [])[1] || slugifyHeading(text));
+    headings.push({ level: Number(level), id, text });
+    return `<h${level} id="${esc(id)}">${inner}</h${level}>`;
+  });
+  out = out.replace(/<table[\s\S]*?<\/table>/gi, (table) => `<div class="docs-table-wrap">${table}</div>`);
+  out = out.replace(/<img([^>]*)>/gi, (_, attrs) => {
+    const src = (attrs.match(/\ssrc="([^"]+)"/) || [])[1] || "";
+    const alt = (attrs.match(/\salt="([^"]*)"/) || [])[1] || "";
+    if (!src) return "";
+    return `<figure class="blog-figure"><img src="${esc(src)}" alt="${esc(alt)}" loading="lazy" /></figure>`;
+  });
+  return { html: out, headings };
+}
+
 function buildBlogPost(post) {
+  const article = BLOG_BODIES.get(post.slug) || {};
+  const rendered = structureBlogHtml(article.html || "");
+  const toc = rendered.headings.length
+    ? `<aside class="docs-toc" aria-label="On this page"><span class="docs-toc-title">On this page</span><ol>${rendered.headings.map((heading) => `<li class="toc-level-${heading.level}"><a href="#${esc(heading.id)}">${esc(heading.text)}</a></li>`).join("")}</ol></aside>`
+    : "";
   const body = `
-  <main class="blog-article-page"><div class="container"><article class="blog-article" id="blogPost">
-    <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blog.html">Blog</a><span aria-hidden="true">/</span><span>${esc(post.category)}</span></nav>
-    <header class="blog-article-header"><span class="bc-cat">${esc(post.category)}</span><h1>${esc(post.title)}</h1><div class="bc-meta"><span>${esc(post.author)}</span><span>${esc(post.date)}</span></div></header>
-    <div class="blog-article-body">${(BLOG_BODIES.get(post.slug) || {}).html || `<p class="blog-lede">${esc(post.excerpt || "")}</p>`}</div>
-    <footer class="blog-article-footer"><a href="/blog.html">← Back to all articles</a><a class="btn btn-primary btn-sm" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Ask support</a></footer>
-  </article></div></main>`;
+  <main class="docs-article-page blog-article-page"><div class="container"><div class="docs-article-layout">
+    <article class="docs-article-column" id="blogPost">
+      <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blog.html">Blog</a><span aria-hidden="true">/</span><span>${esc(post.category)}</span></nav>
+      <header class="docs-article-header"><span class="docs-category">${esc(post.category)}</span><h1>${esc(post.title)}</h1><p class="docs-summary">${esc(post.excerpt || "")}</p><div class="docs-source-meta"><span>${esc(post.author)}</span><span>${esc(post.date)}</span></div></header>
+      <div class="docs-content blog-article-body">${rendered.html || `<p>${esc(post.excerpt || "")}</p>`}</div>
+      <footer class="blog-article-footer"><a href="/blog.html">← Back to all articles</a><a class="btn btn-primary btn-sm" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Ask support</a></footer>
+    </article>
+    ${toc}
+  </div></div></main>`;
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [
     breadcrumbLd(post.title, [
       { name: "Home", url: "__SRDP_BASE__/" },

@@ -770,6 +770,16 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
 .docs-content ul li { position: relative; }
 .docs-content ul li::before { content: ""; position: absolute; left: -17px; top: .68em; width: 6px; height: 6px; border-radius: 1px; background: var(--accent); }
 .docs-content code { color: var(--accent-hover); background: rgba(var(--accent-rgb),.08); border: 1px solid rgba(var(--accent-rgb),.15); border-radius: 4px; padding: 2px 5px; font-size: .9em; }
+.docs-content .docs-table-wrap { overflow-x: auto; margin: 0 0 24px; border: 1px solid var(--border); border-radius: 8px; }
+.docs-content table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.docs-content th, .docs-content td { border-bottom: 1px solid var(--border); padding: 11px 13px; text-align: left; vertical-align: top; }
+.docs-content th { color: var(--text); background: var(--surface-1); font-weight: 600; }
+.docs-content img { display: block; max-width: 100%; height: auto; border-radius: 8px; }
+.docs-content .blog-figure { margin: 8px 0 24px; }
+.docs-content blockquote { margin: 0 0 21px; padding: 14px 18px; color: var(--text-muted); background: rgba(var(--accent-rgb),.06); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; }
+.docs-content pre { margin: 0 0 21px; padding: 16px 18px; overflow-x: auto; color: #d7e0ee; background: #080a0e; border: 1px solid var(--border-strong); border-radius: var(--radius); font: 13px/1.75 var(--font-mono); }
+.docs-content iframe { display: none; }
+.blog-article-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 42px; padding-top: 22px; border-top: 1px solid var(--border); }
 .docs-code-wrap { margin: 21px 0 25px; border: 1px solid var(--border-strong); border-radius: var(--radius); overflow: hidden; background: #080a0e; }
 .docs-code-tools { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 12px; border-bottom: 1px solid var(--border); background: rgba(255,255,255,.025); color: var(--text-dim); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
 .docs-copy { min-height: 30px; padding: 5px 10px; color: var(--text-muted); border: 1px solid var(--border-strong); border-radius: 5px; font: 11px var(--font-mono); }

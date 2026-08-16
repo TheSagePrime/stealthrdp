@@ -143,6 +143,9 @@ test("baked content is present in raw HTML (plans, faq, status, blog)", () => {
     const article = HTML(`blog/${post.slug}.html`);
     assert.ok(!article.includes("Full article content is managed"), `${post.slug}: no placeholder`);
     assert.ok(!article.includes("app.seobotai.com/banner"), `${post.slug}: no seobot banner`);
+    assert.ok(article.includes("docs-content"), `${post.slug}: uses structured article layout`);
+    assert.ok(article.includes("docs-toc"), `${post.slug}: has on-this-page TOC`);
+    assert.ok((article.match(/<h2 /g) || []).length >= 2, `${post.slug}: has section headings`);
     assert.ok(article.length > 8000, `${post.slug}: full body baked (${article.length})`);
   }
 });
