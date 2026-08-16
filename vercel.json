@@ -2,6 +2,10 @@
   "buildCommand": "npm run vercel-build",
   "outputDirectory": "public",
   "framework": null,
+  "redirects": [
+    { "source": "/blog", "destination": "/blog.html", "permanent": true },
+    { "source": "/blog/", "destination": "/blog.html", "permanent": true }
+  ],
   "functions": {
     "api/uptime.js": { "maxDuration": 30 },
     "api/plans.js": { "maxDuration": 10 },

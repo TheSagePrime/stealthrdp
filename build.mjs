@@ -26,6 +26,7 @@ const TESTIMONIALS = DATA("testimonials.json");
 const REVIEWS = DATA("reviews.json");
 const UPTIME = DATA("uptime.json");
 const BLOG = require(path.join(ROOT, "js", "blog-data.js")).SRDP_BLOG;
+const BLOG_BODIES = new Map(DATA("blog-articles.json").map((article) => [article.slug, article]));
 const DOCS = DATA("docs-articles.json");
 
 const MONITORS = (UPTIME && UPTIME.monitors) || [];
@@ -1133,7 +1134,7 @@ function buildBlogPost(post) {
   <main class="blog-article-page"><div class="container"><article class="blog-article" id="blogPost">
     <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blog.html">Blog</a><span aria-hidden="true">/</span><span>${esc(post.category)}</span></nav>
     <header class="blog-article-header"><span class="bc-cat">${esc(post.category)}</span><h1>${esc(post.title)}</h1><div class="bc-meta"><span>${esc(post.author)}</span><span>${esc(post.date)}</span></div></header>
-    <div class="blog-article-body"><p class="blog-lede">${esc(post.excerpt || "")}</p><div class="note">Full article content is managed by our content pipeline and will appear here automatically. Need help now? <a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact support</a>.</div></div>
+    <div class="blog-article-body">${(BLOG_BODIES.get(post.slug) || {}).html || `<p class="blog-lede">${esc(post.excerpt || "")}</p>`}</div>
     <footer class="blog-article-footer"><a href="/blog.html">← Back to all articles</a><a class="btn btn-primary btn-sm" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Ask support</a></footer>
   </article></div></main>`;
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [
