@@ -91,8 +91,11 @@ test("status page documents detailed monitoring windows and privacy", () => {
   assert.doesNotMatch(build, /class=\\"btn btn-sm \$\{p\.popular \? \\"btn-primary\\" : \\"btn-ghost\\"\}/);
   assert.match(build, />Buy Now<\/a>/);
   assert.doesNotMatch(build, />Deploy Now<\/a>/);
+  assert.match(build, /€\$\{fmt\(price\)\}/);
+  assert.doesNotMatch(build, /<span class="cur">\$/);
   assert.match(fs.readFileSync(path.join(ROOT, "server.js"), "utf8"), /: "no-store";/);
   const main = fs.readFileSync(path.join(ROOT, "js/main.js"), "utf8");
+  assert.match(main, /cur">€'/);
   assert.doesNotMatch(main, /Deploy Now/);
   assert.doesNotMatch(main, /"btn-ghost"/);
   assert.match(main, />Buy Now<\/a>/);

@@ -265,7 +265,7 @@ function planCardHtml(p, { showPopular = true } = {}) {
     ${isPop ? '<span class="plan-popular">Most Popular</span>' : ""}
     <div class="p-name">${esc(planName(p))}</div>
     <div class="p-desc">${esc(p.description || "")}</div>
-    <div class="plan-price"><span class="cur">$${fmt(price)}<small>/mo</small></span><span class="was">$${fmt(p.monthlyPrice || 0)}</span></div>
+    <div class="plan-price"><span class="cur">€${fmt(price)}<small>/mo</small></span><span class="was">€${fmt(p.monthlyPrice || 0)}</span></div>
     <div class="plan-specs">
       ${specRow("CPU", p.specs && p.specs.cpu)}
       ${specRow("RAM", p.specs && p.specs.ram)}
@@ -288,7 +288,7 @@ function compareRowHtml(p) {
     <td class="v">${esc((p.specs && p.specs.ram) || "—")}</td>
     <td class="v">${esc((p.specs && p.specs.storage) || "—")}</td>
     <td class="v">${esc((p.specs && p.specs.bandwidth) || "—")}</td>
-    <td class="v">$${fmt(p.monthlyPrice || 0)}</td>
+    <td class="v">€${fmt(p.monthlyPrice || 0)}</td>
     <td><a class="btn btn-sm btn-primary" href="${planUrl(p)}" target="_blank" rel="noopener noreferrer">Buy Now</a></td>
   </tr>`;
 }
@@ -766,7 +766,7 @@ function serviceLd(p) {
     description: p.description || `${p.name} — ${(p.specs && p.specs.cpu) || ""} CPU, ${(p.specs && p.specs.ram) || ""} RAM, ${(p.specs && p.specs.storage) || ""} NVMe`,
     url: planUrl(p),
     provider: { "@type": "Organization", name: "StealthRDP", url: "__SRDP_BASE__/" },
-    offers: { "@type": "Offer", price: monthlyPrice(p), priceCurrency: "USD", url: planUrl(p) },
+    offers: { "@type": "Offer", price: monthlyPrice(p), priceCurrency: "EUR", url: planUrl(p) },
   };
 }
 
@@ -836,7 +836,7 @@ function buildIndex() {
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           <a class="btn btn-ghost" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Ask a Pre-Sales Question</a>
         </div>
-        <p class="hero-micro fade-up d3">Starting at only <b>$9.50/month</b> · No hidden fees · Cancel anytime · 7-day money-back</p>
+        <p class="hero-micro fade-up d3">Starting at only <b>€9.50/month</b> · No hidden fees · Cancel anytime · 7-day money-back</p>
         <div class="hero-stats fade-up d4">
           <div class="hero-stat"><div class="num"><b data-count-up="10000">10,000</b><span class="plus">+</span></div><div class="lbl">Orders</div></div>
           <div class="hero-stat"><div class="num"><b data-count-up="60">60</b><span class="plus">s</span></div><div class="lbl">Average deploy</div></div>
@@ -976,7 +976,7 @@ function buildIndex() {
         <span class="eyebrow fade-up">Backed by 10,000+ orders</span>
         <h2 class="fade-up d1">Ready to stop wasting time on server management?</h2>
         <p class="fade-up d2">Deploy your high-performance VPS in the next 60 seconds and focus on what matters — your actual work.</p>
-        <p class="micro fade-up d3">Starting at just <b>$9.50/month</b> · 7-day money-back guarantee · Cancel anytime</p>
+        <p class="micro fade-up d3">Starting at just <b>€9.50/month</b> · 7-day money-back guarantee · Cancel anytime</p>
       </div>
       <div class="cta-actions fade-up d3">
         <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Deploy Your Server Now</a>
@@ -988,7 +988,7 @@ function buildIndex() {
   return page({
     active: "home",
     title: "StealthRDP — Secure Remote Desktop & VPS Infrastructure",
-    description: "Deploy a Windows or Linux VPS in 60 seconds. Enterprise-grade hardware, DDoS protection, 99.9% uptime SLA and 24/7 support — from $9.50/month.",
+    description: "Deploy a Windows or Linux VPS in 60 seconds. Enterprise-grade hardware, DDoS protection, 99.9% uptime SLA and 24/7 support — from €9.50/month.",
     canonical: "__SRDP_BASE__/",
     jsonLd,
     body,
@@ -1048,7 +1048,7 @@ function buildPlans() {
   return page({
     active: "plans",
     title: "VPS Plans & Pricing — StealthRDP",
-    description: "Compare StealthRDP VPS plans: USA and EU locations, NVMe storage, DDoS protection, 99.9% uptime. From $9.50/month with 7-day money-back guarantee.",
+    description: "Compare StealthRDP VPS plans: USA and EU locations, NVMe storage, DDoS protection, 99.9% uptime. From €9.50/month with 7-day money-back guarantee.",
     canonical: "__SRDP_BASE__/plans.html",
     jsonLd,
     body,

@@ -442,8 +442,8 @@
           (isPop ? '<span class="plan-popular">Most Popular</span>' : "") +
           '<div class="p-name">' + esc(p.name.replace(" USA", "").replace(" EU", "")) + "</div>" +
           '<div class="p-desc">' + esc(p.description || "") + "</div>" +
-          '<div class="plan-price"><span class="cur">$' + fmtPrice(price) + '<small>/mo</small></span>' +
-          '<span class="was">$' + fmtPrice(base) + "</span></div>" +
+          '<div class="plan-price"><span class="cur">€' + fmtPrice(price) + '<small>/mo</small></span>' +
+          '<span class="was">€' + fmtPrice(base) + "</span></div>" +
           '<div class="plan-specs">' +
             specRow("CPU", p.specs && p.specs.cpu) +
             specRow("RAM", p.specs && p.specs.ram) +
@@ -522,7 +522,7 @@
               '<td class="v">' + esc(p.specs && p.specs.ram || "—") + "</td>" +
               '<td class="v">' + esc(p.specs && p.specs.storage || "—") + "</td>" +
               '<td class="v">' + esc(p.specs && p.specs.bandwidth || "—") + "</td>" +
-              '<td class="v">$' + fmtPrice(p.monthlyPrice || 0) + "</td>" +
+              '<td class="v">€' + fmtPrice(p.monthlyPrice || 0) + "</td>" +
               '<td><a class="btn btn-sm btn-primary" href="' + planUrl(p, "monthly") + '" target="_blank" rel="noopener noreferrer">Buy Now</a></td>' +
             "</tr>"
           );
