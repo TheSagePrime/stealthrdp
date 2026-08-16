@@ -26,6 +26,34 @@
     return status === "up" || status === 2 || status === "2";
   }
 
+  /* ---------- Micro-interactions (shadcn-grade, no framework) ---------- */
+  // Count-up hero stats when they enter the viewport.
+  var countUps = $$("[data-count-up]");
+  if (countUps.length && "IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        io.unobserve(entry.target);
+        var el = entry.target;
+        var target = parseFloat(el.getAttribute("data-count-up") || "0");
+        var suffix = el.getAttribute("data-suffix") || "";
+        var duration = 900;
+        var start = performance.now();
+        function tick(now) {
+          var p = Math.min((now - start) / duration, 1);
+          var eased = 1 - Math.pow(1 - p, 3);
+          var value = Math.round(target * eased);
+          var decimals = (String(target).split(".")[1] || "").length;
+          if (decimals) value = (target * eased).toFixed(decimals);
+          el.textContent = value.toLocaleString("en-US") + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.6 });
+    countUps.forEach(function (el) { io.observe(el); });
+  }
+
   /* ---------- Analytics (real GTM container from live site, no PII) ---------- */
   function dl(event, props) {
     try {

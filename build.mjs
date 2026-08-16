@@ -777,9 +777,9 @@ function buildIndex() {
         </div>
         <p class="hero-micro fade-up d3">Starting at only <b>$9.50/month</b> · No hidden fees · Cancel anytime · 7-day money-back</p>
         <div class="hero-stats fade-up d4">
-          <div class="hero-stat"><div class="num">10,000<span class="plus">+</span></div><div class="lbl">Orders</div></div>
-          <div class="hero-stat"><div class="num">60<span class="plus">s</span></div><div class="lbl">Average deploy</div></div>
-          <div class="hero-stat"><div class="num">99.9<span class="plus">%</span></div><div class="lbl">Uptime SLA</div></div>
+          <div class="hero-stat"><div class="num"><b data-count-up="10000">10,000</b><span class="plus">+</span></div><div class="lbl">Orders</div></div>
+          <div class="hero-stat"><div class="num"><b data-count-up="60">60</b><span class="plus">s</span></div><div class="lbl">Average deploy</div></div>
+          <div class="hero-stat"><div class="num"><b data-count-up="99.9">99.9</b><span class="plus">%</span></div><div class="lbl">Uptime SLA</div></div>
         </div>
       </div>
       <div class="hero-console fade-up d2" aria-label="Deployment demonstration">
