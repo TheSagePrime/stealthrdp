@@ -1487,3 +1487,11 @@ html[data-theme="light"] .plan-card, html[data-theme="light"] .docs-card, html[d
   .node-history { grid-column: 1 / -1; }
   .history-bars { gap: 2px; height: 25px; grid-template-columns: repeat(90, minmax(0, 1fr)); }
 }
+
+/* Status semantics stay fixed across every palette and theme. */
+.status-key.healthy, .node-card .n-dot.up, .history-bar.history-up { color: var(--green); background: var(--green); }
+.status-key.degraded, .status-key.unknown,
+.node-card .n-dot.down, .node-card .n-dot.degraded, .node-card .n-dot.unknown,
+.history-bar.history-degraded, .history-bar.history-down, .history-bar.history-unknown,
+.status-source-note-failure::before { color: var(--red); background: var(--red); }
+.node-card.node-degraded .n-state strong, .node-card.node-unknown .n-state strong { color: var(--red); }
