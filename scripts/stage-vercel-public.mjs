@@ -14,11 +14,13 @@ fs.mkdirSync(OUT, { recursive: true });
 const files = [
   "robots.txt",
   "sitemap.xml",
+  "rss.xml",
   "llms.txt",
+  "site.webmanifest",
   "favicon.ico",
   "favicon.svg",
 ];
-const dirs = ["css", "js", "assets", "blog", "docs", "data"];
+const dirs = ["css", "js", "assets", "blog", "docs", "data", ".well-known"];
 
 for (const name of fs.readdirSync(ROOT)) {
   if (name.endsWith(".html")) files.push(name);

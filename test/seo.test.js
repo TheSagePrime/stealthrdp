@@ -103,6 +103,7 @@ test("sitemap.xml is valid XML with all routes; robots.txt allows + references i
   const robots = fs.readFileSync(path.join(ROOT, "robots.txt"), "utf8");
   assert.ok(/^User-agent: \*$/m.test(robots), "robots allows all");
   assert.ok(robots.includes("Sitemap: __SRDP_BASE__/sitemap.xml"), "robots references sitemap");
+  assert.ok(robots.includes("llms.txt"), "robots mentions llms.txt");
   assert.ok(robots.includes("Disallow: /api/"), "robots blocks api");
 });
 
@@ -145,6 +146,7 @@ test("baked content is present in raw HTML (plans, faq, status, blog)", () => {
     assert.ok(!article.includes("app.seobotai.com/banner"), `${post.slug}: no seobot banner`);
     assert.ok(article.includes("docs-content"), `${post.slug}: uses structured article layout`);
     assert.ok(article.includes("docs-toc"), `${post.slug}: has on-this-page TOC`);
+    assert.ok(article.includes('href="/plans.html"'), `${post.slug}: links to plans`);
     assert.ok((article.match(/<h2 /g) || []).length >= 2, `${post.slug}: has section headings`);
     assert.ok(article.length > 8000, `${post.slug}: full body baked (${article.length})`);
   }
@@ -156,4 +158,24 @@ test("no leftover loading placeholders in raw HTML", () => {
     assert.ok(!html.includes("Loading plans…"), `${route}: no plans loading placeholder`);
     assert.ok(!html.includes("Loading articles…"), `${route}: no blog loading placeholder`);
   }
+});
+
+test("rss, security.txt, HowTo schema, and checkout events exist", () => {
+  const rss = fs.readFileSync(path.join(ROOT, "rss.xml"), "utf8");
+  assert.ok(rss.includes("<rss"), "rss feed");
+  assert.ok(rss.includes("__SRDP_BASE__/blog/"), "rss uses host token");
+  assert.strictEqual((rss.match(/<item>/g) || []).length, BLOG.length, "rss has every post");
+
+  const security = fs.readFileSync(path.join(ROOT, ".well-known/security.txt"), "utf8");
+  assert.ok(security.includes("mailto:support@stealthrdp.com"), "security contact");
+
+  const howtoPost = HTML("blog/how-to-set-up-automated-backups-for-vps-hosting.html");
+  assert.ok(howtoPost.includes('"@type":"HowTo"'), "tutorial post has HowTo schema");
+
+  const main = fs.readFileSync(path.join(ROOT, "js/main.js"), "utf8");
+  assert.ok(main.includes('dl("begin_checkout"'), "begin_checkout event");
+  assert.ok(main.includes('dl("view_plans"'), "view_plans event");
+
+  const bake = fs.readFileSync(path.join(ROOT, "scripts/bake-base.mjs"), "utf8");
+  assert.ok(bake.includes("https://www.stealthrdp.com"), "Vercel bake defaults to www");
 });

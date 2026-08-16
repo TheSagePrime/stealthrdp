@@ -64,12 +64,17 @@
   document.addEventListener("click", function (e) {
     var card = e.target.closest ? e.target.closest(".plan-card") : null;
     var name = card && card.querySelector(".p-name");
+    var location = document.body.getAttribute("data-plan-location") || "USA";
     if (name) {
-      dl("select_plan", { plan_name: name.textContent.trim(), location: document.body.getAttribute("data-plan-location") || "USA" });
+      dl("select_plan", { plan_name: name.textContent.trim(), location: location });
+    }
+    var checkout = e.target.closest ? e.target.closest("a[href*='/store/']") : null;
+    if (checkout) {
+      dl("begin_checkout", { location: location, plan_name: name ? name.textContent.trim() : "" });
     }
   });
-  if (document.body.getAttribute("data-page") === "plans") {
-    dl("view_plans", { location: "USA" });
+  if (document.body.getAttribute("data-page") === "plans" || document.querySelector(".plan-grid")) {
+    dl("view_plans", { location: document.body.getAttribute("data-plan-location") || "USA" });
   }
 
   /* ---------- Mobile nav ---------- */

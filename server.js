@@ -30,6 +30,7 @@ const MIME = {
   ".json": "application/json",
   ".xml": "application/xml; charset=utf-8",
   ".txt": "text/plain; charset=utf-8",
+  ".webmanifest": "application/manifest+json; charset=utf-8",
 };
 
 const { isPublicIndexHost, PUBLIC_CANONICAL_ORIGIN, previewRobotsTxt, applyPreviewHtml } = require("./lib/index-policy");
@@ -39,6 +40,7 @@ const SECURITY_HEADERS = {
   "Referrer-Policy": "strict-origin-when-cross-origin",
   "X-Frame-Options": "SAMEORIGIN",
   "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+  "Strict-Transport-Security": "max-age=63072000; includeSubDomains",
 };
 
 function originFor(req) {
@@ -47,8 +49,8 @@ function originFor(req) {
   return proto + "://" + host;
 }
 
-function tokenOrigin(req) {
-  return isPublicIndexHost(req.headers.host) ? originFor(req) : PUBLIC_CANONICAL_ORIGIN;
+function tokenOrigin(_req) {
+  return PUBLIC_CANONICAL_ORIGIN;
 }
 
 function resolveTokens(body, origin) {
@@ -441,7 +443,49 @@ const server = http.createServer((req, res) => {
   }
 
   if (url.pathname === "/blog" || url.pathname === "/blog/") {
-    res.writeHead(301, { Location: "/blog.html", ...SECURITY_HEADERS });
+    res.writeHead(301, { Location: "/blog.html", ...SECURITY_HEADERS, ...extraHeaders(req) });
+    res.end();
+    return;
+  }
+
+  const PAGE_REDIRECTS = {
+    "/plans": "/plans.html",
+    "/plans/": "/plans.html",
+    "/status": "/status.html",
+    "/status/": "/status.html",
+    "/faq": "/faq.html",
+    "/faq/": "/faq.html",
+    "/about": "/about.html",
+    "/about/": "/about.html",
+    "/privacy": "/privacy.html",
+    "/privacy/": "/privacy.html",
+    "/docs": "/docs.html",
+    "/docs/": "/docs.html",
+    "/features": "/#why",
+    "/features/": "/#why",
+  };
+  if (PAGE_REDIRECTS[url.pathname]) {
+    res.writeHead(301, { Location: PAGE_REDIRECTS[url.pathname], ...SECURITY_HEADERS, ...extraHeaders(req) });
+    res.end();
+    return;
+  }
+
+  if (/^\/blog\/[a-z0-9-]+\/?$/.test(url.pathname)) {
+    const slug = url.pathname.replace(/^\/blog\/|\/$/g, "");
+    res.writeHead(301, { Location: "/blog/" + slug + ".html", ...SECURITY_HEADERS, ...extraHeaders(req) });
+    res.end();
+    return;
+  }
+
+  if (/^\/docs\/[a-z0-9_-]+\/?$/.test(url.pathname)) {
+    const slug = url.pathname.replace(/^\/docs\/|\/$/g, "");
+    res.writeHead(301, { Location: "/docs/" + slug + ".html", ...SECURITY_HEADERS, ...extraHeaders(req) });
+    res.end();
+    return;
+  }
+
+  if (url.pathname === "/security.txt") {
+    res.writeHead(301, { Location: "/.well-known/security.txt", ...SECURITY_HEADERS, ...extraHeaders(req) });
     res.end();
     return;
   }
