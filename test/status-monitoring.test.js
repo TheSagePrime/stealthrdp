@@ -85,4 +85,5 @@ test("status page documents detailed monitoring windows and privacy", () => {
   assert.doesNotMatch(build, /class=\\"btn btn-sm \$\{p\.popular \? \\"btn-primary\\" : \\"btn-ghost\\"\}/);
   assert.match(build, />Buy Now<\/a>/);
   assert.doesNotMatch(build, />Deploy Now<\/a>/);
+  assert.match(fs.readFileSync(path.join(ROOT, "server.js"), "utf8"), /: "no-store";/);
 });

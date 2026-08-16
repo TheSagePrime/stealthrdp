@@ -433,7 +433,7 @@ const server = http.createServer((req, res) => {
       ? "public, max-age=604800"
       : ext === ".css" || ext === ".js"
         ? "public, max-age=3600"
-        : "no-cache";
+        : "no-store";
     res.writeHead(200, {
       "Content-Type": MIME[ext] || "application/octet-stream",
       "Cache-Control": cacheControl,
