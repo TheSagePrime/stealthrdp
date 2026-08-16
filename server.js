@@ -91,7 +91,7 @@ function dailyHistoryRanges(days) {
   const dates = [];
   const ranges = [];
   const today = new Date();
-  const endToday = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() + 1) / 1000;
+  const endToday = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()) / 1000;
   for (let offset = days - 1; offset >= 0; offset -= 1) {
     const end = endToday - (offset * 86400);
     const start = end - 86400;
