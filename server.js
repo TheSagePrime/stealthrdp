@@ -223,7 +223,7 @@ function safeUptimePayload(body) {
     });
   }) : [];
 
-  return { stat: source.stat === "ok" ? "ok" : "error", checkedAt: new Date().toISOString(), monitors };
+  return { stat: source.stat === "ok" ? "ok" : "error", checkedAt: source.stat === "ok" ? new Date().toISOString() : null, monitors };
 }
 
 function loadUptime() {
@@ -258,10 +258,13 @@ function loadUptime() {
     }, (upstream) => {
       let responseBody = "";
       upstream.on("data", (chunk) => { responseBody += chunk; });
-      upstream.on("end", () => resolve({
-        status: upstream.statusCode === 200 ? 200 : 502,
-        payload: safeUptimePayload(responseBody),
-      }));
+      upstream.on("end", () => {
+        const payload = safeUptimePayload(responseBody);
+        resolve({
+          status: upstream.statusCode === 200 && payload.stat === "ok" ? 200 : 502,
+          payload,
+        });
+      });
     });
     request.on("timeout", () => request.destroy(new Error("uptime request timeout")));
     request.on("error", () => resolve({ status: 502, payload: { stat: "error", checkedAt: null, monitors: [] } }));
