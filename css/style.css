@@ -827,7 +827,7 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
 .text-link:hover { color: var(--accent-hover); }
 .text-link .inline-arrow { width: 16px; height: 16px; transition: transform 180ms ease; }
 .text-link:hover .inline-arrow { transform: translate(2px, -2px); }
-.infrastructure-section, .outcomes-section, .reviews-section { scroll-margin-top: 92px; }
+.infrastructure-section, .outcomes-section, .reviews-section, .usecases-section, .plans-preview, .cta-band { scroll-margin-top: 92px; }
 .infrastructure-board { overflow: hidden; background: linear-gradient(135deg, var(--surface-1), var(--bg-elev)); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); }
 .infrastructure-intro { display: flex; align-items: center; gap: 10px; padding: 15px 21px; color: var(--text-muted); border-bottom: 1px solid var(--border); font: 11px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
 .infra-signal { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(var(--accent-rgb), .1); }
