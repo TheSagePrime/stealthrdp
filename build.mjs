@@ -329,7 +329,7 @@ const fmtDuration = (seconds) => {
 
 function historyBarHtml(history) {
   if (!Array.isArray(history) || !history.length) {
-    return `<div class="node-history node-history-empty"><span>Daily 90-day history appears after live monitoring connects.</span></div>`;
+    return `<div class="node-history node-history-empty"><span>90-day history unavailable.</span></div>`;
   }
   const bars = history.map((item) => {
     const uptime = Number.isFinite(Number(item.uptime)) ? Number(item.uptime).toFixed(2) + "% uptime" : "No data";
@@ -337,33 +337,23 @@ function historyBarHtml(history) {
     return `<span class="history-bar history-${esc(state)}" title="${esc(item.date || "Unknown date")}: ${esc(uptime)}" aria-hidden="true"></span>`;
   }).join("");
   const available = history.filter((item) => item && item.state !== "unknown").length;
-  return `<div class="node-history"><div class="history-head"><span>90-day history</span><span>${esc(history[0].date || "90 days ago")} · ${esc(history[history.length - 1].date || "Today")}</span></div><div class="history-bars" role="img" aria-label="90-day uptime history with ${available} days of returned data">${bars}</div><div class="history-axis"><span>90 days ago</span><span>Today</span></div></div>`;
+  return `<div class="node-history"><div class="history-bars" role="img" aria-label="90-day uptime history with ${available} days of returned data">${bars}</div><div class="history-axis"><span>90 days ago</span><span>Today</span></div></div>`;
 }
 
 function nodeCardHtml(m) {
-  const legacyRatio = Number.isFinite(Number(m.uptimeRatio)) ? Number(m.uptimeRatio) : null;
-  const uptime7 = Number.isFinite(Number(m.uptime7)) ? Number(m.uptime7) : null;
-  const uptime30 = Number.isFinite(Number(m.uptime30)) ? Number(m.uptime30) : null;
-  const uptime90 = Number.isFinite(Number(m.uptime90)) ? Number(m.uptime90) : legacyRatio;
+  const uptime90 = Number.isFinite(Number(m.uptime90)) ? Number(m.uptime90) : null;
   const status = m.status || (isUp(m) ? "up" : "down");
   const statusLabel = { up: "Operational", down: "Down", degraded: "Degraded", paused: "Paused", pending: "Not checked", unknown: "Unknown" }[status] || "Unknown";
   const statusClass = ["up", "down", "degraded", "paused", "pending"].includes(status) ? status : "unknown";
   const label = m.label || m.friendly_name || "Production node";
   const region = m.region || "Protected infrastructure";
-  const metric = (value) => value == null || value === "" || !Number.isFinite(Number(value)) ? "—" : Number(value).toFixed(2) + "%";
-  const incidents = m.recentIncidents == null ? "—" : String(m.recentIncidents);
+  const uptime = uptime90 == null ? "—" : uptime90.toFixed(3) + "% uptime";
   return `<article class="node-card node-${statusClass}">
     <div class="n-left"><span class="n-dot ${statusClass}" aria-hidden="true"></span>
       <div><div class="n-name">${esc(label)}</div><div class="n-target">${esc(region)}</div></div>
     </div>
-    <div class="n-state"><strong>${statusLabel}</strong><span>Current state</span></div>
-    <div class="node-metrics" aria-label="Availability history">
-      <div class="node-metric"><b>${metric(uptime7)}</b><small>7-day uptime</small></div>
-      <div class="node-metric"><b>${metric(uptime30)}</b><small>30-day uptime</small></div>
-      <div class="node-metric"><b>${metric(uptime90)}</b><small>90-day uptime</small></div>
-      <div class="node-metric"><b>${fmtDuration(m.downtime30)}</b><small>Downtime / 30d</small></div>
-      <div class="node-metric"><b>${incidents}</b><small>Recent incidents</small></div>
-    </div>
+    <div class="n-state"><strong>${statusLabel}</strong></div>
+    <div class="n-uptime"><b>${uptime}</b><small>90-day availability</small></div>
     ${historyBarHtml(m.history90)}
   </article>`;
 }
@@ -1058,31 +1048,20 @@ function buildPlans() {
 
 /* ---------- 4. status ---------- */
 function buildStatus() {
-  const uptime90 = MONITORS.map((m) => Number.isFinite(Number(m.uptime90)) ? Number(m.uptime90) : Number(m.uptimeRatio)).filter(Number.isFinite);
-  const average90 = uptime90.length ? (uptime90.reduce((sum, value) => sum + value, 0) / uptime90.length).toFixed(2) : "—";
-  const summary = `<div class="ss-card"><div class="ss-num ${ALL_UP ? "good" : "warn"}">${UP}/${TOTAL}</div><div class="ss-lbl">Nodes online</div></div>
-    <div class="ss-card"><div class="ss-num ${ALL_UP ? "good" : "warn"}">${TOTAL ? Math.round((UP / TOTAL) * 100) : 0}%</div><div class="ss-lbl">Current availability</div></div>
-    <div class="ss-card"><div class="ss-num ${average90 !== "—" ? "good" : "warn"}">${average90}${average90 === "—" ? "" : "%"}</div><div class="ss-lbl">90-day average</div></div>
-    <div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">Live incident history</div></div>`;
+  const headline = ALL_UP ? "All services are online" : "Service status needs attention";
   const nodes = MONITORS.map(nodeCardHtml).join("");
   const body = `
   <section class="page-head">
-    <div class="container"><span class="eyebrow">Server status</span><h1>Service health, with the detail behind it.</h1><p>See current state, rolling availability windows, downtime, and recent incidents for each logical component. Sensitive infrastructure details stay private.</p></div>
+    <div class="container"><span class="eyebrow">Server status</span><h1>${headline}</h1><p>Live service status and 90-day uptime history.</p></div>
   </section>
   <section class="section status-page-section" style="padding-top:0">
     <div class="container">
       <div class="status-shell">
-        <div class="status-shell-head"><div><span class="mono">OPERATIONS / CURRENT</span><h2>Current service state</h2></div><p>Live refresh is attempted on load. Rolling windows show how each component has performed. If the endpoint is unavailable, the verified snapshot stays visible and is labelled below.</p></div>
-        <div class="status-summary" id="statusSummary" aria-live="polite">${summary}</div>
-        <div class="status-meta"><p class="status-source-note" id="statusSourceNote">Baked uptime snapshot · live refresh is attempted when this page loads.</p><div class="status-legend"><span><i class="status-key healthy" aria-hidden="true"></i>Healthy</span><span><i class="status-key degraded" aria-hidden="true"></i>Partial availability</span><span><i class="status-key unknown" aria-hidden="true"></i>Unknown / attention</span></div></div>
+        <div class="status-shell-head"><div><span class="mono">LIVE STATUS</span><h2>All services</h2></div><p>Current availability for the StealthRDP service layer.</p></div>
+        <div class="status-meta"><p class="status-source-note" id="statusSourceNote">Live refresh is attempted when this page loads.</p><div class="status-legend"><span><i class="status-key healthy" aria-hidden="true"></i>Operational</span><span><i class="status-key degraded" aria-hidden="true"></i>Partial availability</span><span><i class="status-key unknown" aria-hidden="true"></i>Downtime / unknown</span></div></div>
       </div>
-      <div class="status-section-head"><div><span class="mono">COMPONENTS</span><h2>Production nodes</h2></div><span class="status-count">${TOTAL} logical components</span></div>
+      <div class="status-section-head"><div><span class="mono">SERVICES</span><h2>Service components</h2></div><span class="status-count">${TOTAL} services</span></div>
       <div class="node-list" id="nodeList" aria-live="polite">${nodes}</div>
-      <div class="status-info-grid">
-        <div class="status-info-card"><span class="info-index">01</span><h3>Rolling windows</h3><p>Each node reports 7-day, 30-day, and 90-day availability. This makes recent changes visible without exposing the monitored address.</p></div>
-        <div class="status-info-card"><span class="info-index">02</span><h3>Incident context</h3><p>Recent incident context is grouped from the provider's returned log window. The page never publishes raw monitoring logs or monitor identifiers.</p></div>
-        <div class="status-info-card"><span class="info-index">03</span><h3>Privacy boundary</h3><p>Users see logical labels, region, health, uptime, downtime, and the last refresh time. Server IPs and monitoring targets stay on the server.</p></div>
-      </div>
     </div>
   </section>`;
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [
@@ -1094,7 +1073,7 @@ function buildStatus() {
   return page({
     active: "status",
     title: "Server Status — StealthRDP",
-    description: "Real-time status of all StealthRDP server nodes. Live uptime monitoring of USA and EU infrastructure.",
+    description: "Live StealthRDP service status, current availability, and 90-day uptime history for protected service components.",
     canonical: "__SRDP_BASE__/status.html",
     jsonLd,
     body,

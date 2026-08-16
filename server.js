@@ -105,6 +105,12 @@ function dailyHistoryRanges(days) {
 }
 
 const DAILY_HISTORY = dailyHistoryRanges(DAILY_HISTORY_DAYS);
+const DAILY_HISTORY_CHUNK_SIZE = 10;
+const DAILY_HISTORY_QUERIES = DAILY_HISTORY.query.split("-").reduce((chunks, range, index) => {
+  const chunkIndex = Math.floor(index / DAILY_HISTORY_CHUNK_SIZE);
+  chunks[chunkIndex] = chunks[chunkIndex] ? `${chunks[chunkIndex]}-${range}` : range;
+  return chunks;
+}, []);
 
 function historyState(value) {
   if (!Number.isFinite(Number(value))) return "unknown";
@@ -113,9 +119,9 @@ function historyState(value) {
   return "down";
 }
 
-function dailyHistorySnapshot(values) {
-  return numberList(values).slice(0, DAILY_HISTORY_DAYS).map((uptime, index) => ({
-    date: DAILY_HISTORY.dates[index] || null,
+function dailyHistorySnapshot(values, offset = 0) {
+  return numberList(values).slice(0, DAILY_HISTORY_CHUNK_SIZE).map((uptime, index) => ({
+    date: DAILY_HISTORY.dates[offset + index] || null,
     uptime,
     state: historyState(uptime),
   })).filter((item) => item.date);
@@ -252,7 +258,7 @@ function safeUptimePayload(body, options = {}) {
     const allTime = numberList(monitor.all_time_uptime_ratio);
     const incidents = safeIncidentSummary(monitor.logs);
     const historyValues = monitor.custom_uptime_ranges || monitor.custom_uptime_ratio || monitor.custom_uptime_ratios;
-    const history90 = options.includeHistory ? dailyHistorySnapshot(historyValues) : null;
+    const history90 = options.includeHistory ? dailyHistorySnapshot(historyValues, options.historyOffset || 0) : null;
     return safeMonitorSnapshot({
       label: region + " Node " + String(counters[region]).padStart(2, "0"),
       region,
@@ -317,25 +323,29 @@ function loadUptime() {
     logs: "1",
     logs_limit: "20",
   });
-  const historyBody = querystring.stringify({
+  const historyBodies = DAILY_HISTORY_QUERIES.map((query) => querystring.stringify({
     api_key: UPTIME_API_KEY,
     format: "json",
-    custom_uptime_ranges: DAILY_HISTORY.query,
-  });
+    custom_uptime_ranges: query,
+  }));
 
   return Promise.all([
     requestUptime(metricsBody),
-    requestUptime(historyBody, { includeHistory: true }),
-  ]).then(([metrics, history]) => {
+    ...historyBodies.map((body, index) => requestUptime(body, {
+      includeHistory: true,
+      historyOffset: index * DAILY_HISTORY_CHUNK_SIZE,
+    })),
+  ]).then(([metrics, ...histories]) => {
     if (metrics.status !== 200 || metrics.payload.stat !== "ok") return metrics;
-    if (history.status !== 200 || history.payload.stat !== "ok") return metrics;
+    if (histories.some((history) => history.status !== 200 || history.payload.stat !== "ok")) return metrics;
+    const historyByMonitor = metrics.payload.monitors.map((_, monitorIndex) => histories.flatMap((history) => history.payload.monitors[monitorIndex]?.history90 || []).slice(0, DAILY_HISTORY_DAYS));
     return {
       status: 200,
       payload: {
         ...metrics.payload,
         monitors: metrics.payload.monitors.map((monitor, index) => ({
           ...monitor,
-          history90: history.payload.monitors[index]?.history90 ?? monitor.history90 ?? null,
+          history90: historyByMonitor[index] || [],
         })),
       },
     };

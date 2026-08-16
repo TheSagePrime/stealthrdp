@@ -229,9 +229,9 @@
     return { up: "Operational", down: "Down", degraded: "Degraded", paused: "Paused", pending: "Not checked", unknown: "Unknown" }[status] || "Unknown";
   }
   function formatCheckedAt(value) {
-    if (!value) return "Snapshot data · live refresh is pending";
+    if (!value) return "Last updated when live data connects";
     var date = new Date(value);
-    return Number.isNaN(date.getTime()) ? "Live data refreshed" : "Live data refreshed " + date.toLocaleString([], { dateStyle: "medium", timeStyle: "short" });
+    return Number.isNaN(date.getTime()) ? "Last updated from live data" : "Last updated on " + date.toLocaleString([], { dateStyle: "medium", timeStyle: "short" });
   }
   function formatIncident(value) {
     if (!value) return "No recent incident in returned history";
@@ -245,14 +245,14 @@
     return "down";
   }
   function historyBarMarkup(history) {
-    if (!Array.isArray(history) || !history.length) return '<div class="node-history node-history-empty"><span>Daily 90-day history appears after live monitoring connects.</span></div>';
+    if (!Array.isArray(history) || !history.length) return '<div class="node-history node-history-empty"><span>90-day history unavailable.</span></div>';
     var bars = history.map(function (item) {
       var state = item.state || historyState(item.uptime);
       var uptime = Number.isFinite(Number(item.uptime)) ? Number(item.uptime).toFixed(2) + "% uptime" : "No data";
       return '<span class="history-bar history-' + stateClass(state) + '" title="' + esc((item.date || "Unknown date") + ": " + uptime) + '" aria-hidden="true"></span>';
     }).join("");
     var available = history.filter(function (item) { return item && item.state !== "unknown"; }).length;
-    return '<div class="node-history"><div class="history-head"><span>90-day history</span><span>' + esc(history[0].date || "90 days ago") + " · " + esc(history[history.length - 1].date || "Today") + '</span></div><div class="history-bars" role="img" aria-label="90-day uptime history with ' + available + ' days of returned data">' + bars + '</div><div class="history-axis"><span>90 days ago</span><span>Today</span></div></div>';
+    return '<div class="node-history"><div class="history-bars" role="img" aria-label="90-day uptime history with ' + available + ' days of returned data">' + bars + '</div><div class="history-axis"><span>90 days ago</span><span>Today</span></div></div>';
   }
   function stateClass(status) {
     return ["up", "down", "degraded", "paused", "pending"].indexOf(status) !== -1 ? status : "unknown";
@@ -283,7 +283,7 @@
           heroNodeStatus.style.color = total && up === total ? "var(--green)" : "var(--red)";
         }
         var sourceNote = $("#statusSourceNote");
-        if (sourceNote) sourceNote.textContent = formatCheckedAt(d.checkedAt) + " · IPs and monitoring targets remain private.";
+        if (sourceNote) sourceNote.textContent = formatCheckedAt(d.checkedAt);
         renderStatusPage(d);
       })
       .catch(function () {
@@ -301,17 +301,9 @@
   }
 
   function renderStatusFailure() {
-    var summary = $("#statusSummary");
-    if (summary) {
-      summary.innerHTML =
-        '<div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">Live status unavailable</div></div>' +
-        '<div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">Current availability</div></div>' +
-        '<div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">90-day average</div></div>' +
-        '<div class="ss-card"><div class="ss-num warn">—</div><div class="ss-lbl">Incident history</div></div>';
-    }
     var sourceNote = $("#statusSourceNote");
     if (sourceNote) {
-      sourceNote.textContent = "Live status unavailable · showing the baked uptime snapshot below.";
+      sourceNote.textContent = "Live status unavailable · showing the verified snapshot below.";
       sourceNote.classList.add("status-source-note-failure");
       sourceNote.setAttribute("role", "status");
     }
@@ -319,41 +311,24 @@
 
   function renderStatusPage(d) {
     var nodeList = $("#nodeList");
-    var summary = $("#statusSummary");
-    if (!nodeList && !summary) return;
+    if (!nodeList) return;
     var monitors = (d && d.monitors) || [];
-    var up = monitors.filter(isMonitorUp).length;
-    var activeIncidents = monitors.filter(function (monitor) { return ["down", "degraded"].indexOf(monitor.status) !== -1; }).length;
-    var totalDowntime30 = totalMetric(monitors, "downtime30");
-    if (summary) {
-      summary.innerHTML =
-        '<div class="ss-card"><div class="ss-num ' + (up === monitors.length ? "good" : "warn") + '">' + up + "/" + monitors.length + '</div><div class="ss-lbl">Nodes online</div></div>' +
-        '<div class="ss-card"><div class="ss-num ' + (up === monitors.length ? "good" : "warn") + '">' + (monitors.length ? Math.round((up / monitors.length) * 100) : 0) + '%</div><div class="ss-lbl">Current availability</div></div>' +
-        '<div class="ss-card"><div class="ss-num good">' + averageMetric(monitors, "uptime90") + '</div><div class="ss-lbl">90-day average</div></div>' +
-        '<div class="ss-card"><div class="ss-num ' + (activeIncidents ? "warn" : "good") + '">' + (activeIncidents || formatDuration(totalDowntime30)) + '</div><div class="ss-lbl">' + (activeIncidents ? "Active incidents" : "Downtime / 30d") + '</div></div>';
-    }
-    if (nodeList) {
-      nodeList.innerHTML = monitors.map(function (m) {
-        var upNow = isMonitorUp(m);
-        var status = m.status || (upNow ? "up" : "down");
-        var cls = stateClass(status);
-        var incidentCount = m.recentIncidents == null ? "—" : String(m.recentIncidents);
-        return (
-          '<article class="node-card node-' + cls + '">' +
-            '<div class="n-left"><span class="n-dot ' + cls + '" aria-hidden="true"></span>' +
-            "<div><div class=\"n-name\">" + esc(m.label || "Production node") + "</div>" +
-            '<div class="n-target">' + esc(m.region || "Protected infrastructure") + "</div></div></div>" +
-            '<div class="n-state"><strong>' + esc(statusText(status)) + '</strong><span>' + esc(formatIncident(m.lastIncidentAt)) + "</span></div>" +
-            '<div class="node-metrics" aria-label="Availability history">' +
-              '<div class="node-metric"><b>' + formatPercent(m.uptime7) + '</b><small>7-day uptime</small></div>' +
-              '<div class="node-metric"><b>' + formatPercent(m.uptime30) + '</b><small>30-day uptime</small></div>' +
-              '<div class="node-metric"><b>' + formatPercent(m.uptime90) + '</b><small>90-day uptime</small></div>' +
-              '<div class="node-metric"><b>' + formatDuration(m.downtime30) + '</b><small>Downtime / 30d</small></div>' +
-              '<div class="node-metric"><b>' + incidentCount + '</b><small>Recent incidents</small></div>' +
-            "</div>" + historyBarMarkup(m.history90) + "</article>"
-          );
-      }).join("");
-    }
+    nodeList.innerHTML = monitors.map(function (m) {
+      var upNow = isMonitorUp(m);
+      var status = m.status || (upNow ? "up" : "down");
+      var cls = stateClass(status);
+      var uptime = Number.isFinite(Number(m.uptime90)) ? Number(m.uptime90).toFixed(3) + "% uptime" : "—";
+      return (
+        '<article class="node-card node-' + cls + '">' +
+          '<div class="n-left"><span class="n-dot ' + cls + '" aria-hidden="true"></span>' +
+          "<div><div class=\"n-name\">" + esc(m.label || "Production node") + "</div>" +
+          '<div class="n-target">' + esc(m.region || "Protected infrastructure") + "</div></div></div>" +
+          '<div class="n-state"><strong>' + esc(statusText(status)) + "</strong></div>" +
+          '<div class="n-uptime"><b>' + uptime + '</b><small>90-day availability</small></div>' +
+          historyBarMarkup(m.history90) +
+        "</article>"
+      );
+    }).join("");
   }
 
   /* ---------- Homepage plan finder ---------- */

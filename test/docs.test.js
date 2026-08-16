@@ -83,8 +83,8 @@ test("public chrome has no legacy docs host, countdown, or fake live deployment 
 
 test("baked status fixture renders up monitors as healthy", () => {
   const html = HTML("status.html");
-  assert.match(html, />9\/9<\/div>[\s\S]*?Nodes online/);
-  assert.match(html, />100%<\/div>[\s\S]*?Current availability/);
+  assert.match(html, /All services are online/);
+  assert.match(html, /90-day availability/);
   assert.strictEqual((html.match(/n-dot up/g) || []).length, 9);
   assert.strictEqual((html.match(/n-dot down/g) || []).length, 0);
   assert.match(HTML("build.mjs"), /status === "up"/);
@@ -92,13 +92,13 @@ test("baked status fixture renders up monitors as healthy", () => {
   assert.match(HTML("js/main.js"), /Live status unavailable/);
 });
 
-test("status information cards use a responsive semantic grid", () => {
+test("status rows keep the page simple and responsive", () => {
   const build = HTML("build.mjs");
   const css = HTML("css/style.css");
-  assert.match(build, /<div class="status-info-grid">/);
-  assert.doesNotMatch(build, /style="margin-top:64px;display:grid;grid-template-columns:repeat\(3,1fr\);gap:20px"/);
-  assert.match(css, /\.status-info-grid\s*\{[\s\S]*?grid-template-columns:\s*repeat\(3,\s*minmax\(0,\s*1fr\)\s*\)/);
-  assert.match(css, /@media \(max-width:\s*768px\)[\s\S]*?\.status-info-grid\s*\{[\s\S]*?grid-template-columns:\s*1fr/);
+  assert.match(build, /class="node-list"/);
+  assert.doesNotMatch(build, /status-info-grid|status-summary|Recent incidents|Rolling windows/);
+  assert.match(css, /\.node-card \{[\s\S]*grid-template-columns/);
+  assert.match(css, /\.history-bars \{[\s\S]*grid-template-columns: repeat\(90/);
 });
 
 test("Windows ordered steps stay in one list across source blank lines", () => {

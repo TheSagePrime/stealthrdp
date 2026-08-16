@@ -131,7 +131,7 @@ test("baked content is present in raw HTML (plans, faq, status, blog)", () => {
   assert.strictEqual((faq.match(/<div class="faq-item/g) || []).length, 21, "faq: 21 baked items");
 
   const status = HTML("status.html");
-  assert.ok(status.includes("Nodes online"), "status: summary baked");
+  assert.ok(status.includes("All services are online"), "status: service heading baked");
   assert.ok(status.includes("node-card"), "status: node cards baked");
 
   const blog = HTML("blog.html");
