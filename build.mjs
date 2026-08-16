@@ -1018,12 +1018,6 @@ function buildPlans() {
         </div></div>
         <a class="btn btn-sm btn-ghost plans-byo-link" href="https://dash.stealthrdp.com/index.php?rp=/store/build-your-own-rdp-vps" target="_blank" rel="noopener noreferrer">Build Your Own VPS</a>
       </div>
-      <nav class="store-category-links" aria-label="WHMCS store categories">
-        <a href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Standard USA RDP/VPS</a>
-        <a href="https://dash.stealthrdp.com/index.php?rp=/store/eu" target="_blank" rel="noopener noreferrer">Europe RDP/VPS</a>
-        <a href="https://dash.stealthrdp.com/index.php?rp=/store/build-your-own-rdp-vps" target="_blank" rel="noopener noreferrer">Build Your Own RDP/VPS</a>
-        <a href="https://dash.stealthrdp.com/cart.php?a=view" target="_blank" rel="noopener noreferrer">View Cart</a>
-      </nav>
       <div class="plans-grid-head"><div><span class="mono">STANDARD PLANS</span><h2 id="plan-grid">Choose your resource level</h2></div><span id="planGridNote">6 USA plans · prices shown monthly</span></div>
       <div class="plan-grid plans-page-grid" id="planGrid" aria-live="polite">${cards}</div>
       ${includedFeaturesHtml()}

@@ -79,12 +79,12 @@ test("status page documents detailed monitoring windows and privacy", () => {
   assert.match(fs.readFileSync(path.join(ROOT, "build.mjs"), "utf8"), /data-tooltip/);
   assert.match(fs.readFileSync(path.join(ROOT, "js/main.js"), "utf8"), /formatHistoryDate/);
   const build = fs.readFileSync(path.join(ROOT, "build.mjs"), "utf8");
-  assert.match(build, /rp=\/store\/eu/);
   assert.match(build, /const category = p\.name\.endsWith\(" EU"\) \? "eu"/);
   assert.match(build, /category \+ "\/" \+ slug/);
   assert.match(build, /rp=\/store\/standard-usa-rdp-vps/);
   assert.match(build, /rp=\/store\/build-your-own-rdp-vps/);
-  assert.match(build, /cart\.php\?a=view/);
+  assert.doesNotMatch(build, /cart\.php\?a=view/);
+  assert.doesNotMatch(build, /store-category-links/);
   assert.doesNotMatch(build, /class=\\"btn \$\{isPop \? \\"btn-primary\\" : \\"btn-ghost\\"\}/);
   assert.doesNotMatch(build, /class=\\"btn btn-sm \$\{p\.popular \? \\"btn-primary\\" : \\"btn-ghost\\"\}/);
   assert.match(build, />Buy Now<\/a>/);
