@@ -19,8 +19,8 @@ WIDTHS = (360, 390, 412, 768)
 SECTIONS = {
     "01-hero": ".hero",
     "02-trust": ".trust-bar",
-    "03-usecases": ".usecases-section",
-    "04-plans": ".plans-preview",
+    "03-usecases": ".decision-header",
+    "04-plans": ".decision-combined",
     "05-infrastructure": ".infrastructure-section",
     "06-reviews": ".reviews-section",
     "07-cta": ".cta-band",
@@ -85,7 +85,7 @@ MEASURE_JS = r"""() => {
   } : null;
   const sectionNames = [
     ['hero', '.hero'], ['marquee', '.marquee'], ['trust', '.trust-bar'],
-    ['usecases', '.usecases-section'], ['plans', '.plans-preview'],
+    ['usecases', '.decision-header'], ['plans', '.decision-combined'],
     ['infrastructure', '.infrastructure-section'], ['reviews', '.reviews-section'],
     ['cta', '.cta-band'], ['footer', 'footer.footer']
   ];
@@ -100,7 +100,7 @@ MEASURE_JS = r"""() => {
   });
   const edgeSelectors = [
     '.hero-copy', '.hero-copy > *', '.trust-bar .container > *',
-    '.usecases-section .container > *', '.usecase-chips > *',
+    '.decision-combined > .container > *', '.decision-header > *', '.decision-workload', '.decision-combined .usecase-chips > *',
     '.plans-preview .section-head', '.plan-finder', '.plan-finder > *',
     '.billing-toggle', '.plan-grid', '.plan-card', '.infrastructure-section .container > *',
     '.infra-list li', '.review-card', '.review-disclosure', '.reviews-more',
@@ -113,7 +113,7 @@ MEASURE_JS = r"""() => {
     (item.rect.left < gutter.left - 1 || item.rect.right > gutter.right + 1)) : [];
   const textSelectors = [
     '.hero .eyebrow', '.hero h1', '.hero .sub', '.hero-micro', '.hero-stat .lbl',
-    '.trust-bar .container', '.usecases-section h2', '.usecases-section p', '.topic-chip',
+    '.trust-bar .container', '.decision-header h2', '.decision-header p', '.topic-chip',
     '.plans-preview h2', '.plans-preview .section-head p', '.finder-note', '.plan-card .p-name',
     '.plan-card .plan-price', '.plan-card .plan-spec', '.infra-list li',
     '.reviews-head h2', '.reviews-head p', '.review-card blockquote', '.cta-copy h2',

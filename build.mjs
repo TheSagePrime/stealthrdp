@@ -853,26 +853,21 @@ function buildIndex() {
     </div>
   </div>
 
-  <!-- ============ Use-case chips (jump to recommended plan) ============ -->
-  <section class="section section-tight usecases-section decision-entry" id="usecases">
+  <!-- ============ Workload-led pricing decision ============ -->
+  <section class="section plans-preview decision-surface decision-combined" id="plans">
     <div class="container">
-      <div class="compact-section-head">
-        <div><h2>Choose a workload</h2><p>Your choice highlights the plan that fits.</p></div>
+      <div class="decision-header">
+        <div class="decision-title">
+          <span class="sec-index fade-up">Choose a workload</span>
+          <h2 class="fade-up d1">Plans priced for the work</h2>
+        </div>
+        <p class="fade-up d2">Pick a workload to highlight the plan that fits. All plans include free migration assistance, 24/7 support, and our industry-leading uptime guarantee.</p>
       </div>
-      <div class="usecase-rail">
-        <div class="topic-chips usecase-chips" role="group" aria-label="Choose a workload">${useCaseChips}</div>
-        <button type="button" class="usecase-rail-next" aria-label="Show more workloads"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Plans + simple builder ============ -->
-  <section class="section plans-preview decision-surface" id="plans">
-    <div class="container">
-      <div class="section-head">
-        <span class="sec-index fade-up">Pick your power</span>
-        <h2 class="fade-up d1">Plans priced for the work</h2>
-        <p class="fade-up d2">All plans include free migration assistance, 24/7 support, and our industry-leading uptime guarantee.</p>
+      <div class="decision-workload" id="usecases">
+        <div class="usecase-rail">
+          <div class="topic-chips usecase-chips" role="group" aria-label="Choose a workload">${useCaseChips}</div>
+          <button type="button" class="usecase-rail-next" aria-label="Show more workloads"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+        </div>
       </div>
       <div class="plan-finder" aria-label="Plan finder">
         <div class="location-control"><span class="control-label">Region</span><div id="locationTabs" class="location-tabs" role="tablist" aria-label="Deployment region">

@@ -1314,3 +1314,30 @@ h1, h2, h3, h4 { text-wrap: balance; }
   .decision-surface .billing-toggle button .off { display: inline; margin: 0 0 0 2px; font-size: 9px; }
   .footer-about .footer-status { margin: 14px 0 0; padding: 0; font-size: 10px; }
 }
+
+/* ---------- Combined workload and pricing surface ---------- */
+.decision-combined { padding: 42px 0 50px; }
+.decision-combined > .container { max-width: 1040px; padding-left: 0; padding-right: 0; }
+.decision-header { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(300px, .95fr); align-items: end; gap: 28px; margin-bottom: 18px; }
+.decision-title .sec-index { display: block; margin-bottom: 10px; color: var(--accent); }
+.decision-title h2 { margin: 0; font-size: clamp(32px, 4vw, 48px); line-height: 1.06; letter-spacing: -.04em; }
+.decision-header > p { max-width: 480px; margin: 0 0 4px; color: var(--text-muted); font-size: 14px; line-height: 1.55; }
+.decision-workload { scroll-margin-top: 92px; margin-bottom: 20px; }
+.decision-combined .usecase-rail { position: relative; min-width: 0; }
+.decision-combined .usecase-chips { display: flex; flex-wrap: nowrap; justify-content: flex-start; align-items: center; gap: 3px; padding: 5px; margin: 0; overflow-x: auto; scrollbar-width: none; background: var(--bg); border: 1px solid var(--border-strong); border-radius: 14px; }
+.decision-combined .usecase-chips::-webkit-scrollbar { display: none; }
+.decision-combined .usecase-chips .topic-chip { flex: 0 0 auto; min-height: 38px; padding: 8px 12px; color: var(--text-muted); background: transparent; border-color: transparent; border-radius: 9px; }
+.decision-combined .usecase-chips .topic-chip:hover { color: var(--text); background: var(--surface-1); border-color: var(--border); }
+.decision-combined .usecase-chips .topic-chip.active { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); box-shadow: 0 4px 14px rgba(var(--accent-rgb), .2); }
+.decision-combined .plan-finder, .decision-combined .billing-wrap { max-width: none; }
+@media (max-width: 768px) {
+  .decision-combined { padding: 26px 0 26px; }
+  .decision-combined > .container { padding-left: 24px; padding-right: 24px; }
+  .decision-header { display: block; margin-bottom: 12px; }
+  .decision-title .sec-index { margin-bottom: 8px; }
+  .decision-title h2 { font-size: 30px; line-height: 1.08; }
+  .decision-header > p { max-width: none; margin: 8px 0 0; font-size: 13px; line-height: 1.42; }
+  .decision-workload { margin-bottom: 14px; }
+  .decision-combined .usecase-chips { justify-content: flex-start; padding: 4px 42px 4px 4px; -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 30px), transparent 100%); mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 30px), transparent 100%); }
+  .decision-combined .usecase-chips .topic-chip { min-height: 36px; padding: 8px 12px; }
+}
