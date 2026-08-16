@@ -1224,7 +1224,7 @@ h1, h2, h3, h4 { text-wrap: balance; }
 /* The workload choice and pricing controls are one decision surface. */
 .decision-entry { padding: 26px 0 22px; background: var(--bg-elev); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 .decision-entry + .decision-surface { border-top: 0; }
-.decision-entry > .container { max-width: 1040px; grid-template-columns: minmax(230px, .7fr) minmax(0, 1.3fr); gap: 28px; }
+.decision-entry > .container { max-width: 1040px; padding-left: 0; padding-right: 0; grid-template-columns: minmax(230px, .7fr) minmax(0, 1.3fr); gap: 28px; }
 .decision-entry .compact-section-head { align-self: center; }
 .decision-entry .compact-section-head h2 { font-size: clamp(28px, 3vw, 38px); margin-bottom: 7px; }
 .decision-entry .compact-section-head p { font-size: 14px; }
@@ -1269,7 +1269,7 @@ h1, h2, h3, h4 { text-wrap: balance; }
 
 @media (max-width: 768px) {
   .decision-entry { padding: 20px 0 18px; }
-  .decision-entry > .container { display: block; }
+  .decision-entry > .container { display: block; padding-left: 24px; padding-right: 24px; }
   .decision-entry .compact-section-head { margin-bottom: 10px; }
   .decision-entry .compact-section-head h2 { font-size: 28px; }
   .decision-entry .compact-section-head p { font-size: 13px; }
