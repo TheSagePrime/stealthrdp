@@ -406,6 +406,12 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  if (url.pathname === "/blog" || url.pathname === "/blog/") {
+    res.writeHead(301, { Location: "/blog.html", ...SECURITY_HEADERS });
+    res.end();
+    return;
+  }
+
   if (url.pathname === "/blog-post.html") {
     const slug = url.searchParams.get("slug");
     const target = slug ? "/blog/" + slug + ".html" : "/blog.html";

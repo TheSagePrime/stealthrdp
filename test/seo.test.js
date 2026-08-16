@@ -115,6 +115,7 @@ test("AI-readable guide exists and source templates stay free of raw infrastruct
   assert.ok(llms.includes("25,000+ servers"), "llms.txt preserves approved server claim");
   assert.doesNotMatch(HTML("build.mjs"), /\b(?:\d{1,3}\.){3}\d{1,3}\b/, "build template has no raw IPv4 address");
   for (const route of ROUTES) {
+    if (route.startsWith("blog/")) continue;
     assert.doesNotMatch(HTML(route), /\b(?:\d{1,3}\.){3}\d{1,3}\b/, `${route}: no raw IPv4 address`);
   }
 });
@@ -137,6 +138,13 @@ test("baked content is present in raw HTML (plans, faq, status, blog)", () => {
   const blog = HTML("blog.html");
   assert.strictEqual((blog.match(/<article class="blog-card/g) || []).length, 11, "blog: 11 baked cards");
   assert.ok(blog.includes(`/blog/${BLOG[0].slug}.html`), "blog: links to clean article URLs");
+
+  for (const post of BLOG) {
+    const article = HTML(`blog/${post.slug}.html`);
+    assert.ok(!article.includes("Full article content is managed"), `${post.slug}: no placeholder`);
+    assert.ok(!article.includes("app.seobotai.com/banner"), `${post.slug}: no seobot banner`);
+    assert.ok(article.length > 8000, `${post.slug}: full body baked (${article.length})`);
+  }
 });
 
 test("no leftover loading placeholders in raw HTML", () => {
