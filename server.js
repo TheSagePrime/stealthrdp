@@ -225,7 +225,7 @@ function fallbackUptimePayload() {
   return { stat: source.stat === "ok" ? "ok" : "error", checkedAt: null, monitors };
 }
 
-function safeUptimePayload(body) {
+function safeUptimePayload(body, options = {}) {
   let source;
   try {
     source = JSON.parse(body);
@@ -248,7 +248,7 @@ function safeUptimePayload(body) {
     counters[region] = (counters[region] || 0) + 1;
     const allTime = numberList(monitor.all_time_uptime_ratio);
     const incidents = safeIncidentSummary(monitor.logs);
-    const history90 = dailyHistorySnapshot(monitor.custom_uptime_ranges);
+    const history90 = options.includeHistory ? dailyHistorySnapshot(monitor.custom_uptime_ratio || monitor.custom_uptime_ratios) : null;
     return safeMonitorSnapshot({
       label: region + " Node " + String(counters[region]).padStart(2, "0"),
       region,
@@ -266,7 +266,7 @@ function safeUptimePayload(body) {
   return { stat: source.stat === "ok" ? "ok" : "error", checkedAt: source.stat === "ok" ? new Date().toISOString() : null, monitors };
 }
 
-function requestUptime(body) {
+function requestUptime(body, options = {}) {
   return new Promise((resolve) => {
     const request = https.request({
       hostname: "api.uptimerobot.com",
@@ -283,7 +283,7 @@ function requestUptime(body) {
       let responseBody = "";
       upstream.on("data", (chunk) => { responseBody += chunk; });
       upstream.on("end", () => {
-        const payload = safeUptimePayload(responseBody);
+        const payload = safeUptimePayload(responseBody, options);
         resolve({
           status: upstream.statusCode === 200 && payload.stat === "ok" ? 200 : 502,
           payload,
@@ -319,7 +319,10 @@ function loadUptime() {
     custom_uptime_ranges: DAILY_HISTORY.query,
   });
 
-  return Promise.all([requestUptime(metricsBody), requestUptime(historyBody)]).then(([metrics, history]) => {
+  return Promise.all([
+    requestUptime(metricsBody),
+    requestUptime(historyBody, { includeHistory: true }),
+  ]).then(([metrics, history]) => {
     if (metrics.status !== 200 || metrics.payload.stat !== "ok") return metrics;
     if (history.status !== 200 || history.payload.stat !== "ok") return metrics;
     return {
