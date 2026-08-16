@@ -260,24 +260,7 @@ function safeUptimePayload(body) {
   return { stat: source.stat === "ok" ? "ok" : "error", checkedAt: source.stat === "ok" ? new Date().toISOString() : null, monitors };
 }
 
-function loadUptime() {
-  if (!UPTIME_API_KEY) {
-    return Promise.resolve({
-      status: ALLOW_UPTIME_FIXTURE ? 200 : 503,
-      payload: ALLOW_UPTIME_FIXTURE ? fallbackUptimePayload() : { stat: "error", checkedAt: null, monitors: [] },
-    });
-  }
-
-  const body = querystring.stringify({
-    api_key: UPTIME_API_KEY,
-    format: "json",
-    custom_uptime_ratios: "7-30-90",
-    custom_down_durations: "7-30-90",
-    custom_uptime_ranges: DAILY_HISTORY.query,
-    all_time_uptime_ratio: "1",
-    logs: "1",
-    logs_limit: "20",
-  });
+function requestUptime(body) {
   return new Promise((resolve) => {
     const request = https.request({
       hostname: "api.uptimerobot.com",
@@ -305,6 +288,45 @@ function loadUptime() {
     request.on("error", () => resolve({ status: 502, payload: { stat: "error", checkedAt: null, monitors: [] } }));
     request.write(body);
     request.end();
+  });
+}
+
+function loadUptime() {
+  if (!UPTIME_API_KEY) {
+    return Promise.resolve({
+      status: ALLOW_UPTIME_FIXTURE ? 200 : 503,
+      payload: ALLOW_UPTIME_FIXTURE ? fallbackUptimePayload() : { stat: "error", checkedAt: null, monitors: [] },
+    });
+  }
+
+  const metricsBody = querystring.stringify({
+    api_key: UPTIME_API_KEY,
+    format: "json",
+    custom_uptime_ratios: "7-30-90",
+    custom_down_durations: "7-30-90",
+    all_time_uptime_ratio: "1",
+    logs: "1",
+    logs_limit: "20",
+  });
+  const historyBody = querystring.stringify({
+    api_key: UPTIME_API_KEY,
+    format: "json",
+    custom_uptime_ranges: DAILY_HISTORY.query,
+  });
+
+  return Promise.all([requestUptime(metricsBody), requestUptime(historyBody)]).then(([metrics, history]) => {
+    if (metrics.status !== 200 || metrics.payload.stat !== "ok") return metrics;
+    if (history.status !== 200 || history.payload.stat !== "ok") return metrics;
+    return {
+      status: 200,
+      payload: {
+        ...metrics.payload,
+        monitors: metrics.payload.monitors.map((monitor, index) => ({
+          ...monitor,
+          history90: history.payload.monitors[index]?.history90 ?? monitor.history90 ?? null,
+        })),
+      },
+    };
   });
 }
 
