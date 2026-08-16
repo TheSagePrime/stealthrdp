@@ -895,6 +895,27 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
   .console-progress .bar[data-con-bar] { width: 100%; animation: none; }
 }
 
+/* ---------- Mobile polish (overrides for tight, symmetric layout) ---------- */
+@media (max-width: 768px) {
+  .hero { padding-top: 96px; }
+  .palette-trigger { display: none; }
+  .hero-stats { flex-direction: row; gap: 8px; margin-top: 14px; }
+  .hero-stat { flex: 1; min-width: 0; border: 1px solid var(--border); border-bottom: 1px solid var(--border); border-radius: var(--radius); padding: 12px 8px; }
+  .hero-stat .num { font-size: 22px; line-height: 1.2; }
+  .hero-stat .lbl { font-size: 10px; }
+  .hero-micro { margin-bottom: 14px; }
+  .trust-bar .container > span[style*="border-strong"] { display: none; }
+  .trust-bar .container { gap: 6px 16px; font-size: 12.5px; }
+  .infra-list li { padding: 14px 16px; }
+  .infra-list span { font-size: 13px; line-height: 1.45; }
+  .infra-list strong { font-size: 15px; }
+}
+@media (max-width: 480px) {
+  .hero .eyebrow { font-size: 9px; letter-spacing: .07em; white-space: nowrap; padding: 7px 11px; }
+  .billing-toggle { gap: 3px; padding: 3px; }
+  .billing-toggle button { padding: 7px 12px; font-size: 12px; }
+}
+
 /* ============================================================
    Secondary pages — deliberate shells, not generic card stacks
    ============================================================ */
