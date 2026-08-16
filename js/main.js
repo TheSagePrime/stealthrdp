@@ -82,6 +82,27 @@
     });
   }
 
+  /* ---------- Theme toggle ---------- */
+  (function initThemeToggle() {
+    var toggle = $("#themeToggle");
+    if (!toggle) return;
+    var root = document.documentElement;
+    var storageKey = "stealthrdp-preview-theme";
+    function sync(theme) {
+      var light = theme === "light";
+      root.setAttribute("data-theme", light ? "light" : "dark");
+      toggle.setAttribute("aria-pressed", light ? "true" : "false");
+      toggle.setAttribute("aria-label", light ? "Use dark theme" : "Use light theme");
+      toggle.setAttribute("title", light ? "Use dark theme" : "Use light theme");
+    }
+    sync(root.getAttribute("data-theme") === "light" ? "light" : "dark");
+    toggle.addEventListener("click", function () {
+      var next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+      sync(next);
+      try { window.localStorage.setItem(storageKey, next); } catch (e) {}
+    });
+  }());
+
   /* ---------- Preview palette lab ---------- */
   (function initPaletteLab() {
     var lab = $("#paletteLab");

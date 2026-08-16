@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,6 +23,15 @@
   <meta name="twitter:title" content="Server stops randomly — StealthRDP Docs" />
   <meta name="twitter:description" content="A common issue many customers experience is when their server seem to automatically just stop multiple times for no reason. In most cases your windows license expire" />
   <meta name="twitter:image" content="__SRDP_BASE__/assets/og-cover.png" />
+  <meta name="color-scheme" content="dark light" />
+  <script>
+    (function () {
+      try {
+        var savedTheme = window.localStorage.getItem("stealthrdp-preview-theme");
+        if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
+      } catch (e) {}
+    }());
+  </script>
   <script>
     (function () {
       try {
@@ -34,7 +43,7 @@
       } catch (e) {}
     }());
   </script>
-  <link rel="stylesheet" href="/css/style.css?v=2026-08-16T08-45-28-186Z" />
+  <link rel="stylesheet" href="/css/style.css?v=2026-08-16T09-37-07-851Z" />
   <!-- Google Tag Manager (real container from live site) -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -55,6 +64,7 @@
     </a>
     <nav class="nav" aria-label="Main navigation"><a href="/">Home</a><a href="/plans.html">Plans</a><a href="/status.html">Server Status</a><a href="/docs.html" class="active">Docs</a><a href="/blog.html">Blog</a><a href="/faq.html">FAQ</a></nav>
     <div class="header-actions">
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Use light theme" aria-pressed="false"><span class="theme-icon theme-icon-sun" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg></span><span class="theme-icon theme-icon-moon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"/></svg></span></button>
       <div class="palette-lab" id="paletteLab">
       <button type="button" class="palette-trigger" id="paletteTrigger" aria-expanded="false" aria-controls="palettePanel">
         <span class="palette-trigger-swatch" id="paletteTriggerSwatch" style="--swatch: #5b8cff" aria-hidden="true"></span><span>Palette</span><span class="palette-trigger-chevron" aria-hidden="true">⌄</span>
@@ -146,6 +156,6 @@
       </span>
     </div>
   </div></footer>
-  <script src="/js/main.js?v=2026-08-16T08-45-28-186Z"></script><script src="/js/docs.js?v=2026-08-16T08-45-28-186Z"></script>
+  <script src="/js/main.js?v=2026-08-16T09-37-07-851Z"></script><script src="/js/docs.js?v=2026-08-16T09-37-07-851Z"></script>
 </body>
 </html>

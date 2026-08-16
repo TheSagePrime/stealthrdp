@@ -74,6 +74,7 @@ const PALETTES = [
 ];
 const PALETTE_KEYS = PALETTES.map((palette) => palette.key);
 const PALETTE_STORAGE_KEY = "stealthrdp-preview-palette";
+const THEME_STORAGE_KEY = "stealthrdp-preview-theme";
 
 const SOCIAL = [
   { href: "https://x.com/stealthrdp", label: "X / Twitter" },
@@ -87,7 +88,7 @@ function head({ title, description, canonical, pageType = "website", jsonLd = []
   const og = pageType === "article" ? "article" : "website";
   const ld = jsonLd.map((block) => `<script type="application/ld+json">${JSON.stringify(block)}</script>`).join("");
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -111,6 +112,15 @@ function head({ title, description, canonical, pageType = "website", jsonLd = []
   <meta name="twitter:title" content="${esc(title)}" />
   <meta name="twitter:description" content="${esc(description)}" />
   <meta name="twitter:image" content="__SRDP_BASE__/assets/og-cover.png" />
+  <meta name="color-scheme" content="dark light" />
+  <script>
+    (function () {
+      try {
+        var savedTheme = window.localStorage.getItem("${THEME_STORAGE_KEY}");
+        if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
+      } catch (e) {}
+    }());
+  </script>
   <script>
     (function () {
       try {
@@ -170,6 +180,7 @@ function headerHtml(active) {
     </a>
     <nav class="nav" aria-label="Main navigation">${navHtml(active)}</nav>
     <div class="header-actions">
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Use light theme" aria-pressed="false"><span class="theme-icon theme-icon-sun" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg></span><span class="theme-icon theme-icon-moon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"/></svg></span></button>
       ${paletteLabHtml()}
       <a class="btn btn-sm btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client Area</a>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
