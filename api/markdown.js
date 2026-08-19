@@ -5,6 +5,7 @@ const path = require("path");
 const { acceptsMarkdown, safeHtmlPath } = require("../lib/markdown-routing.js");
 
 const CONTENT_SIGNAL = "ai-train=no, search=yes, ai-input=yes";
+const AGENT_DESCRIPTION_LINK = '</llms.txt>; rel="describedby"; type="text/plain"';
 const DEFAULT_MARKDOWN_ROOT = path.resolve(process.cwd(), "markdown");
 
 function send(res, status, body) {
@@ -38,6 +39,7 @@ function createMarkdownHandler(markdownRoot = DEFAULT_MARKDOWN_ROOT) {
     res.setHeader("Content-Type", "text/markdown; charset=utf-8");
     res.setHeader("Vary", "Accept");
     res.setHeader("Content-Signal", CONTENT_SIGNAL);
+    if (htmlPath === "index.html") res.setHeader("Link", AGENT_DESCRIPTION_LINK);
     res.setHeader("X-Markdown-Tokens", String(Math.max(1, Math.ceil(markdown.length / 4))));
     res.setHeader("Cache-Control", "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400");
     return send(res, 200, req.method === "HEAD" ? "" : markdown);
