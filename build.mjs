@@ -1342,13 +1342,13 @@ function buildPrivacy() {
 /* ---------- robots + sitemap ---------- */
 function buildRobots() {
   return `User-agent: *
+Content-Signal: ai-train=no, search=yes, ai-input=yes
 Allow: /
 Disallow: /api/
 Disallow: /blog-post.html
 
 Sitemap: __SRDP_BASE__/sitemap.xml
-# AI guide
-llms.txt
+# AI guide: __SRDP_BASE__/llms.txt
 `;
 }
 

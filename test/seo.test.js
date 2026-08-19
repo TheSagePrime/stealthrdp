@@ -103,8 +103,16 @@ test("sitemap.xml is valid XML with all routes; robots.txt allows + references i
 
   const robots = fs.readFileSync(path.join(ROOT, "robots.txt"), "utf8");
   assert.ok(/^User-agent: \*$/m.test(robots), "robots allows all");
+  assert.ok(
+    /^Content-Signal: ai-train=no, search=yes, ai-input=yes$/m.test(robots),
+    "robots permits search and AI answers but reserves model-training rights",
+  );
   assert.ok(robots.includes("Sitemap: __SRDP_BASE__/sitemap.xml"), "robots references sitemap");
-  assert.ok(robots.includes("llms.txt"), "robots mentions llms.txt");
+  assert.ok(
+    robots.includes("# AI guide: __SRDP_BASE__/llms.txt"),
+    "robots references llms.txt with a valid comment",
+  );
+  assert.ok(!/^llms\.txt$/m.test(robots), "robots has no malformed bare llms.txt line");
   assert.ok(robots.includes("Disallow: /api/"), "robots blocks api");
 });
 
