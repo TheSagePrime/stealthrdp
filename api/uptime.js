@@ -42,7 +42,7 @@ function publicStatusKind(statusClass) {
 function regionFor(name) {
   const value = String(name || "").toLowerCase();
   if (value.includes("eu") || value.includes("nl")) return "EU / Netherlands";
-  if (value.includes("management") || value.includes("portal")) return "Control Panel";
+  if (value.includes("management") || value.includes("portal")) return "Control plane";
   if (value.includes("website") || value.includes("backend")) return "Website";
   if (value.includes("usa") || value.includes("us")) return "USA";
   return "Production";
@@ -77,6 +77,7 @@ function safeHistory(days) {
 }
 
 function hasCompleteHistory(days) {
+  if (!Array.isArray(days) || days.length !== DAILY_HISTORY_DAYS) return false;
   const history = safeHistory(days);
   if (history.length !== DAILY_HISTORY_DAYS) return false;
   const timestamps = history.map((day) => dateTimestamp(day.date));
@@ -84,7 +85,7 @@ function hasCompleteHistory(days) {
   if (timestamps.some((value, index) => index > 0 && value - timestamps[index - 1] !== 86400000)) return false;
   const now = new Date();
   const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-  return Math.abs(timestamps[timestamps.length - 1] - today) <= 86400000;
+  return timestamps[timestamps.length - 1] === today;
 }
 
 function safePublicStatusPayload(source) {
