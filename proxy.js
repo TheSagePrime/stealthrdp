@@ -3,6 +3,8 @@
 const { next, rewrite } = require("@vercel/functions");
 const { acceptsMarkdown, safeHtmlPath } = require("./lib/markdown-routing.js");
 
+const AGENT_DESCRIPTION_LINK = '</llms.txt>; rel="describedby"; type="text/plain"';
+
 function selectMarkdownPage(url, accept) {
   if (!acceptsMarkdown(accept)) return null;
   if (url.pathname === "/") return "index.html";
@@ -10,10 +12,15 @@ function selectMarkdownPage(url, accept) {
 }
 
 function proxy(request) {
-  const page = selectMarkdownPage(new URL(request.url), request.headers.get("accept"));
-  if (!page) return next({ headers: { Vary: "Accept" } });
+  const url = new URL(request.url);
+  const page = selectMarkdownPage(url, request.headers.get("accept"));
+  if (!page) {
+    const headers = { Vary: "Accept" };
+    if (url.pathname === "/") headers.Link = AGENT_DESCRIPTION_LINK;
+    return next({ headers });
+  }
 
-  const destination = new URL("/api/markdown", request.url);
+  const destination = new URL("/api/markdown", url);
   destination.searchParams.set("path", page);
   return rewrite(destination);
 }

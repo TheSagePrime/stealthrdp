@@ -139,6 +139,16 @@ test("Vercel middleware and endpoint share one Accept parser", async () => {
     new Request("https://www.stealthrdp.com/", { headers: { Accept: "text/html,application/xhtml+xml" } }),
   );
   assert.strictEqual(htmlResponse.headers.get("vary"), "Accept", "HTML continuation varies on Accept");
+  assert.strictEqual(
+    htmlResponse.headers.get("link"),
+    '</llms.txt>; rel="describedby"; type="text/plain"',
+    "homepage advertises its machine-readable description",
+  );
+
+  const innerHtmlResponse = proxy(
+    new Request("https://www.stealthrdp.com/docs.html", { headers: { Accept: "text/html" } }),
+  );
+  assert.strictEqual(innerHtmlResponse.headers.get("link"), null, "Link discovery stays scoped to the homepage");
 
   const markdownResponse = proxy(
     new Request("https://www.stealthrdp.com/docs.html", { headers: { Accept: "text/markdown" } }),
@@ -221,8 +231,17 @@ test("Vercel negotiates Markdown while browsers keep static HTML", async () => {
   assert.strictEqual(markdownResponse.headers["content-type"], "text/markdown; charset=utf-8");
   assert.strictEqual(markdownResponse.headers.vary, "Accept");
   assert.strictEqual(markdownResponse.headers["content-signal"], "ai-train=no, search=yes, ai-input=yes");
+  assert.strictEqual(
+    markdownResponse.headers.link,
+    '</llms.txt>; rel="describedby"; type="text/plain"',
+    "homepage Markdown advertises the same machine-readable description",
+  );
   assert.match(markdownResponse.headers["x-markdown-tokens"], /^\d+$/);
   assert.match(markdownResponse.body, /# Your server\. Live in 60 seconds\./);
+
+  const innerMarkdownResponse = await requestMarkdown(handler, { page: "docs.html" });
+  assert.strictEqual(innerMarkdownResponse.statusCode, 200);
+  assert.strictEqual(innerMarkdownResponse.headers.link, undefined, "non-home Markdown omits homepage discovery");
 
   const htmlOnlyResponse = await requestMarkdown(handler, { accept: "text/html" });
   assert.strictEqual(htmlOnlyResponse.statusCode, 406, "direct function rejects non-Markdown clients");
