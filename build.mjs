@@ -147,6 +147,7 @@ function head({ title, description, canonical, pageType = "website", jsonLd = []
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-NS397SS9');</script>
   <!-- End Google Tag Manager -->
+  <script defer data-website-id="dfid_6O4WzLRhSgrGULypBOc8I" data-domain="stealthrdp.com" src="https://datafa.st/js/script.js"></script>
   ${ld}
 </head>`;
 }

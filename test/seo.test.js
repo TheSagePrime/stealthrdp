@@ -49,6 +49,7 @@ test("every route exposes a complete SEO surface", () => {
     assert.ok(s.ogTitle && s.ogDesc && s.ogImage, `${route}: OG complete`);
     assert.ok(s.twitter, `${route}: twitter card`);
     assert.ok(s.ldBlocks.length >= 1, `${route}: JSON-LD present`);
+    assert.strictEqual((html.match(/<script defer data-website-id="dfid_6O4WzLRhSgrGULypBOc8I" data-domain="stealthrdp\.com" src="https:\/\/datafa\.st\/js\/script\.js"><\/script>/g) || []).length, 1, `${route}: DataFast script`);
     for (const block of s.ldBlocks) {
       const parsed = JSON.parse(block); // throws if invalid
       assert.ok(parsed["@context"] === "https://schema.org", `${route}: schema.org context`);
