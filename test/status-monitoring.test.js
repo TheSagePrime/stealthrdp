@@ -31,6 +31,19 @@ function historyWithImpossibleDate() {
   return days;
 }
 
+function shiftedHistory(offsetDays) {
+  return historyFixture().map((day) => ({
+    ...day,
+    date: new Date(Date.parse(`${day.date}T00:00:00Z`) + (offsetDays * 86400000)).toISOString().slice(0, 10),
+  }));
+}
+
+function overlongHistory() {
+  const days = historyFixture();
+  const previousDate = new Date(Date.parse(`${days[0].date}T00:00:00Z`) - 86400000).toISOString().slice(0, 10);
+  return [{ ...days[0], date: previousDate }, ...days];
+}
+
 async function getJson(url, options) {
   const response = await fetch(url, options);
   return { status: response.status, body: await response.json() };
@@ -166,6 +179,9 @@ test("Vercel uptime adapter rejects empty, partial, and malformed status pages",
     { status: "ok", psp: { monitors: [{ ...monitor, dailyRatios: monitor.dailyRatios.slice(1) }] } },
     { status: "ok", psp: { monitors: [{ ...monitor, dailyRatios: monitor.dailyRatios.map((day, index) => index === 45 ? monitor.dailyRatios[44] : day) }] } },
     { status: "ok", psp: { monitors: [{ ...monitor, dailyRatios: historyWithImpossibleDate() }] } },
+    { status: "ok", psp: { monitors: [{ ...monitor, dailyRatios: shiftedHistory(-1) }] } },
+    { status: "ok", psp: { monitors: [{ ...monitor, dailyRatios: shiftedHistory(1) }] } },
+    { status: "ok", psp: { monitors: [{ ...monitor, dailyRatios: overlongHistory() }] } },
     { status: "ok", psp: { monitors: [monitor], totalMonitors: 2 } },
   ];
 
