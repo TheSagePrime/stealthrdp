@@ -7,6 +7,43 @@ const path = require("node:path");
 
 const ROOT = path.join(__dirname, "..");
 
+function historyFixture(overrides = {}) {
+  const now = new Date();
+  const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  return Array.from({ length: 90 }, (_item, index) => {
+    const date = new Date(today - ((89 - index) * 86400000)).toISOString().slice(0, 10);
+    return { date, ratio: "100.000", label: "excellent", color: "green", ...(overrides[index] || {}) };
+  });
+}
+
+function historyWithImpossibleDate() {
+  const days = historyFixture();
+  const index = days.findIndex((day) => {
+    if (!day.date.endsWith("-01")) return false;
+    const value = new Date(`${day.date}T00:00:00Z`);
+    return new Date(Date.UTC(value.getUTCFullYear(), value.getUTCMonth(), 0)).getUTCDate() < 31;
+  });
+  const actual = new Date(`${days[index].date}T00:00:00Z`);
+  const previousMonth = new Date(Date.UTC(actual.getUTCFullYear(), actual.getUTCMonth() - 1, 1));
+  const previousMonthDays = new Date(Date.UTC(actual.getUTCFullYear(), actual.getUTCMonth(), 0)).getUTCDate();
+  const fakeDate = `${previousMonth.getUTCFullYear()}-${String(previousMonth.getUTCMonth() + 1).padStart(2, "0")}-${previousMonthDays + 1}`;
+  days[index] = { ...days[index], date: fakeDate };
+  return days;
+}
+
+function shiftedHistory(offsetDays) {
+  return historyFixture().map((day) => ({
+    ...day,
+    date: new Date(Date.parse(`${day.date}T00:00:00Z`) + (offsetDays * 86400000)).toISOString().slice(0, 10),
+  }));
+}
+
+function overlongHistory() {
+  const days = historyFixture();
+  const previousDate = new Date(Date.parse(`${days[0].date}T00:00:00Z`) - 86400000).toISOString().slice(0, 10);
+  return [{ ...days[0], date: previousDate }, ...days];
+}
+
 async function getJson(url, options) {
   const response = await fetch(url, options);
   return { status: response.status, body: await response.json() };
@@ -49,6 +86,150 @@ test("uptime proxy exposes rolling aggregates without monitor targets", async ()
     }
   } finally {
     child.kill("SIGTERM");
+  }
+});
+
+test("Vercel uptime adapter preserves public 90-day history without provider identifiers", () => {
+  const uptimeHandler = require(path.join(ROOT, "api", "uptime.js"));
+  assert.equal(typeof uptimeHandler.safePublicStatusPayload, "function");
+
+  const source = {
+    status: "ok",
+    psp: {
+      totalMonitors: 1,
+      monitors: [{
+        monitorId: 123456,
+        name: "EU production server 42",
+        url: "https://private-origin.example:8443",
+        statusClass: "success",
+        dailyRatios: historyFixture({
+          87: { ratio: "0.000", label: "black", color: "grey" },
+          88: { ratio: "97.500", label: "fair", color: "yellow" },
+        }),
+        "30dRatio": { ratio: "99.500" },
+        "90dRatio": { ratio: "99.800" },
+        lastDowntime: { date: "2026-08-18 02:00:00", duration: 90, reason: "Incident detected" },
+      }],
+    },
+  };
+
+  const payload = uptimeHandler.safePublicStatusPayload(source);
+  assert.equal(payload.stat, "ok");
+  assert.equal(payload.monitors.length, 1);
+  assert.equal(payload.monitors[0].label, "EU / Netherlands Node 01");
+  assert.equal(payload.monitors[0].uptime90, 99.8);
+  assert.deepEqual(payload.monitors[0].history90.slice(-3).map((day) => day.state), ["unknown", "degraded", "up"]);
+  assert.deepEqual(
+    payload.monitors[0].history90.slice(-3).map((day) => day.date),
+    source.psp.monitors[0].dailyRatios.slice(-3).map((day) => day.date),
+  );
+  assert.equal(payload.monitors[0].history90.length, 90);
+  assert.deepEqual(Object.keys(payload.monitors[0]).sort(), [
+    "allTimeUptime", "downtime30", "downtime7", "downtime90", "history90", "label", "lastIncidentAt",
+    "lastIncidentDuration", "recentIncidents", "region", "status", "uptime30", "uptime7", "uptime90",
+  ]);
+  const serialized = JSON.stringify(payload);
+  for (const secret of ["monitorId", "123456", "EU production server 42", "private-origin.example", "8443"]) {
+    assert.equal(serialized.includes(secret), false, `leaked ${secret}`);
+  }
+});
+
+test("Vercel uptime adapter keeps missing values unknown and does not invent downtime", () => {
+  const uptimeHandler = require(path.join(ROOT, "api", "uptime.js"));
+  const payload = uptimeHandler.safePublicStatusPayload({
+    status: "ok",
+    psp: {
+      totalMonitors: 1,
+      monitors: [{
+        name: "New USA server",
+        statusClass: "success",
+        dailyRatios: historyFixture(Object.fromEntries([
+          ...Array.from({ length: 87 }, (_item, index) => [index, { ratio: null, label: "black", color: "grey" }]),
+          [87, { ratio: null, label: "", color: "" }],
+          [88, { ratio: "", label: "black", color: "grey" }],
+        ])),
+        "30dRatio": { ratio: null },
+        "90dRatio": { ratio: "" },
+        lastDowntime: null,
+      }],
+    },
+  });
+
+  const monitor = payload.monitors[0];
+  assert.equal(monitor.uptime30, null);
+  assert.equal(monitor.uptime90, null);
+  assert.equal(monitor.downtime30, null);
+  assert.equal(monitor.downtime90, null);
+  assert.equal(monitor.lastIncidentDuration, null);
+  assert.deepEqual(monitor.history90.slice(-3).map((day) => day.state), ["unknown", "unknown", "up"]);
+  assert.equal(monitor.history90.length, 90);
+  assert.equal("uptime" in monitor.history90[0], false);
+});
+
+test("Vercel uptime adapter rejects empty, partial, and malformed status pages", () => {
+  const uptimeHandler = require(path.join(ROOT, "api", "uptime.js"));
+  const monitor = {
+    name: "USA server",
+    statusClass: "success",
+    dailyRatios: historyFixture(),
+    "30dRatio": { ratio: "100" },
+    "90dRatio": { ratio: "100" },
+  };
+  const statusPage = (monitors, totalMonitors = monitors.length) => ({ status: "ok", psp: { monitors, totalMonitors } });
+  const payloads = [
+    statusPage([]),
+    statusPage([null]),
+    statusPage([{ ...monitor, dailyRatios: monitor.dailyRatios.slice(1) }]),
+    statusPage([{ ...monitor, dailyRatios: monitor.dailyRatios.map((day, index) => index === 45 ? monitor.dailyRatios[44] : day) }]),
+    statusPage([{ ...monitor, dailyRatios: historyWithImpossibleDate() }]),
+    statusPage([{ ...monitor, dailyRatios: shiftedHistory(-1) }]),
+    statusPage([{ ...monitor, dailyRatios: shiftedHistory(1) }]),
+    statusPage([{ ...monitor, dailyRatios: overlongHistory() }]),
+    statusPage([{ ...monitor, dailyRatios: historyFixture({ 89: { ratio: -1 } }) }]),
+    statusPage([{ ...monitor, dailyRatios: historyFixture({ 89: { ratio: 101 } }) }]),
+    statusPage([{ ...monitor, dailyRatios: historyFixture({ 89: { ratio: true } }) }]),
+    ...[101, -1, "NaN", true, {}, [], "1e2"].map((ratio) => statusPage([{
+      ...monitor,
+      dailyRatios: historyFixture({ 89: { ratio, label: "black", color: "grey" } }),
+    }])),
+    statusPage([{ ...monitor, "30dRatio": { ratio: 101 } }]),
+    statusPage([monitor], 2),
+  ];
+
+  for (const source of payloads) {
+    assert.deepEqual(uptimeHandler.safePublicStatusPayload(source), { stat: "error", checkedAt: null, monitors: [] });
+  }
+});
+
+test("Vercel uptime adapter resolves failed upstream response streams", async () => {
+  const https = require("node:https");
+  const { EventEmitter } = require("node:events");
+  const uptimeHandler = require(path.join(ROOT, "api", "uptime.js"));
+  const originalGet = https.get;
+
+  try {
+    for (const eventName of ["aborted", "error", "close"]) {
+      https.get = (_options, callback) => {
+        const request = new EventEmitter();
+        request.destroy = (error) => request.emit("error", error);
+        process.nextTick(() => {
+          const upstream = new EventEmitter();
+          upstream.statusCode = 200;
+          upstream.complete = false;
+          callback(upstream);
+          process.nextTick(() => upstream.emit(eventName, eventName === "error" ? new Error("stream failed") : undefined));
+        });
+        return request;
+      };
+
+      const result = await Promise.race([
+        uptimeHandler.fetchPublicStatus(),
+        new Promise((resolve) => setTimeout(() => resolve({ status: "timeout" }), 100)),
+      ]);
+      assert.deepEqual(result, { status: 502, payload: { stat: "error", checkedAt: null, monitors: [] } }, eventName);
+    }
+  } finally {
+    https.get = originalGet;
   }
 });
 
@@ -108,10 +289,13 @@ test("status page documents detailed monitoring windows and privacy", () => {
   assert.match(fs.readFileSync(path.join(ROOT, "vercel.json"), "utf8"), /"outputDirectory": "public"/);
   assert.match(fs.readFileSync(path.join(ROOT, "package.json"), "utf8"), /stage-vercel-public/);
   const uptimeFn = fs.readFileSync(path.join(ROOT, "api/uptime.js"), "utf8");
-  assert.match(uptimeFn, /UPTIMEROBOT_API_KEY/);
-  assert.match(uptimeFn, /custom_uptime_ranges/);
-  assert.doesNotMatch(uptimeFn, /friendly_name.*payload|monitor\.url/);
-  assert.match(uptimeFn, /Number\(value\) >= 99\) return "up"/);
+  assert.match(uptimeFn, /stats\.uptimerobot\.com/);
+  assert.match(uptimeFn, /getMonitorList/);
+  assert.doesNotMatch(uptimeFn, /UPTIMEROBOT_API_KEY|custom_uptime_ranges/);
+  assert.doesNotMatch(uptimeFn, /monitor\.url|monitorId/);
+  assert.match(uptimeFn, /if \(number >= 99\) return "up"/);
+  assert.match(uptimeFn, /if \(number >= 95\) return "degraded"/);
+  assert.match(uptimeFn, /number >= 0 && number <= 100/);
   assert.match(fs.readFileSync(path.join(ROOT, "scripts/bake-base.mjs"), "utf8"), /__SRDP_BASE__/);
   assert.doesNotMatch(main, /"btn-ghost"/);
   assert.match(main, />Buy Now<\/a>/);

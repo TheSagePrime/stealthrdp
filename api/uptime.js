@@ -1,123 +1,53 @@
+"use strict";
+
 /**
  * Vercel serverless function: /api/uptime
  *
- * Mirrors the server-side proxy in server.js so the public status page can
- * refresh live data on Vercel. The UptimeRobot API key is read ONLY from the
- * process environment (Vercel env var UPTIMEROBOT_API_KEY). Raw monitoring
- * payloads are never passed through: IPs, hostnames, monitor IDs, ports, and
- * response telemetry are stripped before the response is sent.
+ * The public status page already exposes the approved monitor set and 90 daily
+ * ratios in one request. This adapter reduces that payload to anonymous node
+ * labels and removes provider IDs, names, URLs, ports, and raw telemetry.
  */
 const https = require("https");
 
 const DAILY_HISTORY_DAYS = 90;
-const DAILY_HISTORY_CHUNK_SIZE = 10;
+const PUBLIC_STATUS_HOST = "stats.uptimerobot.com";
+const PUBLIC_STATUS_PATH = "/api/getMonitorList/yvnV3u7x00?page=1";
+const CACHE_MS = 60000;
 
 let cache = { expiresAt: 0, result: null };
 
-function numberList(value) {
-  if (Array.isArray(value)) return value.flatMap((item) => numberList(item));
-  const raw = String(value == null ? "" : value);
-  if (!raw) return [];
-  return raw.split(/[-,]/).map((item) => {
-    const number = Number.parseFloat(item);
-    return Number.isFinite(number) ? number : null;
-  });
+function finiteNumber(value) {
+  if (value === null || value === undefined) return null;
+  if (typeof value !== "number" && typeof value !== "string") return null;
+  if (typeof value === "string" && !/^-?(?:\d+(?:\.\d*)?|\.\d+)$/.test(value.trim())) return null;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
 }
 
-function dailyHistoryRanges(days) {
-  const dates = [];
-  const ranges = [];
-  const now = new Date();
-  const todayStart = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) / 1000;
-  for (let offset = days - 2; offset >= 0; offset -= 1) {
-    const end = todayStart - (offset * 86400);
-    const start = end - 86400;
-    dates.push(new Date(start * 1000).toISOString().slice(0, 10));
-    ranges.push(`${start}_${end}`);
-  }
-  const nowSeconds = Math.floor(now.getTime() / 1000);
-  dates.push(new Date(todayStart * 1000).toISOString().slice(0, 10));
-  ranges.push(`${todayStart}_${nowSeconds}`);
-  return { dates, query: ranges.join("-") };
+function percentageNumber(value) {
+  const number = finiteNumber(value);
+  return number !== null && number >= 0 && number <= 100 ? number : null;
 }
 
-function chunkDailyRanges(query) {
-  return query.split("-").reduce((chunks, range, index) => {
-    const chunkIndex = Math.floor(index / DAILY_HISTORY_CHUNK_SIZE);
-    chunks[chunkIndex] = chunks[chunkIndex] ? `${chunks[chunkIndex]}-${range}` : range;
-    return chunks;
-  }, []);
+function isMissingNumber(value) {
+  return value === null || value === undefined || (typeof value === "string" && value.trim() === "");
 }
 
 function historyState(value) {
-  if (!Number.isFinite(Number(value))) return "unknown";
-  if (Number(value) >= 99) return "up";
-  if (Number(value) >= 95) return "degraded";
+  const number = percentageNumber(value);
+  if (number === null) return "unknown";
+  if (number >= 99) return "up";
+  if (number >= 95) return "degraded";
   return "down";
 }
 
-function statusKind(status) {
-  const value = Number(status);
-  if (value === 2 || status === "up") return "up";
-  if (value === 0 || status === "paused") return "paused";
-  if (value === 1 || status === "not_checked") return "pending";
-  if (value === 8) return "degraded";
-  if (value === 9 || status === "down") return "down";
+function publicStatusKind(statusClass) {
+  const value = String(statusClass || "").toLowerCase();
+  if (value === "success" || value === "up") return "up";
+  if (value === "warning" || value === "degraded" || value === "looks_down") return "degraded";
+  if (value === "danger" || value === "down") return "down";
+  if (value === "black" || value === "paused") return "paused";
   return "unknown";
-}
-
-function ratioValues(monitor) {
-  return numberList(monitor.custom_uptime_ratio || monitor.custom_uptime_ratios);
-}
-
-function durationValues(monitor) {
-  const explicit = numberList(monitor.custom_down_durations);
-  if (explicit.some((value) => value !== null)) return explicit;
-  return ratioValues(monitor).map((ratio, index) => {
-    if (ratio === null) return null;
-    const days = [7, 30, 90][index];
-    return Math.round(days * 86400 * Math.max(0, 1 - (ratio / 100)));
-  });
-}
-
-function safeIncidentSummary(logs) {
-  const incidents = Array.isArray(logs) ? logs.filter((log) => Number(log && log.type) === 1) : [];
-  const sorted = incidents.slice().sort((a, b) => Number(b.datetime || 0) - Number(a.datetime || 0));
-  const latest = sorted[0];
-  return {
-    recentIncidents: incidents.length,
-    lastIncidentAt: latest && Number.isFinite(Number(latest.datetime)) ? new Date(Number(latest.datetime) * 1000).toISOString() : null,
-    lastIncidentDuration: latest && Number.isFinite(Number(latest.duration)) ? Number(latest.duration) : null,
-  };
-}
-
-function dailyHistorySnapshot(values, offset, dates) {
-  return numberList(values).slice(0, DAILY_HISTORY_CHUNK_SIZE).map((uptime, index) => ({
-    date: dates[offset + index] || null,
-    uptime,
-    state: historyState(uptime),
-  })).filter((item) => item.date);
-}
-
-function safeMonitorSnapshot(monitor, index, region) {
-  const ratios = ratioValues(monitor);
-  const durations = durationValues(monitor);
-  return {
-    label: region + " Node " + String(index + 1).padStart(2, "0"),
-    region,
-    status: statusKind(monitor.status),
-    uptime7: Number.isFinite(ratios[0]) ? ratios[0] : null,
-    uptime30: Number.isFinite(ratios[1]) ? ratios[1] : null,
-    uptime90: Number.isFinite(ratios[2]) ? ratios[2] : (Number.isFinite(Number(monitor.uptimeRatio)) ? Number(monitor.uptimeRatio) : null),
-    downtime7: Number.isFinite(durations[0]) ? durations[0] : null,
-    downtime30: Number.isFinite(durations[1]) ? durations[1] : null,
-    downtime90: Number.isFinite(durations[2]) ? durations[2] : null,
-    allTimeUptime: monitor.allTimeUptime == null ? null : (Number.isFinite(Number(monitor.allTimeUptime)) ? Number(monitor.allTimeUptime) : null),
-    recentIncidents: monitor.recentIncidents == null ? null : (Number.isFinite(Number(monitor.recentIncidents)) ? Number(monitor.recentIncidents) : null),
-    lastIncidentAt: monitor.lastIncidentAt || null,
-    lastIncidentDuration: monitor.lastIncidentDuration == null ? null : (Number.isFinite(Number(monitor.lastIncidentDuration)) ? Number(monitor.lastIncidentDuration) : null),
-    history90: Array.isArray(monitor.history90) ? monitor.history90.slice(0, DAILY_HISTORY_DAYS) : [],
-  };
 }
 
 function regionFor(name) {
@@ -129,104 +59,156 @@ function regionFor(name) {
   return "Production";
 }
 
-function postForm(body) {
-  return new Promise((resolve) => {
-    const request = https.request({
-      hostname: "api.uptimerobot.com",
-      port: 443,
-      path: "/v2/getMonitors",
-      method: "POST",
-      timeout: 15000,
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Content-Length": Buffer.byteLength(body),
-        Accept: "application/json",
-      },
-    }, (upstream) => {
-      let responseBody = "";
-      upstream.on("data", (chunk) => { responseBody += chunk; });
-      upstream.on("end", () => resolve({ status: upstream.statusCode, body: responseBody }));
-    });
-    request.on("timeout", () => request.destroy(new Error("uptime request timeout")));
-    request.on("error", () => resolve({ status: 502, body: "" }));
-    request.write(body);
-    request.end();
+function nestedRatio(monitor, key) {
+  const value = monitor && monitor[key];
+  return percentageNumber(value && typeof value === "object" ? value.ratio : value);
+}
+
+function nestedRatioValue(monitor, key) {
+  const value = monitor && monitor[key];
+  return value && typeof value === "object" ? value.ratio : value;
+}
+
+function dateTimestamp(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+  const [year, month, day] = value.split("-").map(Number);
+  const timestamp = Date.UTC(year, month - 1, day);
+  return new Date(timestamp).toISOString().slice(0, 10) === value ? timestamp : null;
+}
+
+function safeHistory(days) {
+  if (!Array.isArray(days)) return [];
+  return days.slice(-DAILY_HISTORY_DAYS).flatMap((day) => {
+    const date = String(day && day.date || "");
+    if (dateTimestamp(date) === null) return [];
+    const unavailable = String(day.label || "").toLowerCase() === "black"
+      || String(day.color || "").toLowerCase() === "grey";
+    const uptime = unavailable ? null : percentageNumber(day.ratio);
+    return [{
+      date,
+      ...(uptime === null ? {} : { uptime }),
+      state: uptime === null ? "unknown" : historyState(uptime),
+    }];
   });
 }
 
-function safeUptimePayload(source, dates, regionCounters) {
-  const monitors = Array.isArray(source.monitors) ? source.monitors.map((monitor, index) => {
-    const region = regionFor(monitor.friendly_name);
-    regionCounters[region] = (regionCounters[region] || 0) + 1;
-    const allTime = numberList(monitor.all_time_uptime_ratio);
-    const incidents = safeIncidentSummary(monitor.logs);
-    return safeMonitorSnapshot({
+function hasCompleteHistory(days) {
+  if (!Array.isArray(days) || days.length !== DAILY_HISTORY_DAYS) return false;
+  if (days.some((day) => !isMissingNumber(day && day.ratio) && percentageNumber(day.ratio) === null)) return false;
+  const history = safeHistory(days);
+  if (history.length !== DAILY_HISTORY_DAYS) return false;
+  const timestamps = history.map((day) => dateTimestamp(day.date));
+  if (timestamps.some((value) => value === null)) return false;
+  if (timestamps.some((value, index) => index > 0 && value - timestamps[index - 1] !== 86400000)) return false;
+  const now = new Date();
+  const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  return timestamps[timestamps.length - 1] === today;
+}
+
+function safePublicStatusPayload(source) {
+  if (!source || source.status !== "ok" || !source.psp || !Array.isArray(source.psp.monitors)) {
+    return { stat: "error", checkedAt: null, monitors: [] };
+  }
+
+  const sourceMonitors = source.psp.monitors;
+  const totalMonitors = finiteNumber(source.psp.totalMonitors);
+  if (!sourceMonitors.length
+    || !Number.isInteger(totalMonitors)
+    || totalMonitors !== sourceMonitors.length
+    || sourceMonitors.some((monitor) => {
+      if (!monitor || typeof monitor !== "object" || !hasCompleteHistory(monitor.dailyRatios)) return true;
+      return ["30dRatio", "90dRatio"].some((key) => {
+        const value = nestedRatioValue(monitor, key);
+        return !isMissingNumber(value) && percentageNumber(value) === null;
+      });
+    })) {
+    return { stat: "error", checkedAt: null, monitors: [] };
+  }
+
+  const counters = Object.create(null);
+  const monitors = sourceMonitors.map((monitor) => {
+    const region = regionFor(monitor && monitor.name);
+    counters[region] = (counters[region] || 0) + 1;
+    const uptime30 = nestedRatio(monitor, "30dRatio");
+    const uptime90 = nestedRatio(monitor, "90dRatio");
+    const lastDuration = finiteNumber(monitor && monitor.lastDowntime && monitor.lastDowntime.duration);
+    return {
+      label: `${region} Node ${String(counters[region]).padStart(2, "0")}`,
       region,
-      status: monitor.status,
-      custom_uptime_ratio: monitor.custom_uptime_ratio || monitor.custom_uptime_ratios,
-      custom_down_durations: monitor.custom_down_durations,
-      allTimeUptime: allTime.length ? allTime[0] : null,
-      recentIncidents: incidents.recentIncidents,
-      lastIncidentAt: incidents.lastIncidentAt,
-      lastIncidentDuration: incidents.lastIncidentDuration,
-      history90: [],
-    }, regionCounters[region] - 1, region);
-  }) : [];
-  return { stat: source.stat === "ok" ? "ok" : "error", checkedAt: source.stat === "ok" ? new Date().toISOString() : null, monitors };
+      status: publicStatusKind(monitor && monitor.statusClass),
+      uptime7: null,
+      uptime30,
+      uptime90,
+      downtime7: null,
+      downtime30: null,
+      downtime90: null,
+      allTimeUptime: null,
+      recentIncidents: null,
+      lastIncidentAt: null,
+      lastIncidentDuration: lastDuration,
+      history90: safeHistory(monitor && monitor.dailyRatios),
+    };
+  });
+
+  return { stat: "ok", checkedAt: new Date().toISOString(), monitors };
 }
 
-async function loadUptime() {
-  const apiKey = process.env.UPTIMEROBOT_API_KEY || "";
-  if (!apiKey) {
-    return { status: 503, payload: { stat: "error", checkedAt: null, monitors: [] } };
-  }
-  const history = dailyHistoryRanges(DAILY_HISTORY_DAYS);
-  const queries = chunkDailyRanges(history.query);
-  const qs = (params) => Object.keys(params).map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`).join("&");
-  const metricsBody = qs({
-    api_key: apiKey, format: "json",
-    custom_uptime_ratios: "7-30-90", all_time_uptime_ratio: "1", logs: "1", logs_limit: "20",
+function fetchPublicStatus() {
+  return new Promise((resolve) => {
+    const errorResult = { status: 502, payload: { stat: "error", checkedAt: null, monitors: [] } };
+    let settled = false;
+    const finish = (result) => {
+      if (settled) return;
+      settled = true;
+      resolve(result);
+    };
+    let request;
+    request = https.get({
+      hostname: PUBLIC_STATUS_HOST,
+      port: 443,
+      path: PUBLIC_STATUS_PATH,
+      timeout: 15000,
+      headers: { Accept: "application/json", "User-Agent": "StealthRDP-Status/1.0" },
+    }, (upstream) => {
+      let body = "";
+      upstream.on("data", (chunk) => {
+        body += chunk;
+        if (body.length > 2_000_000) request.destroy(new Error("status payload too large"));
+      });
+      upstream.on("aborted", () => finish(errorResult));
+      upstream.on("error", () => finish(errorResult));
+      upstream.on("close", () => {
+        if (!upstream.complete) finish(errorResult);
+      });
+      upstream.on("end", () => {
+        if (upstream.statusCode !== 200) {
+          finish(errorResult);
+          return;
+        }
+        try {
+          const payload = safePublicStatusPayload(JSON.parse(body));
+          finish({ status: payload.stat === "ok" ? 200 : 502, payload });
+        } catch (_) {
+          finish(errorResult);
+        }
+      });
+    });
+    request.on("timeout", () => request.destroy(new Error("status request timeout")));
+    request.on("error", () => finish(errorResult));
   });
-  const historyBodies = queries.map((query) => qs({ api_key: apiKey, format: "json", custom_uptime_ranges: query }));
-
-  const responses = await Promise.all([postForm(metricsBody), ...historyBodies.map((body) => postForm(body))]);
-  const parse = (res) => {
-    try { return { status: res.status, payload: JSON.parse(res.body) }; } catch (_) { return { status: res.status, payload: null }; }
-  };
-  const parsed = responses.map(parse);
-  const metrics = parsed[0];
-  const histories = parsed.slice(1);
-  if (metrics.status !== 200 || !metrics.payload || metrics.payload.stat !== "ok") {
-    return { status: metrics.status === 200 ? 502 : metrics.status, payload: { stat: "error", checkedAt: null, monitors: [] } };
-  }
-  if (histories.some((h) => h.status !== 200 || !h.payload || h.payload.stat !== "ok")) {
-    const regionCounters = Object.create(null);
-    return { status: 200, payload: safeUptimePayload(metrics.payload, history.dates, regionCounters) };
-  }
-  const regionCounters = Object.create(null);
-  const payload = safeUptimePayload(metrics.payload, history.dates, regionCounters);
-  const historyByMonitor = payload.monitors.map((_, monitorIndex) => histories.flatMap((h) => {
-    const mon = h.payload.monitors && h.payload.monitors[monitorIndex];
-    return mon && Array.isArray(mon.custom_uptime_ranges) ? numberList(mon.custom_uptime_ranges) : [];
-  }).slice(0, DAILY_HISTORY_DAYS));
-  payload.monitors = payload.monitors.map((monitor, index) => {
-    const h = historyByMonitor[index] || [];
-    return { ...monitor, history90: h.map((uptime, i) => ({ date: history.dates[i] || null, uptime, state: historyState(uptime) })).filter((item) => item.date) };
-  });
-  return { status: 200, payload };
 }
 
-module.exports = async function handler(req, res) {
+async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   const now = Date.now();
   if (cache.result && cache.expiresAt > now) {
     return res.status(cache.result.status).json(cache.result.payload);
   }
-  try {
-    const result = await loadUptime();
-    cache = { expiresAt: Date.now() + 60000, result };
-    return res.status(result.status).json(result.payload);
-  } catch (_) {
-    return res.status(502).json({ stat: "error", checkedAt: null, monitors: [] });
-  }
-};
+  const result = await fetchPublicStatus();
+  cache = { expiresAt: Date.now() + (result.status === 200 ? CACHE_MS : 10000), result };
+  return res.status(result.status).json(result.payload);
+}
+
+module.exports = handler;
+module.exports.safePublicStatusPayload = safePublicStatusPayload;
+module.exports.fetchPublicStatus = fetchPublicStatus;
