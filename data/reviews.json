@@ -552,7 +552,7 @@
   },
   {
     "id": "hackernews-46059527",
-    "quote": "I've had good luck with Ubuntu 25.10's builtin remote desktop RDP server. I think it's gnome remote desktop, but I'm not certain. https://github.com/GNOME/gnome-remote-desktop",
+    "quote": "I've had good luck with Ubuntu 25.10's built-in remote desktop RDP server. I think it's gnome remote desktop, but I'm not certain. https://github.com/GNOME/gnome-remote-desktop",
     "authorName": "@willis936 · Hacker News",
     "publishedOn": "November 26, 2025",
     "sourceLabel": "Community comment · Ubuntu Remote Desktop",
