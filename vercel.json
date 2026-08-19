@@ -2,6 +2,10 @@
   "buildCommand": "npm run vercel-build",
   "outputDirectory": "public",
   "framework": null,
+  "proxy": {
+    "entrypoint": "proxy.js",
+    "matcher": ["/", "/:path(.*\\.html)"]
+  },
   "redirects": [
     { "source": "/blog", "destination": "/blog.html", "permanent": true },
     { "source": "/blog/", "destination": "/blog.html", "permanent": true },
@@ -35,6 +39,7 @@
     }
   ],
   "functions": {
+    "api/markdown.js": { "maxDuration": 10, "includeFiles": "markdown/**" },
     "api/uptime.js": { "maxDuration": 30 },
     "api/plans.js": { "maxDuration": 10 },
     "api/faqs.js": { "maxDuration": 10 },
