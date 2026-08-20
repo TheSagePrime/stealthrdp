@@ -114,6 +114,12 @@ test("sitemap.xml is valid XML with all routes; robots.txt allows + references i
   );
   assert.ok(!/^llms\.txt$/m.test(robots), "robots has no malformed bare llms.txt line");
   assert.ok(robots.includes("Disallow: /api/"), "robots blocks api");
+
+  const indexNowKey = fs.readFileSync(
+    path.join(ROOT, "d6725e43a76b47b39052a3f5c4ee06bf.txt"),
+    "utf8",
+  );
+  assert.strictEqual(indexNowKey.trim(), "d6725e43a76b47b39052a3f5c4ee06bf", "IndexNow key file");
 });
 
 test("AI-readable guide exists and source templates stay free of raw infrastructure IPs", () => {

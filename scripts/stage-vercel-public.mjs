@@ -14,6 +14,7 @@ fs.mkdirSync(OUT, { recursive: true });
 const files = [
   "robots.txt",
   "sitemap.xml",
+  "d6725e43a76b47b39052a3f5c4ee06bf.txt",
   "rss.xml",
   "llms.txt",
   "site.webmanifest",
