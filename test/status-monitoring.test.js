@@ -290,6 +290,8 @@ test("status page documents detailed monitoring windows and privacy", () => {
   assert.match(fs.readFileSync(path.join(ROOT, "vercel.json"), "utf8"), /vercel-build/);
   assert.match(fs.readFileSync(path.join(ROOT, "vercel.json"), "utf8"), /"outputDirectory": "public"/);
   assert.match(fs.readFileSync(path.join(ROOT, "package.json"), "utf8"), /stage-vercel-public/);
+  const stageScript = fs.readFileSync(path.join(ROOT, "scripts/stage-vercel-public.mjs"), "utf8");
+  assert.match(stageScript, /const dirs = \[.*"fonts"/);
   const uptimeFn = fs.readFileSync(path.join(ROOT, "api/uptime.js"), "utf8");
   assert.match(uptimeFn, /stats\.uptimerobot\.com/);
   assert.match(uptimeFn, /getMonitorList/);
