@@ -243,6 +243,8 @@ test("status page documents detailed monitoring windows and privacy", () => {
   assert.doesNotMatch(html, /LIVE STATUS/);
   assert.match(html, /status-meta-row/);
   assert.match(html, /<b>\d+<\/b> services/);
+  assert.match(html, /Control Panel Node 01/);
+  assert.doesNotMatch(html, /Control plane Node 01/);
   assert.doesNotMatch(html, /Recent incidents|Rolling windows|Incident context|Downtime \/ 30d/);
   assert.match(server, /custom_uptime_ratios: "7-30-90"/);
   assert.match(server, /function durationValues\(monitor\)/);

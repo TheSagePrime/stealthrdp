@@ -270,7 +270,7 @@ function safeUptimePayload(body, options = {}) {
   function regionFor(name) {
     const value = String(name || "").toLowerCase();
     if (value.includes("eu") || value.includes("nl")) return "EU / Netherlands";
-    if (value.includes("management") || value.includes("portal")) return "Control plane";
+    if (value.includes("management") || value.includes("portal")) return "Control Panel";
     if (value.includes("website") || value.includes("backend")) return "Website";
     if (value.includes("usa") || value.includes("us")) return "USA";
     return "Production";
