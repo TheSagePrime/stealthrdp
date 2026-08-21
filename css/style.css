@@ -195,9 +195,10 @@ code, .mono { font-family: var(--font-mono); }
 /* ---------- Header ---------- */
 .header { position: sticky; top: 0; z-index: 100; background: rgba(8, 9, 12, 0.86); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--border); }
 .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 68px; }
-.logo { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 20px; letter-spacing: -0.02em; }
-.logo-mark { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, #1d2430, #0f1218); border: 1px solid var(--border-strong); display: grid; place-items: center; color: var(--accent); }
-.logo-mark svg { width: 18px; height: 18px; }
+.logo { display: inline-flex; align-items: center; font-family: var(--font-display); font-weight: 700; font-size: 20px; letter-spacing: -0.02em; }
+.logo-image { display: grid; width: 156px; aspect-ratio: 700 / 170; flex: 0 0 auto; }
+.logo-image img { grid-area: 1 / 1; width: 100%; height: auto; object-fit: contain; }
+.logo-image-light { display: none; }
 .logo span em { font-style: normal; color: var(--accent); }
 
 .nav { display: flex; align-items: center; gap: 2px; }
@@ -1389,7 +1390,8 @@ html[data-theme="light"] {
 html[data-theme="light"] .theme-icon-sun { display: none; }
 html[data-theme="light"] .theme-icon-moon { display: block; }
 html[data-theme="light"] .header { background: rgba(247,244,238,.88); }
-html[data-theme="light"] .logo-mark { background: linear-gradient(135deg, #fffdfa, #e9e4d9); }
+html[data-theme="light"] .logo-image-dark { display: none; }
+html[data-theme="light"] .logo-image-light { display: block; }
 html[data-theme="light"] .nav a:hover { background: rgba(17,24,39,.045); }
 html[data-theme="light"] .palette-trigger { background: rgba(17,24,39,.02); }
 html[data-theme="light"] .palette-trigger-swatch, html[data-theme="light"] .palette-swatch { box-shadow: 0 0 0 2px rgba(17,24,39,.08), 0 0 10px var(--accent-glow); }

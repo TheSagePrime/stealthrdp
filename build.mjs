@@ -153,7 +153,10 @@ function head({ title, description, canonical, pageType = "website", jsonLd = []
 }
 
 /* ---------- shared chrome (header + footer) ---------- */
+const LOGO_DARK_URL = "https://cdn.stealthrdp.com/images/new/6.png";
+const LOGO_LIGHT_URL = "https://cdn.stealthrdp.com/images/new/5.png";
 const LOGO_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>';
+const LOGO_IMAGE_HTML = `<span class="logo-image" aria-hidden="true"><img class="logo-image-dark" src="${LOGO_DARK_URL}" alt="" width="700" height="170" decoding="async"><img class="logo-image-light" src="${LOGO_LIGHT_URL}" alt="" width="700" height="170" decoding="async"></span>`;
 const ARROW_SVG = '<svg class="inline-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>';
 const EXTERNAL_SVG = '<svg class="inline-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 5h5v5"/><path d="M19 5 11 13"/><path d="M19 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg>';
 const CHEVRON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
@@ -184,7 +187,7 @@ function paletteLabHtml() {
 function headerHtml(active) {
   return `<header class="header"><div class="container header-inner">
     <a href="/" class="logo" aria-label="StealthRDP home">
-      <span class="logo-mark">${LOGO_SVG}</span><span>Stealth<em>RDP</em></span>
+      ${LOGO_IMAGE_HTML}
     </a>
     <nav class="nav" aria-label="Main navigation">${navHtml(active)}</nav>
     <div class="header-actions">
@@ -211,7 +214,7 @@ function footerHtml() {
   return `<footer class="footer"><div class="container">
     <div class="footer-grid">
       <div class="footer-about">
-        <a href="/" class="logo" aria-label="StealthRDP home"><span class="logo-mark">${LOGO_SVG}</span><span>Stealth<em>RDP</em></span></a>
+        <a href="/" class="logo" aria-label="StealthRDP home">${LOGO_IMAGE_HTML}</a>
         <p>Enterprise-grade remote desktop infrastructure with unmatched security and performance.</p>
         <div class="footer-social">${social}</div>
         <div class="footer-status"><span class="dot"></span><span id="footerStatus">Checking live status…</span></div>
@@ -742,7 +745,7 @@ const ORG = {
   "@id": "__SRDP_BASE__/#organization",
   name: "StealthRDP",
   url: "__SRDP_BASE__/",
-  logo: "__SRDP_BASE__/assets/favicon.svg",
+  logo: LOGO_DARK_URL,
   description: "Windows and Linux remote desktop infrastructure and VPS hosting with DDoS protection, full administrative access, live status monitoring, and a 99.9% uptime SLA.",
   sameAs: SOCIAL.map((s) => s.href),
 };
@@ -793,7 +796,7 @@ function articleLd(post) {
     description: post.excerpt || "",
     datePublished: post.date,
     author: { "@type": "Organization", name: post.author || "StealthRDP Team", url: "__SRDP_BASE__/about.html" },
-    publisher: { "@type": "Organization", name: "StealthRDP", url: "__SRDP_BASE__/", logo: { "@type": "ImageObject", url: "__SRDP_BASE__/assets/favicon.svg" } },
+    publisher: { "@type": "Organization", name: "StealthRDP", url: "__SRDP_BASE__/", logo: { "@type": "ImageObject", url: LOGO_DARK_URL } },
     image: "__SRDP_BASE__/assets/og-cover.png",
     mainEntityOfPage: `__SRDP_BASE__/blog/${post.slug}.html`,
     url: `__SRDP_BASE__/blog/${post.slug}.html`,
