@@ -4,7 +4,7 @@
   "framework": null,
   "proxy": {
     "entrypoint": "proxy.js",
-    "matcher": ["/", "/:path(.*\\.html)"]
+    "matcher": ["/", "/:path(.*\\.html)", "/index.php", "/dash/login.php", "/dash/index.php"]
   },
   "redirects": [
     { "source": "/blog", "destination": "/blog.html", "permanent": true },
