@@ -40,3 +40,20 @@ test("server-status legacy route redirects to the current status page", () => {
     permanent: true,
   });
 });
+
+test("published HTML does not emit known broken legacy URLs", () => {
+  const staleUrls = [
+    "https://stealthrdp.com/dash/index.php/knowledgebase",
+    "https://stealthrdp.com/dash/index.php/user/password",
+    "https://stealthrdp.com/dash/index.php?rp=/password/reset",
+    "https://www.stealthrdp.com/server-status",
+  ];
+  const failures = [];
+  for (const file of htmlFiles()) {
+    const html = fs.readFileSync(file, "utf8");
+    for (const staleUrl of staleUrls) {
+      if (html.includes(staleUrl)) failures.push(`${path.relative(ROOT, file)}: ${staleUrl}`);
+    }
+  }
+  assert.deepEqual(failures, [], `stale URLs: ${failures.join(" | ")}`);
+});

@@ -26,6 +26,21 @@ function legacyRedirectFor(url) {
     });
   }
 
+  if (url.pathname.startsWith("/dash/index.php/")) {
+    const legacyPath = url.pathname.slice("/dash/index.php".length);
+    const destination = legacyPath.startsWith("/knowledgebase")
+      ? "https://www.stealthrdp.com/docs.html"
+      : legacyPath.startsWith("/user/password")
+        ? "https://dash.stealthrdp.com/index.php?rp=/password/reset"
+        : null;
+
+    if (!destination) return null;
+    return new Response(null, {
+      status: 308,
+      headers: { Location: destination },
+    });
+  }
+
   if (url.pathname !== "/dash/index.php") return null;
 
   const route = url.searchParams.get("rp") || "";
@@ -35,7 +50,9 @@ function legacyRedirectFor(url) {
       ? "https://www.stealthrdp.com/blog.html"
       : route.startsWith("/knowledgebase/")
         ? "https://www.stealthrdp.com/docs.html"
-        : null;
+        : route.startsWith("/password/reset")
+          ? "https://dash.stealthrdp.com/index.php?rp=/password/reset"
+          : null;
 
   if (!destination) return null;
   return new Response(null, {

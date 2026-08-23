@@ -55,6 +55,17 @@ test("legacy knowledgebase URLs redirect to the current documentation surface", 
   });
 });
 
+test("legacy dashboard path variants redirect to live destinations", () => {
+  const cases = [
+    ["https://stealthrdp.com/dash/index.php/knowledgebase", "https://www.stealthrdp.com/docs.html"],
+    ["https://stealthrdp.com/dash/index.php/user/password", "https://dash.stealthrdp.com/index.php?rp=/password/reset"],
+    ["https://stealthrdp.com/dash/index.php?rp=/password/reset", "https://dash.stealthrdp.com/index.php?rp=/password/reset"],
+  ];
+  for (const [url, destination] of cases) {
+    assert.deepEqual(locationFor(url), { status: 308, location: destination }, url);
+  }
+});
+
 test("every screenshot URL maps to its approved canonical destination", () => {
   const cases = [
     ["https://stealthrdp.com/dash/index.php?rp=/store/dedicated-rdp-usa/&language=spanish", "https://www.stealthrdp.com/plans.html"],
