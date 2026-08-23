@@ -13,6 +13,8 @@
     { "source": "/plans/", "destination": "/plans.html", "permanent": true },
     { "source": "/status", "destination": "/status.html", "permanent": true },
     { "source": "/status/", "destination": "/status.html", "permanent": true },
+    { "source": "/server-status", "destination": "/status.html", "permanent": true },
+    { "source": "/server-status/", "destination": "/status.html", "permanent": true },
     { "source": "/faq", "destination": "/faq.html", "permanent": true },
     { "source": "/faq/", "destination": "/faq.html", "permanent": true },
     { "source": "/about", "destination": "/about.html", "permanent": true },

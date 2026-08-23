@@ -156,7 +156,7 @@ function head({ title, description, canonical, pageType = "website", jsonLd = []
 const LOGO_DARK_URL = "https://cdn.stealthrdp.com/images/new/6.png";
 const LOGO_LIGHT_URL = "https://cdn.stealthrdp.com/images/new/5.png";
 const LOGO_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>';
-const LOGO_IMAGE_HTML = `<span class="logo-image" aria-hidden="true"><img class="logo-image-dark" src="${LOGO_DARK_URL}" alt="" width="700" height="170" decoding="async"><img class="logo-image-light" src="${LOGO_LIGHT_URL}" alt="" width="700" height="170" decoding="async"></span>`;
+const LOGO_IMAGE_HTML = `<span class="logo-image" aria-hidden="true"><img class="logo-image-dark" src="${LOGO_DARK_URL}" alt="StealthRDP dark logo" width="700" height="170" decoding="async"><img class="logo-image-light" src="${LOGO_LIGHT_URL}" alt="StealthRDP light logo" width="700" height="170" decoding="async"></span>`;
 const ARROW_SVG = '<svg class="inline-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>';
 const EXTERNAL_SVG = '<svg class="inline-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 5h5v5"/><path d="M19 5 11 13"/><path d="M19 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg>';
 const CHEVRON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
@@ -903,15 +903,15 @@ function buildIndex() {
       </div>
       <div class="marquee-set" aria-hidden="true">
         <span class="marquee-label">Works with your OS</span>
-        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/debian.svg" alt="" width="24" height="24" decoding="async"><span>Debian</span></span>
-        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/centos.svg" alt="" width="24" height="24" decoding="async"><span>CentOS</span></span>
-        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/rockylinux.svg" alt="" width="24" height="24" decoding="async"><span>Rocky Linux</span></span>
-        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/ubuntu.svg" alt="" width="24" height="24" decoding="async"><span>Ubuntu</span></span>
-        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/fedora.svg" alt="" width="24" height="24" decoding="async"><span>Fedora</span></span>
-        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/freebsd.svg" alt="" width="24" height="24" decoding="async"><span>FreeBSD</span></span>
-        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/alpinelinux.svg" alt="" width="24" height="24" decoding="async"><span>Alpine Linux</span></span>
-        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/almalinux.svg" alt="" width="24" height="24" decoding="async"><span>AlmaLinux</span></span>
-        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/windows.svg" alt="" width="24" height="24" decoding="async"><span>Windows</span></span>
+        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/debian.svg" alt="Debian" width="24" height="24" decoding="async"><span>Debian</span></span>
+        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/centos.svg" alt="CentOS" width="24" height="24" decoding="async"><span>CentOS</span></span>
+        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/rockylinux.svg" alt="Rocky Linux" width="24" height="24" decoding="async"><span>Rocky Linux</span></span>
+        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/ubuntu.svg" alt="Ubuntu" width="24" height="24" decoding="async"><span>Ubuntu</span></span>
+        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/fedora.svg" alt="Fedora" width="24" height="24" decoding="async"><span>Fedora</span></span>
+        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/freebsd.svg" alt="FreeBSD" width="24" height="24" decoding="async"><span>FreeBSD</span></span>
+        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/alpinelinux.svg" alt="Alpine Linux" width="24" height="24" decoding="async"><span>Alpine Linux</span></span>
+        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/almalinux.svg" alt="AlmaLinux" width="24" height="24" decoding="async"><span>AlmaLinux</span></span>
+        <span class="marquee-item"><img class="os-logo" src="/assets/os-logos/windows.svg" alt="Windows" width="24" height="24" decoding="async"><span>Windows</span></span>
       </div>
     </div>
   </div>
