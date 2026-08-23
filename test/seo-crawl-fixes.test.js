@@ -41,6 +41,11 @@ test("server-status legacy route redirects to the current status page", () => {
   });
 });
 
+test("vercel proxy matches legacy dashboard path variants", () => {
+  const config = JSON.parse(fs.readFileSync(path.join(ROOT, "vercel.json"), "utf8"));
+  assert.ok(config.proxy.matcher.includes("/dash/index.php/:path*"));
+});
+
 test("published HTML does not emit known broken legacy URLs", () => {
   const staleUrls = [
     "https://stealthrdp.com/dash/index.php/knowledgebase",
