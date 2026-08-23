@@ -821,9 +821,9 @@ function howToLd(post, headings) {
 }
 
 /* ---------- page builders ---------- */
-function page({ active, title, description, canonical, pageType = "website", jsonLd = [], body, extraScripts = [], planLocation = "", planLimit = "" }) {
+function page({ active, title, description, canonical, pageType = "website", jsonLd = [], body, extraScripts = [], planLocation = "", planLimit = "", robots = "index,follow" }) {
   const pageData = `${planLocation ? ` data-plan-location="${esc(planLocation)}"` : ""}${planLimit ? ` data-plan-limit="${esc(planLimit)}"` : ""}`;
-  return `${head({ title, description, canonical, pageType, jsonLd })}
+  return `${head({ title, description, canonical, pageType, jsonLd, robots })}
 <body data-page="${active}"${pageData}>
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NS397SS9"
@@ -837,7 +837,20 @@ function page({ active, title, description, canonical, pageType = "website", jso
 </html>`;
 }
 
-/* ---------- 1. index ---------- */
+/* ---------- 1. 404 ---------- */
+function build404() {
+  const body = `<main class="error-page">
+    <section class="page-head">
+      <div class="container"><span class="eyebrow">Error 404</span><h1>That page is not here.</h1><p>The address may be outdated or the page may have moved. Use one of these paths to continue.</p></div>
+    </section>
+    <section class="section section-tight" style="padding-top:0">
+      <div class="container"><div class="section-head center"><span class="section-label">Find your way back</span><h2>Start from a trusted StealthRDP page.</h2><p>These links help people and agents recover without guessing the next URL.</p><div class="error-actions"><a class="btn btn-primary" href="/">Return home</a><a class="btn btn-ghost" href="/docs.html">Open documentation</a><a class="btn btn-ghost" href="/sitemap.xml">View sitemap</a><a class="btn btn-ghost" href="/llms.txt">Agent guide</a></div></div></div>
+    </section>
+  </main>`;
+  return page({ active: "404", title: "Page not found — StealthRDP", description: "The requested StealthRDP page could not be found. Return home or use the documentation, sitemap, and agent guide.", canonical: "__SRDP_BASE__/404.html", robots: "noindex,follow", body });
+}
+
+/* ---------- 2. index ---------- */
 function buildIndex() {
   const preview = USA.slice(0, 3).map((p) => planCardHtml(p)).join("");
   const useCases = [
@@ -1403,6 +1416,7 @@ ${items}
 /* ---------- write ---------- */
 fs.mkdirSync(path.join(ROOT, "docs"), { recursive: true });
 const OUT = {
+  "404.html": build404(),
   "index.html": buildIndex(),
   "plans.html": buildPlans(),
   "status.html": buildStatus(),

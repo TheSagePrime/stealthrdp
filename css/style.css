@@ -482,6 +482,7 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
 .page-head .eyebrow { display: inline-block; margin-bottom: 10px; }
 .page-head h1 { font-size: clamp(28px, 3.6vw, 42px); line-height: 1.12; margin: 10px 0 8px; }
 .page-head p { color: var(--text-muted); font-size: 15px; line-height: 1.6; max-width: 640px; }
+.error-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 28px; }
 .docs-page-head { padding-bottom: 20px; }
 .docs-page-head .docs-breadcrumbs { margin-bottom: 14px; }
 
