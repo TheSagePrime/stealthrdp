@@ -109,6 +109,21 @@ test("Windows ordered steps stay in one list across source blank lines", () => {
   assert.doesNotMatch(content[1], /<\/ol>\s*<ol>/);
 });
 
+test("Windows evaluation article clarifies rearm vs activation and keeps the slug", () => {
+  const html = HTML("docs/1737944563-how-to-re_activate-and-extend-your-180_day-windows-trial.html");
+  assert.match(html, /<h1>How to Extend the Windows Server 180-Day Evaluation Period<\/h1><aside class="docs-warning">/);
+  assert.match(html, /class="docs-warning"/);
+  assert.match(html, /Windows Server Evaluation Notice/);
+  assert.match(html, /does not activate Windows/);
+  assert.match(html, /<code>slmgr -rearm<\/code>/);
+  assert.match(html, /<code>slmgr -dlv<\/code>/);
+  assert.match(html, /<code>slmgr -ato<\/code>/);
+  assert.match(html, /does not convert an Evaluation edition into a licensed production edition/);
+  assert.match(html, /This step is not part of extending the evaluation period/);
+  assert.match(html, /canonical" href="__SRDP_BASE__\/docs\/1737944563-how-to-re_activate-and-extend-your-180_day-windows-trial.html"/);
+  assert.doesNotMatch(html, /Re-activate|Re-Activate|permanently activat|indefinitely|Microsoft-approved for commercial|this makes the setup legal/i);
+});
+
 test("the docs artifact is source-labelled and sanitised before rendering", () => {
   assert.ok(DOCS.length > 0, "verified docs artifact is non-empty");
   for (const article of DOCS) {
