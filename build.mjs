@@ -1442,6 +1442,10 @@ for (const post of BLOG) {
 for (const [index, article] of DOCS.entries()) {
   OUT[`docs/${article.slug}.html`] = buildDocArticle(article, index);
 }
+const windowsEvalArticle = DOCS.find((article) => article.slug === "1737944563-how-to-re_activate-and-extend-your-180_day-windows-trial");
+if (windowsEvalArticle) {
+  OUT[`docs/${windowsEvalArticle.slug.replace("how-to-", "how-to_")}.html`] = buildDocArticle(windowsEvalArticle, DOCS.indexOf(windowsEvalArticle));
+}
 
 for (const [file, content] of Object.entries(OUT)) {
   fs.writeFileSync(path.join(ROOT, file), content);

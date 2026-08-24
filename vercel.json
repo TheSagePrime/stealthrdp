@@ -7,6 +7,7 @@
     "matcher": ["/", "/:path(.*\\.html)", "/index.php", "/dash/login.php", "/dash/index.php", "/dash/index.php/:path*"]
   },
   "redirects": [
+    { "source": "/docs/1737944563-how-to_re_activate-and-extend-your-180_day-windows-trial.html", "destination": "/docs/1737944563-how-to-re_activate-and-extend-your-180_day-windows-trial.html", "permanent": true },
     { "source": "/blog", "destination": "/blog.html", "permanent": true },
     { "source": "/blog/", "destination": "/blog.html", "permanent": true },
     { "source": "/plans", "destination": "/plans.html", "permanent": true },

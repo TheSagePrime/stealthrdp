@@ -111,6 +111,9 @@ test("Windows ordered steps stay in one list across source blank lines", () => {
 
 test("Windows evaluation article clarifies rearm vs activation and keeps the slug", () => {
   const html = HTML("docs/1737944563-how-to-re_activate-and-extend-your-180_day-windows-trial.html");
+  const alias = HTML("docs/1737944563-how-to_re_activate-and-extend-your-180_day-windows-trial.html");
+  assert.match(alias, /<h1>How to Extend the Windows Server 180-Day Evaluation Period<\/h1>/);
+  assert.match(alias, /Windows Server Evaluation Notice/);
   assert.match(html, /<h1>How to Extend the Windows Server 180-Day Evaluation Period<\/h1><aside class="docs-warning">/);
   assert.match(html, /class="docs-warning"/);
   assert.match(html, /Windows Server Evaluation Notice/);
