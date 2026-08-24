@@ -26,7 +26,7 @@ test("docs index is crawlable and includes every verified article", () => {
   }
 });
 
-test("every native article has metadata, breadcrumbs, readable content, and WHMCS support", () => {
+test("every native article has metadata, breadcrumbs, readable content, and support", () => {
   for (const article of DOCS) {
     const html = HTML(`docs/${article.slug}.html`);
     assert.match(html, /<main[^>]+class="docs-article-page/);
@@ -70,7 +70,7 @@ test("docs search and category filtering are client-side and testable without a 
 test("public chrome has no legacy docs host, countdown, or fake live deployment wording", () => {
   for (const route of publicRoutes) {
     const html = HTML(route);
-    assert.doesNotMatch(html, /docs\.stealthrdp\.com|Chatwoot/i, `${route}: legacy documentation reference`);
+    assert.doesNotMatch(html, /docs\.stealthrdp\.com|Chatwoot|\bWHMCS\b/i, `${route}: legacy service reference`);
     assert.doesNotMatch(html, /countdown|srdp_offer_end|72h rolling/i, `${route}: no countdown`);
   }
   const mainJs = HTML("js/main.js");
