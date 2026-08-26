@@ -140,12 +140,8 @@ function head({ title, description, canonical, pageType = "website", jsonLd = []
     }());
   </script>
   <link rel="stylesheet" href="/css/style.css?v=${ASSET_STAMP}" />
-  <!-- Google Tag Manager (real container from live site) -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-NS397SS9');</script>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src="https://sgtm.stealthrdp.com/2l3xebiqyzc.js?"+i;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','yw=Ch5ENj0vSDYwSUBGOjFcXhVHS19YRAEWXgkNFAgOERARHglfCg0I');</script>
   <!-- End Google Tag Manager -->
   <script defer data-website-id="dfid_6O4WzLRhSgrGULypBOc8I" data-domain="stealthrdp.com" src="https://datafa.st/js/script.js"></script>
   ${ld}
@@ -828,10 +824,6 @@ function page({ active, title, description, canonical, pageType = "website", jso
   const pageData = `${planLocation ? ` data-plan-location="${esc(planLocation)}"` : ""}${planLimit ? ` data-plan-limit="${esc(planLimit)}"` : ""}`;
   return `${head({ title, description, canonical, pageType, jsonLd, robots })}
 <body data-page="${active}"${pageData}>
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NS397SS9"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
   ${headerHtml(active)}
   ${body}
   ${footerHtml()}
