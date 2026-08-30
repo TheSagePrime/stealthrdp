@@ -18,7 +18,14 @@ const base = (explicit || "https://www.stealthrdp.com").replace(/\/+$/, "");
 
 function collectFiles() {
   const out = [];
-  const roots = [ROOT, path.join(ROOT, "blog"), path.join(ROOT, "docs"), path.join(ROOT, ".well-known")];
+  const roots = [
+    ROOT,
+    path.join(ROOT, "blog"),
+    path.join(ROOT, "docs"),
+    path.join(ROOT, "windows-vps"),
+    path.join(ROOT, "linux-vps"),
+    path.join(ROOT, ".well-known"),
+  ];
   for (const dir of roots) {
     if (!fs.existsSync(dir)) continue;
     for (const name of fs.readdirSync(dir)) {

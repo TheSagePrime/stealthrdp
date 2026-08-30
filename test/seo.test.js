@@ -291,3 +291,9 @@ test("rss, security.txt, HowTo schema, and checkout events exist", () => {
   const bake = fs.readFileSync(path.join(ROOT, "scripts/bake-base.mjs"), "utf8");
   assert.ok(bake.includes("https://www.stealthrdp.com"), "Vercel bake defaults to www");
 });
+
+test("Vercel bake includes nested OS landing pages", () => {
+  const bake = fs.readFileSync(path.join(ROOT, "scripts/bake-base.mjs"), "utf8");
+  assert.match(bake, /path\.join\(ROOT, "windows-vps"\)/);
+  assert.match(bake, /path\.join\(ROOT, "linux-vps"\)/);
+});
