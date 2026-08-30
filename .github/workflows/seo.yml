@@ -10,6 +10,10 @@ on:
         description: "Deployed preview URL to crawl"
         required: false
         type: string
+      live_url:
+        description: "Published live URL to verify"
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -51,3 +55,17 @@ jobs:
           node-version: 20
       - name: Crawl deployed preview
         run: node scripts/check-preview.mjs "${{ inputs.preview_url }}"
+
+  live:
+    name: Published SEO verification
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.live_url != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Verify published URL
+        run: node scripts/check-live.mjs "${{ inputs.live_url }}"

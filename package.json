@@ -11,7 +11,8 @@
     "start": "node server.js",
     "check": "node --test test/*.test.js",
     "seo:check": "SEO_CHANGED_ONLY=1 node scripts/seo-gates.mjs",
-    "preview:check": "node scripts/check-preview.mjs"
+    "preview:check": "node scripts/check-preview.mjs",
+    "live:check": "node scripts/check-live.mjs"
   },
   "engines": {
     "node": ">=20"
