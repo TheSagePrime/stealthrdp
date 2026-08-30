@@ -958,6 +958,7 @@ function buildIndex() {
         <div class="finder-field"><span class="control-label">Operating system</span><select id="osSelect" aria-label="Operating system"><option value="any">Any OS</option><option value="windows">Windows</option><option value="linux">Linux</option></select></div>
         <div class="finder-field"><span class="control-label">Use case</span><select id="useCaseSelect" aria-label="Use case"><option value="remote-desktop">Remote desktop</option><option value="web-hosting">Web hosting</option><option value="automation">Automation &amp; bots</option><option value="trading">Trading</option><option value="storage">Storage &amp; backups</option></select></div>
         <p class="finder-note" id="finderNote">Best fit: Bronze USA — any OS included on every plan.</p>
+        <div class="all-link os-links" aria-label="Browse VPS operating system plans"><a class="btn btn-ghost btn-sm" href="/plans.html#windows-vps">Windows VPS</a><a class="btn btn-ghost btn-sm" href="/plans.html#linux-vps">Linux VPS</a><a class="btn btn-ghost btn-sm" href="/plans.html#comparison">Compare VPS resources</a></div>
       </div>
       <div class="billing-wrap fade-up d2">
         <div class="billing-toggle" id="billingToggle" role="tablist" aria-label="Billing cycle">
@@ -1034,7 +1035,7 @@ function buildPlans() {
   const compare = USA.concat(EU).map(compareRowHtml).join("");
   const body = `
   <section class="page-head">
-    <div class="container"><span class="eyebrow">VPS plans</span><h1>Plans priced for the work.</h1><p>Pick a resource level, choose your region and billing cycle, and deploy in seconds.</p></div>
+    <div class="container"><span class="eyebrow">Windows and Linux VPS</span><h1>Windows &amp; Linux VPS Hosting Plans</h1><p>Compare Windows and Linux VPS hosting plans in one place. Choose a resource level, region, and billing cycle before the shared checkout.</p></div>
   </section>
   <section class="section plans-page-section" style="padding-top:0">
     <div class="container">
@@ -1053,12 +1054,26 @@ function buildPlans() {
       </div>
       <div class="plans-grid-head"><div><span class="mono">STANDARD PLANS</span><h2 id="plan-grid">Choose your resource level</h2></div><span id="planGridNote">6 USA plans · prices shown monthly</span></div>
       <div class="plan-grid plans-page-grid" id="planGrid" aria-live="polite">${cards}</div>
+      <section class="os-choice-section" aria-labelledby="os-choice-heading">
+        <div class="plans-context">
+          <div><span class="sec-index">01 / Choose an operating system</span><h2 id="os-choice-heading">Pick the VPS environment that fits your work.</h2></div>
+          <p>Windows and Linux VPS plans use the same resource comparison. Select the operating system that matches your software, administration, and remote-access needs during checkout.</p>
+        </div>
+        <article class="byo-panel" id="windows-vps">
+          <div><span class="included-label">Windows VPS</span><h2>Windows VPS for graphical remote access.</h2><p>Choose Windows when your workflow needs a graphical desktop or Microsoft-compatible software. Compare CPU, RAM, NVMe storage, bandwidth, region, and billing cycle above.</p></div>
+          <a class="btn btn-ghost" href="#plan-grid">Compare Windows VPS resources</a>
+        </article>
+        <article class="byo-panel" id="linux-vps">
+          <div><span class="included-label">Linux VPS</span><h2>Linux VPS for server and open-source workloads.</h2><p>Choose Linux for command-line administration, web hosting, open-source applications, and server tooling. Compare the same resource levels before you continue to the shared checkout.</p></div>
+          <a class="btn btn-ghost" href="#plan-grid">Compare Linux VPS resources</a>
+        </article>
+      </section>
       ${includedFeaturesHtml()}
       <div id="build-your-own" class="byo-panel">
         <div><span class="included-label">For workloads between the lines</span><h2>Build a server around your exact brief.</h2><p>Choose your own CPU, RAM, storage, location, and billing cycle in the server configurator.</p></div>
         <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/build-your-own-rdp-vps" target="_blank" rel="noopener noreferrer">Configure &amp; Deploy</a>
       </div>
-      <div class="comparison-section">
+      <div class="comparison-section" id="comparison">
         <div class="comparison-head"><div><span class="sec-index">02 / Compare precisely</span><h2>See the difference in one view. <span class="visually-hidden">VPS Features Comparison</span></h2></div><p>Use this table for a quick resource check. Checkout confirms the current price and availability.</p></div>
         <div class="compare-wrap">
           <table class="compare-table">
@@ -1073,15 +1088,15 @@ function buildPlans() {
     { "@context": "https://schema.org", "@graph": [
       breadcrumbLd("Plans", [
         { name: "Home", url: "__SRDP_BASE__/" },
-        { name: "VPS Plans & Pricing", url: "__SRDP_BASE__/plans.html" },
+        { name: "Windows & Linux VPS Hosting", url: "__SRDP_BASE__/plans.html" },
       ]),
       { "@type": "ItemList", name: "StealthRDP VPS Plans", itemListElement: USA.concat(EU).map((p, i) => ({ "@type": "ListItem", position: i + 1, item: serviceLd(p) })) },
     ]},
   ];
   return page({
     active: "plans",
-    title: "VPS Plans & Pricing — StealthRDP",
-    description: "Compare StealthRDP VPS plans: USA and EU locations, NVMe storage, DDoS protection, 99.9% uptime. From €9.50/month with 7-day money-back guarantee.",
+    title: "Windows & Linux VPS Hosting | USA & EU | StealthRDP",
+    description: "Compare Windows and Linux VPS hosting plans from StealthRDP with USA and EU locations, NVMe storage, flexible billing, and shared checkout.",
     canonical: "__SRDP_BASE__/plans.html",
     jsonLd,
     body,
@@ -1185,6 +1200,34 @@ function structureBlogHtml(html) {
   return { html: out, headings };
 }
 
+const ARTICLE_PLAN_LINKS = {
+  "windows-vs-linux-vps-which-os-best-fits-your-business": [
+    ["/plans.html#windows-vps", "Compare Windows VPS plans"],
+    ["/plans.html#linux-vps", "Compare Linux VPS plans"],
+  ],
+  "5-ways-to-optimize-your-rdp-performance-for-remote-work": [
+    ["/plans.html#windows-vps", "Compare Windows VPS plans"],
+  ],
+  "8-signs-you-need-to-upgrade-your-vps-resources": [
+    ["/plans.html#comparison", "Compare VPS resources"],
+  ],
+  "common-vps-performance-bottlenecks": [
+    ["/plans.html#comparison", "Compare VPS resources"],
+  ],
+  "common-vps-hosting-issues-and-their-solutions": [
+    ["/plans.html#linux-vps", "Compare Linux VPS plans"],
+  ],
+  "top-6-vps-management-tools-for-small-businesses": [
+    ["/plans.html#linux-vps", "Compare Linux VPS plans"],
+  ],
+};
+
+function articlePlanLinksHtml(post) {
+  const links = ARTICLE_PLAN_LINKS[post.slug] || [];
+  if (!links.length) return "";
+  return `<p class="article-plan-links"><strong>Continue your VPS research:</strong> ${links.map(([href, label]) => `<a href="${href}">${label}</a>`).join(" · ")}</p>`;
+}
+
 function buildBlogPost(post) {
   const article = BLOG_BODIES.get(post.slug) || {};
   const rendered = structureBlogHtml(article.html || "");
@@ -1196,7 +1239,7 @@ function buildBlogPost(post) {
     <article class="docs-article-column" id="blogPost">
       <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blog.html">Blog</a><span aria-hidden="true">/</span><span>${esc(post.category)}</span></nav>
       <header class="docs-article-header"><span class="docs-category">${esc(post.category)}</span><h1>${esc(post.title)}</h1><p class="docs-summary">${esc(post.excerpt || "")}</p><div class="docs-source-meta"><span>${esc(post.author)}</span><span>${esc(post.date)}</span></div></header>
-      <div class="docs-content blog-article-body">${rendered.html || `<p>${esc(post.excerpt || "")}</p>`}</div>
+      <div class="docs-content blog-article-body">${rendered.html || `<p>${esc(post.excerpt || "")}</p>`}${articlePlanLinksHtml(post)}</div>
       <footer class="blog-article-footer"><a href="/blog.html">← Back to all articles</a><span class="blog-article-actions"><a class="btn btn-ghost btn-sm" href="/plans.html">View plans</a><a class="btn btn-primary btn-sm" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Ask support</a></span></footer>
     </article>
     ${toc}

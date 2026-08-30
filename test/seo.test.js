@@ -176,6 +176,46 @@ test("no leftover loading placeholders in raw HTML", () => {
   }
 });
 
+test("VPS SEO hub keeps OS anchors, selector, internal links, and checkout paths", () => {
+  const home = HTML("index.html");
+  const plans = HTML("plans.html");
+  assert.match(plans, /<title>Windows &amp; Linux VPS Hosting \| USA &amp; EU \| StealthRDP<\/title>/);
+  assert.match(plans, /<meta name="description" content="Compare Windows and Linux VPS hosting plans from StealthRDP/);
+  assert.strictEqual((plans.match(/<h1[\s>]/g) || []).length, 1, "plans: one H1");
+  assert.match(plans, /<h1>Windows &amp; Linux VPS Hosting Plans<\/h1>/);
+  assert.match(plans, /id="windows-vps"/);
+  assert.match(plans, /id="linux-vps"/);
+  assert.match(plans, /id="comparison"/);
+  assert.match(home, /id="osSelect"[\s\S]*value="windows"[\s\S]*value="linux"/);
+  assert.match(home, /href="\/plans\.html#windows-vps">Windows VPS<\/a>/);
+  assert.match(home, /href="\/plans\.html#linux-vps">Linux VPS<\/a>/);
+  assert.match(home, /href="\/plans\.html#comparison">Compare VPS resources<\/a>/);
+
+  const checkoutPaths = [
+    "standard-usa-rdp-vps/bronze-usa2",
+    "standard-usa-rdp-vps/silver-usa",
+    "standard-usa-rdp-vps/gold-usa",
+    "standard-usa-rdp-vps/platinum-usa",
+    "standard-usa-rdp-vps/diamond-usa",
+    "standard-usa-rdp-vps/emerald-usa",
+    "eu/bronze-eu",
+    "eu/silver-eu",
+    "eu/gold-eu",
+    "eu/platinum-eu",
+    "eu/diamond-eu",
+  ];
+  for (const checkoutPath of checkoutPaths) {
+    const escapedPath = checkoutPath.replace("/", "\\/");
+    assert.match(plans, new RegExp(`https://dash\\.stealthrdp\\.com/index\\.php\\?rp=/store/${escapedPath}&billingcycle=monthly`), `${checkoutPath}: shared WHMCS path`);
+  }
+
+  assert.match(HTML("blog/windows-vs-linux-vps-which-os-best-fits-your-business.html"), /href="\/plans\.html#windows-vps"/);
+  assert.match(HTML("blog/windows-vs-linux-vps-which-os-best-fits-your-business.html"), /href="\/plans\.html#linux-vps"/);
+  assert.match(HTML("blog/5-ways-to-optimize-your-rdp-performance-for-remote-work.html"), /href="\/plans\.html#windows-vps"/);
+  assert.match(HTML("blog/8-signs-you-need-to-upgrade-your-vps-resources.html"), /href="\/plans\.html#comparison"/);
+  assert.match(HTML("blog/common-vps-hosting-issues-and-their-solutions.html"), /href="\/plans\.html#linux-vps"/);
+});
+
 test("rss, security.txt, HowTo schema, and checkout events exist", () => {
   const rss = fs.readFileSync(path.join(ROOT, "rss.xml"), "utf8");
   assert.ok(rss.includes("<rss"), "rss feed");
