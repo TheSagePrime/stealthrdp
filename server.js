@@ -510,11 +510,16 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  const filePath = path.normalize(path.join(ROOT, url.pathname === "/" ? "index.html" : url.pathname));
+  let filePath = path.normalize(path.join(ROOT, url.pathname === "/" ? "index.html" : url.pathname));
   if (!filePath.startsWith(ROOT + path.sep) && filePath !== ROOT) {
     res.writeHead(403, { "Content-Type": "text/plain", ...SECURITY_HEADERS });
     res.end("Forbidden");
     return;
+  }
+  try {
+    if (fs.statSync(filePath).isDirectory()) filePath = path.join(filePath, "index.html");
+  } catch (_) {
+    // The read below returns the regular 404 response for missing paths.
   }
 
   fs.readFile(filePath, (err, data) => {

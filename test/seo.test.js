@@ -11,10 +11,12 @@ const ROOT = path.join(__dirname, "..");
 const HTML = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 const BLOG = require(path.join(ROOT, "js", "blog-data.js")).SRDP_BLOG;
 const DOCS = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "docs-articles.json"), "utf8"));
+const OS_ROUTES = ["windows-vps/index.html", "linux-vps/index.html"];
 
 const ROUTES = [
   "index.html",
   "plans.html",
+  ...OS_ROUTES,
   "status.html",
   "blog.html",
   "faq.html",
@@ -97,7 +99,12 @@ test("sitemap.xml is valid XML with all routes; robots.txt allows + references i
   assert.strictEqual(locs.length, ROUTES.length, `sitemap has ${ROUTES.length} URLs`);
   for (const loc of locs) assert.ok(loc.startsWith("__SRDP_BASE__/"), `sitemap absolute loc ${loc}`);
   for (const route of ROUTES) {
-    const wanted = route === "index.html" ? "__SRDP_BASE__/" : `__SRDP_BASE__/${route}`;
+    const sitemapRoute = route === "index.html"
+      ? ""
+      : route.endsWith("/index.html")
+        ? route.slice(0, -"index.html".length)
+        : route;
+    const wanted = `__SRDP_BASE__/${sitemapRoute}`;
     assert.ok(locs.includes(wanted), `sitemap includes ${wanted}`);
   }
 
@@ -214,6 +221,55 @@ test("VPS SEO hub keeps OS anchors, selector, internal links, and checkout paths
   assert.match(HTML("blog/5-ways-to-optimize-your-rdp-performance-for-remote-work.html"), /href="\/plans\.html#windows-vps"/);
   assert.match(HTML("blog/8-signs-you-need-to-upgrade-your-vps-resources.html"), /href="\/plans\.html#comparison"/);
   assert.match(HTML("blog/common-vps-hosting-issues-and-their-solutions.html"), /href="\/plans\.html#linux-vps"/);
+});
+
+test("OS landing pages have separate commercial intent, page schema, and shared checkout", () => {
+  const windows = HTML("windows-vps/index.html");
+  const linux = HTML("linux-vps/index.html");
+  assert.match(windows, /<title>Windows VPS Hosting \| USA &amp; EU Plans \| StealthRDP<\/title>/);
+  assert.match(linux, /<title>Linux VPS Hosting \| USA &amp; EU Plans \| StealthRDP<\/title>/);
+  assert.match(windows, /canonical" href="__SRDP_BASE__\/windows-vps\//);
+  assert.match(linux, /canonical" href="__SRDP_BASE__\/linux-vps\//);
+  assert.match(windows, /<h1>Windows VPS Hosting Plans<\/h1>/);
+  assert.match(linux, /<h1>Linux VPS Hosting Plans<\/h1>/);
+  assert.strictEqual((windows.match(/<h1[\s>]/g) || []).length, 1);
+  assert.strictEqual((linux.match(/<h1[\s>]/g) || []).length, 1);
+  assert.match(windows, /windows-vps\/.*Windows VPS|Windows VPS.*windows-vps\//s);
+  assert.match(linux, /linux-vps\/.*Linux VPS|Linux VPS.*linux-vps\//s);
+  assert.match(windows, /href="\/plans\.html#windows-vps"/);
+  assert.match(linux, /href="\/plans\.html#linux-vps"/);
+  assert.match(windows, /href="\/plans\.html#comparison"/);
+  assert.match(linux, /href="\/plans\.html#comparison"/);
+  assert.match(windows, /alt="Windows operating system logo"/);
+  assert.match(linux, /alt="Ubuntu Linux operating system logo"/);
+  for (const html of [windows, linux]) {
+    const graph = parse(html).ldBlocks.flatMap((b) => JSON.parse(b)["@graph"] || [JSON.parse(b)]);
+    assert.ok(graph.some((item) => item["@type"] === "BreadcrumbList"), "OS page: BreadcrumbList");
+    assert.ok(graph.some((item) => item["@type"] === "WebPage"), "OS page: WebPage");
+    assert.match(html, /https:\/\/dash\.stealthrdp\.com\/index\.php\?rp=\/store\/standard-usa-rdp-vps/);
+    assert.doesNotMatch(html, /TODO|TBD|PLACEHOLDER|LOREM IPSUM/i);
+  }
+  assert.notStrictEqual(windows, linux, "OS pages are not duplicate HTML");
+});
+
+test("OS landing pages are linked from the approved site context", () => {
+  assert.match(HTML("index.html"), /href="\/windows-vps\/"/);
+  assert.match(HTML("index.html"), /href="\/linux-vps\/"/);
+  assert.match(HTML("plans.html"), /href="\/windows-vps\/"/);
+  assert.match(HTML("plans.html"), /href="\/linux-vps\/"/);
+  for (const route of [
+    "blog/windows-vs-linux-vps-which-os-best-fits-your-business.html",
+    "blog/5-ways-to-optimize-your-rdp-performance-for-remote-work.html",
+    "blog/8-signs-you-need-to-upgrade-your-vps-resources.html",
+  ]) {
+    const html = HTML(route);
+    assert.match(html, /href="\/windows-vps\/"/);
+    if (route.includes("windows-vs-linux") || route.includes("8-signs")) assert.match(html, /href="\/linux-vps\/"/);
+  }
+  const windows = HTML("windows-vps/index.html");
+  const linux = HTML("linux-vps/index.html");
+  assert.match(windows, /Products<\/h4>[\s\S]*href="\/linux-vps\/"/);
+  assert.match(linux, /Products<\/h4>[\s\S]*href="\/windows-vps\/"/);
 });
 
 test("rss, security.txt, HowTo schema, and checkout events exist", () => {

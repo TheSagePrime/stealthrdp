@@ -9,7 +9,7 @@ const ROOT = path.join(__dirname, "..");
 const HTML = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 const DOCS = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "docs-articles.json"), "utf8"));
 const publicRoutes = [
-  "index.html", "plans.html", "status.html", "blog.html", "faq.html", "about.html", "privacy.html", "docs.html",
+  "index.html", "plans.html", "windows-vps/index.html", "linux-vps/index.html", "status.html", "blog.html", "faq.html", "about.html", "privacy.html", "docs.html",
   ...DOCS.map((article) => `docs/${article.slug}.html`),
   ...fs.readdirSync(path.join(ROOT, "blog")).map((file) => `blog/${file}`),
 ];

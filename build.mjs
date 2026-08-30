@@ -217,6 +217,8 @@ function footerHtml() {
       </div>
       <div class="footer-col"><h4>Products</h4><ul>
         <li><a href="/plans.html">RDP Plans</a></li>
+        <li><a href="/windows-vps/">Windows VPS Hosting</a></li>
+        <li><a href="/linux-vps/">Linux VPS Hosting</a></li>
         <li><a href="/plans.html#build-your-own">Build Your Own VPS</a></li>
         <li><a href="/plans.html">Pricing</a></li>
       </ul></div>
@@ -236,7 +238,7 @@ function footerHtml() {
     </div>
     <div class="footer-mobile-nav" aria-label="Footer navigation">
       <details class="footer-mobile-group"><summary><span>Products</span><small>RDP plans · pricing</small><b aria-hidden="true">+</b></summary><ul>
-        <li><a href="/plans.html">RDP Plans</a></li><li><a href="/plans.html#build-your-own">Build Your Own VPS</a></li><li><a href="/plans.html">Pricing</a></li>
+        <li><a href="/plans.html">RDP Plans</a></li><li><a href="/windows-vps/">Windows VPS Hosting</a></li><li><a href="/linux-vps/">Linux VPS Hosting</a></li><li><a href="/plans.html#build-your-own">Build Your Own VPS</a></li><li><a href="/plans.html">Pricing</a></li>
       </ul></details>
       <details class="footer-mobile-group"><summary><span>Resources</span><small>Docs · blog · status</small><b aria-hidden="true">+</b></summary><ul>
         <li><a href="/docs.html">Documentation</a></li><li><a href="/blog.html">Tutorials</a></li><li><a href="/faq.html">FAQ</a></li><li><a href="/blog.html">Blog</a></li><li><a href="/status.html">Server Status</a></li>
@@ -958,7 +960,7 @@ function buildIndex() {
         <div class="finder-field"><span class="control-label">Operating system</span><select id="osSelect" aria-label="Operating system"><option value="any">Any OS</option><option value="windows">Windows</option><option value="linux">Linux</option></select></div>
         <div class="finder-field"><span class="control-label">Use case</span><select id="useCaseSelect" aria-label="Use case"><option value="remote-desktop">Remote desktop</option><option value="web-hosting">Web hosting</option><option value="automation">Automation &amp; bots</option><option value="trading">Trading</option><option value="storage">Storage &amp; backups</option></select></div>
         <p class="finder-note" id="finderNote">Best fit: Bronze USA — any OS included on every plan.</p>
-        <div class="all-link os-links" aria-label="Browse VPS operating system plans"><a class="btn btn-ghost btn-sm" href="/plans.html#windows-vps">Windows VPS</a><a class="btn btn-ghost btn-sm" href="/plans.html#linux-vps">Linux VPS</a><a class="btn btn-ghost btn-sm" href="/plans.html#comparison">Compare VPS resources</a></div>
+        <div class="all-link os-links" aria-label="Browse VPS operating system plans"><a class="btn btn-ghost btn-sm" href="/windows-vps/">Windows VPS hosting</a><a class="btn btn-ghost btn-sm" href="/linux-vps/">Linux VPS hosting</a><a class="btn btn-ghost btn-sm" href="/plans.html#windows-vps">Windows VPS</a><a class="btn btn-ghost btn-sm" href="/plans.html#linux-vps">Linux VPS</a><a class="btn btn-ghost btn-sm" href="/plans.html#comparison">Compare VPS resources</a></div>
       </div>
       <div class="billing-wrap fade-up d2">
         <div class="billing-toggle" id="billingToggle" role="tablist" aria-label="Billing cycle">
@@ -1060,11 +1062,11 @@ function buildPlans() {
           <p>Windows and Linux VPS plans use the same resource comparison. Select the operating system that matches your software, administration, and remote-access needs during checkout.</p>
         </div>
         <article class="byo-panel" id="windows-vps">
-          <div><span class="included-label">Windows VPS</span><h2>Windows VPS for graphical remote access.</h2><p>Choose Windows when your workflow needs a graphical desktop or Microsoft-compatible software. Compare CPU, RAM, NVMe storage, bandwidth, region, and billing cycle above.</p></div>
+          <div><span class="included-label">Windows VPS</span><h2>Windows VPS for graphical remote access.</h2><p>Choose Windows when your workflow needs a graphical desktop or Microsoft-compatible software. Compare CPU, RAM, NVMe storage, bandwidth, region, and billing cycle above. <a href="/windows-vps/">Read the Windows VPS hosting guide</a>.</p></div>
           <a class="btn btn-ghost" href="#plan-grid">Compare Windows VPS resources</a>
         </article>
         <article class="byo-panel" id="linux-vps">
-          <div><span class="included-label">Linux VPS</span><h2>Linux VPS for server and open-source workloads.</h2><p>Choose Linux for command-line administration, web hosting, open-source applications, and server tooling. Compare the same resource levels before you continue to the shared checkout.</p></div>
+          <div><span class="included-label">Linux VPS</span><h2>Linux VPS for server and open-source workloads.</h2><p>Choose Linux for command-line administration, web hosting, open-source applications, and server tooling. Compare the same resource levels before you continue to the shared checkout. <a href="/linux-vps/">Read the Linux VPS hosting guide</a>.</p></div>
           <a class="btn btn-ghost" href="#plan-grid">Compare Linux VPS resources</a>
         </article>
       </section>
@@ -1102,6 +1104,190 @@ function buildPlans() {
     body,
     planLocation: "USA",
     planLimit: USA.length,
+  });
+}
+
+function osVpsPageLd({ slug, title, description, serviceName, serviceType }) {
+  return {
+    "@type": "WebPage",
+    "@id": `__SRDP_BASE__/${slug}/#webpage`,
+    url: `__SRDP_BASE__/${slug}/`,
+    name: title,
+    description,
+    isPartOf: { "@id": "__SRDP_BASE__/#website" },
+    about: {
+      "@type": "Service",
+      name: serviceName,
+      serviceType,
+      provider: { "@id": "__SRDP_BASE__/#organization" },
+      areaServed: ["USA", "EU"],
+    },
+  };
+}
+
+function buildOsVpsPage({
+  slug,
+  label,
+  title,
+  description,
+  serviceName,
+  serviceType,
+  logo,
+  logoAlt,
+  h1,
+  intro,
+  workloadHeading,
+  workloadCopy,
+  otherPage,
+  otherLabel,
+  resourceHeading,
+  resourceCopy,
+  planHref,
+  planLabel,
+  accessHeading,
+  accessCopy,
+  accessGuide,
+  responsibilitiesCopy,
+  faqs,
+  planOption,
+}) {
+  const faqHtml = faqs.map(([question, answer]) => `<h3>${question}</h3><p>${answer}</p>`).join("");
+  const body = `
+  <main class="os-vps-page">
+    <section class="page-head">
+      <div class="container">
+        <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/plans.html">VPS Plans</a><span aria-hidden="true">/</span><span>${label} VPS</span></nav>
+        <span class="eyebrow">${label} VPS hosting</span>
+        <h1>${h1}</h1>
+        <p>${intro}</p>
+        <div class="os-vps-intro">
+          <img class="os-vps-logo" src="${logo}" alt="${logoAlt}" width="64" height="64" decoding="async">
+          <div><strong>${serviceName}</strong><span>Choose resources, region, and operating system through the existing shared checkout.</span></div>
+        </div>
+        <div class="os-vps-links"><a class="btn btn-primary" href="${planHref}">${planLabel}</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Continue to shared checkout</a></div>
+      </div>
+    </section>
+    <section class="section" style="padding-top:0">
+      <div class="container prose">
+        <h2>${workloadHeading}</h2>
+        <p>${workloadCopy}</p>
+        <p>If you need ${otherLabel}, compare the <a href="${otherPage}">${otherLabel} VPS plans</a>. To review both operating systems, use the <a href="/plans.html#comparison">VPS resource comparison</a>.</p>
+        <h2>${resourceHeading}</h2>
+        <p>${resourceCopy}</p>
+        <div class="byo-panel">
+          <div><span class="included-label">Current plan catalog</span><h2>Compare ${label} VPS resources</h2><p>Review CPU cores, RAM, NVMe storage, bandwidth, billing cycle, and region before ordering. Prices and availability can change; the plan catalog and checkout are the source of truth.</p></div>
+          <a class="btn btn-ghost" href="${planHref}">${planLabel}</a>
+        </div>
+        <h2>${accessHeading}</h2>
+        <p>${accessCopy} ${accessGuide}</p>
+        <h2>What happens after you choose a plan</h2>
+        <ol>
+          <li>Compare the available resources and region.</li>
+          <li>Select the ${label} option in the checkout flow.</li>
+          <li>Complete the order through the existing StealthRDP checkout.</li>
+          <li>Follow the service instructions provided after purchase.</li>
+          <li>Contact <a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">support</a> when you need help with the service process.</li>
+        </ol>
+        <h2>Which ${label} VPS plan should you choose?</h2>
+        <ul>
+          <li>Choose a lower resource plan for a small workload or light ${label === "Windows" ? "remote access" : "application"}.</li>
+          <li>Choose more RAM when your software or users need additional memory.</li>
+          <li>Choose more CPU cores for workloads that run several processes.</li>
+          <li>Choose more storage when your files, databases, or applications need more space.</li>
+          <li>Choose the region that best matches your users and operating requirements.</li>
+        </ul>
+        <h2>Support and customer responsibilities</h2>
+        <p>${responsibilitiesCopy} Review the <a href="/docs/1737944013-use-of-service.html">service terms</a> before ordering and contact support for account or server-specific questions.</p>
+        <h2>${label} VPS questions</h2>
+        ${faqHtml}
+        <div class="note"><strong>Ready to compare?</strong> Select the ${label} option in the shared checkout, or start with the <a href="${planHref}">${planOption}</a>.</div>
+      </div>
+    </section>
+    <section class="cta-band">
+      <div class="container cta-grid">
+        <div class="cta-copy"><span class="eyebrow">${label} VPS plans</span><h2>Start with the resources your workload needs.</h2><p>Compare the current catalog, select your region and operating system, and continue through the existing checkout.</p></div>
+        <div class="cta-actions"><a class="btn btn-primary" href="${planHref}">${planLabel}</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Open shared checkout</a></div>
+      </div>
+    </section>
+  </main>`;
+  const jsonLd = [{ "@context": "https://schema.org", "@graph": [
+    breadcrumbLd(`${label} VPS`, [
+      { name: "Home", url: "__SRDP_BASE__/" },
+      { name: "VPS Plans", url: "__SRDP_BASE__/plans.html" },
+      { name: `${label} VPS`, url: `__SRDP_BASE__/${slug}/` },
+    ]),
+    osVpsPageLd({ slug, title, description, serviceName, serviceType }),
+  ] }];
+  return page({ active: "plans", title, description, canonical: `__SRDP_BASE__/${slug}/`, jsonLd, body });
+}
+
+function buildWindowsVps() {
+  return buildOsVpsPage({
+    slug: "windows-vps",
+    label: "Windows",
+    title: "Windows VPS Hosting | USA & EU Plans | StealthRDP",
+    description: "Compare Windows VPS hosting plans from StealthRDP for remote access, applications, and business workloads in USA and EU regions.",
+    serviceName: "StealthRDP Windows VPS hosting",
+    serviceType: "Windows VPS hosting",
+    logo: "/assets/os-logos/windows.svg",
+    logoAlt: "Windows operating system logo",
+    h1: "Windows VPS Hosting Plans",
+    intro: "Choose a Windows VPS when your workload needs a Windows environment, familiar administration tools, or Windows-compatible applications. StealthRDP offers resource-based VPS plans with USA and EU region options through one checkout.",
+    workloadHeading: "Choose a Windows VPS by workload",
+    workloadCopy: "Windows VPS hosting can support remote access, Windows applications, testing, and business workflows. Select the plan that matches your CPU, memory, storage, and region requirements.",
+    otherPage: "/linux-vps/",
+    otherLabel: "Linux",
+    resourceHeading: "Windows VPS resources and regions",
+    resourceCopy: "Review each plan before ordering. Compare CPU cores, RAM, NVMe storage, bandwidth, billing cycle, and region. The available catalog includes USA and EU plans. The checkout lets you choose the operating system for the VPS product.",
+    planHref: "/plans.html#windows-vps",
+    planLabel: "Compare Windows VPS plans",
+    accessHeading: "Windows VPS with remote access",
+    accessCopy: "A Windows VPS can provide a remote Windows environment for supported workloads. Before you order, confirm that your chosen plan and operating-system selection match your intended remote-access use case.",
+    accessGuide: "For connection and security guidance, read the <a href=\"/blog/7-tips-for-securing-your-remote-desktop-connection.html\">remote desktop security guide</a>.",
+    responsibilitiesCopy: "Keep your account details secure, choose resources that fit your workload, and follow the service requirements for your intended use.",
+    faqs: [
+      ["Is Windows VPS available in USA and EU regions?", "The public plan catalog includes USA and EU VPS options. Review the current availability during checkout."],
+      ["Can I choose Windows or Linux during checkout?", "The shared VPS checkout supports operating-system selection. Choose Windows for this page's use cases, or review the <a href=\"/linux-vps/\">Linux VPS page</a> for Linux workloads."],
+      ["How much CPU, RAM, and storage do I need?", "Choose resources according to your application, users, and storage needs. Compare the current plans at <a href=\"/plans.html#comparison\">VPS plans</a>."],
+      ["Where can I see current Windows VPS prices?", "Prices and billing options are shown on the <a href=\"/plans.html#windows-vps\">current Windows VPS plans</a>. The checkout is the source of truth for the order."],
+      ["Is Windows VPS suitable for remote access?", "Windows is suitable for workloads that require a Windows environment and remote access. Confirm the plan details and service requirements before ordering."],
+    ],
+    planOption: "Windows VPS plan catalog",
+  });
+}
+
+function buildLinuxVps() {
+  return buildOsVpsPage({
+    slug: "linux-vps",
+    label: "Linux",
+    title: "Linux VPS Hosting | USA & EU Plans | StealthRDP",
+    description: "Compare Linux VPS hosting plans from StealthRDP for websites, applications, development, and server workloads in USA and EU regions.",
+    serviceName: "StealthRDP Linux VPS hosting",
+    serviceType: "Linux VPS hosting",
+    logo: "/assets/os-logos/ubuntu.svg",
+    logoAlt: "Ubuntu Linux operating system logo",
+    h1: "Linux VPS Hosting Plans",
+    intro: "Choose a Linux VPS when your workload needs a Linux environment, open-source software, or server administration tools. StealthRDP offers resource-based VPS plans with USA and EU region options through one checkout.",
+    workloadHeading: "Linux VPS for websites and applications",
+    workloadCopy: "Linux VPS hosting can support websites, applications, databases, development environments, and other server workloads. Select the plan that matches your CPU, memory, storage, and region requirements.",
+    otherPage: "/windows-vps/",
+    otherLabel: "Windows",
+    resourceHeading: "Linux VPS resources and regions",
+    resourceCopy: "Review each plan before ordering. Compare CPU cores, RAM, NVMe storage, bandwidth, billing cycle, and region. The available catalog includes USA and EU plans. The checkout lets you choose the operating system for the VPS product.",
+    planHref: "/plans.html#linux-vps",
+    planLabel: "Compare Linux VPS plans",
+    accessHeading: "Linux VPS for Ubuntu and development",
+    accessCopy: "Linux VPS hosting can provide a flexible server environment for Ubuntu-based applications, development work, websites, and services. Confirm the supported operating-system option and plan resources during checkout.",
+    accessGuide: "For server guidance, review the <a href=\"/blog.html\">VPS management articles</a>.",
+    responsibilitiesCopy: "Keep your account details secure, maintain the software you install, choose resources that fit your workload, and follow the service requirements for your intended use.",
+    faqs: [
+      ["Is Linux VPS available in USA and EU regions?", "The public plan catalog includes USA and EU VPS options. Review the current availability during checkout."],
+      ["Can I choose Linux during checkout?", "The shared VPS checkout supports operating-system selection. Choose Linux for this page's use cases, or review the <a href=\"/windows-vps/\">Windows VPS page</a> for Windows workloads."],
+      ["Is Linux VPS suitable for web hosting?", "Linux VPS hosting can suit websites and server applications. Choose resources that match your expected traffic, software, and storage requirements."],
+      ["Can I use Ubuntu on a Linux VPS?", "Ubuntu is a common Linux VPS use case. Confirm the available operating-system option during checkout before ordering."],
+      ["Where can I see current Linux VPS prices?", "Prices and billing options are shown on the <a href=\"/plans.html#linux-vps\">current Linux VPS plans</a>. The checkout is the source of truth for the order."],
+    ],
+    planOption: "Linux VPS plan catalog",
   });
 }
 
@@ -1202,13 +1388,18 @@ function structureBlogHtml(html) {
 
 const ARTICLE_PLAN_LINKS = {
   "windows-vs-linux-vps-which-os-best-fits-your-business": [
+    ["/windows-vps/", "Explore Windows VPS hosting"],
+    ["/linux-vps/", "Explore Linux VPS hosting"],
     ["/plans.html#windows-vps", "Compare Windows VPS plans"],
     ["/plans.html#linux-vps", "Compare Linux VPS plans"],
   ],
   "5-ways-to-optimize-your-rdp-performance-for-remote-work": [
+    ["/windows-vps/", "Explore Windows VPS hosting"],
     ["/plans.html#windows-vps", "Compare Windows VPS plans"],
   ],
   "8-signs-you-need-to-upgrade-your-vps-resources": [
+    ["/windows-vps/", "Review Windows VPS resources"],
+    ["/linux-vps/", "Review Linux VPS resources"],
     ["/plans.html#comparison", "Compare VPS resources"],
   ],
   "common-vps-performance-bottlenecks": [
@@ -1431,6 +1622,8 @@ function buildSitemap() {
   const staticRoutes = [
     ["/", "2026-08-06"],
     ["/plans.html", "2026-08-06"],
+    ["/windows-vps/", "2026-08-30"],
+    ["/linux-vps/", "2026-08-30"],
     ["/status.html", "2026-08-06"],
     ["/blog.html", "2026-08-06"],
     ["/faq.html", "2026-08-06"],
@@ -1457,6 +1650,8 @@ const OUT = {
   "404.html": build404(),
   "index.html": buildIndex(),
   "plans.html": buildPlans(),
+  "windows-vps/index.html": buildWindowsVps(),
+  "linux-vps/index.html": buildLinuxVps(),
   "status.html": buildStatus(),
   "blog.html": buildBlog(),
   "faq.html": buildFaq(),
@@ -1483,6 +1678,7 @@ if (windowsEvalArticle) {
 }
 
 for (const [file, content] of Object.entries(OUT)) {
+  fs.mkdirSync(path.dirname(path.join(ROOT, file)), { recursive: true });
   fs.writeFileSync(path.join(ROOT, file), content);
   console.log("wrote", file, (content.length / 1024).toFixed(1) + "KB");
 }
