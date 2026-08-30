@@ -8,6 +8,7 @@ const {
   applyPreviewHtml,
   PUBLIC_CANONICAL_ORIGIN,
 } = require("../lib/index-policy");
+const proxy = require("../proxy");
 
 test("only stealthrdp.com hosts are indexable", () => {
   assert.strictEqual(isPublicIndexHost("www.stealthrdp.com"), true);
@@ -32,4 +33,17 @@ test("preview HTML flips robots meta and keeps production as the token origin", 
   assert.ok(html.includes('content="noindex,nofollow"'));
   assert.ok(!html.includes("index,follow"));
   assert.strictEqual(PUBLIC_CANONICAL_ORIGIN, "https://www.stealthrdp.com");
+});
+
+test("Vercel preview policy blocks robots and sitemap and marks pages noindex", async () => {
+  const robots = proxy(new Request("https://preview.example/robots.txt"));
+  assert.strictEqual(robots.status, 200);
+  assert.match(await robots.text(), /Disallow: \/\n/);
+
+  const sitemap = proxy(new Request("https://preview.example/sitemap.xml"));
+  assert.strictEqual(sitemap.status, 404);
+  assert.strictEqual(await sitemap.text(), "Not found");
+
+  const page = proxy(new Request("https://preview.example/windows-vps/"));
+  assert.strictEqual(page.headers.get("x-robots-tag"), "noindex, nofollow");
 });

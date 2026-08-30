@@ -19,13 +19,14 @@ const title = (html.match(/<title[^>]*>([\s\S]*?)<\/title>/i) || [])[1]?.trim() 
 const description = (html.match(/<meta\s+name=["']description["']\s+content=["']([^"']*)["']/i) || [])[1]?.trim() || "";
 const canonical = (html.match(/<link\s+rel=["']canonical["']\s+href=["']([^"']*)["']/i) || [])[1]?.trim() || "";
 const robots = (html.match(/<meta\s+name=["']robots["']\s+content=["']([^"']*)["']/i) || [])[1] || "";
+const robotsHeader = response.headers.get("x-robots-tag") || "";
 const h1Count = (html.match(/<h1(?:\s|>)/gi) || []).length;
 const schemaBlocks = [...html.matchAll(/<script\s+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)].map((m) => m[1]);
 
 if (!title) fail("title is missing from rendered HTML");
 if (!description) fail("meta description is missing from rendered HTML");
 if (!canonical) fail("canonical is missing from rendered HTML");
-if (!/noindex/i.test(robots)) fail("preview page must contain noindex");
+if (!/noindex/i.test(robots) && !/noindex/i.test(robotsHeader)) fail("preview page must contain noindex");
 if (h1Count !== 1) fail(`expected one H1, found ${h1Count}`);
 if (!schemaBlocks.length) fail("structured data is missing");
 for (const block of schemaBlocks) {
