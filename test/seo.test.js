@@ -241,7 +241,7 @@ test("OS landing pages have separate commercial intent, page schema, and shared 
   assert.match(windows, /href="\/plans\.html#comparison"/);
   assert.match(linux, /href="\/plans\.html#comparison"/);
   assert.match(windows, /alt="Windows operating system logo"/);
-  assert.match(linux, /alt="Ubuntu Linux operating system logo"/);
+  assert.match(linux, /alt="Linux operating system logo"/);
   for (const html of [windows, linux]) {
     const graph = parse(html).ldBlocks.flatMap((b) => JSON.parse(b)["@graph"] || [JSON.parse(b)]);
     assert.ok(graph.some((item) => item["@type"] === "BreadcrumbList"), "OS page: BreadcrumbList");
@@ -273,9 +273,9 @@ test("OS landing page heroes use the colored vendor logo variants", () => {
   const windows = HTML("windows-vps/index.html");
   const linux = HTML("linux-vps/index.html");
   assert.match(windows, /class="os-vps-logo" src="\/assets\/os-logos\/windows-colored\.svg"/);
-  assert.match(linux, /class="os-vps-logo" src="\/assets\/os-logos\/ubuntu-colored\.svg"/);
+  assert.match(linux, /class="os-vps-logo" src="\/assets\/os-logos\/linux-colored\.svg"/);
   assert.match(fs.readFileSync(path.join(ROOT, "assets", "os-logos", "windows-colored.svg"), "utf8"), /fill="#00A4EF"/);
-  assert.match(fs.readFileSync(path.join(ROOT, "assets", "os-logos", "ubuntu-colored.svg"), "utf8"), /fill="#E95420"/);
+  assert.match(fs.readFileSync(path.join(ROOT, "assets", "os-logos", "linux-colored.svg"), "utf8"), /fill="#FCC624"/);
 });
 
 test("OS landing pages are linked from the approved site context", () => {
