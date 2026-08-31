@@ -246,7 +246,7 @@ test("VPS SEO hub keeps OS anchors, selector, internal links, and checkout paths
   assert.match(HTML("blog/common-vps-hosting-issues-and-their-solutions.html"), /href="\/plans\.html#linux-vps"/);
 });
 
-test("OS landing pages have separate commercial intent, page schema, and shared checkout", () => {
+test("OS landing pages have separate commercial intent, page schema, and checkout", () => {
   const windows = HTML("windows-vps/index.html");
   const linux = HTML("linux-vps/index.html");
   assert.match(windows, /<title>Windows VPS Hosting \| USA &amp; EU Plans \| StealthRDP<\/title>/);
@@ -270,6 +270,7 @@ test("OS landing pages have separate commercial intent, page schema, and shared 
     assert.ok(graph.some((item) => item["@type"] === "BreadcrumbList"), "OS page: BreadcrumbList");
     assert.ok(graph.some((item) => item["@type"] === "WebPage"), "OS page: WebPage");
     assert.match(html, /https:\/\/dash\.stealthrdp\.com\/index\.php\?rp=\/store\/standard-usa-rdp-vps/);
+    assert.doesNotMatch(html, /shared checkout/i);
     assert.doesNotMatch(html, /TODO|TBD|PLACEHOLDER|LOREM IPSUM/i);
   }
   assert.notStrictEqual(windows, linux, "OS pages are not duplicate HTML");
@@ -287,7 +288,7 @@ test("OS landing pages render the shared catalog cards without copied plan data"
     assert.match(html, /Region: USA/);
     assert.match(html, /Region: EU/);
     assert.strictEqual((html.match(/>Choose this plan<\/a>/g) || []).length, CATALOG.length, `${route}: neutral card CTAs`);
-    assert.match(html, /Choose the plan first\. Select Windows or Linux in shared checkout\./);
+    assert.match(html, /Choose the plan first\. Select Windows or Linux in checkout\./);
     assert.doesNotMatch(html, /Palette|Preview lab/);
     assert.doesNotMatch(html, /\bSSH\b|\bDocker\b|\bIIS\b|\.NET/i);
     for (const plan of CATALOG) {
@@ -315,6 +316,21 @@ test("OS landing pages expose an accessible USA and EU region toggle", () => {
   assert.match(main, /classList\.contains\("os-vps-plan-grid"\)/);
   assert.match(main, /card\.hidden = !selected/);
   assert.match(main, /if \(isOsVpsCatalog\) \{\n        syncOsVpsCards\(PLAN_LOCATION\);/);
+});
+
+test("OS landing pages use grouped guide sections instead of a flat prose stream", () => {
+  const windows = HTML("windows-vps/index.html");
+  const linux = HTML("linux-vps/index.html");
+  for (const [route, html] of [["windows", windows], ["linux", linux]]) {
+    assert.match(html, /class="os-vps-guide-intro"/);
+    assert.match(html, /class="os-vps-guide-grid"/);
+    assert.strictEqual((html.match(/class="os-vps-guide-card/g) || []).length, 4, `${route}: four guide cards`);
+    assert.match(html, /class="os-vps-ops-panel"/);
+    assert.match(html, /class="os-vps-order-panel"/);
+    assert.match(html, /class="os-vps-faq"/);
+    assert.strictEqual((html.match(/class="os-vps-faq-item"/g) || []).length, route === "windows" ? 8 : 9, `${route}: FAQ items`);
+    assert.doesNotMatch(html, /class="container prose"/);
+  }
 });
 
 test("OS landing pages use the approved copy and preserve current Bronze pricing", () => {

@@ -1065,7 +1065,7 @@ function buildPlans() {
   const compare = USA.concat(EU).map(compareRowHtml).join("");
   const body = `
   <section class="page-head">
-    <div class="container"><span class="eyebrow">Windows and Linux VPS</span><h1>Windows &amp; Linux VPS Hosting Plans</h1><p>Compare Windows and Linux VPS hosting plans in one place. Choose a resource level, region, and billing cycle before the shared checkout.</p></div>
+    <div class="container"><span class="eyebrow">Windows and Linux VPS</span><h1>Windows &amp; Linux VPS Hosting Plans</h1><p>Compare Windows and Linux VPS hosting plans in one place. Choose a resource level, region, and billing cycle before the checkout.</p></div>
   </section>
   <section class="section plans-page-section" style="padding-top:0">
     <div class="container">
@@ -1089,7 +1089,7 @@ function buildPlans() {
           <a class="btn btn-ghost" href="#plan-grid">Compare Windows VPS resources</a>
         </article>
         <article class="byo-panel" id="linux-vps">
-          <div><span class="included-label">Linux VPS</span><h2>Linux VPS for server and open-source workloads.</h2><p>Choose Linux for command-line administration, web hosting, open-source applications, and server tooling. Compare the same resource levels before you continue to the shared checkout. <a href="/linux-vps/">Read the Linux VPS hosting guide</a>.</p></div>
+          <div><span class="included-label">Linux VPS</span><h2>Linux VPS for server and open-source workloads.</h2><p>Choose Linux for command-line administration, web hosting, open-source applications, and server tooling. Compare the same resource levels before you continue to the checkout. <a href="/linux-vps/">Read the Linux VPS hosting guide</a>.</p></div>
           <a class="btn btn-ghost" href="#plan-grid">Compare Linux VPS resources</a>
         </article>
       </section>
@@ -1121,7 +1121,7 @@ function buildPlans() {
   return page({
     active: "plans",
     title: "Windows & Linux VPS Hosting | USA & EU | StealthRDP",
-    description: "Compare Windows and Linux VPS hosting plans from StealthRDP with USA and EU locations, NVMe storage, flexible billing, and shared checkout.",
+    description: "Compare Windows and Linux VPS hosting plans from StealthRDP with USA and EU locations, NVMe storage, flexible billing, and checkout.",
     canonical: "__SRDP_BASE__/plans.html",
     jsonLd,
     body,
@@ -1173,27 +1173,27 @@ function buildOsVpsPage({
         <p>${intro}</p>
         <div class="os-vps-intro">
           <img class="os-vps-logo" src="${logo}" alt="${logoAlt}" width="64" height="64" decoding="async">
-          <div><strong>${serviceName}</strong><span>Choose resources, region, and operating system through the existing shared checkout.</span></div>
+          <div><strong>${serviceName}</strong><span>Choose resources, region, and operating system through the existing checkout.</span></div>
         </div>
-        <div class="os-vps-links"><a class="btn btn-primary" href="${planHref}">${planLabel}</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Continue to shared checkout</a></div>
+        <div class="os-vps-links"><a class="btn btn-primary" href="${planHref}">${planLabel}</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Continue to checkout</a></div>
       </div>
     </section>
     ${osVpsCatalogHtml({ slug, label })}
     <section class="section os-vps-checkout-note" aria-labelledby="${slug}-checkout-heading">
       <div class="container">
         <div class="byo-panel">
-          <div><span class="included-label">Next step</span><h2 id="${slug}-checkout-heading">Choose the plan first. Select Windows or Linux in shared checkout.</h2><p>The buyer chooses the resource plan and region on this page. The existing shared checkout then provides the operating-system selector before payment.</p></div>
+          <div><span class="included-label">Next step</span><h2 id="${slug}-checkout-heading">Choose the plan first. Select Windows or Linux in checkout.</h2><p>The buyer chooses the resource plan and region on this page. The existing checkout then provides the operating-system selector before payment.</p></div>
           <a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Configure this VPS</a>
         </div>
       </div>
     </section>
-    <section class="section" style="padding-top:0">
-      <div class="container prose">${contentHtml}</div>
+    <section class="section os-vps-guide" style="padding-top:0">
+      <div class="container os-vps-guide-container">${contentHtml}</div>
     </section>
     <section class="cta-band">
       <div class="container cta-grid">
         <div class="cta-copy"><span class="eyebrow">${label} VPS plans</span><h2>${planLabel}</h2></div>
-        <div class="cta-actions"><a class="btn btn-primary" href="${planHref}">${planLabel}</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Open shared checkout</a></div>
+        <div class="cta-actions"><a class="btn btn-primary" href="${planHref}">${planLabel}</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Open checkout</a></div>
       </div>
     </section>
   </main>`;
@@ -1223,46 +1223,76 @@ function buildWindowsVps() {
     planHref: "/plans.html#windows-vps",
     planLabel: "Compare Windows VPS plans",
     contentHtml: `
-        <a class="btn btn-primary" href="/plans.html#windows-vps">Compare Windows VPS plans</a>
-        <h2>Keep your Windows workflow in reach</h2>
-        <p>A Windows VPS gives you a remote Windows environment for software, testing, administration, and business workflows. It can also suit users who need access to a Windows desktop or server without keeping the machine on site.</p>
-        <p>Start with the software and users. A plan that fits one application may not fit several concurrent sessions or a larger installation.</p>
-        <h2>Choose the Windows version your software needs</h2>
-        <p>The Services &amp; Plans FAQ lists these Windows options:</p>
-        <ul><li>Windows Server 2016</li><li>Windows Server 2019</li><li>Windows Server 2022</li><li>Windows 10</li><li>Windows 11</li></ul>
-        <p>Confirm the operating-system option during ordering. The available choice should match the software, workflow, and access pattern you plan to use.</p>
-        <h2>Administrator access for hands-on control</h2>
-        <p>VPS plans include full Windows Administrator access. That gives you control over the Windows environment and the software you install. You are responsible for regular backups of important data.</p>
-        <p>For the remote sign-in process, see <a href="/docs/1737945157-how-do-i-log-into-windows.html">How do I log into Windows?</a> StealthRDP sends service credentials by email after payment confirmation.</p>
-        <h2>Select resources by workload</h2>
-        <p>Use the live catalog to compare the fields that affect fit:</p>
-        <ul><li><strong>CPU cores:</strong> Match active processing and concurrent tasks.</li><li><strong>RAM:</strong> Allow for Windows, applications, and users running at the same time.</li><li><strong>NVMe storage:</strong> Include the operating system, installed software, files, and future additions.</li><li><strong>Bandwidth:</strong> Review the listed allowance for your network activity.</li><li><strong>Region:</strong> Choose between the available USA and EU options.</li><li><strong>Billing cycle:</strong> Select the payment period shown in checkout.</li></ul>
-        <p>The cards above use the current shared catalog and show the displayed monthly price. Checkout confirms the final configuration and billing cycle.</p>
-        <h2>A practical way to choose a plan</h2>
-        <p>If you need a remote desktop for a small set of applications, begin with the software requirements and user count. If several users will connect or several applications will run together, pay closer attention to RAM. If the workload performs active processing, compare CPU cores. If you store installers, files, or large application data, include that storage in your estimate.</p>
-        <p>This approach helps you choose from the catalog without treating a plan label as a workload guarantee.</p>
-        <h2>USA or EU availability</h2>
-        <p>StealthRDP lists Windows VPS options for USA and EU regions. Compare the region, resources, operating-system choice, and billing cycle in the <a href="/plans.html#windows-vps">Windows VPS catalog</a>.</p>
-        <h2>What happens after payment</h2>
-        <p>Standard Windows and Linux installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation. StealthRDP sends your service credentials by email after payment confirmation.</p>
-        <p>The <a href="/faq.html">FAQ</a> provides account, setup, and service information. Review the <a href="/docs/1737944184-payment-terms.html">payment terms</a> and <a href="/docs/1737944110-termination-of-service.html">termination of service terms</a> for refund and cancellation conditions.</p>
-        <h2>Support and acceptable use</h2>
-        <p>Support is available through the client-area ticketing system and support email. Review the <a href="/faq.html">FAQ</a> for support information and the <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a> before you order.</p>
-        <p>The terms require lawful use. They prohibit abuse, scanning, hacking, spam, botnets, and similar misuse. Use the service only for permitted activity.</p>
-        <h2>Order your Windows VPS</h2>
-        <ol><li>Open the Windows VPS catalog.</li><li>Check the Windows version and required software.</li><li>Compare CPU, RAM, NVMe storage, bandwidth, region, and billing cycle.</li><li>Review the live order details and price.</li><li>Confirm the purchase through StealthRDP.</li></ol>
-        <a class="btn btn-primary" href="/plans.html#windows-vps">Compare Windows VPS plans</a>
-        <h2>Windows VPS questions</h2>
-        <h3>Can I use familiar Windows software?</h3><p>A Windows VPS provides a Windows environment for compatible software. Check each application's system requirements before ordering.</p>
-        <h3>Do Windows VPS plans include Administrator access?</h3><p>Yes. The FAQ states that VPS plans include full Administrator access.</p>
-        <h3>Which Windows versions are listed?</h3><p>The FAQ lists Windows Server 2016, Windows Server 2019, Windows Server 2022, Windows 10, and Windows 11. Confirm the available selection during checkout.</p>
-        <h3>When will my Windows VPS be activated?</h3><p>Standard installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation.</p>
-        <h3>How will I receive my credentials?</h3><p>StealthRDP sends service credentials by email after payment confirmation.</p>
-        <h3>How do I choose CPU, RAM, and storage?</h3><p>Use your software requirements, user count, processing needs, and data size. Then use the <a href="/plans.html#comparison">plan comparison</a> to compare the available configurations.</p>
-        <h3>Where can I get support?</h3><p>Use the client-area ticketing system or support email. The <a href="/faq.html">FAQ</a> provides the current support details.</p>
-        <h3>Can I run any workload?</h3><p>No. Use must remain lawful and must follow the <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a>.</p>
-        <h2>Need Linux instead?</h2>
-        <p>For websites, applications, databases, or development stacks, see <a href="/linux-vps/">Linux VPS hosting</a>.</p>`,
+        <div class="os-vps-guide-intro">
+          <span class="included-label">Windows VPS guide</span>
+          <h2>Keep your Windows workflow in reach</h2>
+          <p>A Windows VPS gives you a remote Windows environment for software, testing, administration, and business workflows. It can also suit users who need access to a Windows desktop or server without keeping the machine on site.</p>
+          <p>Start with the software and users. A plan that fits one application may not fit several concurrent sessions or a larger installation.</p>
+        </div>
+        <div class="os-vps-guide-grid">
+          <article class="os-vps-guide-card">
+            <span class="os-vps-guide-kicker">Environment</span>
+            <h2>Choose the Windows version your software needs</h2>
+            <p>The Services &amp; Plans FAQ lists these Windows options:</p>
+            <ul class="os-vps-option-list"><li>Windows Server 2016</li><li>Windows Server 2019</li><li>Windows Server 2022</li><li>Windows 10</li><li>Windows 11</li></ul>
+            <p>Confirm the operating-system option during ordering. The available choice should match the software, workflow, and access pattern you plan to use.</p>
+          </article>
+          <article class="os-vps-guide-card">
+            <span class="os-vps-guide-kicker">Control</span>
+            <h2>Administrator access for hands-on control</h2>
+            <p>VPS plans include full Windows Administrator access. That gives you control over the Windows environment and the software you install. You are responsible for regular backups of important data.</p>
+            <p>For the remote sign-in process, see <a href="/docs/1737945157-how-do-i-log-into-windows.html">How do I log into Windows?</a> StealthRDP sends service credentials by email after payment confirmation.</p>
+          </article>
+          <article class="os-vps-guide-card os-vps-guide-card-wide">
+            <span class="os-vps-guide-kicker">Resource fit</span>
+            <h2>Select resources by workload</h2>
+            <p>Use the catalog above to compare the fields that affect fit:</p>
+            <ul class="os-vps-check-list"><li><strong>CPU cores:</strong> Match active processing and concurrent tasks.</li><li><strong>RAM:</strong> Allow for Windows, applications, and users running at the same time.</li><li><strong>NVMe storage:</strong> Include the operating system, installed software, files, and future additions.</li><li><strong>Bandwidth:</strong> Review the listed allowance for your network activity.</li><li><strong>Region:</strong> Choose between the available USA and EU options.</li><li><strong>Billing cycle:</strong> Select the payment period shown in checkout.</li></ul>
+            <p>The cards above use the current catalog and show the displayed monthly price. Checkout confirms the final configuration and billing cycle.</p>
+          </article>
+          <article class="os-vps-guide-card os-vps-guide-card-wide">
+            <span class="os-vps-guide-kicker">Decision rule</span>
+            <h2>A practical way to choose a plan</h2>
+            <p>If you need a remote desktop for a small set of applications, begin with the software requirements and user count. If several users will connect or several applications will run together, pay closer attention to RAM. If the workload performs active processing, compare CPU cores. If you store installers, files, or large application data, include that storage in your estimate.</p>
+            <p>This approach helps you choose from the catalog without treating a plan label as a workload guarantee.</p>
+          </article>
+        </div>
+        <section class="os-vps-ops-panel">
+          <div class="os-vps-ops-copy">
+            <span class="included-label">Before you order</span>
+            <h2>Choose the location and know what happens next.</h2>
+            <h3>USA or EU availability</h3>
+            <p>StealthRDP lists Windows VPS options for USA and EU regions. Compare the region and resources in the <a href="/plans.html#windows-vps">Windows VPS catalog</a>.</p>
+            <h3>What happens after payment</h3>
+            <p>Standard Windows and Linux installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation. StealthRDP sends your service credentials by email after payment confirmation.</p>
+            <p>The <a href="/faq.html">FAQ</a> provides account, setup, and service information. Review the <a href="/docs/1737944184-payment-terms.html">payment terms</a> and <a href="/docs/1737944110-termination-of-service.html">termination of service terms</a> for refund and cancellation conditions.</p>
+          </div>
+          <div class="os-vps-ops-copy">
+            <span class="included-label">Support and lawful use</span>
+            <h3>Support and acceptable use</h3>
+            <p>Support is available through the client-area ticketing system and support email. Review the <a href="/faq.html">FAQ</a> for support information and the <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a> before you order.</p>
+            <p>The terms require lawful use. They prohibit abuse, scanning, hacking, spam, botnets, and similar misuse. Use the service only for permitted activity.</p>
+          </div>
+        </section>
+        <section class="os-vps-order-panel">
+          <div><span class="included-label">Order steps</span><h2>Order your Windows VPS</h2><p>Use these steps to move from workload requirements to a selected plan.</p></div>
+          <ol><li>Open the Windows VPS catalog.</li><li>Check the Windows version and required software.</li><li>Compare CPU, RAM, NVMe storage, bandwidth, and region.</li><li>Review the live order details and price.</li><li>Confirm the purchase through StealthRDP.</li></ol>
+          <a class="btn btn-primary" href="/plans.html#windows-vps">Compare Windows VPS plans</a>
+        </section>
+        <section class="os-vps-faq" aria-labelledby="windows-vps-faq-heading">
+          <div class="os-vps-faq-head"><span class="included-label">Common questions</span><h2 id="windows-vps-faq-heading">Windows VPS questions</h2><p>Quick answers for software, access, activation, and support.</p></div>
+          <div class="os-vps-faq-grid">
+            <details class="os-vps-faq-item" open><summary>Can I use familiar Windows software?</summary><p>A Windows VPS provides a Windows environment for compatible software. Check each application's system requirements before ordering.</p></details>
+            <details class="os-vps-faq-item"><summary>Do Windows VPS plans include Administrator access?</summary><p>Yes. The FAQ states that VPS plans include full Administrator access.</p></details>
+            <details class="os-vps-faq-item"><summary>Which Windows versions are listed?</summary><p>The FAQ lists Windows Server 2016, Windows Server 2019, Windows Server 2022, Windows 10, and Windows 11. Confirm the available selection during checkout.</p></details>
+            <details class="os-vps-faq-item"><summary>When will my Windows VPS be activated?</summary><p>Standard installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation.</p></details>
+            <details class="os-vps-faq-item"><summary>How will I receive my credentials?</summary><p>StealthRDP sends service credentials by email after payment confirmation.</p></details>
+            <details class="os-vps-faq-item"><summary>How do I choose CPU, RAM, and storage?</summary><p>Use your software requirements, user count, processing needs, and data size. Then use the <a href="/plans.html#comparison">plan comparison</a> to compare the available configurations.</p></details>
+            <details class="os-vps-faq-item"><summary>Where can I get support?</summary><p>Use the client-area ticketing system or support email. The <a href="/faq.html">FAQ</a> provides the current support details.</p></details>
+            <details class="os-vps-faq-item"><summary>Can I run any workload?</summary><p>No. Use must remain lawful and must follow the <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a>.</p></details>
+          </div>
+        </section>
+        <section class="os-vps-next"><span class="included-label">Choose another environment</span><h2>Need Linux instead?</h2><p>For websites, applications, databases, or development stacks, see <a href="/linux-vps/">Linux VPS hosting</a>.</p></section>`,
   });
 }
 
@@ -1281,48 +1311,78 @@ function buildLinuxVps() {
     planHref: "/plans.html#linux-vps",
     planLabel: "Compare Linux VPS plans",
     contentHtml: `
-        <a class="btn btn-primary" href="/plans.html#linux-vps">Compare Linux VPS plans</a>
-        <h2>Start with the stack, not the plan name</h2>
-        <p>Linux VPS hosting suits projects that need a configurable server environment. That includes web applications, databases, development tools, and websites.</p>
-        <p>Write down the services your project needs before you compare plans. Include the web server, application runtime, database, control panel, background jobs, and files you expect to keep on the server.</p>
-        <h2>Choose a distribution that fits the project</h2>
-        <p>The Services &amp; Plans FAQ historically listed these Linux options:</p>
-        <ul><li>Ubuntu 18.04</li><li>Ubuntu 20.04</li><li>Ubuntu 22.04</li><li>CentOS 7</li><li>CentOS 8</li><li>CentOS Stream</li><li>Debian 10</li><li>Debian 11</li><li>Other distributions listed by the service</li></ul>
-        <p>These are historical FAQ-listed options. Confirm current availability and suitability for your software in checkout.</p>
-        <p>For one documented setup path, see <a href="/docs/1737946490-how-to-install-direct-admin-in-a-linux-server.html">How to install DirectAdmin in a Linux server</a>.</p>
-        <h2>Root access for server administration</h2>
-        <p>VPS plans include full Linux Root access. You can administer the server and install the components your project requires. You are responsible for regular backups of important data.</p>
-        <p>Root access also means you must manage the server responsibly. Follow the <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a> and keep every workload lawful.</p>
-        <h2>Size the server around the bottleneck</h2>
-        <p>Use the live catalog to compare:</p>
-        <ul><li><strong>CPU cores:</strong> Allow for application processes, compilation, and concurrent work.</li><li><strong>RAM:</strong> Account for the operating system, web services, databases, caches, and users.</li><li><strong>NVMe storage:</strong> Include application files, database data, logs, backups, and growth.</li><li><strong>Bandwidth:</strong> Review the listed allowance for traffic and updates.</li><li><strong>Region:</strong> Compare the available USA and EU options.</li><li><strong>Billing cycle:</strong> Select the payment period shown at checkout.</li></ul>
-        <p>The cards above use the current shared catalog and show the displayed monthly price. Checkout confirms the final configuration and billing cycle.</p>
-        <h2>Match common project shapes to resources</h2>
-        <p>A small website may need modest resources, but its database and control panel still count. A multi-service application needs enough RAM for each service to run together. A build or compute-heavy workflow benefits from reviewing CPU requirements. A data-heavy project needs storage for its database, files, logs, and expected growth.</p>
-        <p>Use the documented requirements for your software as the starting point. Then compare the catalog options against those requirements.</p>
-        <h2>Choose between USA and EU plans</h2>
-        <p>StealthRDP lists Linux VPS options in USA and EU regions. Compare the region with your users, services, and operational needs. Confirm the final availability and configuration in the <a href="/plans.html#linux-vps">Linux VPS catalog</a>.</p>
-        <h2>Activation and credential delivery</h2>
-        <p>Standard Windows and Linux installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation. StealthRDP sends service credentials by email after payment confirmation.</p>
-        <p>The <a href="/faq.html">FAQ</a> provides account, setup, and service information. Review the <a href="/docs/1737944184-payment-terms.html">payment terms</a> and <a href="/docs/1737944110-termination-of-service.html">termination of service terms</a> for refund and cancellation conditions.</p>
-        <h2>Support and lawful use</h2>
-        <p>Support is available through the client-area ticketing system and support email. Review the <a href="/faq.html">FAQ</a> for current support details.</p>
-        <p>The <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a> require lawful use. They prohibit abuse, scanning, hacking, spam, botnets, and similar misuse. Check the terms before you deploy a workload.</p>
-        <h2>Order a Linux VPS</h2>
-        <ol><li>List the software, services, databases, and data your project needs.</li><li>Select the distribution that matches those requirements.</li><li>Compare CPU, RAM, NVMe storage, bandwidth, region, and billing cycle.</li><li>Review the live order details and price.</li><li>Confirm the purchase through StealthRDP.</li></ol>
-        <a class="btn btn-primary" href="/plans.html#linux-vps">Compare Linux VPS plans</a>
-        <h2>Linux VPS questions</h2>
-        <h3>What can I run on a Linux VPS?</h3><p>Linux VPS hosting can suit websites, web applications, databases, and development environments. Check the requirements of each component in your stack.</p>
-        <h3>Which Linux distributions are listed?</h3><p>The FAQ historically listed Ubuntu 18.04, 20.04, and 22.04; CentOS 7, 8, and Stream; Debian 10 and 11; plus other distributions. Confirm current availability and suitability for your software in checkout.</p>
-        <h3>Do Linux VPS plans include Root access?</h3><p>Yes. The FAQ states that VPS plans include full Root access.</p>
-        <h3>How much RAM or CPU does my stack need?</h3><p>Count the services that run together. Include database memory, application processes, background jobs, build tasks, and concurrent users. Then use the <a href="/plans.html#comparison">plan comparison</a> to review the available configurations.</p>
-        <h3>When will my Linux VPS be activated?</h3><p>Standard installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation.</p>
-        <h3>How will I receive my credentials?</h3><p>StealthRDP sends service credentials by email after payment confirmation.</p>
-        <h3>Are USA and EU Linux plans available?</h3><p>The public catalog lists USA and EU options. Confirm the current region and configuration in the catalog or checkout.</p>
-        <h3>Where can I get support?</h3><p>Use the client-area ticketing system or support email. See the <a href="/faq.html">FAQ</a> for current support information.</p>
-        <h3>Are all uses permitted?</h3><p>No. Use must remain lawful and must follow the <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a>.</p>
-        <h2>Need Windows instead?</h2>
-        <p>For familiar Windows software and remote Windows desktop or server access, see <a href="/windows-vps/">Windows VPS hosting</a>.</p>`,
+        <div class="os-vps-guide-intro">
+          <span class="included-label">Linux VPS guide</span>
+          <h2>Start with the stack, not the plan name</h2>
+          <p>Linux VPS hosting suits projects that need a configurable server environment. That includes web applications, databases, development tools, and websites.</p>
+          <p>Write down the services your project needs before you compare plans. Include the web server, application runtime, database, control panel, background jobs, and files you expect to keep on the server.</p>
+        </div>
+        <div class="os-vps-guide-grid">
+          <article class="os-vps-guide-card">
+            <span class="os-vps-guide-kicker">Environment</span>
+            <h2>Choose a distribution that fits the project</h2>
+            <p>The Services &amp; Plans FAQ historically listed these Linux options:</p>
+            <ul class="os-vps-option-list"><li>Ubuntu 18.04</li><li>Ubuntu 20.04</li><li>Ubuntu 22.04</li><li>CentOS 7</li><li>CentOS 8</li><li>CentOS Stream</li><li>Debian 10</li><li>Debian 11</li><li>Other distributions listed by the service</li></ul>
+            <p>These are historical FAQ-listed options. Confirm current availability and suitability for your software in checkout.</p>
+            <p>For one documented setup path, see <a href="/docs/1737946490-how-to-install-direct-admin-in-a-linux-server.html">How to install DirectAdmin in a Linux server</a>.</p>
+          </article>
+          <article class="os-vps-guide-card">
+            <span class="os-vps-guide-kicker">Control</span>
+            <h2>Root access for server administration</h2>
+            <p>VPS plans include full Linux Root access. You can administer the server and install the components your project requires. You are responsible for regular backups of important data.</p>
+            <p>Root access also means you must manage the server responsibly. Follow the <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a> and keep every workload lawful.</p>
+          </article>
+          <article class="os-vps-guide-card os-vps-guide-card-wide">
+            <span class="os-vps-guide-kicker">Resource fit</span>
+            <h2>Size the server around the bottleneck</h2>
+            <p>Use the catalog above to compare:</p>
+            <ul class="os-vps-check-list"><li><strong>CPU cores:</strong> Allow for application processes, compilation, and concurrent work.</li><li><strong>RAM:</strong> Account for the operating system, web services, databases, caches, and users.</li><li><strong>NVMe storage:</strong> Include application files, database data, logs, backups, and growth.</li><li><strong>Bandwidth:</strong> Review the listed allowance for traffic and updates.</li><li><strong>Region:</strong> Compare the available USA and EU options.</li><li><strong>Billing cycle:</strong> Select the payment period shown at checkout.</li></ul>
+            <p>The cards above use the current catalog and show the displayed monthly price. Checkout confirms the final configuration and billing cycle.</p>
+          </article>
+          <article class="os-vps-guide-card os-vps-guide-card-wide">
+            <span class="os-vps-guide-kicker">Decision rule</span>
+            <h2>Match common project shapes to resources</h2>
+            <p>A small website may need modest resources, but its database and control panel still count. A multi-service application needs enough RAM for each service to run together. A build or compute-heavy workflow benefits from reviewing CPU requirements. A data-heavy project needs storage for its database, files, logs, and expected growth.</p>
+            <p>Use the documented requirements for your software as the starting point. Then compare the catalog options against those requirements.</p>
+          </article>
+        </div>
+        <section class="os-vps-ops-panel">
+          <div class="os-vps-ops-copy">
+            <span class="included-label">Before you order</span>
+            <h2>Choose the location and know what happens next.</h2>
+            <h3>Choose between USA and EU plans</h3>
+            <p>StealthRDP lists Linux VPS options in USA and EU regions. Compare the region and resources in the <a href="/plans.html#linux-vps">Linux VPS catalog</a>.</p>
+            <h3>Activation and credential delivery</h3>
+            <p>Standard Windows and Linux installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation. StealthRDP sends service credentials by email after payment confirmation.</p>
+            <p>The <a href="/faq.html">FAQ</a> provides account, setup, and service information. Review the <a href="/docs/1737944184-payment-terms.html">payment terms</a> and <a href="/docs/1737944110-termination-of-service.html">termination of service terms</a> for refund and cancellation conditions.</p>
+          </div>
+          <div class="os-vps-ops-copy">
+            <span class="included-label">Support and lawful use</span>
+            <h3>Support and acceptable use</h3>
+            <p>Support is available through the client-area ticketing system and support email. Review the <a href="/faq.html">FAQ</a> for support information.</p>
+            <p>The <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a> require lawful use. They prohibit abuse, scanning, hacking, spam, botnets, and similar misuse. Check the terms before you deploy a workload.</p>
+          </div>
+        </section>
+        <section class="os-vps-order-panel">
+          <div><span class="included-label">Order steps</span><h2>Order a Linux VPS</h2><p>Use these steps to move from stack requirements to a selected plan.</p></div>
+          <ol><li>List the software, services, databases, and data your project needs.</li><li>Select the distribution that matches those requirements.</li><li>Compare CPU, RAM, NVMe storage, bandwidth, and region.</li><li>Review the live order details and price.</li><li>Confirm the purchase through StealthRDP.</li></ol>
+          <a class="btn btn-primary" href="/plans.html#linux-vps">Compare Linux VPS plans</a>
+        </section>
+        <section class="os-vps-faq" aria-labelledby="linux-vps-faq-heading">
+          <div class="os-vps-faq-head"><span class="included-label">Common questions</span><h2 id="linux-vps-faq-heading">Linux VPS questions</h2><p>Quick answers for software, distributions, access, and support.</p></div>
+          <div class="os-vps-faq-grid">
+            <details class="os-vps-faq-item" open><summary>What can I run on a Linux VPS?</summary><p>Linux VPS hosting can suit websites, web applications, databases, and development environments. Check the requirements of each component in your stack.</p></details>
+            <details class="os-vps-faq-item"><summary>Which Linux distributions are listed?</summary><p>The FAQ historically listed Ubuntu 18.04, 20.04, and 22.04; CentOS 7, 8, and Stream; Debian 10 and 11; plus other distributions. Confirm current availability and suitability for your software in checkout.</p></details>
+            <details class="os-vps-faq-item"><summary>Do Linux VPS plans include Root access?</summary><p>Yes. The FAQ states that VPS plans include full Root access.</p></details>
+            <details class="os-vps-faq-item"><summary>How much RAM or CPU does my stack need?</summary><p>Count the services that run together. Include database memory, application processes, background jobs, build tasks, and concurrent users. Then use the <a href="/plans.html#comparison">plan comparison</a> to review the available configurations.</p></details>
+            <details class="os-vps-faq-item"><summary>When will my Linux VPS be activated?</summary><p>Standard installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation.</p></details>
+            <details class="os-vps-faq-item"><summary>How will I receive my credentials?</summary><p>StealthRDP sends service credentials by email after payment confirmation.</p></details>
+            <details class="os-vps-faq-item"><summary>Are USA and EU Linux plans available?</summary><p>The public catalog lists USA and EU options. Confirm the current region and configuration in the catalog or checkout.</p></details>
+            <details class="os-vps-faq-item"><summary>Where can I get support?</summary><p>Use the client-area ticketing system or support email. See the <a href="/faq.html">FAQ</a> for current support information.</p></details>
+            <details class="os-vps-faq-item"><summary>Are all uses permitted?</summary><p>No. Use must remain lawful and must follow the <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a>.</p></details>
+          </div>
+        </section>
+        <section class="os-vps-next"><span class="included-label">Choose another environment</span><h2>Need Windows instead?</h2><p>For familiar Windows software and remote Windows desktop or server access, see <a href="/windows-vps/">Windows VPS hosting</a>.</p></section>`,
   });
 }
 

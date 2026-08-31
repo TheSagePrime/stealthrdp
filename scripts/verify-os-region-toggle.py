@@ -39,6 +39,14 @@ async def snapshot(page):
             const box = el.getBoundingClientRect();
             return { width: Math.round(box.width), height: Math.round(box.height) };
           })(),
+          structure: {
+            guideIntro: Boolean(document.querySelector('.os-vps-guide-intro')),
+            guideCards: document.querySelectorAll('.os-vps-guide-card').length,
+            opsPanel: Boolean(document.querySelector('.os-vps-ops-panel')),
+            orderPanel: Boolean(document.querySelector('.os-vps-order-panel')),
+            faqItems: document.querySelectorAll('.os-vps-faq-item').length,
+            flatProse: Boolean(document.querySelector('.container.prose')),
+          },
         })"""
     )
 
@@ -57,6 +65,12 @@ async def check_route(browser, route):
     assert all(c["display"] == "none" for c in usa["cards"] if c["region"] == "EU")
     assert usa["note"] == "Showing 6 USA plans"
     assert usa["overflow"] <= 0
+    expected_faq_items = 8 if route == "/windows-vps/" else 9
+    assert usa["structure"]["guideIntro"]
+    assert usa["structure"]["guideCards"] == 4
+    assert usa["structure"]["opsPanel"] and usa["structure"]["orderPanel"]
+    assert usa["structure"]["faqItems"] == expected_faq_items
+    assert not usa["structure"]["flatProse"]
 
     await page.locator('#locationTabs button[data-location="EU"]').click()
     await page.wait_for_timeout(80)
@@ -80,6 +94,8 @@ async def check_route(browser, route):
     assert focus["outlineWidth"] != "0px"
     await page.locator(".os-vps-catalog").scroll_into_view_if_needed()
     await page.screenshot(path=str(SCREENSHOT_DIR / (route.strip("/").replace("/", "-") + "-desktop.png")), full_page=False)
+    await page.locator(".header").evaluate("el => { el.style.visibility = 'hidden'; }")
+    await page.locator(".os-vps-guide-grid").screenshot(path=str(SCREENSHOT_DIR / (route.strip("/").replace("/", "-") + "-guide-desktop.png")))
     await page.close()
 
     mobile = await browser.new_page(viewport={"width": 390, "height": 844})
@@ -96,7 +112,11 @@ async def check_route(browser, route):
     assert mobile_after["control"]["width"] <= 390
     assert all(button["height"] >= 24 for button in mobile_after["buttons"])
     assert all(0 <= card["rect"]["left"] and card["rect"]["right"] <= 390 for card in mobile_after["cards"] if not card["hidden"])
+    assert mobile_after["structure"]["guideCards"] == 4
+    assert not mobile_after["structure"]["flatProse"]
     await mobile.screenshot(path=str(SCREENSHOT_DIR / (route.strip("/").replace("/", "-") + "-mobile.png")), full_page=False)
+    await mobile.locator(".header").evaluate("el => { el.style.visibility = 'hidden'; }")
+    await mobile.locator(".os-vps-guide-grid").screenshot(path=str(SCREENSHOT_DIR / (route.strip("/").replace("/", "-") + "-guide-mobile.png")))
     await mobile.close()
     assert not errors + mobile_errors, errors + mobile_errors
     return {"route": route, "desktopUSA": usa, "desktopEU": eu, "mobileEU": mobile_after}
