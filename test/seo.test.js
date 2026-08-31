@@ -269,6 +269,15 @@ test("OS landing pages use the approved copy and preserve current Bronze pricing
   assert.doesNotMatch(linux, /Linux VPS Hosting Plans/);
 });
 
+test("OS landing page heroes use the colored vendor logo variants", () => {
+  const windows = HTML("windows-vps/index.html");
+  const linux = HTML("linux-vps/index.html");
+  assert.match(windows, /class="os-vps-logo" src="\/assets\/os-logos\/windows-colored\.svg"/);
+  assert.match(linux, /class="os-vps-logo" src="\/assets\/os-logos\/ubuntu-colored\.svg"/);
+  assert.match(fs.readFileSync(path.join(ROOT, "assets", "os-logos", "windows-colored.svg"), "utf8"), /fill="#00A4EF"/);
+  assert.match(fs.readFileSync(path.join(ROOT, "assets", "os-logos", "ubuntu-colored.svg"), "utf8"), /fill="#E95420"/);
+});
+
 test("OS landing pages are linked from the approved site context", () => {
   assert.match(HTML("index.html"), /href="\/windows-vps\/"/);
   assert.match(HTML("index.html"), /href="\/linux-vps\/"/);

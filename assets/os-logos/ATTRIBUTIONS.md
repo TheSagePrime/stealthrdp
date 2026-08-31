@@ -26,3 +26,9 @@ Project license: https://github.com/simple-icons/simple-icons/blob/16.28.0/LICEN
 The Windows SVG is from Font Awesome Free 7.3.1. Its SVG icons are licensed under
 CC BY 4.0. License text: https://github.com/FortAwesome/Font-Awesome/blob/7.3.1/LICENSE.txt
 The attribution comment included in the upstream SVG is retained.
+
+## Colored hero variants
+
+The hero-only `windows-colored.svg` and `ubuntu-colored.svg` reuse the corresponding
+licensed paths above with fixed brand colors. They do not change the shared marquee
+assets or add any runtime third-party dependency.
