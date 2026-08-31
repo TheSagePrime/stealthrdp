@@ -388,8 +388,8 @@ test("OS landing pages are linked from the approved site context", () => {
   }
   const windows = HTML("windows-vps/index.html");
   const linux = HTML("linux-vps/index.html");
-  assert.match(windows, /Products<\/h4>[\s\S]*href="\/linux-vps\/"/);
-  assert.match(linux, /Products<\/h4>[\s\S]*href="\/windows-vps\/"/);
+  assert.match(windows, /Products<\/h2>[\s\S]*href="\/linux-vps\/"/);
+  assert.match(linux, /Products<\/h2>[\s\S]*href="\/windows-vps\/"/);
 });
 
 test("rss, security.txt, HowTo schema, and checkout events exist", () => {

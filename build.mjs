@@ -49,6 +49,20 @@ const TERMS_URL = `/docs/${(DOCS.find((article) => article.slug === "1737944013-
 const esc = (s) =>
   String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const fmt = (n) => n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const SEO_TITLE_LIMIT = 60;
+function seoTitle(title, suffix = " — StealthRDP") {
+  const value = String(title || "").trim();
+  const full = `${value}${suffix}`;
+  if (full.length <= SEO_TITLE_LIMIT) return full;
+  const available = SEO_TITLE_LIMIT - suffix.length - 1;
+  return `${value.slice(0, Math.max(1, available)).trimEnd()}…${suffix}`;
+}
+function seoDescription(description) {
+  const value = String(description || "").trim();
+  if (value.length <= 160) return value;
+  const clipped = value.slice(0, 157).replace(/\s+\S*$/, "").trim();
+  return `${clipped}…`;
+}
 
 const PLAN_SLUGS = {
   "Bronze USA": "bronze-usa2", "Silver USA": "silver-usa", "Gold USA": "gold-usa",
@@ -218,21 +232,21 @@ function footerHtml() {
         <div class="footer-social">${social}</div>
         <div class="footer-status"><span class="dot"></span><span id="footerStatus">Checking live status…</span></div>
       </div>
-      <div class="footer-col"><h4>Products</h4><ul>
+      <div class="footer-col"><h2>Products</h2><ul>
         <li><a href="/plans.html">RDP Plans</a></li>
         <li><a href="/windows-vps/">Windows VPS Hosting</a></li>
         <li><a href="/linux-vps/">Linux VPS Hosting</a></li>
         <li><a href="/plans.html#build-your-own">Build Your Own VPS</a></li>
         <li><a href="/plans.html">Pricing</a></li>
       </ul></div>
-      <div class="footer-col"><h4>Resources</h4><ul>
+      <div class="footer-col"><h2>Resources</h2><ul>
         <li><a href="/docs.html">Documentation</a></li>
         <li><a href="/blog.html">Tutorials</a></li>
         <li><a href="/faq.html">FAQ</a></li>
         <li><a href="/blog.html">Blog</a></li>
         <li><a href="/status.html">Server Status</a></li>
       </ul></div>
-      <div class="footer-col"><h4>Company</h4><ul>
+      <div class="footer-col"><h2>Company</h2><ul>
         <li><a href="/about.html">About Us</a></li>
         <li><a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact Support</a></li>
         <li><a href="/privacy.html">Privacy Policy</a></li>
@@ -456,7 +470,7 @@ function reviewWallHtml() {
 function blogCardHtml(p, extraClass = "") {
   return `<article class="blog-card${extraClass}" data-blog-category="${esc(p.category || "Insights")}" data-blog-title="${esc(p.title)}"><div class="bc-body">
     <span class="bc-cat">${esc(p.category)}</span>
-    <h3>${esc(p.title)}</h3>
+    <h2>${esc(p.title)}</h2>
     <p>${esc(p.excerpt || "")}</p>
     <div class="bc-meta"><span>${esc(p.author)}</span><span>${esc(p.date)}</span></div>
     <a class="bc-link" href="/blog/${esc(p.slug)}.html">Read article →</a>
@@ -552,6 +566,7 @@ function renderDocMarkdown(article) {
   let list = null;
   let code = [];
   let fence = null;
+  let previousHeadingLevel = 1;
 
   const flushParagraph = () => {
     if (!paragraph.length) return;
@@ -574,13 +589,15 @@ function renderDocMarkdown(article) {
     flushParagraph();
     flushList();
     flushCode();
-    const safeLevel = Math.max(2, Math.min(6, Number(level) || 2));
+    const requestedLevel = Math.max(2, Math.min(6, Number(level) || 2));
+    const safeLevel = Math.min(requestedLevel, previousHeadingLevel + 1);
     const clean = rawText.replace(/\[#\]\([^)]*\)/g, "").replace(/^\*\*(.*)\*\*$/, "$1").trim();
     const idBase = slugifyHeading(clean);
     let id = idBase;
     let suffix = 2;
     while (headings.some((heading) => heading.id === id)) id = `${idBase}-${suffix++}`;
     headings.push({ id, text: clean, level: safeLevel });
+    previousHeadingLevel = safeLevel;
     html.push(`<h${safeLevel} id="${id}">${inlineDocHtml(clean)}</h${safeLevel}>`);
   };
   const addRule = () => {
@@ -723,7 +740,7 @@ function buildDocsIndex() {
   const options = categories.map((category) => `<option value="${esc(category)}">${esc(category)}</option>`).join("");
   const cards = DOCS.map(docCardHtml).join("");
   const topicChips = `<button type="button" class="topic-chip active" data-docs-topic="all">All<span>${DOCS.length}</span></button>` + categories.map((category) => `<button type="button" class="topic-chip" data-docs-topic="${esc(category)}">${esc(category)}<span>${DOCS.filter((article) => article.category === category).length}</span></button>`).join("");
-  const groupedCards = categories.map((category) => `<div class="docs-group" data-docs-group="${esc(category)}"><div class="docs-group-head"><h3>${esc(category)}</h3><span>${DOCS.filter((article) => article.category === category).length} guides</span></div><div class="docs-group-grid">${DOCS.filter((article) => article.category === category).map(docCardHtml).join("")}</div></div>`).join("");
+  const groupedCards = categories.map((category) => `<div class="docs-group" data-docs-group="${esc(category)}"><div class="docs-group-head"><h2>${esc(category)}</h2><span>${DOCS.filter((article) => article.category === category).length} guides</span></div><div class="docs-group-grid">${DOCS.filter((article) => article.category === category).map(docCardHtml).join("")}</div></div>`).join("");
   const body = `<main class="docs-index docs-surface">
     <section class="page-head docs-page-head">
       <div class="container">
@@ -764,9 +781,9 @@ function buildDocArticle(article, index) {
     <article class="docs-article"><header class="docs-article-header"><span class="docs-category">${esc(article.category)}</span><h1>${esc(article.title)}</h1>${docsWarning(article)}<p class="docs-summary">${esc(article.summary)}</p><div class="docs-source-meta">${sourceMeta}</div></header><div class="docs-content">${rendered.html}</div><div class="docs-support"><div><span class="sec-index">Need a hand?</span><h2>Need account or server support?</h2><p>For account or server-specific help, use the StealthRDP support portal.</p></div><a class="btn btn-primary" href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">Contact support</a></div>${relatedHtml}</article>
   </div>${contents}</div></main>`;
   const fullTitle = `${article.title} — StealthRDP Docs`;
-  const useTitle = fullTitle.length <= 70 ? fullTitle : `${article.title.slice(0, Math.max(30, 70 - " — StealthRDP".length - 1)).trim()}… — StealthRDP`;
+  const useTitle = fullTitle.length <= SEO_TITLE_LIMIT ? fullTitle : seoTitle(article.title);
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [breadcrumbLd(article.title, [{ name: "Home", url: "__SRDP_BASE__/" }, { name: "Docs", url: "__SRDP_BASE__/docs.html" }, { name: article.category, url: `__SRDP_BASE__/docs.html?category=${encodeURIComponent(article.category)}` }, { name: article.title, url: `__SRDP_BASE__/docs/${article.slug}.html` }]), docsArticleLd(article)] }];
-  return page({ active: "docs", title: useTitle, description: (article.summary.length < 70 ? `${article.summary} Read the verified guide and contact StealthRDP support when you need account-specific help.` : article.summary).slice(0, 165), canonical: `__SRDP_BASE__/docs/${article.slug}.html`, pageType: "article", jsonLd, body, extraScripts: ["/js/docs.js"] });
+  return page({ active: "docs", title: useTitle, description: seoDescription(article.summary.length < 70 ? `${article.summary} Read the verified guide and contact StealthRDP support when you need account-specific help.` : article.summary), canonical: `__SRDP_BASE__/docs/${article.slug}.html`, pageType: "article", jsonLd, body, extraScripts: ["/js/docs.js"] });
 }
 
 /* ---------- JSON-LD ---------- */
@@ -1466,12 +1483,17 @@ function structureBlogHtml(html) {
     .replace(/\sclass="[^"]*"/gi, "")
     .replace(/<h6[\s\S]*?<\/h6>/gi, "");
   const headings = [];
+  let previousHeadingLevel = 1;
   out = out.replace(/<h([23])([^>]*)>([\s\S]*?)<\/h\1>/gi, (_, level, attrs, inner) => {
     const text = inner.replace(/<[^>]+>/g, "").trim();
     const id = ((attrs.match(/\sid="([^"]+)"/) || [])[1] || slugifyHeading(text));
-    headings.push({ level: Number(level), id, text });
-    return `<h${level} id="${esc(id)}">${inner}</h${level}>`;
+    const requestedLevel = Number(level);
+    const safeLevel = Math.min(requestedLevel, previousHeadingLevel + 1);
+    previousHeadingLevel = safeLevel;
+    headings.push({ level: safeLevel, id, text });
+    return `<h${safeLevel} id="${esc(id)}">${inner}</h${safeLevel}>`;
   });
+  out = out.replace(/https:\/\/stealthrdp\.com\/dash\/login\.php/gi, "https://dash.stealthrdp.com/index.php?rp=/login");
   out = out.replace(/<table[\s\S]*?<\/table>/gi, (table) => `<div class="docs-table-wrap">${table}</div>`);
   out = out.replace(/<img([^>]*)>/gi, (_, attrs) => {
     const src = (attrs.match(/\ssrc="([^"]+)"/) || [])[1] || "";
@@ -1542,8 +1564,7 @@ function buildBlogPost(post) {
     ...(howto ? [howto] : []),
   ]}];
   const fullTitle = `${post.title} — StealthRDP Blog`;
-  const shortTitle = `${post.title} — StealthRDP`;
-  const useTitle = fullTitle.length <= 65 ? fullTitle : shortTitle;
+  const useTitle = fullTitle.length <= SEO_TITLE_LIMIT ? fullTitle : seoTitle(post.title);
   return page({
     active: "blog",
     title: useTitle,

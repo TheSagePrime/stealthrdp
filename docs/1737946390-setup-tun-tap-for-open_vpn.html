@@ -47,7 +47,7 @@
       } catch (e) {}
     }());
   </script>
-  <link rel="stylesheet" href="/css/style.css?v=2026-08-30T15-52-24-590Z" />
+  <link rel="stylesheet" href="/css/style.css?v=2026-08-31T19-40-04-964Z" />
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src="https://sgtm.stealthrdp.com/2l3xebiqyzc.js?"+i;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','yw=Ch5ENj0vSDYwSUBGOjFcXhVHS19YRAEWXgkNFAgOERARHglfCg0I');</script>
   <!-- End Google Tag Manager -->
@@ -100,14 +100,14 @@
   </header>
   <main class="docs-article-page docs-surface" data-docs-category="VPN and networking" data-doc-slug="1737946390-setup-tun-tap-for-open_vpn"><div class="container docs-article-layout"><div class="docs-article-column">
     <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/docs.html">Docs</a><span aria-hidden="true">/</span><span>VPN and networking</span></nav>
-    <article class="docs-article"><header class="docs-article-header"><span class="docs-category">VPN and networking</span><h1>Setup Tun/Tap For OpenVPN</h1><p class="docs-summary">Please follow the steps below to fix the error: tun needs to be installed</p><div class="docs-source-meta"><span>Source: Verified StealthRDP documentation snapshot</span><span>Source date: <time datetime="2025-01-27">Jan 27, 2025</time></span><span>Migrated 2026-08-13</span><span>Public examples redacted</span></div></header><div class="docs-content"><h3 id="please-follow-the-steps-below-to-fix-the-error-tun-needs-to-be-installed">Please follow the steps below to fix the error: tun needs to be installed</h3>
+    <article class="docs-article"><header class="docs-article-header"><span class="docs-category">VPN and networking</span><h1>Setup Tun/Tap For OpenVPN</h1><p class="docs-summary">Please follow the steps below to fix the error: tun needs to be installed</p><div class="docs-source-meta"><span>Source: Verified StealthRDP documentation snapshot</span><span>Source date: <time datetime="2025-01-27">Jan 27, 2025</time></span><span>Migrated 2026-08-13</span><span>Public examples redacted</span></div></header><div class="docs-content"><h2 id="please-follow-the-steps-below-to-fix-the-error-tun-needs-to-be-installed">Please follow the steps below to fix the error: tun needs to be installed</h2>
 <ol><li>SSH into your vps!</li><li>Run sudo apt-get update&amp;&amp;sudo apt-get upgrade -y</li></ol>
 <p><strong>3\. Run The Following Commands</strong></p>
 <div class="docs-code-wrap"><div class="docs-code-tools"><span class="mono">Command</span><button class="docs-copy" type="button" data-copy-target="docs-code-1">Copy</button></div><pre class="docs-code" id="docs-code-1"><code>mkdir /dev/net</code></pre></div>
 <div class="docs-code-wrap"><div class="docs-code-tools"><span class="mono">Command</span><button class="docs-copy" type="button" data-copy-target="docs-code-2">Copy</button></div><pre class="docs-code" id="docs-code-2"><code>mknod /dev/net/tun c 10 200</code></pre></div>
 <div class="docs-code-wrap"><div class="docs-code-tools"><span class="mono">Command</span><button class="docs-copy" type="button" data-copy-target="docs-code-3">Copy</button></div><pre class="docs-code" id="docs-code-3"><code>chmod 666 /dev/net/tun</code></pre></div>
 <p><strong>After Running those commands install your OpenVPN as normal</strong></p></div><div class="docs-support"><div><span class="sec-index">Need a hand?</span><h2>Need account or server support?</h2><p>For account or server-specific help, use the StealthRDP support portal.</p></div><a class="btn btn-primary" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact support</a></div><nav class="docs-related" aria-label="Related guides"><div class="docs-related-head"><span class="sec-index">Continue exploring</span><h2>Related guides</h2></div><div class="docs-related-grid"><a class="docs-related-link" href="/docs/1737943955-introduction.html"><span class="docs-category">Terms and policies</span><strong>Introduction</strong><span>Read guide →</span></a></div></nav></article>
-  </div><aside class="docs-toc" aria-label="On this page"><span class="docs-toc-title">On this page</span><ol><li class="toc-level-3"><a href="#please-follow-the-steps-below-to-fix-the-error-tun-needs-to-be-installed">Please follow the steps below to fix the error: tun needs to be installed</a></li></ol></aside></div></main>
+  </div><aside class="docs-toc" aria-label="On this page"><span class="docs-toc-title">On this page</span><ol><li class="toc-level-2"><a href="#please-follow-the-steps-below-to-fix-the-error-tun-needs-to-be-installed">Please follow the steps below to fix the error: tun needs to be installed</a></li></ol></aside></div></main>
   <footer class="footer"><div class="container">
     <div class="footer-grid">
       <div class="footer-about">
@@ -116,21 +116,21 @@
         <div class="footer-social"><a href="https://x.com/stealthrdp" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L2.8 2h6.4l4.4 5.9L18.9 2zm-1.1 18h1.7L7.1 3.9H5.3L17.8 20z"/></svg></a><a href="https://www.instagram.com/stealth_rdp" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg></a><a href="https://discord.gg/9JJFs4DDyF" target="_blank" rel="noopener noreferrer" aria-label="Discord"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12h.01M12 12h.01M16 12h.01M8.5 19c-2.5-.5-4.5-2-5.5-4.5C2 10 3.5 5 8.5 4.5c.5-1 3.5-1 3.5-1s3 0 3.5 1c5 .5 6.5 5.5 6 10-1 2.5-3 4-5.5 4.5"/></svg></a><a href="https://t.me/StealthRDP" target="_blank" rel="noopener noreferrer" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></a></div>
         <div class="footer-status"><span class="dot"></span><span id="footerStatus">Checking live status…</span></div>
       </div>
-      <div class="footer-col"><h4>Products</h4><ul>
+      <div class="footer-col"><h2>Products</h2><ul>
         <li><a href="/plans.html">RDP Plans</a></li>
         <li><a href="/windows-vps/">Windows VPS Hosting</a></li>
         <li><a href="/linux-vps/">Linux VPS Hosting</a></li>
         <li><a href="/plans.html#build-your-own">Build Your Own VPS</a></li>
         <li><a href="/plans.html">Pricing</a></li>
       </ul></div>
-      <div class="footer-col"><h4>Resources</h4><ul>
+      <div class="footer-col"><h2>Resources</h2><ul>
         <li><a href="/docs.html">Documentation</a></li>
         <li><a href="/blog.html">Tutorials</a></li>
         <li><a href="/faq.html">FAQ</a></li>
         <li><a href="/blog.html">Blog</a></li>
         <li><a href="/status.html">Server Status</a></li>
       </ul></div>
-      <div class="footer-col"><h4>Company</h4><ul>
+      <div class="footer-col"><h2>Company</h2><ul>
         <li><a href="/about.html">About Us</a></li>
         <li><a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact Support</a></li>
         <li><a href="/privacy.html">Privacy Policy</a></li>
@@ -157,6 +157,6 @@
       </span>
     </div>
   </div></footer>
-  <script src="/js/main.js?v=2026-08-30T15-52-24-590Z"></script><script src="/js/docs.js?v=2026-08-30T15-52-24-590Z"></script>
+  <script src="/js/main.js?v=2026-08-31T19-40-04-964Z"></script><script src="/js/docs.js?v=2026-08-31T19-40-04-964Z"></script>
 </body>
 </html>

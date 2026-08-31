@@ -46,7 +46,8 @@ if (sitemapResponse.status !== 404) fail(`preview sitemap must be hidden, return
 if (sitemapText.trim() !== "Not found") fail("preview sitemap response body is unexpected");
 
 const internalLinks = [...html.matchAll(/\bhref\s*=\s*["']([^"']+)["']/gi)]
-  .map((m) => m[1]).filter((href) => href.startsWith("/"));
+  .map((m) => m[1])
+  .filter((href) => href.startsWith("/") && !href.startsWith("/cdn-cgi/l/email-protection"));
 for (const href of [...new Set(internalLinks)]) {
   const linkResponse = await fetch(new URL(href, url.origin), { redirect: "manual" });
   if (linkResponse.status >= 400) fail(`internal link ${href} returned HTTP ${linkResponse.status}`);
