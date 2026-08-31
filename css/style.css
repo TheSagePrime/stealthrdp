@@ -560,6 +560,14 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
 .os-vps-intro strong { color: var(--text); font-size: 15px; }
 .os-vps-intro span { color: var(--text-muted); font-size: 13px; line-height: 1.5; }
 .os-vps-links { display: flex; flex-wrap: wrap; gap: 12px; }
+.os-vps-catalog { background: linear-gradient(180deg, var(--bg), var(--bg-elev)); }
+.os-vps-catalog-head { display: flex; align-items: end; justify-content: space-between; gap: 28px; margin-bottom: 24px; }
+.os-vps-catalog-head h2 { margin: 12px 0 0; font-size: clamp(25px, 3.2vw, 36px); }
+.os-vps-catalog-head p { max-width: 560px; color: var(--text-muted); font-size: 14px; line-height: 1.65; }
+.os-vps-plan-grid { max-width: 1200px; }
+.os-vps-plan-grid .plan-card { min-height: 380px; }
+.plan-card .p-location { margin-top: 12px; color: var(--text-dim); font: 11px var(--font-mono); letter-spacing: .05em; text-transform: uppercase; }
+.os-vps-checkout-note { padding-top: 0; }
 .os-vps-page .prose h3 { margin: 24px 0 8px; font-size: 18px; }
 .os-vps-page .prose ol { display: grid; gap: 10px; margin: 0 0 18px; padding-left: 22px; color: var(--text-muted); font-size: 15px; line-height: 1.6; }
 .os-vps-page .prose ol li::marker { color: var(--accent); font-family: var(--font-mono); font-weight: 600; }

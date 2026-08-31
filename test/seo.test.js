@@ -11,6 +11,10 @@ const ROOT = path.join(__dirname, "..");
 const HTML = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 const BLOG = require(path.join(ROOT, "js", "blog-data.js")).SRDP_BLOG;
 const DOCS = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "docs-articles.json"), "utf8"));
+const CATALOG = [
+  ...JSON.parse(fs.readFileSync(path.join(ROOT, "data", "plans_usa.json"), "utf8")),
+  ...JSON.parse(fs.readFileSync(path.join(ROOT, "data", "plans_eu.json"), "utf8")),
+];
 const { APPROVED_INDEXABLE_COMMERCIAL_PAGES, checkAiDiscovery } = require(path.join(ROOT, "lib", "ai-discovery.js"));
 const OS_ROUTES = ["windows-vps/index.html", "linux-vps/index.html"];
 
@@ -272,19 +276,42 @@ test("OS landing pages have separate commercial intent, page schema, and shared 
   assert.notStrictEqual(windows, linux, "OS pages are not duplicate HTML");
 });
 
+test("OS landing pages render the shared catalog cards without copied plan data", () => {
+  const windows = HTML("windows-vps/index.html");
+  const linux = HTML("linux-vps/index.html");
+  const monthlyPrice = (plan) => (Math.round(Number(plan.monthlyPrice) * 0.95 * 100) / 100).toFixed(2);
+  const planName = (plan) => plan.name.replace(" USA", "").replace(" EU", "");
+
+  for (const [route, html] of [["windows", windows], ["linux", linux]]) {
+    assert.strictEqual((html.match(/class="plan-card/g) || []).length, CATALOG.length, `${route}: every catalog plan is rendered`);
+    assert.strictEqual((html.match(/class="p-location"/g) || []).length, CATALOG.length, `${route}: every card shows its region`);
+    assert.match(html, /Region: USA/);
+    assert.match(html, /Region: EU/);
+    assert.strictEqual((html.match(/>Choose this plan<\/a>/g) || []).length, CATALOG.length, `${route}: neutral card CTAs`);
+    assert.match(html, /Choose the plan first\. Select Windows or Linux in shared checkout\./);
+    assert.doesNotMatch(html, /Palette|Preview lab/);
+    assert.doesNotMatch(html, /\bSSH\b|\bDocker\b|\bIIS\b|\.NET/i);
+    for (const plan of CATALOG) {
+      assert.match(html, new RegExp(`€${monthlyPrice(plan)}<small>\\/mo<\\/small>`), `${route}: displayed monthly price for ${plan.name}`);
+      assert.match(html, new RegExp(`>${planName(plan)}<\\/div>`), `${route}: plan name for ${plan.name}`);
+      assert.match(html, new RegExp(`Region: ${plan.location}`), `${route}: location for ${plan.name}`);
+      for (const value of Object.values(plan.specs)) assert.match(html, new RegExp(`>${value}<\\/span>`), `${route}: ${value} for ${plan.name}`);
+    }
+  }
+});
+
 test("OS landing pages use the approved copy and preserve current Bronze pricing", () => {
   const windows = HTML("windows-vps/index.html");
   const linux = HTML("linux-vps/index.html");
   assert.match(windows, /Keep your Windows workflow in reach/);
   assert.match(windows, /Windows Server 2016/);
   assert.match(windows, /Administrator access for hands-on control/);
-  assert.match(windows, /Bronze USA at <strong>€9\.50\/month<\/strong>/);
+  assert.match(windows, /remote Windows access/);
   assert.match(windows, /Need Linux instead\?/);
   assert.doesNotMatch(windows, /Choose a Windows VPS by workload/);
   assert.match(linux, /Start with the stack, not the plan name/);
   assert.match(linux, /Ubuntu 18\.04/);
   assert.match(linux, /Root access for server administration/);
-  assert.match(linux, /Bronze EU is also <strong>€9\.50\/month<\/strong>/);
   assert.match(linux, /Need Windows instead\?/);
   assert.doesNotMatch(linux, /Linux VPS Hosting Plans/);
 });

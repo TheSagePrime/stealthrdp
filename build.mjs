@@ -180,7 +180,7 @@ function paletteLabHtml() {
     </div>`;
 }
 
-function headerHtml(active) {
+function headerHtml(active, { showPalette = true } = {}) {
   return `<header class="header"><div class="container header-inner">
     <a href="/" class="logo" aria-label="StealthRDP home">
       ${LOGO_IMAGE_HTML}
@@ -188,8 +188,7 @@ function headerHtml(active) {
     <nav class="nav" aria-label="Main navigation">${navHtml(active)}</nav>
     <div class="header-actions">
       <button type="button" class="theme-toggle" id="themeToggle" aria-label="Use light theme" aria-pressed="false"><span class="theme-icon theme-icon-sun" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg></span><span class="theme-icon theme-icon-moon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"/></svg></span></button>
-      ${paletteLabHtml()}
-      <a class="btn btn-sm btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client Area</a>
+${showPalette ? `      ${paletteLabHtml()}\n` : ""}      <a class="btn btn-sm btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client Area</a>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     </div>
   </div>
@@ -264,22 +263,36 @@ function scripts(extra = []) {
 }
 
 /* ---------- baked content ---------- */
-function planCardHtml(p, { showPopular = true } = {}) {
+function planCardHtml(p, { showPopular = true, showLocation = false, ctaLabel = "Buy Now" } = {}) {
   const price = monthlyPrice(p);
   const isPop = showPopular && p.popular;
   return `<article class="plan-card${isPop ? " popular" : ""}">
-    ${isPop ? '<span class="plan-popular">Most Popular</span>' : ""}
-    <div class="p-name">${esc(planName(p))}</div>
+${isPop ? `    <span class="plan-popular">Most Popular</span>\n` : ""}    <div class="p-name">${esc(planName(p))}</div>
     <div class="p-desc">${esc(p.description || "")}</div>
-    <div class="plan-price"><span class="cur">€${fmt(price)}<small>/mo</small></span><span class="was">€${fmt(p.monthlyPrice || 0)}</span></div>
+${showLocation ? `    <div class="p-location">Region: ${esc(p.location || "Not listed")}</div>\n` : ""}    <div class="plan-price"><span class="cur">€${fmt(price)}<small>/mo</small></span><span class="was">€${fmt(p.monthlyPrice || 0)}</span></div>
     <div class="plan-specs">
       ${specRow("CPU", p.specs && p.specs.cpu)}
       ${specRow("RAM", p.specs && p.specs.ram)}
       ${specRow("Storage", p.specs && p.specs.storage)}
       ${specRow("Bandwidth", p.specs && p.specs.bandwidth)}
     </div>
-    <a class="btn btn-primary" href="${planUrl(p)}" target="_blank" rel="noopener noreferrer">Buy Now</a>
+    <a class="btn btn-primary" href="${planUrl(p)}" target="_blank" rel="noopener noreferrer">${esc(ctaLabel)}</a>
   </article>`;
+}
+
+function osVpsCatalogHtml({ slug, label }) {
+  const cards = USA.concat(EU)
+    .map((p) => planCardHtml(p, { showLocation: true, ctaLabel: "Choose this plan" }))
+    .join("");
+  return `<section class="section os-vps-catalog" aria-labelledby="${slug}-catalog-heading">
+    <div class="container">
+      <div class="os-vps-catalog-head">
+        <div><span class="included-label">Current VPS catalog</span><h2 id="${slug}-catalog-heading">Choose your resource level</h2></div>
+        <p>Compare the current displayed monthly price, CPU, RAM, NVMe storage, bandwidth, and region. Windows and Linux use this shared VPS catalog.</p>
+      </div>
+      <div class="plan-grid os-vps-plan-grid" aria-label="${label} VPS plan cards">${cards}</div>
+    </div>
+  </section>`;
 }
 
 function specRow(k, v) {
@@ -822,11 +835,11 @@ function howToLd(post, headings) {
 }
 
 /* ---------- page builders ---------- */
-function page({ active, title, description, canonical, pageType = "website", jsonLd = [], body, extraScripts = [], planLocation = "", planLimit = "", robots = "index,follow" }) {
+function page({ active, title, description, canonical, pageType = "website", jsonLd = [], body, extraScripts = [], planLocation = "", planLimit = "", robots = "index,follow", showPalette = true }) {
   const pageData = `${planLocation ? ` data-plan-location="${esc(planLocation)}"` : ""}${planLimit ? ` data-plan-limit="${esc(planLimit)}"` : ""}`;
   return `${head({ title, description, canonical, pageType, jsonLd, robots })}
 <body data-page="${active}"${pageData}>
-  ${headerHtml(active)}
+  ${headerHtml(active, { showPalette })}
   ${body}
   ${footerHtml()}
   ${scripts(extraScripts)}
@@ -1154,6 +1167,15 @@ function buildOsVpsPage({
         <div class="os-vps-links"><a class="btn btn-primary" href="${planHref}">${planLabel}</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Continue to shared checkout</a></div>
       </div>
     </section>
+    ${osVpsCatalogHtml({ slug, label })}
+    <section class="section os-vps-checkout-note" aria-labelledby="${slug}-checkout-heading">
+      <div class="container">
+        <div class="byo-panel">
+          <div><span class="included-label">Next step</span><h2 id="${slug}-checkout-heading">Choose the plan first. Select Windows or Linux in shared checkout.</h2><p>The buyer chooses the resource plan and region on this page. The existing shared checkout then provides the operating-system selector before payment.</p></div>
+          <a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Configure this VPS</a>
+        </div>
+      </div>
+    </section>
     <section class="section" style="padding-top:0">
       <div class="container prose">${contentHtml}</div>
     </section>
@@ -1172,7 +1194,7 @@ function buildOsVpsPage({
     ]),
     osVpsPageLd({ slug, title, description, serviceName, serviceType }),
   ] }];
-  return page({ active: "plans", title, description, canonical: `__SRDP_BASE__/${slug}/`, jsonLd, body });
+  return page({ active: "plans", title, description, canonical: `__SRDP_BASE__/${slug}/`, jsonLd, body, showPalette: false });
 }
 
 function buildWindowsVps() {
@@ -1186,7 +1208,7 @@ function buildWindowsVps() {
     logo: "/assets/os-logos/windows-colored.svg",
     logoAlt: "Windows operating system logo",
     h1: "Windows VPS hosting for work that belongs on Windows",
-    intro: "Run familiar Windows software from a remote desktop or server environment. Choose your operating system, compare the resources, and order the configuration that fits the job.",
+    intro: "Use remote Windows access for familiar software, administration, and business workflows. Choose your operating system, compare the resources, and order the configuration that fits the job.",
     planHref: "/plans.html#windows-vps",
     planLabel: "Compare Windows VPS plans",
     contentHtml: `
@@ -1204,7 +1226,7 @@ function buildWindowsVps() {
         <h2>Select resources by workload</h2>
         <p>Use the live catalog to compare the fields that affect fit:</p>
         <ul><li><strong>CPU cores:</strong> Match active processing and concurrent tasks.</li><li><strong>RAM:</strong> Allow for Windows, applications, and users running at the same time.</li><li><strong>NVMe storage:</strong> Include the operating system, installed software, files, and future additions.</li><li><strong>Bandwidth:</strong> Review the listed allowance for your network activity.</li><li><strong>Region:</strong> Choose between the available USA and EU options.</li><li><strong>Billing cycle:</strong> Select the payment period shown in checkout.</li></ul>
-        <p>The current catalog shows Bronze USA at <strong>€9.50/month</strong> after the monthly reduction, from a €10.00 base price. It includes 2 Core, 4 GB RAM, 60 GB NVMe, and Unlimited bandwidth. Bronze EU is also <strong>€9.50/month</strong>, from a €10.00 base price, with 2 Core, 4 GB RAM, 40 GB NVMe, and Unlimited bandwidth. Check the live catalog for the current configuration and billing-cycle price.</p>
+        <p>The cards above use the current shared catalog and show the displayed monthly price. Checkout confirms the final configuration and billing cycle.</p>
         <h2>A practical way to choose a plan</h2>
         <p>If you need a remote desktop for a small set of applications, begin with the software requirements and user count. If several users will connect or several applications will run together, pay closer attention to RAM. If the workload performs active processing, compare CPU cores. If you store installers, files, or large application data, include that storage in your estimate.</p>
         <p>This approach helps you choose from the catalog without treating a plan label as a workload guarantee.</p>
@@ -1263,7 +1285,7 @@ function buildLinuxVps() {
         <h2>Size the server around the bottleneck</h2>
         <p>Use the live catalog to compare:</p>
         <ul><li><strong>CPU cores:</strong> Allow for application processes, compilation, and concurrent work.</li><li><strong>RAM:</strong> Account for the operating system, web services, databases, caches, and users.</li><li><strong>NVMe storage:</strong> Include application files, database data, logs, backups, and growth.</li><li><strong>Bandwidth:</strong> Review the listed allowance for traffic and updates.</li><li><strong>Region:</strong> Compare the available USA and EU options.</li><li><strong>Billing cycle:</strong> Select the payment period shown at checkout.</li></ul>
-        <p>The current catalog shows Bronze USA at <strong>€9.50/month</strong> after the monthly reduction, from a €10.00 base price. It includes 2 Core, 4 GB RAM, 60 GB NVMe, and Unlimited bandwidth. Bronze EU is also <strong>€9.50/month</strong>, from a €10.00 base price, with 2 Core, 4 GB RAM, 40 GB NVMe, and Unlimited bandwidth. Check the live catalog for the current configuration and billing-cycle price.</p>
+        <p>The cards above use the current shared catalog and show the displayed monthly price. Checkout confirms the final configuration and billing cycle.</p>
         <h2>Match common project shapes to resources</h2>
         <p>A small website may need modest resources, but its database and control panel still count. A multi-service application needs enough RAM for each service to run together. A build or compute-heavy workflow benefits from reviewing CPU requirements. A data-heavy project needs storage for its database, files, logs, and expected growth.</p>
         <p>Use the documented requirements for your software as the starting point. Then compare the catalog options against those requirements.</p>
