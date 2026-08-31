@@ -16,6 +16,7 @@ const CATALOG = PRICING_CATALOG.plans;
 const pricing = require(path.join(ROOT, "js", "pricing.js"));
 const { APPROVED_INDEXABLE_COMMERCIAL_PAGES, checkAiDiscovery } = require(path.join(ROOT, "lib", "ai-discovery.js"));
 const OS_ROUTES = ["windows-vps/index.html", "linux-vps/index.html"];
+const BING_VERIFICATION_TAG = '<meta name="msvalidate.01" content="BC1193DFC35353EA0CED70B0E5F25F09" />';
 
 const ROUTES = [
   "index.html",
@@ -60,6 +61,15 @@ test("every route exposes a complete SEO surface", () => {
       const parsed = JSON.parse(block); // throws if invalid
       assert.ok(parsed["@context"] === "https://schema.org", `${route}: schema.org context`);
     }
+  }
+});
+
+test("Bing Webmaster verification tag exists once in the shared head", () => {
+  const template = HTML("build.mjs");
+  assert.strictEqual(template.split(BING_VERIFICATION_TAG).length - 1, 1, "build template has one exact Bing tag");
+  for (const route of ROUTES) {
+    const html = HTML(route);
+    assert.strictEqual(html.split(BING_VERIFICATION_TAG).length - 1, 1, `${route}: one exact Bing tag`);
   }
 });
 

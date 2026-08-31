@@ -106,6 +106,7 @@ function head({ title, description, canonical, pageType = "website", jsonLd = []
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <meta name="author" content="StealthRDP" />
+  <meta name="msvalidate.01" content="BC1193DFC35353EA0CED70B0E5F25F09" />
   <link rel="canonical" href="${canonical}" />
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
   <link rel="manifest" href="/site.webmanifest" />
