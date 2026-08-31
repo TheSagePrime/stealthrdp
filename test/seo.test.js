@@ -11,10 +11,9 @@ const ROOT = path.join(__dirname, "..");
 const HTML = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 const BLOG = require(path.join(ROOT, "js", "blog-data.js")).SRDP_BLOG;
 const DOCS = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "docs-articles.json"), "utf8"));
-const CATALOG = [
-  ...JSON.parse(fs.readFileSync(path.join(ROOT, "data", "plans_usa.json"), "utf8")),
-  ...JSON.parse(fs.readFileSync(path.join(ROOT, "data", "plans_eu.json"), "utf8")),
-];
+const PRICING_CATALOG = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "plans.json"), "utf8"));
+const CATALOG = PRICING_CATALOG.plans;
+const pricing = require(path.join(ROOT, "js", "pricing.js"));
 const { APPROVED_INDEXABLE_COMMERCIAL_PAGES, checkAiDiscovery } = require(path.join(ROOT, "lib", "ai-discovery.js"));
 const OS_ROUTES = ["windows-vps/index.html", "linux-vps/index.html"];
 
@@ -279,7 +278,7 @@ test("OS landing pages have separate commercial intent, page schema, and shared 
 test("OS landing pages render the shared catalog cards without copied plan data", () => {
   const windows = HTML("windows-vps/index.html");
   const linux = HTML("linux-vps/index.html");
-  const monthlyPrice = (plan) => (Math.round(Number(plan.monthlyPrice) * 0.95 * 100) / 100).toFixed(2);
+  const monthlyPrice = (plan) => pricing.cycleEntry(plan, "monthly").amount.toFixed(2);
   const planName = (plan) => plan.name.replace(" USA", "").replace(" EU", "");
 
   for (const [route, html] of [["windows", windows], ["linux", linux]]) {

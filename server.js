@@ -176,10 +176,12 @@ function safeIncidentSummary(logs) {
 }
 
 function safePlan(plan) {
+  const pricing = plan.pricing || {};
+  const monthly = pricing.monthly || {};
   return {
     name: String(plan.name || ""),
     description: String(plan.description || ""),
-    monthlyPrice: Number.isFinite(Number(plan.monthlyPrice)) ? Number(plan.monthlyPrice) : 0,
+    monthlyPrice: Number.isFinite(Number(monthly.amount)) ? Number(monthly.amount) : 0,
     location: String(plan.location || ""),
     popular: Boolean(plan.popular),
     specs: {
@@ -188,16 +190,17 @@ function safePlan(plan) {
       storage: String(plan.specs && plan.specs.storage || ""),
       bandwidth: String(plan.specs && plan.specs.bandwidth || ""),
     },
-    billingOptions: plan.billingOptions || {},
+    pricing,
+    source: plan.source || {},
   };
 }
 
 function localApi(pathname, url) {
   if (pathname === "/api/plans") {
     const location = String(url.searchParams.get("location") || "USA").toLowerCase() === "eu" ? "EU" : "USA";
-    const file = location === "EU" ? "plans_eu.json" : "plans_usa.json";
-    const data = readJson(file, []);
-    return Array.isArray(data) ? data.map(safePlan) : [];
+    const catalog = readJson("plans.json", { plans: [] });
+    const data = Array.isArray(catalog.plans) ? catalog.plans.filter((plan) => plan.location === location) : [];
+    return data.map(safePlan);
   }
   if (pathname === "/api/features") {
     const data = readJson("features.json", []);

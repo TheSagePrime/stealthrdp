@@ -19,8 +19,16 @@ const require = createRequire(import.meta.url);
 const ROOT = path.dirname(new URL(import.meta.url).pathname);
 const DATA = (f) => JSON.parse(fs.readFileSync(path.join(ROOT, "data", f), "utf8"));
 
-const USA = DATA("plans_usa.json");
-const EU = DATA("plans_eu.json");
+const PRICING_CATALOG = DATA("plans.json");
+const CATALOG = PRICING_CATALOG.plans;
+const USA = CATALOG.filter((plan) => plan.location === "USA");
+const EU = CATALOG.filter((plan) => plan.location === "EU");
+const pricing = require(path.join(ROOT, "js", "pricing.js"));
+const LOWEST_PLAN = CATALOG.reduce((lowest, plan) => {
+  const amount = pricing.cycleEntry(plan, "monthly").amount;
+  return !lowest || amount < pricing.cycleEntry(lowest, "monthly").amount ? plan : lowest;
+}, null);
+const STARTING_PRICE = pricing.formatAmount(pricing.cycleEntry(LOWEST_PLAN, "monthly").amount);
 const FAQS = DATA("faqs.json");
 const TESTIMONIALS = DATA("testimonials.json");
 const REVIEWS = DATA("reviews.json");
@@ -40,12 +48,7 @@ const TERMS_URL = `/docs/${(DOCS.find((article) => article.slug === "1737944013-
 /* ---------- helpers ---------- */
 const esc = (s) =>
   String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const round2 = (n) => Math.round(n * 100) / 100;
 const fmt = (n) => n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-// Visible monthly price = API base * 0.95 (matches main.js CYCLE_MULT.monthly)
-const MONTHLY_MULT = 0.95;
-const monthlyPrice = (p) => round2((p.monthlyPrice || 0) * MONTHLY_MULT);
 
 const PLAN_SLUGS = {
   "Bronze USA": "bronze-usa2", "Silver USA": "silver-usa", "Gold USA": "gold-usa",
@@ -258,18 +261,18 @@ function footerHtml() {
 }
 
 const ASSET_STAMP = new Date().toISOString().replace(/[:.]/g, "-");
-function scripts(extra = []) {
-  return `<script src="/js/main.js?v=${ASSET_STAMP}"></script>${extra.map((s) => `<script src="${s}?v=${ASSET_STAMP}"></script>`).join("")}`;
+function scripts(extra = [], includePricing = false) {
+  const pricingScript = includePricing ? `<script src="/js/pricing.js?v=${ASSET_STAMP}"></script>` : "";
+  return `${pricingScript}<script src="/js/main.js?v=${ASSET_STAMP}"></script>${extra.map((s) => `<script src="${s}?v=${ASSET_STAMP}"></script>`).join("")}`;
 }
 
 /* ---------- baked content ---------- */
 function planCardHtml(p, { showPopular = true, showLocation = false, ctaLabel = "Buy Now" } = {}) {
-  const price = monthlyPrice(p);
   const isPop = showPopular && p.popular;
   return `<article class="plan-card${isPop ? " popular" : ""}">
 ${isPop ? `    <span class="plan-popular">Most Popular</span>\n` : ""}    <div class="p-name">${esc(planName(p))}</div>
     <div class="p-desc">${esc(p.description || "")}</div>
-${showLocation ? `    <div class="p-location">Region: ${esc(p.location || "Not listed")}</div>\n` : ""}    <div class="plan-price"><span class="cur">€${fmt(price)}<small>/mo</small></span><span class="was">€${fmt(p.monthlyPrice || 0)}</span></div>
+${showLocation ? `    <div class="p-location">Region: ${esc(p.location || "Not listed")}</div>\n` : ""}    ${pricing.priceMarkup(p, "monthly")}
     <div class="plan-specs">
       ${specRow("CPU", p.specs && p.specs.cpu)}
       ${specRow("RAM", p.specs && p.specs.ram)}
@@ -307,9 +310,13 @@ function compareRowHtml(p) {
     <td class="v">${esc((p.specs && p.specs.ram) || "—")}</td>
     <td class="v">${esc((p.specs && p.specs.storage) || "—")}</td>
     <td class="v">${esc((p.specs && p.specs.bandwidth) || "—")}</td>
-    <td class="v">€${fmt(p.monthlyPrice || 0)}</td>
+    <td class="v">${pricing.tablePrice(p)}</td>
     <td><a class="btn btn-sm btn-primary" href="${planUrl(p)}" target="_blank" rel="noopener noreferrer">Buy Now</a></td>
   </tr>`;
+}
+
+function billingToggleHtml() {
+  return Object.keys(PRICING_CATALOG.billingCycles).map((key) => pricing.cycleButtonMarkup(key, PRICING_CATALOG.billingCycles)).join("\n          ");
 }
 
 function faqItemHtml(f, i) {
@@ -788,7 +795,7 @@ function serviceLd(p) {
     description: p.description || `${p.name} — ${(p.specs && p.specs.cpu) || ""} CPU, ${(p.specs && p.specs.ram) || ""} RAM, ${(p.specs && p.specs.storage) || ""} NVMe`,
     url: planUrl(p),
     provider: { "@type": "Organization", name: "StealthRDP", url: "__SRDP_BASE__/" },
-    offers: { "@type": "Offer", price: monthlyPrice(p), priceCurrency: "EUR", url: planUrl(p) },
+    offers: { "@type": "Offer", price: pricing.cycleEntry(p, "monthly").amount, priceCurrency: p.pricing.currency, url: planUrl(p), description: "Monthly billing" },
   };
 }
 
@@ -835,14 +842,14 @@ function howToLd(post, headings) {
 }
 
 /* ---------- page builders ---------- */
-function page({ active, title, description, canonical, pageType = "website", jsonLd = [], body, extraScripts = [], planLocation = "", planLimit = "", robots = "index,follow", showPalette = true }) {
+function page({ active, title, description, canonical, pageType = "website", jsonLd = [], body, extraScripts = [], planLocation = "", planLimit = "", robots = "index,follow", showPalette = true, includePricing = false }) {
   const pageData = `${planLocation ? ` data-plan-location="${esc(planLocation)}"` : ""}${planLimit ? ` data-plan-limit="${esc(planLimit)}"` : ""}`;
   return `${head({ title, description, canonical, pageType, jsonLd, robots })}
 <body data-page="${active}"${pageData}>
   ${headerHtml(active, { showPalette })}
   ${body}
   ${footerHtml()}
-  ${scripts(extraScripts)}
+  ${scripts(extraScripts, includePricing)}
 </body>
 </html>`;
 }
@@ -976,12 +983,7 @@ function buildIndex() {
         <div class="all-link os-links" aria-label="Browse VPS operating system plans"><a class="btn btn-ghost btn-sm" href="/windows-vps/">Windows VPS hosting</a><a class="btn btn-ghost btn-sm" href="/linux-vps/">Linux VPS hosting</a><a class="btn btn-ghost btn-sm" href="/plans.html#windows-vps">Windows VPS</a><a class="btn btn-ghost btn-sm" href="/plans.html#linux-vps">Linux VPS</a><a class="btn btn-ghost btn-sm" href="/plans.html#comparison">Compare VPS resources</a></div>
       </div>
       <div class="billing-wrap fade-up d2">
-        <div class="billing-toggle" id="billingToggle" role="tablist" aria-label="Billing cycle">
-          <button role="tab" data-cycle="monthly" class="active">Monthly</button>
-          <button role="tab" data-cycle="quarterly">Quarterly <span class="off">−10%</span></button>
-          <button role="tab" data-cycle="annual">Annual <span class="off">−20%</span></button>
-          <button role="tab" data-cycle="biannual">Biannual <span class="off">−30%</span></button>
-        </div>
+        <div class="billing-toggle" id="billingToggle" role="tablist" aria-label="Billing cycle">${billingToggleHtml()}</div>
       </div>
       <div class="plan-grid" id="planGrid" aria-live="polite">${preview}</div>
       <div class="plan-rail-cue" aria-live="polite"><span id="planRailStatus">Plan 1 of 3</span><span class="plan-rail-line" aria-hidden="true"><i></i></span><span>Swipe to compare plans</span></div>
@@ -1025,7 +1027,7 @@ function buildIndex() {
         <span class="eyebrow fade-up">Backed by 10,000+ orders</span>
         <h2 class="fade-up d1">Ready to stop wasting time on server management?</h2>
         <p class="fade-up d2">Deploy your high-performance VPS in the next 60 seconds and focus on what matters — your actual work.</p>
-        <p class="micro fade-up d3">Starting at just <b>€9.50/month</b> · 7-day money-back guarantee · Cancel anytime</p>
+        <p class="micro fade-up d3">Starting at just <b>€${STARTING_PRICE}/month</b> · 7-day money-back guarantee · Cancel anytime</p>
       </div>
       <div class="cta-actions fade-up d3">
         <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Deploy Your Server Now</a>
@@ -1033,14 +1035,19 @@ function buildIndex() {
       </div>
     </div>
   </section>`;
-  const jsonLd = [{ "@context": "https://schema.org", "@graph": [ORG, websiteLd()] }];
+  const jsonLd = [{ "@context": "https://schema.org", "@graph": [
+    ORG,
+    websiteLd(),
+    { "@type": "ItemList", name: "StealthRDP featured USA VPS plans", itemListElement: USA.slice(0, 3).map((p, i) => ({ "@type": "ListItem", position: i + 1, item: serviceLd(p) })) },
+  ] }];
   return page({
     active: "home",
     title: "StealthRDP — Secure Remote Desktop & VPS Infrastructure",
-    description: "Deploy a Windows or Linux VPS in 60 seconds. Enterprise-grade hardware, DDoS protection, 99.9% uptime SLA and 24/7 support — from €9.50/month.",
+    description: `Deploy a Windows or Linux VPS in 60 seconds. Enterprise-grade hardware, DDoS protection, 99.9% uptime SLA and 24/7 support — from €${STARTING_PRICE}/month.`,
     canonical: "__SRDP_BASE__/",
     jsonLd,
     body,
+    includePricing: true,
   });
 }
 
@@ -1055,12 +1062,7 @@ function buildPlans() {
   <section class="section plans-page-section" style="padding-top:0">
     <div class="container">
       <div class="plans-controls">
-        <div class="billing-control"><span class="control-label">Billing cycle</span><div class="billing-toggle" id="billingToggle" role="tablist" aria-label="Billing cycle">
-          <button role="tab" aria-selected="true" data-cycle="monthly" class="active">Monthly</button>
-          <button role="tab" aria-selected="false" data-cycle="quarterly">Quarterly <span class="off">−10%</span></button>
-          <button role="tab" aria-selected="false" data-cycle="annual">Annual <span class="off">−20%</span></button>
-          <button role="tab" aria-selected="false" data-cycle="biannual">Biannual <span class="off">−30%</span></button>
-        </div></div>
+        <div class="billing-control"><span class="control-label">Billing cycle</span><div class="billing-toggle" id="billingToggle" role="tablist" aria-label="Billing cycle">${billingToggleHtml()}</div></div>
         <div class="location-control"><span class="control-label">Deployment region</span><div id="locationTabs" class="location-tabs" role="tablist" aria-label="Deployment region">
           <button role="tab" aria-selected="true" data-location="USA" class="active">USA</button>
           <button role="tab" aria-selected="false" data-location="EU">EU</button>
@@ -1117,6 +1119,7 @@ function buildPlans() {
     body,
     planLocation: "USA",
     planLimit: USA.length,
+    includePricing: true,
   });
 }
 

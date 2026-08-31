@@ -399,6 +399,8 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
 .plan-price .cur { font-family: var(--font-display); font-weight: 700; font-size: 36px; letter-spacing: -0.03em; }
 .plan-price .cur small { font-size: 15px; color: var(--text-muted); font-weight: 600; }
 .plan-price .was { font-size: 14.5px; color: var(--text-muted); text-decoration: line-through; text-decoration-thickness: 1.5px; }
+.plan-price .price-note { flex-basis: 100%; font-size: 12px; line-height: 1.35; color: var(--text-muted); }
+.plan-price-unavailable .cur { font-size: 24px; }
 .plan-specs { margin: 18px 0 24px; display: grid; gap: 10px; }
 .plan-spec { display: flex; align-items: center; justify-content: space-between; font-size: 13.5px; }
 .plan-spec .k { color: var(--text-dim); }

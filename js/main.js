@@ -6,6 +6,7 @@
   "use strict";
 
   var API = "/api"; // same-origin proxy (server.js) — no CORS dependency
+  var pricing = window.SRDP_PRICING;
 
   function $(sel, root) { return (root || document).querySelector(sel); }
   function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
@@ -13,9 +14,6 @@
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
-  }
-  function fmtPrice(n) {
-    return n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
   function hasBaked(container) {
     return container && container.querySelector("article, .faq-item, .node-card, .q-text");
@@ -195,12 +193,9 @@
     "Bronze EU": "bronze-eu", "Silver EU": "silver-eu", "GOLD EU": "gold-eu",
     "Platinum EU": "platinum-eu", "Diamond EU": "diamond-eu", "Emerald EU": "emerald-eu"
   };
-  var CYCLE_MULT = { monthly: 0.95, quarterly: 0.90, annual: 0.80, biannual: 0.70 };
-  var CYCLE_KEY = { monthly: "monthly", quarterly: "quarterly", annual: "annually", biannual: "biannually" };
-
   function planUrl(plan, cycle) {
     var slug = PLAN_SLUGS[plan.name] || "";
-    var cyc = CYCLE_KEY[cycle] || "monthly";
+    var cyc = pricing.cycleUrlKey(cycle);
     if (slug) {
       var category = plan.name.indexOf(" EU") !== -1 ? "eu" : "standard-usa-rdp-vps";
       return "https://dash.stealthrdp.com/index.php?rp=/store/" + category + "/" + slug + "&billingcycle=" + cyc;
@@ -429,20 +424,16 @@
 
   function renderPlans(plans) {
     if (!planGrid) return;
-    var mult = CYCLE_MULT[currentCycle] || 1;
     var popularIdx = -1;
     for (var i = 0; i < plans.length; i++) { if (plans[i].popular) { popularIdx = i; break; } }
     var html = plans.map(function (p, i) {
-      var base = p.monthlyPrice || 0;
-      var price = Math.round(base * mult * 100) / 100;
       var isPop = i === popularIdx;
       return (
         '<article class="plan-card' + (isPop ? " popular" : "") + '">' +
           (isPop ? '<span class="plan-popular">Most Popular</span>' : "") +
           '<div class="p-name">' + esc(p.name.replace(" USA", "").replace(" EU", "")) + "</div>" +
           '<div class="p-desc">' + esc(p.description || "") + "</div>" +
-          '<div class="plan-price"><span class="cur">€' + fmtPrice(price) + '<small>/mo</small></span>' +
-          '<span class="was">€' + fmtPrice(base) + "</span></div>" +
+          pricing.priceMarkup(p, currentCycle) +
           '<div class="plan-specs">' +
             specRow("CPU", p.specs && p.specs.cpu) +
             specRow("RAM", p.specs && p.specs.ram) +
@@ -456,7 +447,7 @@
     planGrid.innerHTML = html || '<div style="grid-column:1/-1;text-align:center;color:var(--text-dim);padding:40px">Plans are being updated — check back shortly.</div>';
     syncPlanRail();
     var planGridNote = $("#planGridNote");
-    if (planGridNote) planGridNote.textContent = plans.length + " " + PLAN_LOCATION + " plans · " + (currentCycle === "monthly" ? "prices shown monthly" : currentCycle + " discount applied");
+    if (planGridNote) planGridNote.textContent = plans.length + " " + PLAN_LOCATION + " plans · " + pricing.cycleLabel(currentCycle) + " billing";
     highlightRecommended(currentTier());
   }
 
@@ -521,7 +512,7 @@
               '<td class="v">' + esc(p.specs && p.specs.ram || "—") + "</td>" +
               '<td class="v">' + esc(p.specs && p.specs.storage || "—") + "</td>" +
               '<td class="v">' + esc(p.specs && p.specs.bandwidth || "—") + "</td>" +
-              '<td class="v">€' + fmtPrice(p.monthlyPrice || 0) + "</td>" +
+              '<td class="v">' + pricing.tablePrice(p) + "</td>" +
               '<td><a class="btn btn-sm btn-primary" href="' + planUrl(p, "monthly") + '" target="_blank" rel="noopener noreferrer">Buy Now</a></td>' +
             "</tr>"
           );
