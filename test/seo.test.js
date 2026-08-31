@@ -299,6 +299,24 @@ test("OS landing pages render the shared catalog cards without copied plan data"
   }
 });
 
+test("OS landing pages expose an accessible USA and EU region toggle", () => {
+  const main = fs.readFileSync(path.join(ROOT, "js", "main.js"), "utf8");
+  for (const [route, html] of [["windows", HTML("windows-vps/index.html")], ["linux", HTML("linux-vps/index.html")]]) {
+    assert.match(html, /class="os-vps-region-control"/);
+    assert.match(html, /<span class="control-label">Deployment region<\/span>/);
+    assert.match(html, /id="locationTabs" class="location-tabs" role="tablist" aria-label="Deployment region"/);
+    assert.match(html, /<button type="button" role="tab" aria-selected="true" data-location="USA" class="active">USA<\/button>/);
+    assert.match(html, /<button type="button" role="tab" aria-selected="false" data-location="EU">EU<\/button>/);
+    assert.match(html, /id="planGrid" aria-label="[^"]+ VPS plan cards"/);
+    assert.strictEqual((html.match(/data-plan-location="USA"/g) || []).length, 6, `${route}: six USA cards`);
+    assert.strictEqual((html.match(/data-plan-location="EU"/g) || []).length, 5, `${route}: five EU cards`);
+    assert.strictEqual((html.match(/ data-plan-location="EU" hidden>/g) || []).length, 5, `${route}: EU cards hidden initially`);
+  }
+  assert.match(main, /classList\.contains\("os-vps-plan-grid"\)/);
+  assert.match(main, /card\.hidden = !selected/);
+  assert.match(main, /if \(isOsVpsCatalog\) \{\n        syncOsVpsCards\(PLAN_LOCATION\);/);
+});
+
 test("OS landing pages use the approved copy and preserve current Bronze pricing", () => {
   const windows = HTML("windows-vps/index.html");
   const linux = HTML("linux-vps/index.html");

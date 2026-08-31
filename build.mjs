@@ -267,9 +267,10 @@ function scripts(extra = [], includePricing = false) {
 }
 
 /* ---------- baked content ---------- */
-function planCardHtml(p, { showPopular = true, showLocation = false, ctaLabel = "Buy Now" } = {}) {
+function planCardHtml(p, { showPopular = true, showLocation = false, ctaLabel = "Buy Now", hidden = false } = {}) {
   const isPop = showPopular && p.popular;
-  return `<article class="plan-card${isPop ? " popular" : ""}">
+  const location = esc(p.location || "");
+  return `<article class="plan-card${isPop ? " popular" : ""}" data-plan-location="${location}"${hidden ? " hidden" : ""}>
 ${isPop ? `    <span class="plan-popular">Most Popular</span>\n` : ""}    <div class="p-name">${esc(planName(p))}</div>
     <div class="p-desc">${esc(p.description || "")}</div>
 ${showLocation ? `    <div class="p-location">Region: ${esc(p.location || "Not listed")}</div>\n` : ""}    ${pricing.priceMarkup(p, "monthly")}
@@ -285,7 +286,7 @@ ${showLocation ? `    <div class="p-location">Region: ${esc(p.location || "Not l
 
 function osVpsCatalogHtml({ slug, label }) {
   const cards = USA.concat(EU)
-    .map((p) => planCardHtml(p, { showLocation: true, ctaLabel: "Choose this plan" }))
+    .map((p) => planCardHtml(p, { showLocation: true, ctaLabel: "Choose this plan", hidden: p.location !== "USA" }))
     .join("");
   return `<section class="section os-vps-catalog" aria-labelledby="${slug}-catalog-heading">
     <div class="container">
@@ -293,7 +294,14 @@ function osVpsCatalogHtml({ slug, label }) {
         <div><span class="included-label">Current VPS catalog</span><h2 id="${slug}-catalog-heading">Choose your resource level</h2></div>
         <p>Compare the current displayed monthly price, CPU, RAM, NVMe storage, bandwidth, and region. Windows and Linux use this shared VPS catalog.</p>
       </div>
-      <div class="plan-grid os-vps-plan-grid" aria-label="${label} VPS plan cards">${cards}</div>
+      <div class="os-vps-region-control">
+        <div class="location-control"><span class="control-label">Deployment region</span><div id="locationTabs" class="location-tabs" role="tablist" aria-label="Deployment region">
+          <button type="button" role="tab" aria-selected="true" data-location="USA" class="active">USA</button>
+          <button type="button" role="tab" aria-selected="false" data-location="EU">EU</button>
+        </div></div>
+        <span class="os-vps-region-note" id="osVpsRegionNote">Showing ${USA.length} USA plans</span>
+      </div>
+      <div class="plan-grid os-vps-plan-grid" id="planGrid" aria-label="${label} VPS plan cards">${cards}</div>
     </div>
   </section>`;
 }

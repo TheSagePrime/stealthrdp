@@ -46,7 +46,7 @@
       } catch (e) {}
     }());
   </script>
-  <link rel="stylesheet" href="/css/style.css?v=2026-08-31T12-48-25-740Z" />
+  <link rel="stylesheet" href="/css/style.css?v=2026-08-31T13-33-21-517Z" />
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src="https://sgtm.stealthrdp.com/2l3xebiqyzc.js?"+i;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','yw=Ch5ENj0vSDYwSUBGOjFcXhVHS19YRAEWXgkNFAgOERARHglfCg0I');</script>
   <!-- End Google Tag Manager -->
@@ -87,7 +87,14 @@
         <div><span class="included-label">Current VPS catalog</span><h2 id="linux-vps-catalog-heading">Choose your resource level</h2></div>
         <p>Compare the current displayed monthly price, CPU, RAM, NVMe storage, bandwidth, and region. Windows and Linux use this shared VPS catalog.</p>
       </div>
-      <div class="plan-grid os-vps-plan-grid" aria-label="Linux VPS plan cards"><article class="plan-card popular">
+      <div class="os-vps-region-control">
+        <div class="location-control"><span class="control-label">Deployment region</span><div id="locationTabs" class="location-tabs" role="tablist" aria-label="Deployment region">
+          <button type="button" role="tab" aria-selected="true" data-location="USA" class="active">USA</button>
+          <button type="button" role="tab" aria-selected="false" data-location="EU">EU</button>
+        </div></div>
+        <span class="os-vps-region-note" id="osVpsRegionNote">Showing 6 USA plans</span>
+      </div>
+      <div class="plan-grid os-vps-plan-grid" id="planGrid" aria-label="Linux VPS plan cards"><article class="plan-card popular" data-plan-location="USA">
     <span class="plan-popular">Most Popular</span>
     <div class="p-name">Bronze</div>
     <div class="p-desc">Blazing Fast Connectivity</div>
@@ -100,7 +107,7 @@
       <div class="plan-spec"><span class="k">Bandwidth</span><span class="sep"></span><span class="v">Unlimited</span></div>
     </div>
     <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/bronze-usa2&billingcycle=monthly" target="_blank" rel="noopener noreferrer">Choose this plan</a>
-  </article><article class="plan-card">
+  </article><article class="plan-card" data-plan-location="USA">
     <div class="p-name">Silver</div>
     <div class="p-desc">Blazing Fast Connectivity</div>
     <div class="p-location">Region: USA</div>
@@ -112,7 +119,7 @@
       <div class="plan-spec"><span class="k">Bandwidth</span><span class="sep"></span><span class="v">Unlimited</span></div>
     </div>
     <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/silver-usa&billingcycle=monthly" target="_blank" rel="noopener noreferrer">Choose this plan</a>
-  </article><article class="plan-card popular">
+  </article><article class="plan-card popular" data-plan-location="USA">
     <span class="plan-popular">Most Popular</span>
     <div class="p-name">Gold</div>
     <div class="p-desc">Blazing Fast Connectivity</div>
@@ -125,7 +132,7 @@
       <div class="plan-spec"><span class="k">Bandwidth</span><span class="sep"></span><span class="v">Unlimited</span></div>
     </div>
     <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/gold-usa&billingcycle=monthly" target="_blank" rel="noopener noreferrer">Choose this plan</a>
-  </article><article class="plan-card">
+  </article><article class="plan-card" data-plan-location="USA">
     <div class="p-name">Platinum</div>
     <div class="p-desc">Blazing Fast Connectivity</div>
     <div class="p-location">Region: USA</div>
@@ -137,7 +144,7 @@
       <div class="plan-spec"><span class="k">Bandwidth</span><span class="sep"></span><span class="v">Unlimited</span></div>
     </div>
     <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/platinum-usa&billingcycle=monthly" target="_blank" rel="noopener noreferrer">Choose this plan</a>
-  </article><article class="plan-card popular">
+  </article><article class="plan-card popular" data-plan-location="USA">
     <span class="plan-popular">Most Popular</span>
     <div class="p-name">Diamond</div>
     <div class="p-desc">Blazing Fast Connectivity</div>
@@ -150,7 +157,7 @@
       <div class="plan-spec"><span class="k">Bandwidth</span><span class="sep"></span><span class="v">Unlimited</span></div>
     </div>
     <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/diamond-usa&billingcycle=monthly" target="_blank" rel="noopener noreferrer">Choose this plan</a>
-  </article><article class="plan-card">
+  </article><article class="plan-card" data-plan-location="USA">
     <div class="p-name">Emerald</div>
     <div class="p-desc">Blazing Fast Connectivity</div>
     <div class="p-location">Region: USA</div>
@@ -162,7 +169,7 @@
       <div class="plan-spec"><span class="k">Bandwidth</span><span class="sep"></span><span class="v">Unlimited</span></div>
     </div>
     <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps/emerald-usa&billingcycle=monthly" target="_blank" rel="noopener noreferrer">Choose this plan</a>
-  </article><article class="plan-card">
+  </article><article class="plan-card" data-plan-location="EU" hidden>
     <div class="p-name">Bronze</div>
     <div class="p-desc">Blazing Fast Connectivity</div>
     <div class="p-location">Region: EU</div>
@@ -174,7 +181,7 @@
       <div class="plan-spec"><span class="k">Bandwidth</span><span class="sep"></span><span class="v">Unlimited</span></div>
     </div>
     <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/eu/bronze-eu&billingcycle=monthly" target="_blank" rel="noopener noreferrer">Choose this plan</a>
-  </article><article class="plan-card popular">
+  </article><article class="plan-card popular" data-plan-location="EU" hidden>
     <span class="plan-popular">Most Popular</span>
     <div class="p-name">Silver</div>
     <div class="p-desc">Blazing Fast Connectivity</div>
@@ -187,7 +194,7 @@
       <div class="plan-spec"><span class="k">Bandwidth</span><span class="sep"></span><span class="v">Unlimited</span></div>
     </div>
     <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/eu/silver-eu&billingcycle=monthly" target="_blank" rel="noopener noreferrer">Choose this plan</a>
-  </article><article class="plan-card">
+  </article><article class="plan-card" data-plan-location="EU" hidden>
     <div class="p-name">GOLD</div>
     <div class="p-desc">Blazing Fast Connectivity</div>
     <div class="p-location">Region: EU</div>
@@ -199,7 +206,7 @@
       <div class="plan-spec"><span class="k">Bandwidth</span><span class="sep"></span><span class="v">Unlimited</span></div>
     </div>
     <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/eu/gold-eu&billingcycle=monthly" target="_blank" rel="noopener noreferrer">Choose this plan</a>
-  </article><article class="plan-card popular">
+  </article><article class="plan-card popular" data-plan-location="EU" hidden>
     <span class="plan-popular">Most Popular</span>
     <div class="p-name">Platinum</div>
     <div class="p-desc">Blazing Fast Connectivity</div>
@@ -212,7 +219,7 @@
       <div class="plan-spec"><span class="k">Bandwidth</span><span class="sep"></span><span class="v">Unlimited</span></div>
     </div>
     <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/eu/platinum-eu&billingcycle=monthly" target="_blank" rel="noopener noreferrer">Choose this plan</a>
-  </article><article class="plan-card">
+  </article><article class="plan-card" data-plan-location="EU" hidden>
     <div class="p-name">Diamond</div>
     <div class="p-desc">Blazing Fast Connectivity</div>
     <div class="p-location">Region: EU</div>
@@ -336,6 +343,6 @@
       </span>
     </div>
   </div></footer>
-  <script src="/js/main.js?v=2026-08-31T12-48-25-740Z"></script>
+  <script src="/js/main.js?v=2026-08-31T13-33-21-517Z"></script>
 </body>
 </html>

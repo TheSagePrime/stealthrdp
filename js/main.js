@@ -421,6 +421,25 @@
   var cachedPlans = [];
   var PLAN_LOCATION = document.body.getAttribute("data-plan-location") || "USA";
   var PLAN_LIMIT = parseInt(document.body.getAttribute("data-plan-limit") || "3", 10);
+  var isOsVpsCatalog = !!(planGrid && planGrid.classList.contains("os-vps-plan-grid"));
+
+  function syncOsVpsCards(location) {
+    if (!isOsVpsCatalog) return;
+    var visible = 0;
+    $$(".plan-card", planGrid).forEach(function (card) {
+      var selected = card.getAttribute("data-plan-location") === location;
+      card.hidden = !selected;
+      if (selected) {
+        card.removeAttribute("aria-hidden");
+        visible += 1;
+      } else {
+        card.setAttribute("aria-hidden", "true");
+      }
+    });
+    var note = $("#osVpsRegionNote");
+    if (note) note.textContent = "Showing " + visible + " " + location + " plans";
+    planGrid.setAttribute("aria-label", location + " VPS plan cards");
+  }
 
   function renderPlans(plans) {
     if (!planGrid) return;
@@ -457,7 +476,7 @@
   }
 
   function loadPlans() {
-    if (!planGrid) return;
+    if (!planGrid || isOsVpsCatalog) return;
     fetch(API + "/plans?location=" + PLAN_LOCATION)
       .then(function (r) { if (!r.ok) throw new Error("bad status"); return r.json(); })
       .then(function (data) {
@@ -478,9 +497,10 @@
       if (cachedPlans.length) renderPlans(cachedPlans.slice(0, PLAN_LIMIT));
     });
   }
+  if (isOsVpsCatalog) syncOsVpsCards(PLAN_LOCATION);
   loadPlans();
 
-  /* ---------- Location tabs (plans page) ---------- */
+  /* ---------- Location tabs (plans page and OS VPS pages) ---------- */
   var locTabs = $("#locationTabs");
   if (locTabs) {
     locTabs.addEventListener("click", function (e) {
@@ -488,6 +508,10 @@
       if (!btn) return;
       PLAN_LOCATION = btn.getAttribute("data-location");
       $$("button", locTabs).forEach(function (b) { var selected = b === btn; b.classList.toggle("active", selected); b.setAttribute("aria-selected", selected ? "true" : "false"); });
+      if (isOsVpsCatalog) {
+        syncOsVpsCards(PLAN_LOCATION);
+        return;
+      }
       cachedPlans = [];
       planGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--text-dim);padding:40px">Loading plans…</div>';
       loadPlans();
