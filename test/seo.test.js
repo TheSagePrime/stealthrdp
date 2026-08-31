@@ -343,7 +343,11 @@ test("OS landing pages use the approved copy and preserve current Bronze pricing
   assert.match(windows, /Need Linux instead\?/);
   assert.doesNotMatch(windows, /Choose a Windows VPS by workload/);
   assert.match(linux, /Start with the stack, not the plan name/);
-  assert.match(linux, /Ubuntu 18\.04/);
+  assert.match(linux, /Choose from the Linux operating systems provided by StealthRDP/);
+  for (const distro of ["Debian", "CentOS", "Rocky Linux", "Ubuntu", "Fedora", "FreeBSD", "Alpine Linux", "AlmaLinux"]) {
+    assert.match(linux, new RegExp(`>${distro}<`), `${distro} is listed`);
+  }
+  assert.doesNotMatch(linux, /Ubuntu 18\.04|Ubuntu 20\.04|Ubuntu 22\.04|CentOS 7|CentOS 8|CentOS Stream|Debian 10|Debian 11/);
   assert.match(linux, /Root access for server administration/);
   assert.match(linux, /Need Windows instead\?/);
   assert.doesNotMatch(linux, /Linux VPS Hosting Plans/);

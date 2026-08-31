@@ -1321,9 +1321,9 @@ function buildLinuxVps() {
           <article class="os-vps-guide-card">
             <span class="os-vps-guide-kicker">Environment</span>
             <h2>Choose a distribution that fits the project</h2>
-            <p>The Services &amp; Plans FAQ historically listed these Linux options:</p>
-            <ul class="os-vps-option-list"><li>Ubuntu 18.04</li><li>Ubuntu 20.04</li><li>Ubuntu 22.04</li><li>CentOS 7</li><li>CentOS 8</li><li>CentOS Stream</li><li>Debian 10</li><li>Debian 11</li><li>Other distributions listed by the service</li></ul>
-            <p>These are historical FAQ-listed options. Confirm current availability and suitability for your software in checkout.</p>
+            <p>Choose from the Linux operating systems provided by StealthRDP:</p>
+            <ul class="os-vps-option-list"><li>Debian</li><li>CentOS</li><li>Rocky Linux</li><li>Ubuntu</li><li>Fedora</li><li>FreeBSD</li><li>Alpine Linux</li><li>AlmaLinux</li></ul>
+            <p>Review your software requirements before you select a distribution. Confirm the current image and configuration in checkout.</p>
             <p>For one documented setup path, see <a href="/docs/1737946490-how-to-install-direct-admin-in-a-linux-server.html">How to install DirectAdmin in a Linux server</a>.</p>
           </article>
           <article class="os-vps-guide-card">
@@ -1372,7 +1372,7 @@ function buildLinuxVps() {
           <div class="os-vps-faq-head"><span class="included-label">Common questions</span><h2 id="linux-vps-faq-heading">Linux VPS questions</h2><p>Quick answers for software, distributions, access, and support.</p></div>
           <div class="os-vps-faq-grid">
             <details class="os-vps-faq-item" open><summary>What can I run on a Linux VPS?</summary><p>Linux VPS hosting can suit websites, web applications, databases, and development environments. Check the requirements of each component in your stack.</p></details>
-            <details class="os-vps-faq-item"><summary>Which Linux distributions are listed?</summary><p>The FAQ historically listed Ubuntu 18.04, 20.04, and 22.04; CentOS 7, 8, and Stream; Debian 10 and 11; plus other distributions. Confirm current availability and suitability for your software in checkout.</p></details>
+            <details class="os-vps-faq-item"><summary>Which Linux distributions are provided?</summary><p>StealthRDP provides Debian, CentOS, Rocky Linux, Ubuntu, Fedora, FreeBSD, Alpine Linux, and AlmaLinux. Confirm the current image and configuration in checkout.</p></details>
             <details class="os-vps-faq-item"><summary>Do Linux VPS plans include Root access?</summary><p>Yes. The FAQ states that VPS plans include full Root access.</p></details>
             <details class="os-vps-faq-item"><summary>How much RAM or CPU does my stack need?</summary><p>Count the services that run together. Include database memory, application processes, background jobs, build tasks, and concurrent users. Then use the <a href="/plans.html#comparison">plan comparison</a> to review the available configurations.</p></details>
             <details class="os-vps-faq-item"><summary>When will my Linux VPS be activated?</summary><p>Standard installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation.</p></details>
