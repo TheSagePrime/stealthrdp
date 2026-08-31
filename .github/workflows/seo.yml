@@ -36,7 +36,7 @@ jobs:
         run: npm ci
       - name: Run application tests
         run: npm test
-      - name: Run strict SEO gates
+      - name: Run strict SEO and AI-discovery gates
         run: npm run seo:check
       - name: Build site
         run: npm run build

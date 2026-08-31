@@ -2,6 +2,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
+const { checkAiDiscovery } = require("../lib/ai-discovery.js");
 
 const ROOT = process.cwd();
 const changedOnly = process.env.SEO_CHANGED_ONLY === "1";
@@ -122,6 +126,8 @@ else {
   if (!robots.includes("Sitemap: __SRDP_BASE__/sitemap.xml")) fail("robots.txt: sitemap reference missing");
   if (!/^User-agent:\s*\*/m.test(robots)) fail("robots.txt: wildcard user-agent missing");
 }
+
+for (const issue of checkAiDiscovery({ root: ROOT })) fail(issue);
 
 if (routes.size === 0) fail("routes: no HTML routes found");
 if (failures.length) {

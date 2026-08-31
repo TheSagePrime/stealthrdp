@@ -11,6 +11,7 @@ const ROOT = path.join(__dirname, "..");
 const HTML = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 const BLOG = require(path.join(ROOT, "js", "blog-data.js")).SRDP_BLOG;
 const DOCS = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "docs-articles.json"), "utf8"));
+const { APPROVED_INDEXABLE_COMMERCIAL_PAGES, checkAiDiscovery } = require(path.join(ROOT, "lib", "ai-discovery.js"));
 const OS_ROUTES = ["windows-vps/index.html", "linux-vps/index.html"];
 
 const ROUTES = [
@@ -142,6 +143,25 @@ test("AI-readable guide exists and source templates stay free of raw infrastruct
     if (route.startsWith("blog/")) continue;
     assert.doesNotMatch(HTML(route), /\b(?:\d{1,3}\.){3}\d{1,3}\b/, `${route}: no raw IPv4 address`);
   }
+});
+
+test("AI discovery gate covers every approved commercial page", () => {
+  const llms = HTML("llms.txt");
+  const robots = HTML("robots.txt");
+  assert.deepStrictEqual(checkAiDiscovery({ root: ROOT }), [], "source AI discovery surface passes");
+  for (const page of APPROVED_INDEXABLE_COMMERCIAL_PAGES) {
+    assert.match(llms, new RegExp(`__SRDP_BASE__${page.path.replaceAll("/", "\\/")}`), `${page.label}: llms entry`);
+  }
+  assert.match(llms, /Windows VPS hosting].*plans\.html#windows-vps.*dash\.stealthrdp\.com\/index\.php\?rp=\/store\/standard-usa-rdp-vps/);
+  assert.match(llms, /Linux VPS hosting].*plans\.html#linux-vps.*dash\.stealthrdp\.com\/index\.php\?rp=\/store\/standard-usa-rdp-vps/);
+  assert.match(robots, /# AI guide: __SRDP_BASE__\/llms\.txt/);
+
+  const withoutWindows = llms.replace(/^- \[Windows VPS hosting\].*\n/m, "");
+  assert.match(
+    checkAiDiscovery({ llmsText: withoutWindows, robotsText: robots }).join("\n"),
+    /approved commercial page missing __SRDP_BASE__\/windows-vps\//,
+    "missing commercial entry fails the gate",
+  );
 });
 
 test("baked content is present in raw HTML (plans, faq, status, blog)", () => {
