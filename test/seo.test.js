@@ -230,8 +230,8 @@ test("OS landing pages have separate commercial intent, page schema, and shared 
   assert.match(linux, /<title>Linux VPS Hosting \| USA &amp; EU Plans \| StealthRDP<\/title>/);
   assert.match(windows, /canonical" href="__SRDP_BASE__\/windows-vps\//);
   assert.match(linux, /canonical" href="__SRDP_BASE__\/linux-vps\//);
-  assert.match(windows, /<h1>Windows VPS Hosting Plans<\/h1>/);
-  assert.match(linux, /<h1>Linux VPS Hosting Plans<\/h1>/);
+  assert.match(windows, /<h1>Windows VPS hosting for work that belongs on Windows<\/h1>/);
+  assert.match(linux, /<h1>Linux VPS hosting for the stack you need to run<\/h1>/);
   assert.strictEqual((windows.match(/<h1[\s>]/g) || []).length, 1);
   assert.strictEqual((linux.match(/<h1[\s>]/g) || []).length, 1);
   assert.match(windows, /windows-vps\/.*Windows VPS|Windows VPS.*windows-vps\//s);
@@ -250,6 +250,23 @@ test("OS landing pages have separate commercial intent, page schema, and shared 
     assert.doesNotMatch(html, /TODO|TBD|PLACEHOLDER|LOREM IPSUM/i);
   }
   assert.notStrictEqual(windows, linux, "OS pages are not duplicate HTML");
+});
+
+test("OS landing pages use the approved copy and preserve current Bronze pricing", () => {
+  const windows = HTML("windows-vps/index.html");
+  const linux = HTML("linux-vps/index.html");
+  assert.match(windows, /Keep your Windows workflow in reach/);
+  assert.match(windows, /Windows Server 2016/);
+  assert.match(windows, /Administrator access for hands-on control/);
+  assert.match(windows, /Bronze USA at <strong>€9\.50\/month<\/strong>/);
+  assert.match(windows, /Need Linux instead\?/);
+  assert.doesNotMatch(windows, /Choose a Windows VPS by workload/);
+  assert.match(linux, /Start with the stack, not the plan name/);
+  assert.match(linux, /Ubuntu 18\.04/);
+  assert.match(linux, /Root access for server administration/);
+  assert.match(linux, /Bronze EU is also <strong>€9\.50\/month<\/strong>/);
+  assert.match(linux, /Need Windows instead\?/);
+  assert.doesNotMatch(linux, /Linux VPS Hosting Plans/);
 });
 
 test("OS landing pages are linked from the approved site context", () => {
