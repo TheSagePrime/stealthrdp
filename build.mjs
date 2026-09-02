@@ -1768,8 +1768,8 @@ function buildSitemap() {
   const staticRoutes = [
     ["/", "2026-08-06"],
     ["/plans.html", "2026-08-06"],
-    ["/windows-vps/", "2026-08-30"],
-    ["/linux-vps/", "2026-08-30"],
+    ["/windows-vps/", "2026-09-02"],
+    ["/linux-vps/", "2026-09-02"],
     ["/status.html", "2026-08-06"],
     ["/blog.html", "2026-08-06"],
     ["/faq.html", "2026-08-06"],
