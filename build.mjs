@@ -1766,16 +1766,16 @@ ${items}
 
 function buildSitemap() {
   const staticRoutes = [
-    ["/", "2026-08-06"],
-    ["/plans.html", "2026-08-06"],
+    ["/", "2026-08-31"],
+    ["/plans.html", "2026-08-31"],
     ["/windows-vps/", "2026-09-02"],
     ["/linux-vps/", "2026-09-02"],
-    ["/status.html", "2026-08-06"],
-    ["/blog.html", "2026-08-06"],
-    ["/faq.html", "2026-08-06"],
-    ["/about.html", "2026-08-06"],
-    ["/privacy.html", "2026-08-06"],
-    ["/docs.html", "2026-08-13"],
+    ["/status.html", "2026-08-31"],
+    ["/blog.html", "2026-08-31"],
+    ["/faq.html", "2026-08-31"],
+    ["/about.html", "2026-08-31"],
+    ["/privacy.html", "2026-08-31"],
+    ["/docs.html", "2026-08-31"],
   ];
   const blogRoutes = BLOG.map((p) => [`/blog/${p.slug}.html`, p.date]);
   const docRoutes = DOCS.map((article) => [`/docs/${article.slug}.html`, docDateIso(article.date) || "2026-08-13"]);
