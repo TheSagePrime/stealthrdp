@@ -1230,8 +1230,8 @@ function buildWindowsVps() {
   return buildOsVpsPage({
     slug: "windows-vps",
     label: "Windows",
-    title: "Windows VPS Hosting | USA & EU Plans | StealthRDP",
-    description: "Compare Windows VPS hosting plans from StealthRDP for remote access, applications, and business workloads in USA and EU regions.",
+    title: "Windows VPS Hosting | Compare USA and EU Plans | StealthRDP",
+    description: "Compare Windows VPS hosting plans by Administrator access, operating-system options, resources, and USA or EU regions, then continue to checkout.",
     serviceName: "StealthRDP Windows VPS hosting",
     serviceType: "Windows VPS hosting",
     logo: "/assets/os-logos/windows-colored.svg",
@@ -1318,8 +1318,8 @@ function buildLinuxVps() {
   return buildOsVpsPage({
     slug: "linux-vps",
     label: "Linux",
-    title: "Linux VPS Hosting | USA & EU Plans | StealthRDP",
-    description: "Compare Linux VPS hosting plans from StealthRDP for websites, applications, development, and server workloads in USA and EU regions.",
+    title: "Linux VPS Hosting | Compare USA and EU Plans | StealthRDP",
+    description: "Compare Linux VPS hosting plans by Root access, distribution, resources, and USA or EU options, then continue to checkout.",
     serviceName: "StealthRDP Linux VPS hosting",
     serviceType: "Linux VPS hosting",
     logo: "/assets/os-logos/linux-colored.svg",
