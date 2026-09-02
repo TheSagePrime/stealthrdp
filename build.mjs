@@ -1215,6 +1215,34 @@ function buildOsVpsPage({
       </div>
     </section>
   </main>`;
+  // Build FAQ schema based on page type
+  const faqSchema = slug === 'windows-vps' ? {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type": "Question", "name": "Can I use familiar Windows software?", "acceptedAnswer": {"@type": "Answer", "text": "A Windows VPS provides a Windows environment for compatible software. Check each application's system requirements before ordering."}},
+        {"@type": "Question", "name": "Do Windows VPS plans include Administrator access?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The FAQ states that VPS plans include full Administrator access."}},
+        {"@type": "Question", "name": "Which Windows versions are listed?", "acceptedAnswer": {"@type": "Answer", "text": "The FAQ lists Windows Server 2016, Windows Server 2019, Windows Server 2022, Windows 10, and Windows 11. Confirm the available selection during checkout."}},
+        {"@type": "Question", "name": "When will my Windows VPS be activated?", "acceptedAnswer": {"@type": "Answer", "text": "Standard installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation."}},
+        {"@type": "Question", "name": "How will I receive my credentials?", "acceptedAnswer": {"@type": "Answer", "text": "StealthRDP sends service credentials by email after payment confirmation."}},
+        {"@type": "Question", "name": "How do I choose CPU, RAM, and storage?", "acceptedAnswer": {"@type": "Answer", "text": "Use your software requirements, user count, processing needs, and data size. Then use the plan comparison to compare the available configurations."}},
+        {"@type": "Question", "name": "Where can I get support?", "acceptedAnswer": {"@type": "Answer", "text": "Use the client-area ticketing system or support email. The FAQ provides the current support details."}},
+        {"@type": "Question", "name": "Can I run any workload?", "acceptedAnswer": {"@type": "Answer", "text": "No. Use must remain lawful and must follow the Use of Service terms."}}
+      ]
+    } : {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type": "Question", "name": "What can I run on a Linux VPS?", "acceptedAnswer": {"@type": "Answer", "text": "Linux VPS hosting can suit websites, web applications, databases, and development environments. Check the requirements of each component in your stack."}},
+        {"@type": "Question", "name": "Which Linux distributions are provided?", "acceptedAnswer": {"@type": "Answer", "text": "StealthRDP provides Debian, CentOS, Rocky Linux, Ubuntu, Fedora, FreeBSD, Alpine Linux, and AlmaLinux. Confirm the current image and configuration in checkout."}},
+        {"@type": "Question", "name": "Do Linux VPS plans include Root access?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The FAQ states that VPS plans include full Root access."}},
+        {"@type": "Question", "name": "How much RAM or CPU does my stack need?", "acceptedAnswer": {"@type": "Answer", "text": "Count the services that run together. Include database memory, application processes, background jobs, build tasks, and concurrent users. Then use the plan comparison to review the available configurations."}},
+        {"@type": "Question", "name": "When will my Linux VPS be activated?", "acceptedAnswer": {"@type": "Answer", "text": "Standard installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation."}},
+        {"@type": "Question", "name": "How will I receive my credentials?", "acceptedAnswer": {"@type": "Answer", "text": "StealthRDP sends service credentials by email after payment confirmation."}},
+        {"@type": "Question", "name": "Are USA and EU Linux plans available?", "acceptedAnswer": {"@type": "Answer", "text": "The public catalog lists USA and EU options. Confirm the current region and configuration in the catalog or checkout."}},
+        {"@type": "Question", "name": "Where can I get support?", "acceptedAnswer": {"@type": "Answer", "text": "Use the client-area ticketing system or support email. See the FAQ for current support information."}},
+        {"@type": "Question", "name": "Are all uses permitted?", "acceptedAnswer": {"@type": "Answer", "text": "No. Use must remain lawful and must follow the Use of Service terms."}}
+      ]
+    };
+  
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [
     breadcrumbLd(`${label} VPS`, [
       { name: "Home", url: "__SRDP_BASE__/" },
@@ -1222,6 +1250,7 @@ function buildOsVpsPage({
       { name: `${label} VPS`, url: `__SRDP_BASE__/${slug}/` },
     ]),
     osVpsPageLd({ slug, title, description, serviceName, serviceType }),
+    faqSchema,
   ] }];
   return page({ active: "plans", title, description, canonical: `__SRDP_BASE__/${slug}/`, jsonLd, body, showPalette: false });
 }
@@ -1231,7 +1260,7 @@ function buildWindowsVps() {
     slug: "windows-vps",
     label: "Windows",
     title: "Windows VPS Hosting | Compare USA and EU Plans | StealthRDP",
-    description: "Compare Windows VPS hosting plans by Administrator access, operating-system options, resources, and USA or EU regions, then continue to checkout.",
+    description: "Compare Windows VPS hosting plans with full Administrator access, multiple OS versions, and flexible resources. Choose USA or EU regions and deploy fast.",
     serviceName: "StealthRDP Windows VPS hosting",
     serviceType: "Windows VPS hosting",
     logo: "/assets/os-logos/windows-colored.svg",
@@ -1319,7 +1348,7 @@ function buildLinuxVps() {
     slug: "linux-vps",
     label: "Linux",
     title: "Linux VPS Hosting | Compare USA and EU Plans | StealthRDP",
-    description: "Compare Linux VPS hosting plans by Root access, distribution, resources, and USA or EU options, then continue to checkout.",
+    description: "Compare Linux VPS hosting plans with full Root access, multiple distributions, and flexible resources. Choose USA or EU regions and deploy in minutes.",
     serviceName: "StealthRDP Linux VPS hosting",
     serviceType: "Linux VPS hosting",
     logo: "/assets/os-logos/linux-colored.svg",
