@@ -259,8 +259,8 @@ test("VPS SEO hub keeps OS anchors, selector, internal links, and checkout paths
 test("OS landing pages have separate commercial intent, page schema, and checkout", () => {
   const windows = HTML("windows-vps/index.html");
   const linux = HTML("linux-vps/index.html");
-  assert.match(windows, /<title>Windows VPS Hosting \| USA &amp; EU Plans \| StealthRDP<\/title>/);
-  assert.match(linux, /<title>Linux VPS Hosting \| USA &amp; EU Plans \| StealthRDP<\/title>/);
+  assert.match(windows, /<title>Windows VPS Hosting \| Compare USA and EU Plans \| StealthRDP<\/title>/);
+  assert.match(linux, /<title>Linux VPS Hosting \| Compare USA and EU Plans \| StealthRDP<\/title>/);
   assert.match(windows, /canonical" href="__SRDP_BASE__\/windows-vps\//);
   assert.match(linux, /canonical" href="__SRDP_BASE__\/linux-vps\//);
   assert.match(windows, /<h1>Windows VPS hosting for work that belongs on Windows<\/h1>/);
