@@ -1270,6 +1270,199 @@ function buildOsVpsPage({
   return page({ active: "plans", title, description, canonical: `__SRDP_BASE__/${slug}/`, jsonLd, body, showPalette: false });
 }
 
+function windowsLandingHtml() {
+  return `<main class="os-vps-page os-vps-landing">
+    <section class="page-head os-vps-hero" id="top">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/plans.html">VPS Plans</a><span aria-hidden="true">/</span><span>Windows VPS</span></nav>
+          <img class="os-vps-logo" src="/assets/os-logos/windows-colored.svg" alt="Windows operating system logo" width="64" height="64" decoding="async">
+          <span class="eyebrow">Windows VPS hosting</span>
+          <h1>Windows VPS hosting for work that belongs on Windows</h1>
+          <p class="sub">Use remote Windows access for familiar software, administration, and business workflows. Choose your operating system, compare the resources, and order the configuration that fits the job.</p>
+          <p class="sub">StealthRDP sells Windows VPS plans in USA and EU regions. Compare the live catalog, then continue to the existing checkout.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#windows-plans">Compare Windows VPS plans</a>
+            <a class="btn btn-ghost" href="#windows-versions">Windows versions</a>
+          </div>
+          <div class="os-hero-chips" aria-label="Listed Windows families">
+            <span class="os-hero-chip"><img src="/assets/os-logos/windows-colored.svg" alt="Windows Server" width="18" height="18" decoding="async">Windows Server</span>
+            <span class="os-hero-chip"><img src="/assets/os-logos/windows.svg" alt="Windows 10" width="18" height="18" decoding="async">Windows 10</span>
+            <span class="os-hero-chip"><img src="/assets/os-logos/windows.svg" alt="Windows 11" width="18" height="18" decoding="async">Windows 11</span>
+          </div>
+        </div>
+        <aside class="hero-console" aria-label="Windows VPS deployment showcase">
+          <div class="console-card">
+            <div class="console-head"><span class="c-dot r"></span><span class="c-dot y"></span><span class="c-dot g"></span><span class="c-title">Windows VPS</span></div>
+            <div class="console-body">
+              <div class="console-line"><span class="cmd">$ stealth deploy --os windows --region us</span></div>
+              <div class="console-line"><span class="dim">region USA / EU</span></div>
+              <div class="console-line"><span class="dim">image Server / Windows 10 / Windows 11</span></div>
+              <div class="console-line"><span class="dim">storage NVMe</span></div>
+              <div class="console-line"><span class="ok">✓ confirm image during checkout</span></div>
+            </div>
+            <div class="console-foot"><span class="chip">€9.50 <b>Bronze / mo</b></span><span class="chip">Admin <b>included</b></span><span class="chip">5–10m <b>after payment</b></span></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+    ${osVpsCatalogHtml({ slug: "windows-vps", label: "Windows", sectionId: "windows-plans" })}
+    <section class="section os-vps-checkout-note" aria-labelledby="windows-vps-checkout-heading">
+      <div class="container">
+        <div class="byo-panel">
+          <div><span class="included-label">Next step</span><h2 id="windows-vps-checkout-heading">Choose the plan first. Select Windows or Linux in checkout.</h2><p>The buyer chooses the resource plan and region on this page. The existing checkout then provides the operating-system selector before payment.</p></div>
+          <a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Configure this VPS</a>
+        </div>
+      </div>
+    </section>
+    <section class="section os-vps-cheap" id="windows-workflow">
+      <div class="container">
+        <div class="os-vps-guide-intro">
+          <span class="included-label">Windows VPS guide</span>
+          <h2>Keep your Windows workflow in reach</h2>
+        </div>
+        <div class="os-content-card">
+          <p>A Windows VPS gives you a remote Windows environment for software, testing, administration, and business workflows. It can also suit users who need access to a Windows desktop or server without keeping the machine on site.</p>
+          <p>Start with the software and users. A plan that fits one application may not fit several concurrent sessions or a larger installation.</p>
+          <div class="os-vps-links"><a class="btn btn-primary" href="/plans.html#windows-vps">Windows VPS catalog</a><a class="btn btn-ghost" href="/plans.html#comparison">Plan comparison</a></div>
+        </div>
+      </div>
+    </section>
+    <section class="section os-vps-distros" id="windows-versions">
+      <div class="container">
+        <div class="os-vps-guide-intro">
+          <span class="included-label">Environment</span>
+          <h2>Choose the Windows version your software needs</h2>
+          <p>The Services &amp; Plans FAQ lists these Windows options. Confirm the operating-system option during ordering.</p>
+        </div>
+        <div class="os-distro-wrap">
+          <span class="os-distro-label" id="windows-version-label">Windows version</span>
+          <div class="os-distro-tabs" role="tablist" aria-labelledby="windows-version-label">
+            <button class="os-distro-tab" id="tab-server-2016" type="button" role="tab" aria-selected="true" aria-controls="panel-server-2016"><img src="/assets/os-logos/windows-colored.svg" alt="Windows Server 2016" width="32" height="32" decoding="async"><span><strong>Server 2016</strong><small>Listed</small></span></button>
+            <button class="os-distro-tab" id="tab-server-2019" type="button" role="tab" aria-selected="false" aria-controls="panel-server-2019"><img src="/assets/os-logos/windows-colored.svg" alt="Windows Server 2019" width="32" height="32" decoding="async"><span><strong>Server 2019</strong><small>Listed</small></span></button>
+            <button class="os-distro-tab" id="tab-server-2022" type="button" role="tab" aria-selected="false" aria-controls="panel-server-2022"><img src="/assets/os-logos/windows-colored.svg" alt="Windows Server 2022" width="32" height="32" decoding="async"><span><strong>Server 2022</strong><small>Listed</small></span></button>
+            <button class="os-distro-tab" id="tab-windows-10" type="button" role="tab" aria-selected="false" aria-controls="panel-windows-10"><img src="/assets/os-logos/windows.svg" alt="Windows 10" width="32" height="32" decoding="async"><span><strong>Windows 10</strong><small>Listed</small></span></button>
+            <button class="os-distro-tab" id="tab-windows-11" type="button" role="tab" aria-selected="false" aria-controls="panel-windows-11"><img src="/assets/os-logos/windows.svg" alt="Windows 11" width="32" height="32" decoding="async"><span><strong>Windows 11</strong><small>Listed</small></span></button>
+          </div>
+          <div class="os-distro-panels">
+            <article class="os-distro-panel" id="panel-server-2016" role="tabpanel" aria-labelledby="tab-server-2016">
+              <h3>Windows Server 2016</h3>
+              <p>Use when the software or workflow asks for Windows Server 2016.</p>
+              <p class="os-confirm-note">Confirm the available selection during checkout.</p>
+            </article>
+            <article class="os-distro-panel" id="panel-server-2019" role="tabpanel" aria-labelledby="tab-server-2019" hidden>
+              <h3>Windows Server 2019</h3>
+              <p>Use when the software or workflow asks for Windows Server 2019.</p>
+              <p class="os-confirm-note">Confirm the available selection during checkout.</p>
+            </article>
+            <article class="os-distro-panel" id="panel-server-2022" role="tabpanel" aria-labelledby="tab-server-2022" hidden>
+              <h3>Windows Server 2022</h3>
+              <p>Use when the software or workflow asks for Windows Server 2022.</p>
+              <p class="os-confirm-note">Confirm the available selection during checkout.</p>
+            </article>
+            <article class="os-distro-panel" id="panel-windows-10" role="tabpanel" aria-labelledby="tab-windows-10" hidden>
+              <h3>Windows 10</h3>
+              <p>Use when you need a Windows 10 desktop environment. Confirm the image matches the software and access pattern.</p>
+              <p class="os-confirm-note">Confirm the available selection during checkout.</p>
+            </article>
+            <article class="os-distro-panel" id="panel-windows-11" role="tabpanel" aria-labelledby="tab-windows-11" hidden>
+              <h3>Windows 11</h3>
+              <p>Use when you need a Windows 11 desktop environment. Confirm the image matches the software and access pattern.</p>
+              <p class="os-confirm-note">Confirm the available selection during checkout.</p>
+            </article>
+          </div>
+          <a class="os-related-link" href="/docs/1737945157-how-do-i-log-into-windows.html">How do I log into Windows?</a>
+        </div>
+      </div>
+    </section>
+    <section class="section os-vps-root" id="admin-access">
+      <div class="container">
+        <div class="os-vps-guide-intro"><span class="included-label">Control</span><h2>Administrator access for hands-on control</h2></div>
+        <div class="os-content-card">
+          <p>VPS plans include full Windows Administrator access. That gives you control over the Windows environment and the software you install. You are responsible for regular backups of important data.</p>
+          <p>For the remote sign-in process, see <a href="/docs/1737945157-how-do-i-log-into-windows.html">How do I log into Windows?</a> StealthRDP sends service credentials by email after payment confirmation.</p>
+        </div>
+      </div>
+    </section>
+    <section class="section os-vps-size" id="size">
+      <div class="container">
+        <div class="os-vps-guide-intro">
+          <span class="included-label">Resource fit</span>
+          <h2>Size the machine to the stack</h2>
+          <p>Count what runs at the same time: Windows, applications, users, files, and future additions.</p>
+        </div>
+        <div class="os-mini-grid">
+          <article class="os-mini-card"><span class="os-mini-kicker">01 / CPU</span><h3>Concurrent work</h3><p>Match active processing and concurrent tasks.</p></article>
+          <article class="os-mini-card"><span class="os-mini-kicker">02 / RAM</span><h3>Active services</h3><p>Allow for Windows, applications, and users running at the same time.</p></article>
+          <article class="os-mini-card"><span class="os-mini-kicker">03 / NVMe</span><h3>Files and data</h3><p>Include the operating system, installed software, files, and future additions.</p></article>
+        </div>
+      </div>
+    </section>
+    <section class="section os-vps-regions" id="regions">
+      <div class="container">
+        <div class="os-vps-guide-intro"><span class="included-label">Regions</span><h2>USA or EU</h2></div>
+        <div class="os-two-col">
+          <article class="os-content-card"><h3>USA</h3><p>StealthRDP lists Windows VPS options for USA regions. Compare the region and resources in the catalog.</p></article>
+          <article class="os-content-card"><h3>EU</h3><p>EU Windows VPS options also appear in the public catalog. Confirm the region and current configuration in checkout.</p></article>
+        </div>
+      </div>
+    </section>
+    <section class="section os-vps-activation" id="activation">
+      <div class="container">
+        <div class="os-vps-guide-intro"><span class="included-label">Before you order</span><h2>After payment</h2></div>
+        <div class="os-content-card"><p>Standard Windows and Linux installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation. StealthRDP sends your service credentials by email after payment confirmation.</p></div>
+      </div>
+    </section>
+    <section class="section os-vps-support" id="support">
+      <div class="container">
+        <div class="os-vps-guide-intro"><span class="included-label">Support and limits</span><h2>Support and limits</h2></div>
+        <div class="os-content-card">
+          <p>Support is available through the client-area ticketing system and support email. Review the <a href="/faq.html">FAQ</a> for support information and the <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a> before you order.</p>
+          <ul class="os-vps-check-list">
+            <li>Use the client-area ticket system for service support.</li>
+            <li>Follow the published Use of Service terms.</li>
+            <li>The terms require lawful use. They prohibit abuse, scanning, hacking, spam, botnets, and similar misuse.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <section class="section os-vps-order" id="order">
+      <div class="container">
+        <div class="os-vps-guide-intro"><span class="included-label">Order steps</span><h2>Order your Windows VPS</h2><p>Use these steps to move from workload requirements to a selected plan.</p></div>
+        <ol class="os-order-list">
+          <li>Open the Windows VPS catalog.</li>
+          <li>Check the Windows version and required software.</li>
+          <li>Compare CPU, RAM, NVMe storage, bandwidth, and region.</li>
+          <li>Review the live order details and price, then confirm the purchase through StealthRDP.</li>
+        </ol>
+        <div class="os-vps-links"><a class="btn btn-primary" href="/plans.html#windows-vps">Compare Windows VPS plans</a></div>
+      </div>
+    </section>
+    <section class="os-vps-faq" id="faq" aria-labelledby="windows-vps-faq-heading">
+      <div class="container">
+        <div class="os-vps-faq-head"><span class="included-label">Common questions</span><h2 id="windows-vps-faq-heading">Windows VPS questions</h2><p>Quick answers for software, access, activation, and support.</p></div>
+        <div class="os-vps-faq-grid">
+          <details class="os-vps-faq-item" open><summary>Can I use familiar Windows software?</summary><p>A Windows VPS provides a Windows environment for compatible software. Check each application's system requirements before ordering.</p></details>
+          <details class="os-vps-faq-item"><summary>Do Windows VPS plans include Administrator access?</summary><p>Yes. The FAQ states that VPS plans include full Administrator access.</p></details>
+          <details class="os-vps-faq-item"><summary>Which Windows versions are listed?</summary><p>The FAQ lists Windows Server 2016, Windows Server 2019, Windows Server 2022, Windows 10, and Windows 11. Confirm the available selection during checkout.</p></details>
+          <details class="os-vps-faq-item"><summary>When will my Windows VPS be activated?</summary><p>Standard installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation.</p></details>
+          <details class="os-vps-faq-item"><summary>How will I receive my credentials?</summary><p>StealthRDP sends service credentials by email after payment confirmation.</p></details>
+          <details class="os-vps-faq-item"><summary>How do I choose CPU, RAM, and storage?</summary><p>Use your software requirements, user count, processing needs, and data size. Then use the <a href="/plans.html#comparison">plan comparison</a> to compare the available configurations.</p></details>
+          <details class="os-vps-faq-item"><summary>Where can I get support?</summary><p>Use the client-area ticketing system or support email. The <a href="/faq.html">FAQ</a> provides the current support details.</p></details>
+          <details class="os-vps-faq-item"><summary>Can I run any workload?</summary><p>No. Use must remain lawful and must follow the <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a>.</p></details>
+        </div>
+        <section class="os-vps-next"><span class="included-label">Choose another environment</span><h2>Need Linux instead?</h2><p>For websites, applications, databases, or development stacks, see <a href="/linux-vps/">Linux VPS hosting</a>.</p></section>
+      </div>
+    </section>
+    <section class="cta-band">
+      <div class="container cta-grid">
+        <div class="cta-copy"><span class="eyebrow">Windows VPS plans</span><h2>Compare Windows VPS plans</h2></div>
+        <div class="cta-actions"><a class="btn btn-primary" href="/plans.html#windows-vps">Compare Windows VPS plans</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Continue to checkout</a></div>
+      </div>
+    </section>
+  </main>`;
+}
+
 function buildWindowsVps() {
   return buildOsVpsPage({
     slug: "windows-vps",
@@ -1284,77 +1477,8 @@ function buildWindowsVps() {
     intro: "Use remote Windows access for familiar software, administration, and business workflows. Choose your operating system, compare the resources, and order the configuration that fits the job.",
     planHref: "/plans.html#windows-vps",
     planLabel: "Compare Windows VPS plans",
-    contentHtml: `
-        <div class="os-vps-guide-intro">
-          <span class="included-label">Windows VPS guide</span>
-          <h2>Keep your Windows workflow in reach</h2>
-          <p>A Windows VPS gives you a remote Windows environment for software, testing, administration, and business workflows. It can also suit users who need access to a Windows desktop or server without keeping the machine on site.</p>
-          <p>Start with the software and users. A plan that fits one application may not fit several concurrent sessions or a larger installation.</p>
-        </div>
-        <div class="os-vps-guide-grid">
-          <article class="os-vps-guide-card">
-            <span class="os-vps-guide-kicker">Environment</span>
-            <h2>Choose the Windows version your software needs</h2>
-            <p>The Services &amp; Plans FAQ lists these Windows options:</p>
-            <ul class="os-vps-option-list"><li>Windows Server 2016</li><li>Windows Server 2019</li><li>Windows Server 2022</li><li>Windows 10</li><li>Windows 11</li></ul>
-            <p>Confirm the operating-system option during ordering. The available choice should match the software, workflow, and access pattern you plan to use.</p>
-          </article>
-          <article class="os-vps-guide-card">
-            <span class="os-vps-guide-kicker">Control</span>
-            <h2>Administrator access for hands-on control</h2>
-            <p>VPS plans include full Windows Administrator access. That gives you control over the Windows environment and the software you install. You are responsible for regular backups of important data.</p>
-            <p>For the remote sign-in process, see <a href="/docs/1737945157-how-do-i-log-into-windows.html">How do I log into Windows?</a> StealthRDP sends service credentials by email after payment confirmation.</p>
-          </article>
-          <article class="os-vps-guide-card os-vps-guide-card-wide">
-            <span class="os-vps-guide-kicker">Resource fit</span>
-            <h2>Select resources by workload</h2>
-            <p>Use the catalog above to compare the fields that affect fit:</p>
-            <ul class="os-vps-check-list"><li><strong>CPU cores:</strong> Match active processing and concurrent tasks.</li><li><strong>RAM:</strong> Allow for Windows, applications, and users running at the same time.</li><li><strong>NVMe storage:</strong> Include the operating system, installed software, files, and future additions.</li><li><strong>Bandwidth:</strong> Review the listed allowance for your network activity.</li><li><strong>Region:</strong> Choose between the available USA and EU options.</li><li><strong>Billing cycle:</strong> Select the payment period shown in checkout.</li></ul>
-            <p>The cards above use the current catalog and show the displayed monthly price. Checkout confirms the final configuration and billing cycle.</p>
-          </article>
-          <article class="os-vps-guide-card os-vps-guide-card-wide">
-            <span class="os-vps-guide-kicker">Decision rule</span>
-            <h2>A practical way to choose a plan</h2>
-            <p>If you need a remote desktop for a small set of applications, begin with the software requirements and user count. If several users will connect or several applications will run together, pay closer attention to RAM. If the workload performs active processing, compare CPU cores. If you store installers, files, or large application data, include that storage in your estimate.</p>
-            <p>This approach helps you choose from the catalog without treating a plan label as a workload guarantee.</p>
-          </article>
-        </div>
-        <section class="os-vps-ops-panel">
-          <div class="os-vps-ops-copy">
-            <span class="included-label">Before you order</span>
-            <h2>Choose the location and know what happens next.</h2>
-            <h3>USA or EU availability</h3>
-            <p>StealthRDP lists Windows VPS options for USA and EU regions. Compare the region and resources in the <a href="/plans.html#windows-vps">Windows VPS catalog</a>.</p>
-            <h3>What happens after payment</h3>
-            <p>Standard Windows and Linux installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation. StealthRDP sends your service credentials by email after payment confirmation.</p>
-            <p>The <a href="/faq.html">FAQ</a> provides account, setup, and service information. Review the <a href="/docs/1737944184-payment-terms.html">payment terms</a> and <a href="/docs/1737944110-termination-of-service.html">termination of service terms</a> for refund and cancellation conditions.</p>
-          </div>
-          <div class="os-vps-ops-copy">
-            <span class="included-label">Support and lawful use</span>
-            <h3>Support and acceptable use</h3>
-            <p>Support is available through the client-area ticketing system and support email. Review the <a href="/faq.html">FAQ</a> for support information and the <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a> before you order.</p>
-            <p>The terms require lawful use. They prohibit abuse, scanning, hacking, spam, botnets, and similar misuse. Use the service only for permitted activity.</p>
-          </div>
-        </section>
-        <section class="os-vps-order-panel">
-          <div><span class="included-label">Order steps</span><h2>Order your Windows VPS</h2><p>Use these steps to move from workload requirements to a selected plan.</p></div>
-          <ol><li>Open the Windows VPS catalog.</li><li>Check the Windows version and required software.</li><li>Compare CPU, RAM, NVMe storage, bandwidth, and region.</li><li>Review the live order details and price.</li><li>Confirm the purchase through StealthRDP.</li></ol>
-          <a class="btn btn-primary" href="/plans.html#windows-vps">Compare Windows VPS plans</a>
-        </section>
-        <section class="os-vps-faq" aria-labelledby="windows-vps-faq-heading">
-          <div class="os-vps-faq-head"><span class="included-label">Common questions</span><h2 id="windows-vps-faq-heading">Windows VPS questions</h2><p>Quick answers for software, access, activation, and support.</p></div>
-          <div class="os-vps-faq-grid">
-            <details class="os-vps-faq-item" open><summary>Can I use familiar Windows software?</summary><p>A Windows VPS provides a Windows environment for compatible software. Check each application's system requirements before ordering.</p></details>
-            <details class="os-vps-faq-item"><summary>Do Windows VPS plans include Administrator access?</summary><p>Yes. The FAQ states that VPS plans include full Administrator access.</p></details>
-            <details class="os-vps-faq-item"><summary>Which Windows versions are listed?</summary><p>The FAQ lists Windows Server 2016, Windows Server 2019, Windows Server 2022, Windows 10, and Windows 11. Confirm the available selection during checkout.</p></details>
-            <details class="os-vps-faq-item"><summary>When will my Windows VPS be activated?</summary><p>Standard installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation.</p></details>
-            <details class="os-vps-faq-item"><summary>How will I receive my credentials?</summary><p>StealthRDP sends service credentials by email after payment confirmation.</p></details>
-            <details class="os-vps-faq-item"><summary>How do I choose CPU, RAM, and storage?</summary><p>Use your software requirements, user count, processing needs, and data size. Then use the <a href="/plans.html#comparison">plan comparison</a> to compare the available configurations.</p></details>
-            <details class="os-vps-faq-item"><summary>Where can I get support?</summary><p>Use the client-area ticketing system or support email. The <a href="/faq.html">FAQ</a> provides the current support details.</p></details>
-            <details class="os-vps-faq-item"><summary>Can I run any workload?</summary><p>No. Use must remain lawful and must follow the <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a>.</p></details>
-          </div>
-        </section>
-        <section class="os-vps-next"><span class="included-label">Choose another environment</span><h2>Need Linux instead?</h2><p>For websites, applications, databases, or development stacks, see <a href="/linux-vps/">Linux VPS hosting</a>.</p></section>`,
+    contentHtml: "",
+    landingHtml: windowsLandingHtml(),
   });
 }
 

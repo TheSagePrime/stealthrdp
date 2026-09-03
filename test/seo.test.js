@@ -343,14 +343,20 @@ test("OS landing pages expose an accessible USA and EU region toggle", () => {
 test("OS landing pages use grouped guide sections instead of a flat prose stream", () => {
   const windows = HTML("windows-vps/index.html");
   const linux = HTML("linux-vps/index.html");
-  assert.match(windows, /class="os-vps-guide-intro"/);
-  assert.match(windows, /class="os-vps-guide-grid"/);
-  assert.strictEqual((windows.match(/class="os-vps-guide-card/g) || []).length, 4, "windows: four guide cards");
-  assert.match(windows, /class="os-vps-ops-panel"/);
-  assert.match(windows, /class="os-vps-order-panel"/);
+  assert.match(windows, /os-vps-landing/);
+  assert.match(windows, /id="windows-plans"/);
+  assert.match(windows, /id="windows-workflow"/);
+  assert.match(windows, /class="os-distro-tabs"/);
+  assert.match(windows, /id="admin-access"/);
+  assert.match(windows, /id="size"/);
+  assert.match(windows, /id="regions"/);
+  assert.match(windows, /id="activation"/);
+  assert.match(windows, /id="support"/);
+  assert.match(windows, /id="order"/);
   assert.match(windows, /class="os-vps-faq"/);
   assert.strictEqual((windows.match(/class="os-vps-faq-item"/g) || []).length, 8, "windows: FAQ items");
   assert.doesNotMatch(windows, /class="container prose"/);
+  assert.doesNotMatch(windows, /class="os-vps-guide-grid"/);
   assert.match(linux, /os-vps-landing/);
   assert.match(linux, /id="linux-plans"/);
   assert.match(linux, /id="cheap-linux-vps"/);
