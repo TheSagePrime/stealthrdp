@@ -260,11 +260,11 @@ test("OS landing pages have separate commercial intent, page schema, and checkou
   const windows = HTML("windows-vps/index.html");
   const linux = HTML("linux-vps/index.html");
   assert.match(windows, /<title>Windows VPS Hosting \| Compare USA and EU Plans \| StealthRDP<\/title>/);
-  assert.match(linux, /<title>Linux VPS Hosting \| Ubuntu and USA \/ EU Plans \| StealthRDP<\/title>/);
+  assert.match(linux, /<title>Linux VPS Hosting \| Ubuntu, Debian, CentOS \| StealthRDP<\/title>/);
   assert.match(windows, /canonical" href="__SRDP_BASE__\/windows-vps\//);
   assert.match(linux, /canonical" href="__SRDP_BASE__\/linux-vps\//);
   assert.match(windows, /<h1>Windows VPS hosting for work that belongs on Windows<\/h1>/);
-  assert.match(linux, /<h1>Linux VPS hosting for Ubuntu, Root access, and a price you can check<\/h1>/);
+  assert.match(linux, /<h1>Linux VPS hosting with Root access and a distro you can confirm<\/h1>/);
   assert.strictEqual((windows.match(/<h1[\s>]/g) || []).length, 1);
   assert.strictEqual((linux.match(/<h1[\s>]/g) || []).length, 1);
   assert.match(windows, /windows-vps\/.*Windows VPS|Windows VPS.*windows-vps\//s);
@@ -338,7 +338,7 @@ test("OS landing pages use grouped guide sections instead of a flat prose stream
     assert.match(html, /class="os-vps-ops-panel"/);
     assert.match(html, /class="os-vps-order-panel"/);
     assert.match(html, /class="os-vps-faq"/);
-    assert.strictEqual((html.match(/class="os-vps-faq-item"/g) || []).length, route === "windows" ? 8 : 6, `${route}: FAQ items`);
+    assert.strictEqual((html.match(/class="os-vps-faq-item"/g) || []).length, route === "windows" ? 8 : 7, `${route}: FAQ items`);
     assert.doesNotMatch(html, /class="container prose"/);
   }
 });
@@ -354,8 +354,12 @@ test("OS landing pages use the approved copy and preserve current Bronze pricing
   assert.doesNotMatch(windows, /Choose a Windows VPS by workload/);
   assert.match(linux, /If you searched for cheap Linux VPS/);
   assert.match(linux, /including Bronze at <strong>€9\.50\/month<\/strong>/);
-  assert.match(linux, /The live FAQ lists Ubuntu <strong>18\.04, 20\.04, and 22\.04<\/strong>/);
-  assert.match(linux, /Do not assume Ubuntu 24\.04 unless checkout shows it/);
+  assert.match(linux, /<h2>Linux distributions you can run<\/h2>/);
+  assert.match(linux, /Ubuntu <strong>18\.04, 20\.04, and 22\.04<\/strong>/);
+  assert.match(linux, /Debian <strong>10 and 11<\/strong>/);
+  assert.match(linux, /CentOS <strong>7, 8, and Stream<\/strong>/);
+  assert.match(linux, /Other popular distributions, confirmed in checkout/);
+  assert.match(linux, /Do not assume Ubuntu 24\.04, AlmaLinux, or Rocky Linux unless checkout shows them/);
   assert.match(linux, /It does not mean we are the cheapest provider on the internet\. We do not claim that\./);
   assert.match(linux, /Root access<\/h2>/);
   assert.match(linux, /USA or EU<\/h2>/);

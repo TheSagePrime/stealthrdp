@@ -1232,7 +1232,8 @@ function buildOsVpsPage({
       "@type": "FAQPage",
       "mainEntity": [
         {"@type": "Question", "name": "Can I order a cheap Linux VPS?", "acceptedAnswer": {"@type": "Answer", "text": "You can compare current Linux plan prices on the catalog, including Bronze at €9.50/month on the live plans page. Confirm the live price. We do not claim to be the cheapest host."}},
-        {"@type": "Question", "name": "Can I run Ubuntu?", "acceptedAnswer": {"@type": "Answer", "text": "The FAQ lists Ubuntu 18.04, 20.04, and 22.04. Confirm the image in checkout."}},
+        {"@type": "Question", "name": "Which Linux distributions can I run?", "acceptedAnswer": {"@type": "Answer", "text": "The FAQ lists Ubuntu 18.04, 20.04, and 22.04; Debian 10 and 11; CentOS 7, 8, and Stream; and other popular distributions. Confirm the image in checkout."}},
+        {"@type": "Question", "name": "Can I run Ubuntu?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Ubuntu 18.04, 20.04, and 22.04 are listed. Confirm the image in checkout."}},
         {"@type": "Question", "name": "Do plans include Root?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The FAQ states that VPS plans include full Root access."}},
         {"@type": "Question", "name": "Are USA and EU Linux plans available?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Both appear in the public catalog. Confirm the region at checkout."}},
         {"@type": "Question", "name": "When is it activated?", "acceptedAnswer": {"@type": "Answer", "text": "Typically within 5 minutes for standard installs. Most services within 5–10 minutes after payment confirmation."}},
@@ -1344,14 +1345,14 @@ function buildLinuxVps() {
   return buildOsVpsPage({
     slug: "linux-vps",
     label: "Linux",
-    title: "Linux VPS Hosting | Ubuntu and USA / EU Plans | StealthRDP",
-    description: "Compare cheap Linux VPS plans, including Ubuntu, with Root access in USA or EU regions. Check live catalog prices, then continue to checkout.",
+    title: "Linux VPS Hosting | Ubuntu, Debian, CentOS | StealthRDP",
+    description: "Compare cheap Linux VPS plans with Ubuntu, Debian, or CentOS, Root access, and USA or EU regions. Check live catalog prices, then continue to checkout.",
     serviceName: "StealthRDP Linux VPS hosting",
     serviceType: "Linux VPS hosting",
     logo: "/assets/os-logos/linux-colored.svg",
     logoAlt: "Linux operating system logo",
-    h1: "Linux VPS hosting for Ubuntu, Root access, and a price you can check",
-    intro: "You need a Linux server you can log into as root. Often that means Ubuntu. You also need a price you can verify before you pay.<br><br>StealthRDP sells Linux VPS plans in USA and EU regions. Compare the live catalog, then continue to the existing checkout.",
+    h1: "Linux VPS hosting with Root access and a distro you can confirm",
+    intro: "You need a Linux server you can log into as root. That can be Ubuntu, Debian, CentOS, or another listed image. You also need a price you can verify before you pay.<br><br>StealthRDP sells Linux VPS plans in USA and EU regions. Compare the live catalog, then continue to the existing checkout.",
     planHref: "/plans.html#linux-vps",
     planLabel: "Compare Linux VPS plans",
     contentHtml: `
@@ -1365,9 +1366,11 @@ function buildLinuxVps() {
         <div class="os-vps-guide-grid">
           <article class="os-vps-guide-card">
             <span class="os-vps-guide-kicker">Environment</span>
-            <h2>If you need Ubuntu on a VPS</h2>
-            <p>The live FAQ lists Ubuntu <strong>18.04, 20.04, and 22.04</strong>, plus CentOS 7, 8, and Stream, Debian 10 and 11, and other distributions. Confirm the image in checkout. Do not assume Ubuntu 24.04 unless checkout shows it.</p>
-            <p>Ubuntu fits many websites, panels, and development stacks. Debian and CentOS remain options when your software asks for them.</p>
+            <h2>Linux distributions you can run</h2>
+            <p>This is a Linux VPS page, not an Ubuntu-only page. The live FAQ lists:</p>
+            <ul class="os-vps-option-list"><li>Ubuntu <strong>18.04, 20.04, and 22.04</strong></li><li>Debian <strong>10 and 11</strong></li><li>CentOS <strong>7, 8, and Stream</strong></li><li>Other popular distributions, confirmed in checkout</li></ul>
+            <p>Pick the image your stack needs. Confirm it in checkout. Do not assume Ubuntu 24.04, AlmaLinux, or Rocky Linux unless checkout shows them.</p>
+            <p>Ubuntu fits many websites, panels, and development stacks. Debian fits many stable server installs. CentOS remains an option when your software asks for it.</p>
             <p>For one documented setup path, see <a href="/docs/1737946490-how-to-install-direct-admin-in-a-linux-server.html">How to install DirectAdmin in a Linux server</a>.</p>
           </article>
           <article class="os-vps-guide-card">
@@ -1402,14 +1405,15 @@ function buildLinuxVps() {
         </section>
         <section class="os-vps-order-panel">
           <div><span class="included-label">Order steps</span><h2>Order a Linux VPS</h2><p>Move from your requirements to checkout.</p></div>
-          <ol><li>Write down Ubuntu or another distribution, plus the services you will run.</li><li>Open the <a href="/plans.html#linux-vps">Linux VPS catalog</a>.</li><li>Compare CPU, RAM, disk, region, and the price on the page.</li><li>Continue to checkout. Select Linux there.</li></ol>
+          <ol><li>Write down Ubuntu, Debian, CentOS, or another listed distribution, plus the services you will run.</li><li>Open the <a href="/plans.html#linux-vps">Linux VPS catalog</a>.</li><li>Compare CPU, RAM, disk, region, and the price on the page.</li><li>Continue to checkout. Select Linux there.</li></ol>
           <a class="btn btn-primary" href="/plans.html#linux-vps">Compare Linux VPS plans</a>
         </section>
         <section class="os-vps-faq" aria-labelledby="linux-vps-faq-heading">
           <div class="os-vps-faq-head"><span class="included-label">Common questions</span><h2 id="linux-vps-faq-heading">Linux VPS questions</h2><p>Quick answers for price, Ubuntu, access, regions, and activation.</p></div>
           <div class="os-vps-faq-grid">
             <details class="os-vps-faq-item" open><summary>Can I order a cheap Linux VPS?</summary><p>You can compare current Linux plan prices on the catalog, including Bronze at €9.50/month on the live plans page. Confirm the live price. We do not claim to be the cheapest host.</p></details>
-            <details class="os-vps-faq-item"><summary>Can I run Ubuntu?</summary><p>The FAQ lists Ubuntu 18.04, 20.04, and 22.04. Confirm the image in checkout.</p></details>
+            <details class="os-vps-faq-item"><summary>Which Linux distributions can I run?</summary><p>The FAQ lists Ubuntu 18.04, 20.04, and 22.04; Debian 10 and 11; CentOS 7, 8, and Stream; and other popular distributions. Confirm the image in checkout.</p></details>
+            <details class="os-vps-faq-item"><summary>Can I run Ubuntu?</summary><p>Yes. Ubuntu 18.04, 20.04, and 22.04 are listed. Confirm the image in checkout.</p></details>
             <details class="os-vps-faq-item"><summary>Do plans include Root?</summary><p>Yes. The FAQ states that VPS plans include full Root access.</p></details>
             <details class="os-vps-faq-item"><summary>Are USA and EU Linux plans available?</summary><p>Yes. Both appear in the public catalog. Confirm the region at checkout.</p></details>
             <details class="os-vps-faq-item"><summary>When is it activated?</summary><p>Typically within 5 minutes for standard installs. Most services within 5–10 minutes after payment confirmation.</p></details>
