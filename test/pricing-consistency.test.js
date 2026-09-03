@@ -93,7 +93,7 @@ test("all public pricing cards use identical catalog monthly displays", () => {
         : Object.keys(EXPECTED_MONTHLY);
     for (const name of names) {
       const expected = EXPECTED_MONTHLY[name];
-      const displayName = name.replace(" USA", "").replace(" EU", "");
+      const displayName = name.replace(" USA", "").replace(" EU", "").replace(/[A-Za-z]+/g, (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
       const location = route.includes("vps/") ? (name.endsWith(" EU") ? "EU" : "USA") : "";
       assert.equal(displayedMonthly(html, displayName, location), expected.toFixed(2), `${route}: ${name}`);
     }
