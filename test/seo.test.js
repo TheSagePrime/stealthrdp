@@ -264,7 +264,7 @@ test("OS landing pages have separate commercial intent, page schema, and checkou
   assert.match(windows, /canonical" href="__SRDP_BASE__\/windows-vps\//);
   assert.match(linux, /canonical" href="__SRDP_BASE__\/linux-vps\//);
   assert.match(windows, /<h1>Windows VPS hosting for work that belongs on Windows<\/h1>/);
-  assert.match(linux, /<h1>Linux VPS hosting built for real workloads\.<\/h1>/);
+  assert.match(linux, /<h1>Linux VPS hosting with Root access and a distro you can confirm<\/h1>/);
   assert.strictEqual((windows.match(/<h1[\s>]/g) || []).length, 1);
   assert.strictEqual((linux.match(/<h1[\s>]/g) || []).length, 1);
   assert.match(windows, /windows-vps\/.*Windows VPS|Windows VPS.*windows-vps\//s);
@@ -300,7 +300,7 @@ test("OS landing pages render the shared catalog cards without copied plan data"
     assert.strictEqual((html.match(/class="p-location"/g) || []).length, CATALOG.length, `${route}: every card shows its region`);
     assert.match(html, /Region: USA/);
     assert.match(html, /Region: EU/);
-    assert.strictEqual((html.match(/>Choose this plan<\/a>/g) || []).length, route === "linux" ? CATALOG.length * 2 : CATALOG.length, `${route}: plan CTAs`);
+    assert.strictEqual((html.match(/>Choose this plan<\/a>/g) || []).length, CATALOG.length, `${route}: plan CTAs`);
     assert.match(html, /Choose the plan first\. Select Windows or Linux in checkout\./);
     assert.doesNotMatch(html, /Palette|Preview lab/);
     assert.doesNotMatch(html, /\bSSH\b|\bDocker\b|\bIIS\b|\.NET/i);
@@ -331,9 +331,9 @@ test("OS landing pages expose an accessible USA and EU region toggle", () => {
     assert.match(html, /<button type="button" role="tab" aria-selected="true" data-location="USA" class="active">USA<\/button>/);
     assert.match(html, /<button type="button" role="tab" aria-selected="false" data-location="EU">EU<\/button>/);
     assert.match(html, /id="planGrid" aria-label="[^"]+ VPS plan cards"/);
-    assert.strictEqual((html.match(/data-plan-location="USA"/g) || []).length, route === "linux" ? 12 : 6, `${route}: USA catalog rows`);
-    assert.strictEqual((html.match(/data-plan-location="EU"/g) || []).length, route === "linux" ? 10 : 5, `${route}: EU catalog rows`);
-    assert.strictEqual((html.match(/ data-plan-location="EU" hidden>/g) || []).length, route === "linux" ? 10 : 5, `${route}: EU rows hidden initially`);
+    assert.strictEqual((html.match(/data-plan-location="USA"/g) || []).length, 6, `${route}: USA catalog rows`);
+    assert.strictEqual((html.match(/data-plan-location="EU"/g) || []).length, 5, `${route}: EU catalog rows`);
+    assert.strictEqual((html.match(/ data-plan-location="EU" hidden>/g) || []).length, 5, `${route}: EU rows hidden initially`);
   }
   assert.match(main, /classList\.contains\("os-vps-plan-grid"\)/);
   assert.match(main, /card\.hidden = !selected/);
@@ -352,14 +352,20 @@ test("OS landing pages use grouped guide sections instead of a flat prose stream
   assert.strictEqual((windows.match(/class="os-vps-faq-item"/g) || []).length, 8, "windows: FAQ items");
   assert.doesNotMatch(windows, /class="container prose"/);
   assert.match(linux, /os-vps-landing/);
-  assert.match(linux, /class="os-distro-grid"/);
-  assert.match(linux, /class="os-feature-grid"/);
-  assert.match(linux, /class="os-step-grid"/);
-  assert.match(linux, /id="linuxCompareBody"/);
+  assert.match(linux, /id="linux-plans"/);
+  assert.match(linux, /id="cheap-linux-vps"/);
+  assert.match(linux, /class="os-distro-tabs"/);
+  assert.match(linux, /id="root-access"/);
+  assert.match(linux, /id="size"/);
+  assert.match(linux, /id="regions"/);
+  assert.match(linux, /id="activation"/);
+  assert.match(linux, /id="support"/);
+  assert.match(linux, /id="order"/);
   assert.match(linux, /class="os-vps-faq"/);
-  assert.strictEqual((linux.match(/class="os-vps-faq-item"/g) || []).length, 7, "linux: FAQ items");
+  assert.strictEqual((linux.match(/class="os-vps-faq-item"/g) || []).length, 8, "linux: FAQ items");
   assert.doesNotMatch(linux, /class="container prose"/);
   assert.doesNotMatch(linux, /class="os-vps-guide-grid"/);
+  assert.doesNotMatch(linux, /cdn\.jsdelivr\.net/);
 });
 
 test("OS landing pages use the approved copy and preserve current Bronze pricing", () => {
@@ -383,8 +389,10 @@ test("OS landing pages use the approved copy and preserve current Bronze pricing
   assert.match(linux, /Other popular distributions, confirmed in checkout/);
   assert.match(linux, /Do not assume Ubuntu 24\.04, AlmaLinux, or Rocky Linux unless checkout shows them/);
   assert.match(linux, /It does not mean we are the cheapest provider on the internet\. We do not claim that\./);
-  assert.match(linux, /<h3>Full Root access<\/h3>/);
-  assert.match(linux, /<h3>USA or EU<\/h3>/);
+  assert.match(linux, /<h2>Root access<\/h2>/);
+  assert.match(linux, /<h2>USA or EU<\/h2>/);
+  assert.match(linux, /<h2>Size the machine to the stack<\/h2>/);
+  assert.match(linux, /<h2>Order a Linux VPS<\/h2>/);
   assert.match(linux, /Need Windows instead\?/);
   assert.doesNotMatch(linux, /Linux VPS Hosting Plans/);
 });

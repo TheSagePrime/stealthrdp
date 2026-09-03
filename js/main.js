@@ -655,6 +655,36 @@
     filterBlog();
   }
 
+  /* ---------- Linux distro tabs ---------- */
+  (function initLinuxDistroTabs() {
+    var tabs = $$(".os-distro-tab");
+    var panels = $$(".os-distro-panel");
+    if (!tabs.length || !panels.length) return;
+    function activate(tab) {
+      var target = tab.getAttribute("aria-controls");
+      tabs.forEach(function (item) {
+        var selected = item === tab;
+        item.setAttribute("aria-selected", selected ? "true" : "false");
+      });
+      panels.forEach(function (panel) {
+        panel.hidden = panel.id !== target;
+      });
+    }
+    tabs.forEach(function (tab) {
+      tab.addEventListener("click", function () { activate(tab); });
+      tab.addEventListener("keydown", function (event) {
+        var index = tabs.indexOf(tab);
+        if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+        event.preventDefault();
+        var next = event.key === "ArrowRight"
+          ? tabs[(index + 1) % tabs.length]
+          : tabs[(index - 1 + tabs.length) % tabs.length];
+        next.focus();
+        activate(next);
+      });
+    });
+  }());
+
   /* ---------- Static deployment demonstration ---------- */
   // The hero console is intentionally static. It never claims that a server
   // was provisioned and does not simulate progress or completion.
