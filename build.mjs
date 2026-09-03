@@ -1337,7 +1337,7 @@ function windowsLandingHtml() {
         </div>
         <div class="os-distro-wrap">
           <span class="os-distro-label" id="windows-version-label">Windows version</span>
-          <div class="os-distro-tabs" role="tablist" aria-labelledby="windows-version-label">
+          <div class="os-distro-tabs os-distro-tabs-3" role="tablist" aria-labelledby="windows-version-label">
             <button class="os-distro-tab" id="tab-server-2019" type="button" role="tab" aria-selected="true" aria-controls="panel-server-2019"><img src="/assets/os-logos/windows-colored.svg" alt="Windows Server 2019" width="32" height="32" decoding="async"><span><strong>Server 2019</strong><small>2019</small></span></button>
             <button class="os-distro-tab" id="tab-server-2022" type="button" role="tab" aria-selected="false" aria-controls="panel-server-2022"><img src="/assets/os-logos/windows-colored.svg" alt="Windows Server 2022" width="32" height="32" decoding="async"><span><strong>Server 2022</strong><small>2022</small></span></button>
             <button class="os-distro-tab" id="tab-server-2025" type="button" role="tab" aria-selected="false" aria-controls="panel-server-2025"><img src="/assets/os-logos/windows-colored.svg" alt="Windows Server 2025" width="32" height="32" decoding="async"><span><strong>Server 2025</strong><small>2025</small></span></button>

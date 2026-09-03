@@ -346,7 +346,7 @@ test("OS landing pages use grouped guide sections instead of a flat prose stream
   assert.match(windows, /os-vps-landing/);
   assert.match(windows, /id="windows-plans"/);
   assert.match(windows, /id="windows-workflow"/);
-  assert.match(windows, /class="os-distro-tabs"/);
+  assert.match(windows, /os-distro-tabs/);
   assert.match(windows, /id="admin-access"/);
   assert.match(windows, /id="size"/);
   assert.match(windows, /id="regions"/);
