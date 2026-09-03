@@ -142,7 +142,7 @@
       "description": "Blazing Fast Connectivity",
       "location": "EU",
       "popular": false,
-      "specs": { "cpu": "4 Core", "ram": "16 GB", "storage": "16 GB NVMe", "bandwidth": "Unlimited" },
+      "specs": { "cpu": "4 Core", "ram": "16 GB", "storage": "100 GB NVMe", "bandwidth": "Unlimited" },
       "purchaseUrl": "https://dash.stealthrdp.com/index.php?rp=/store/eu/gold-eu&billingcycle=monthly",
       "source": { "url": "https://dash.stealthrdp.com/index.php?rp=/store/eu", "availability": "out-of-stock", "cycleNote": "WHMCS product page returns Out of Stock; cycle totals are not published." },
       "pricing": { "currency": "EUR", "monthly": { "amount": 28.49, "suffix": "/mo", "periodLabel": "every month" } }

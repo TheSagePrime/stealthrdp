@@ -15,6 +15,8 @@ The following eight icons are copied unchanged from the Simple Icons 16.28.0 rel
 - FreeBSD — https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/freebsd.svg
 - Alpine Linux — https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/alpinelinux.svg
 - AlmaLinux — https://github.com/simple-icons/simple-icons/blob/16.28.0/icons/almalinux.svg
+- openSUSE — https://github.com/simple-icons/simple-icons/blob/15.16.0/icons/opensuse.svg
+- Arch Linux — https://github.com/simple-icons/simple-icons/blob/15.16.0/icons/archlinux.svg
 
 Project license: https://github.com/simple-icons/simple-icons/blob/16.28.0/LICENSE.md
 (CC0 1.0 Universal). Simple Icons notes that CC0 does not waive trademark rights.
@@ -27,6 +29,9 @@ Project license: https://github.com/simple-icons/simple-icons/blob/16.28.0/LICEN
 The Linux and Windows SVGs are from Font Awesome Free 7.3.1. Its SVG icons are licensed under
 CC BY 4.0. License text: https://github.com/FortAwesome/Font-Awesome/blob/7.3.1/LICENSE.txt
 The attribution comment included in the upstream SVG is retained.
+
+Oracle Linux and CloudLinux marks in this folder are local transparent brand-color SVGs
+for the listed images. They are not copied from a third-party CDN.
 
 ## Colored hero variants
 

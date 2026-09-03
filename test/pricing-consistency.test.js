@@ -129,3 +129,14 @@ test("stale Silver USA values are absent from every public pricing surface", () 
   }
   assert.doesNotMatch(HTML("build.mjs"), /€18\.05|€18\.99|€19\.00/);
 });
+
+test("Gold EU storage is 100 GB NVMe", () => {
+  const plan = planFromName("GOLD EU");
+  assert.equal(plan.specs.storage, "100 GB NVMe");
+  for (const route of PRICING_ROUTES) {
+    const html = HTML(route);
+    if (route === "index.html") continue;
+    assert.match(html, /100 GB NVMe/);
+    assert.doesNotMatch(html, /4 Core · 16 GB · 16 GB NVMe/);
+  }
+});

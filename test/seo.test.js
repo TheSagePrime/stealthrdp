@@ -378,7 +378,11 @@ test("OS landing pages use the approved copy and preserve current Bronze pricing
   const windows = HTML("windows-vps/index.html");
   const linux = HTML("linux-vps/index.html");
   assert.match(windows, /Keep your Windows workflow in reach/);
-  assert.match(windows, /Windows Server 2016/);
+  assert.match(windows, /Windows Server 2019/);
+  assert.match(windows, /Windows Server 2025/);
+  assert.doesNotMatch(windows, /Windows Server 2016/);
+  assert.doesNotMatch(windows, /Windows 10/);
+  assert.doesNotMatch(windows, /Windows 11/);
   assert.match(windows, /Administrator access for hands-on control/);
   assert.match(windows, /remote Windows access/);
   assert.match(windows, /Need Linux instead\?/);
@@ -387,13 +391,16 @@ test("OS landing pages use the approved copy and preserve current Bronze pricing
   assert.match(linux, /including Bronze at <strong>€9\.50\/month<\/strong>/);
   assert.match(linux, /<h2>Linux distributions you can run<\/h2>/);
   assert.match(linux, /<h3>Ubuntu<\/h3>/);
-  assert.match(linux, />18\.04</);
-  assert.match(linux, />20\.04</);
-  assert.match(linux, />22\.04</);
+  assert.match(linux, /18\.04 LTS/);
+  assert.match(linux, /24\.04 LTS/);
+  assert.match(linux, /26\.04 LTS/);
   assert.match(linux, /<h3>Debian<\/h3>/);
   assert.match(linux, /<h3>CentOS<\/h3>/);
-  assert.match(linux, /Other popular distributions, confirmed in checkout/);
-  assert.match(linux, /Do not assume Ubuntu 24\.04, AlmaLinux, or Rocky Linux unless checkout shows them/);
+  assert.match(linux, /<h3>AlmaLinux<\/h3>/);
+  assert.match(linux, /<h3>Rocky Linux<\/h3>/);
+  assert.match(linux, /openSUSE Leap 15/);
+  assert.doesNotMatch(linux, /Other popular distributions, confirmed in checkout/);
+  assert.doesNotMatch(linux, /Do not assume Ubuntu 24\.04/);
   assert.match(linux, /It does not mean we are the cheapest provider on the internet\. We do not claim that\./);
   assert.match(linux, /<h2>Root access<\/h2>/);
   assert.match(linux, /<h2>USA or EU<\/h2>/);
@@ -401,6 +408,8 @@ test("OS landing pages use the approved copy and preserve current Bronze pricing
   assert.match(linux, /<h2>Order a Linux VPS<\/h2>/);
   assert.match(linux, /Need Windows instead\?/);
   assert.doesNotMatch(linux, /Linux VPS Hosting Plans/);
+  assert.doesNotMatch(windows, /Custom OS/i);
+  assert.doesNotMatch(linux, /Custom OS/i);
 });
 
 test("OS landing page heroes use the colored vendor logo variants", () => {
