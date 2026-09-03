@@ -436,6 +436,9 @@
         card.setAttribute("aria-hidden", "true");
       }
     });
+    $$("tr[data-plan-location]").forEach(function (row) {
+      row.hidden = row.getAttribute("data-plan-location") !== location;
+    });
     var note = $("#osVpsRegionNote");
     if (note) note.textContent = "Showing " + visible + " " + location + " plans";
     planGrid.setAttribute("aria-label", location + " VPS plan cards");

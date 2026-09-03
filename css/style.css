@@ -625,6 +625,33 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
 .os-vps-faq-item p { margin-top: 12px; font-size: 13px; }
 .os-vps-next { margin-top: 30px; padding: 24px 28px; background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius-lg); }
 .os-vps-next h2 { margin: 10px 0 8px; font-size: 23px; }
+.os-vps-landing .page-head { padding-bottom: 40px; }
+.os-vps-landing .page-head .os-vps-logo { display: block; margin: 12px 0 8px; }
+.os-vps-landing .hero-micro { margin: 16px 0 0; color: var(--text-muted); font-size: 13px; line-height: 1.5; }
+.os-vps-landing .hero-copy .sub { max-width: 54ch; }
+.os-distro-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.os-distro-card { min-width: 0; padding: 20px; background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+.os-distro-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.os-distro-card img { width: 40px; height: 40px; }
+.os-distro-badge { color: var(--accent); font: 600 10px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
+.os-distro-card h3 { margin: 0 0 8px; font-size: 18px; }
+.os-distro-card p { margin: 0 0 12px; color: var(--text-muted); font-size: 13px; line-height: 1.6; }
+.os-distro-versions { display: flex; flex-wrap: wrap; gap: 6px; }
+.os-distro-versions span { padding: 4px 8px; border: 1px solid var(--border); border-radius: 999px; color: var(--text-dim); font: 11px var(--font-mono); }
+.os-feature-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.os-feature-card { min-width: 0; padding: 20px; background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+.os-feature-card h3 { margin: 0 0 8px; font-size: 17px; }
+.os-feature-card p { margin: 0; color: var(--text-muted); font-size: 13px; line-height: 1.65; }
+.os-step-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; counter-reset: linux-step; }
+.os-step-grid li { min-width: 0; padding: 20px; background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius-lg); counter-increment: linux-step; }
+.os-step-grid li::before { content: counter(linux-step); display: block; margin-bottom: 10px; color: var(--accent); font: 600 12px var(--font-mono); }
+.os-step-grid h3 { margin: 0 0 8px; font-size: 17px; }
+.os-step-grid p { margin: 0; color: var(--text-muted); font-size: 13px; line-height: 1.65; }
+.os-vps-compare { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-1); }
+.os-vps-compare table { width: 100%; border-collapse: collapse; }
+.os-vps-compare th, .os-vps-compare td { padding: 12px 14px; border-bottom: 1px solid var(--border); text-align: left; font-size: 13px; white-space: nowrap; }
+.os-vps-compare th { color: var(--text-dim); font: 600 11px var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }
+.os-vps-compare tr[hidden] { display: none; }
 
 /* ---------- Animations ---------- */
 @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
@@ -644,6 +671,7 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
   .header-actions .btn { display: none; }
   .plan-grid { grid-template-columns: repeat(2, 1fr); }
   .os-vps-plan-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .os-distro-grid, .os-feature-grid, .os-step-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .os-vps-catalog-head { align-items: start; flex-wrap: wrap; }
   .blog-grid { grid-template-columns: repeat(2, 1fr); }
   .status-summary { grid-template-columns: 1fr; }
@@ -664,6 +692,7 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
   .os-vps-region-control { flex-wrap: wrap; align-items: start; }
   .os-vps-option-list, .os-vps-check-list { grid-template-columns: 1fr; }
   .os-vps-ops-panel, .os-vps-order-panel, .os-vps-faq-grid { grid-template-columns: 1fr; }
+  .os-distro-grid, .os-feature-grid, .os-step-grid { grid-template-columns: 1fr; }
   .plans-page-grid .plan-card { min-height: 0; }
   .plan-grid .plan-card .p-desc { display: none; }
   .os-vps-plan-grid .plan-card .p-desc { display: block; min-height: 0; }
