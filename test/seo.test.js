@@ -290,7 +290,10 @@ test("OS landing pages render the shared catalog cards without copied plan data"
   const windows = HTML("windows-vps/index.html");
   const linux = HTML("linux-vps/index.html");
   const monthlyPrice = (plan) => pricing.cycleEntry(plan, "monthly").amount.toFixed(2);
-  const planName = (plan) => plan.name.replace(" USA", "").replace(" EU", "");
+  const planName = (plan) => {
+    const raw = plan.name.replace(" USA", "").replace(" EU", "");
+    return raw.replace(/[A-Za-z]+/g, (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
+  };
 
   for (const [route, html] of [["windows", windows], ["linux", linux]]) {
     assert.strictEqual((html.match(/class="plan-card/g) || []).length, CATALOG.length, `${route}: every catalog plan is rendered`);
@@ -307,6 +310,15 @@ test("OS landing pages render the shared catalog cards without copied plan data"
       assert.match(html, new RegExp(`Region: ${plan.location}`), `${route}: location for ${plan.name}`);
       for (const value of Object.values(plan.specs)) assert.match(html, new RegExp(`>${value}<\\/span>`), `${route}: ${value} for ${plan.name}`);
     }
+  }
+});
+
+test("OS landing catalog cards use one popular badge and title-case names", () => {
+  for (const [route, html] of [["windows", HTML("windows-vps/index.html")], ["linux", HTML("linux-vps/index.html")]]) {
+    assert.strictEqual((html.match(/class="plan-popular"/g) || []).length, 2, `${route}: one Most Popular badge per region`);
+    assert.doesNotMatch(html, />GOLD</, `${route}: Gold is title case`);
+    assert.match(html, />2 Core · 4 GB · 60 GB NVMe</, `${route}: USA Bronze uses spec line`);
+    assert.doesNotMatch(html, /class="p-desc">Blazing Fast Connectivity</, `${route}: catalog cards do not repeat the shared slogan`);
   }
 });
 

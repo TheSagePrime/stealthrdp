@@ -80,6 +80,15 @@ const planUrl = (p) => {
   return "https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps";
 };
 const planName = (p) => p.name.replace(" USA", "").replace(" EU", "");
+const displayPlanName = (p) => planName(p).replace(/[A-Za-z]+/g, (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
+function planSpecLine(p) {
+  const specs = p.specs || {};
+  return [specs.cpu, specs.ram, specs.storage].filter(Boolean).join(" · ");
+}
+function firstPopularName(plans) {
+  const hit = plans.find((plan) => plan.popular);
+  return hit ? hit.name : "";
+}
 
 const PALETTES = [
   { key: "cobalt", label: "Cobalt", accent: "#5b8cff", hover: "#7aa5ff", deep: "#3f6fe0", rgb: "91, 140, 255", ink: "#07111f" },
@@ -286,7 +295,7 @@ function planCardHtml(p, { showPopular = true, showLocation = false, ctaLabel = 
   const isPop = showPopular && p.popular;
   const location = esc(p.location || "");
   return `<article class="plan-card${isPop ? " popular" : ""}" data-plan-location="${location}"${hidden ? " hidden" : ""}>
-${isPop ? `    <span class="plan-popular">Most Popular</span>\n` : ""}    <div class="p-name">${esc(planName(p))}</div>
+${isPop ? `    <span class="plan-popular">Most Popular</span>\n` : ""}    <div class="p-name">${esc(displayPlanName(p))}</div>
     <div class="p-desc">${esc(p.description || "")}</div>
 ${showLocation ? `    <div class="p-location">Region: ${esc(p.location || "Not listed")}</div>\n` : ""}    ${pricing.priceMarkup(p, "monthly")}
     <div class="plan-specs">
@@ -300,8 +309,14 @@ ${showLocation ? `    <div class="p-location">Region: ${esc(p.location || "Not l
 }
 
 function osVpsCatalogHtml({ slug, label }) {
+  const usaStar = firstPopularName(USA);
+  const euStar = firstPopularName(EU);
   const cards = USA.concat(EU)
-    .map((p) => planCardHtml(p, { showLocation: true, ctaLabel: "Choose this plan", hidden: p.location !== "USA" }))
+    .map((p) => planCardHtml({
+      ...p,
+      popular: p.name === usaStar || p.name === euStar,
+      description: planSpecLine(p),
+    }, { showLocation: true, ctaLabel: "Choose this plan", hidden: p.location !== "USA" }))
     .join("");
   return `<section class="section os-vps-catalog" aria-labelledby="${slug}-catalog-heading">
     <div class="container">
