@@ -73,3 +73,19 @@ test("published HTML does not emit known broken legacy URLs", () => {
   }
   assert.deepEqual(failures, [], `stale URLs: ${failures.join(" | ")}`);
 });
+
+test("dash.stealthrdp.com links stay in the same tab", () => {
+  const failures = [];
+  const dashHref = /<a\b[^>]*href="https:\/\/dash\.stealthrdp\.com[^"]*"[^>]*>/gi;
+  for (const file of htmlFiles()) {
+    const html = fs.readFileSync(file, "utf8");
+    for (const match of html.matchAll(dashHref)) {
+      if (/\btarget\s*=\s*["_']_blank["_']/i.test(match[0])) {
+        failures.push(`${path.relative(ROOT, file)}: ${match[0]}`);
+      }
+    }
+  }
+  const main = fs.readFileSync(path.join(ROOT, "js", "main.js"), "utf8");
+  if (/planUrl\([^)]+\)[\s\S]{0,80}target="_blank"/.test(main)) failures.push("js/main.js: planUrl target=_blank");
+  assert.deepEqual(failures, [], `dash new-tab failures: ${failures.slice(0, 8).join(" | ")}`);
+});

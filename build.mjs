@@ -215,11 +215,11 @@ function headerHtml(active, { showPalette = true } = {}) {
     <nav class="nav" aria-label="Main navigation">${navHtml(active)}</nav>
     <div class="header-actions">
       <button type="button" class="theme-toggle" id="themeToggle" aria-label="Use light theme" aria-pressed="false"><span class="theme-icon theme-icon-sun" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg></span><span class="theme-icon theme-icon-moon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"/></svg></span></button>
-${showPalette ? `      ${paletteLabHtml()}\n` : ""}      <a class="btn btn-sm btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client Area</a>
+${showPalette ? `      ${paletteLabHtml()}\n` : ""}      <a class="btn btn-sm btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login">Client Area</a>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     </div>
   </div>
-  <div class="mobile-nav" id="mobileNav">${navHtml(active)}<a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login" target="_blank" rel="noopener noreferrer">Client Area</a></div>
+  <div class="mobile-nav" id="mobileNav">${navHtml(active)}<a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login">Client Area</a></div>
   </header>`;
 }
 
@@ -257,7 +257,7 @@ function footerHtml() {
       </ul></div>
       <div class="footer-col"><h2>Company</h2><ul>
         <li><a href="/about.html">About Us</a></li>
-        <li><a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact Support</a></li>
+        <li><a href="https://dash.stealthrdp.com/submitticket.php">Contact Support</a></li>
         <li><a href="/privacy.html">Privacy Policy</a></li>
         <li><a href="${TERMS_URL}">Terms of Service</a></li>
       </ul></div>
@@ -270,7 +270,7 @@ function footerHtml() {
         <li><a href="/docs.html">Documentation</a></li><li><a href="/blog.html">Tutorials</a></li><li><a href="/faq.html">FAQ</a></li><li><a href="/blog.html">Blog</a></li><li><a href="/status.html">Server Status</a></li>
       </ul></details>
       <details class="footer-mobile-group"><summary><span>Company</span><small>About · support · legal</small><b aria-hidden="true">+</b></summary><ul>
-        <li><a href="/about.html">About Us</a></li><li><a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Contact Support</a></li><li><a href="/privacy.html">Privacy Policy</a></li><li><a href="${TERMS_URL}">Terms of Service</a></li>
+        <li><a href="/about.html">About Us</a></li><li><a href="https://dash.stealthrdp.com/submitticket.php">Contact Support</a></li><li><a href="/privacy.html">Privacy Policy</a></li><li><a href="${TERMS_URL}">Terms of Service</a></li>
       </ul></details>
     </div>
     <div class="footer-bottom">
@@ -304,7 +304,7 @@ ${showLocation ? `    <div class="p-location">Region: ${esc(p.location || "Not l
       ${specRow("Storage", p.specs && p.specs.storage)}
       ${specRow("Bandwidth", p.specs && p.specs.bandwidth)}
     </div>
-    <a class="btn btn-primary" href="${planUrl(p)}" target="_blank" rel="noopener noreferrer">${esc(ctaLabel)}</a>
+    <a class="btn btn-primary" href="${planUrl(p)}">${esc(ctaLabel)}</a>
   </article>`;
 }
 
@@ -349,7 +349,7 @@ function compareRowHtml(p) {
     <td class="v">${esc((p.specs && p.specs.storage) || "—")}</td>
     <td class="v">${esc((p.specs && p.specs.bandwidth) || "—")}</td>
     <td class="v">${pricing.tablePrice(p)}</td>
-    <td><a class="btn btn-sm btn-primary" href="${planUrl(p)}" target="_blank" rel="noopener noreferrer">Buy Now</a></td>
+    <td><a class="btn btn-sm btn-primary" href="${planUrl(p)}">Buy Now</a></td>
   </tr>`;
 }
 
@@ -793,7 +793,7 @@ function buildDocArticle(article, index) {
   const sourceMeta = `<span>Source: ${esc(sourceLabel)}</span>${time}<span>${esc(migrationDate)}</span><span>${redactionLabel}</span>`;
   const body = `<main class="docs-article-page docs-surface" data-docs-category="${esc(article.category)}" data-doc-slug="${esc(article.slug)}"><div class="container docs-article-layout"><div class="docs-article-column">
     <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/docs.html">Docs</a><span aria-hidden="true">/</span><span>${esc(article.category)}</span></nav>
-    <article class="docs-article"><header class="docs-article-header"><span class="docs-category">${esc(article.category)}</span><h1>${esc(article.title)}</h1>${docsWarning(article)}<p class="docs-summary">${esc(article.summary)}</p><div class="docs-source-meta">${sourceMeta}</div></header><div class="docs-content">${rendered.html}</div><div class="docs-support"><div><span class="sec-index">Need a hand?</span><h2>Need account or server support?</h2><p>For account or server-specific help, use the StealthRDP support portal.</p></div><a class="btn btn-primary" href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">Contact support</a></div>${relatedHtml}</article>
+    <article class="docs-article"><header class="docs-article-header"><span class="docs-category">${esc(article.category)}</span><h1>${esc(article.title)}</h1>${docsWarning(article)}<p class="docs-summary">${esc(article.summary)}</p><div class="docs-source-meta">${sourceMeta}</div></header><div class="docs-content">${rendered.html}</div><div class="docs-support"><div><span class="sec-index">Need a hand?</span><h2>Need account or server support?</h2><p>For account or server-specific help, use the StealthRDP support portal.</p></div><a class="btn btn-primary" href="${DOC_SUPPORT_URL}">Contact support</a></div>${relatedHtml}</article>
   </div>${contents}</div></main>`;
   const fullTitle = `${article.title} — StealthRDP Docs`;
   const useTitle = fullTitle.length <= SEO_TITLE_LIMIT ? fullTitle : seoTitle(article.title);
@@ -928,9 +928,9 @@ function buildIndex() {
         <h1 class="fade-up d1">Your server. <span class="gold">Live in 60 seconds.</span></h1>
         <p class="sub fade-up d2">High-performance remote desktop infrastructure without the complexity. Enterprise hardware, DDoS protection, and a 99.9% uptime SLA — online the moment you pay.</p>
         <div class="hero-cta fade-up d3">
-          <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Deploy Your Server Now
+          <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps">Deploy Your Server Now
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <a class="btn btn-ghost" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Ask a Pre-Sales Question</a>
+          <a class="btn btn-ghost" href="https://dash.stealthrdp.com/submitticket.php">Ask a Pre-Sales Question</a>
         </div>
         <p class="hero-micro fade-up d3">Starting at only <b>€9.50/month</b> · No hidden fees · Cancel anytime · 7-day money-back</p>
         <div class="hero-stats fade-up d4">
@@ -1071,8 +1071,8 @@ function buildIndex() {
         <p class="micro fade-up d3">Starting at just <b>€${STARTING_PRICE}/month</b> · 7-day money-back guarantee · Cancel anytime</p>
       </div>
       <div class="cta-actions fade-up d3">
-        <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Deploy Your Server Now</a>
-        <a class="btn btn-ghost" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Ask a Pre-Sales Question</a>
+        <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps">Deploy Your Server Now</a>
+        <a class="btn btn-ghost" href="https://dash.stealthrdp.com/submitticket.php">Ask a Pre-Sales Question</a>
       </div>
     </div>
   </section>`;
@@ -1108,7 +1108,7 @@ function buildPlans() {
           <button role="tab" aria-selected="true" data-location="USA" class="active">USA</button>
           <button role="tab" aria-selected="false" data-location="EU">EU</button>
         </div></div>
-        <a class="btn btn-sm btn-ghost plans-byo-link" href="https://dash.stealthrdp.com/index.php?rp=/store/build-your-own-rdp-vps" target="_blank" rel="noopener noreferrer">Build Your Own VPS</a>
+        <a class="btn btn-sm btn-ghost plans-byo-link" href="https://dash.stealthrdp.com/index.php?rp=/store/build-your-own-rdp-vps">Build Your Own VPS</a>
       </div>
       <div class="plans-grid-head"><div><span class="mono">STANDARD PLANS</span><h2 id="plan-grid">Choose your resource level</h2></div><span id="planGridNote">6 USA plans · prices shown monthly</span></div>
       <div class="plan-grid plans-page-grid" id="planGrid" aria-live="polite">${cards}</div>
@@ -1129,7 +1129,7 @@ function buildPlans() {
       ${includedFeaturesHtml()}
       <div id="build-your-own" class="byo-panel">
         <div><span class="included-label">For workloads between the lines</span><h2>Build a server around your exact brief.</h2><p>Choose your own CPU, RAM, storage, location, and billing cycle in the server configurator.</p></div>
-        <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/build-your-own-rdp-vps" target="_blank" rel="noopener noreferrer">Configure &amp; Deploy</a>
+        <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/build-your-own-rdp-vps">Configure &amp; Deploy</a>
       </div>
       <div class="comparison-section" id="comparison">
         <div class="comparison-head"><div><span class="sec-index">02 / Compare precisely</span><h2>See the difference in one view. <span class="visually-hidden">VPS Features Comparison</span></h2></div><p>Use this table for a quick resource check. Checkout confirms the current price and availability.</p></div>
@@ -1209,7 +1209,7 @@ function buildOsVpsPage({
           <img class="os-vps-logo" src="${logo}" alt="${logoAlt}" width="64" height="64" decoding="async">
           <div><strong>${serviceName}</strong><span>Choose resources, region, and operating system through the existing checkout.</span></div>
         </div>
-        <div class="os-vps-links"><a class="btn btn-primary" href="${planHref}">${planLabel}</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Continue to checkout</a></div>
+        <div class="os-vps-links"><a class="btn btn-primary" href="${planHref}">${planLabel}</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps">Continue to checkout</a></div>
       </div>
     </section>
     ${osVpsCatalogHtml({ slug, label })}
@@ -1217,7 +1217,7 @@ function buildOsVpsPage({
       <div class="container">
         <div class="byo-panel">
           <div><span class="included-label">Next step</span><h2 id="${slug}-checkout-heading">Choose the plan first. Select Windows or Linux in checkout.</h2><p>The buyer chooses the resource plan and region on this page. The existing checkout then provides the operating-system selector before payment.</p></div>
-          <a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Configure this VPS</a>
+          <a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps">Configure this VPS</a>
         </div>
       </div>
     </section>
@@ -1227,7 +1227,7 @@ function buildOsVpsPage({
     <section class="cta-band">
       <div class="container cta-grid">
         <div class="cta-copy"><span class="eyebrow">${label} VPS plans</span><h2>${planLabel}</h2></div>
-        <div class="cta-actions"><a class="btn btn-primary" href="${planHref}">${planLabel}</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Open checkout</a></div>
+        <div class="cta-actions"><a class="btn btn-primary" href="${planHref}">${planLabel}</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps">Open checkout</a></div>
       </div>
     </section>
   </main>`;
@@ -1311,7 +1311,7 @@ function windowsLandingHtml() {
       <div class="container">
         <div class="byo-panel">
           <div><span class="included-label">Next step</span><h2 id="windows-vps-checkout-heading">Choose the plan first. Select Windows or Linux in checkout.</h2><p>The buyer chooses the resource plan and region on this page. The existing checkout then provides the operating-system selector before payment.</p></div>
-          <a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Configure this VPS</a>
+          <a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps">Configure this VPS</a>
         </div>
       </div>
     </section>
@@ -1457,7 +1457,7 @@ function windowsLandingHtml() {
     <section class="cta-band">
       <div class="container cta-grid">
         <div class="cta-copy"><span class="eyebrow">Windows VPS plans</span><h2>Compare Windows VPS plans</h2></div>
-        <div class="cta-actions"><a class="btn btn-primary" href="/plans.html#windows-vps">Compare Windows VPS plans</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Continue to checkout</a></div>
+        <div class="cta-actions"><a class="btn btn-primary" href="/plans.html#windows-vps">Compare Windows VPS plans</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps">Continue to checkout</a></div>
       </div>
     </section>
   </main>`;
@@ -1523,7 +1523,7 @@ function linuxLandingHtml() {
       <div class="container">
         <div class="byo-panel">
           <div><span class="included-label">Next step</span><h2 id="linux-vps-checkout-heading">Choose the plan first. Select Windows or Linux in checkout.</h2><p>The buyer chooses the resource plan and region on this page. The existing checkout then provides the operating-system selector before payment.</p></div>
-          <a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Configure this VPS</a>
+          <a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps">Configure this VPS</a>
         </div>
       </div>
     </section>
@@ -1687,7 +1687,7 @@ function linuxLandingHtml() {
     <section class="cta-band">
       <div class="container cta-grid">
         <div class="cta-copy"><span class="eyebrow">Linux VPS plans</span><h2>Compare Linux VPS plans</h2><p>Check the current plan, region, and displayed price, then confirm Linux and the exact image in checkout.</p></div>
-        <div class="cta-actions"><a class="btn btn-primary" href="/plans.html#linux-vps">Compare Linux VPS plans</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps" target="_blank" rel="noopener noreferrer">Continue to checkout</a></div>
+        <div class="cta-actions"><a class="btn btn-primary" href="/plans.html#linux-vps">Compare Linux VPS plans</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps">Continue to checkout</a></div>
       </div>
     </section>
   </main>`;
@@ -1857,7 +1857,7 @@ function buildBlogPost(post) {
       <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blog.html">Blog</a><span aria-hidden="true">/</span><span>${esc(post.category)}</span></nav>
       <header class="docs-article-header"><span class="docs-category">${esc(post.category)}</span><h1>${esc(post.title)}</h1><p class="docs-summary">${esc(post.excerpt || "")}</p><div class="docs-source-meta"><span>${esc(post.author)}</span><span>${esc(post.date)}</span></div></header>
       <div class="docs-content blog-article-body">${rendered.html || `<p>${esc(post.excerpt || "")}</p>`}${articlePlanLinksHtml(post)}</div>
-      <footer class="blog-article-footer"><a href="/blog.html">← Back to all articles</a><span class="blog-article-actions"><a class="btn btn-ghost btn-sm" href="/plans.html">View plans</a><a class="btn btn-primary btn-sm" href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer">Ask support</a></span></footer>
+      <footer class="blog-article-footer"><a href="/blog.html">← Back to all articles</a><span class="blog-article-actions"><a class="btn btn-ghost btn-sm" href="/plans.html">View plans</a><a class="btn btn-primary btn-sm" href="https://dash.stealthrdp.com/submitticket.php">Ask support</a></span></footer>
     </article>
     ${toc}
   </div></div></main>`;
@@ -1901,7 +1901,7 @@ function buildFaq() {
         <div class="topic-chips faq-topics" role="group" aria-label="Filter by topic">${topicChips}</div>
         <div class="faq-results-bar"><span id="faqResultsCount">${FAQS.length} questions</span><span>Source-backed answers · updated with the site snapshot</span></div>
         <div class="faq-list" id="faqList" aria-live="polite">${items}</div><p class="faq-empty" id="faqEmpty" hidden>No questions match that search. Try another phrase or choose all topics.</p>
-        <div class="faq-support"><div><span class="sec-index">Still need a hand?</span><h2>Take the question to support.</h2><p>Account, billing, and server-specific requests are handled in the client portal.</p></div><a class="btn btn-primary" href="${DOC_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">Contact support</a></div>
+        <div class="faq-support"><div><span class="sec-index">Still need a hand?</span><h2>Take the question to support.</h2><p>Account, billing, and server-specific requests are handled in the client portal.</p></div><a class="btn btn-primary" href="${DOC_SUPPORT_URL}">Contact support</a></div>
       </div>
     </div>
   </section>`;
@@ -1942,7 +1942,7 @@ function buildAbout() {
       </ul>
       <h2>Trusted at scale</h2>
       <p>10,000+ orders and counting for remote work, web hosting, trading infrastructure, and always-on automation. Every new server is backed by our 99.9% uptime SLA and a 7-day money-back guarantee.</p>
-      <div class="note">Questions about our infrastructure? <a href="https://dash.stealthrdp.com/submitticket.php" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">Talk to our team</a> — we respond within 2 hours, 24/7.</div>
+      <div class="note">Questions about our infrastructure? <a href="https://dash.stealthrdp.com/submitticket.php" style="color:var(--accent)">Talk to our team</a> — we respond within 2 hours, 24/7.</div>
     </div>
   </section>`;
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [

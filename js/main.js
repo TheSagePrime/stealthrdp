@@ -462,7 +462,7 @@
             specRow("Storage", p.specs && p.specs.storage) +
             specRow("Bandwidth", p.specs && p.specs.bandwidth) +
           "</div>" +
-          '<a class="btn btn-primary" href="' + planUrl(p, currentCycle) + '" target="_blank" rel="noopener noreferrer">Buy Now</a>' +
+          '<a class="btn btn-primary" href="' + planUrl(p, currentCycle) + '">Buy Now</a>' +
         "</article>"
       );
     }).join("");
@@ -540,7 +540,7 @@
               '<td class="v">' + esc(p.specs && p.specs.storage || "—") + "</td>" +
               '<td class="v">' + esc(p.specs && p.specs.bandwidth || "—") + "</td>" +
               '<td class="v">' + pricing.tablePrice(p) + "</td>" +
-              '<td><a class="btn btn-sm btn-primary" href="' + planUrl(p, "monthly") + '" target="_blank" rel="noopener noreferrer">Buy Now</a></td>' +
+              '<td><a class="btn btn-sm btn-primary" href="' + planUrl(p, "monthly") + '">Buy Now</a></td>' +
             "</tr>"
           );
         }).join("");
