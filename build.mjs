@@ -1231,15 +1231,12 @@ function buildOsVpsPage({
     } : {
       "@type": "FAQPage",
       "mainEntity": [
-        {"@type": "Question", "name": "What can I run on a Linux VPS?", "acceptedAnswer": {"@type": "Answer", "text": "Linux VPS hosting can suit websites, web applications, databases, and development environments. Check the requirements of each component in your stack."}},
-        {"@type": "Question", "name": "Which Linux distributions are provided?", "acceptedAnswer": {"@type": "Answer", "text": "StealthRDP provides Debian, CentOS, Rocky Linux, Ubuntu, Fedora, FreeBSD, Alpine Linux, and AlmaLinux. Confirm the current image and configuration in checkout."}},
-        {"@type": "Question", "name": "Do Linux VPS plans include Root access?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The FAQ states that VPS plans include full Root access."}},
-        {"@type": "Question", "name": "How much RAM or CPU does my stack need?", "acceptedAnswer": {"@type": "Answer", "text": "Count the services that run together. Include database memory, application processes, background jobs, build tasks, and concurrent users. Then use the plan comparison to review the available configurations."}},
-        {"@type": "Question", "name": "When will my Linux VPS be activated?", "acceptedAnswer": {"@type": "Answer", "text": "Standard installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation."}},
-        {"@type": "Question", "name": "How will I receive my credentials?", "acceptedAnswer": {"@type": "Answer", "text": "StealthRDP sends service credentials by email after payment confirmation."}},
-        {"@type": "Question", "name": "Are USA and EU Linux plans available?", "acceptedAnswer": {"@type": "Answer", "text": "The public catalog lists USA and EU options. Confirm the current region and configuration in the catalog or checkout."}},
-        {"@type": "Question", "name": "Where can I get support?", "acceptedAnswer": {"@type": "Answer", "text": "Use the client-area ticketing system or support email. See the FAQ for current support information."}},
-        {"@type": "Question", "name": "Are all uses permitted?", "acceptedAnswer": {"@type": "Answer", "text": "No. Use must remain lawful and must follow the Use of Service terms."}}
+        {"@type": "Question", "name": "Can I order a cheap Linux VPS?", "acceptedAnswer": {"@type": "Answer", "text": "You can compare current Linux plan prices on the catalog, including Bronze at €9.50/month on the live plans page. Confirm the live price. We do not claim to be the cheapest host."}},
+        {"@type": "Question", "name": "Can I run Ubuntu?", "acceptedAnswer": {"@type": "Answer", "text": "The FAQ lists Ubuntu 18.04, 20.04, and 22.04. Confirm the image in checkout."}},
+        {"@type": "Question", "name": "Do plans include Root?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The FAQ states that VPS plans include full Root access."}},
+        {"@type": "Question", "name": "Are USA and EU Linux plans available?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Both appear in the public catalog. Confirm the region at checkout."}},
+        {"@type": "Question", "name": "When is it activated?", "acceptedAnswer": {"@type": "Answer", "text": "Typically within 5 minutes for standard installs. Most services within 5–10 minutes after payment confirmation."}},
+        {"@type": "Question", "name": "How do I get credentials?", "acceptedAnswer": {"@type": "Answer", "text": "By email after payment confirmation."}}
       ]
     };
   
@@ -1347,86 +1344,76 @@ function buildLinuxVps() {
   return buildOsVpsPage({
     slug: "linux-vps",
     label: "Linux",
-    title: "Linux VPS Hosting | Compare USA and EU Plans | StealthRDP",
-    description: "Compare Linux VPS hosting plans with full Root access, multiple distributions, and flexible resources. Choose USA or EU regions and deploy in minutes.",
+    title: "Linux VPS Hosting | Ubuntu and USA / EU Plans | StealthRDP",
+    description: "Compare cheap Linux VPS plans, including Ubuntu, with Root access in USA or EU regions. Check live catalog prices, then continue to checkout.",
     serviceName: "StealthRDP Linux VPS hosting",
     serviceType: "Linux VPS hosting",
     logo: "/assets/os-logos/linux-colored.svg",
     logoAlt: "Linux operating system logo",
-    h1: "Linux VPS hosting for the stack you need to run",
-    intro: "Deploy a website, application, database, or development environment on a Linux VPS. Choose the distribution, size the resources around the stack, and compare USA or EU plans before checkout.",
+    h1: "Linux VPS hosting for Ubuntu, Root access, and a price you can check",
+    intro: "You need a Linux server you can log into as root. Often that means Ubuntu. You also need a price you can verify before you pay.<br><br>StealthRDP sells Linux VPS plans in USA and EU regions. Compare the live catalog, then continue to the existing checkout.",
     planHref: "/plans.html#linux-vps",
     planLabel: "Compare Linux VPS plans",
     contentHtml: `
         <div class="os-vps-guide-intro">
           <span class="included-label">Linux VPS guide</span>
-          <h2>Start with the stack, not the plan name</h2>
-          <p>Linux VPS hosting suits projects that need a configurable server environment. That includes web applications, databases, development tools, and websites.</p>
-          <p>Write down the services your project needs before you compare plans. Include the web server, application runtime, database, control panel, background jobs, and files you expect to keep on the server.</p>
+          <h2>If you searched for cheap Linux VPS</h2>
+          <p>“Cheap” here means: see the current catalog, including Bronze at <strong>€9.50/month</strong> on the live plans page (from a €10.00 base). It does not mean we are the cheapest provider on the internet. We do not claim that.</p>
+          <p>Bronze USA lists 2 Core, 4 GB RAM, 60 GB NVMe, and Unlimited bandwidth. Bronze EU lists 2 Core, 4 GB RAM, 40 GB NVMe, and Unlimited bandwidth. Confirm the live row before you order. Prices and stock can change.</p>
+          <p>Use the <a href="/plans.html#linux-vps">Linux VPS catalog</a> and the <a href="/plans.html#comparison">plan comparison</a>.</p>
         </div>
         <div class="os-vps-guide-grid">
           <article class="os-vps-guide-card">
             <span class="os-vps-guide-kicker">Environment</span>
-            <h2>Choose a distribution that fits the project</h2>
-            <p>Choose from the Linux operating systems provided by StealthRDP:</p>
-            <ul class="os-vps-option-list"><li>Debian</li><li>CentOS</li><li>Rocky Linux</li><li>Ubuntu</li><li>Fedora</li><li>FreeBSD</li><li>Alpine Linux</li><li>AlmaLinux</li></ul>
-            <p>Review your software requirements before you select a distribution. Confirm the current image and configuration in checkout.</p>
+            <h2>If you need Ubuntu on a VPS</h2>
+            <p>The live FAQ lists Ubuntu <strong>18.04, 20.04, and 22.04</strong>, plus CentOS 7, 8, and Stream, Debian 10 and 11, and other distributions. Confirm the image in checkout. Do not assume Ubuntu 24.04 unless checkout shows it.</p>
+            <p>Ubuntu fits many websites, panels, and development stacks. Debian and CentOS remain options when your software asks for them.</p>
             <p>For one documented setup path, see <a href="/docs/1737946490-how-to-install-direct-admin-in-a-linux-server.html">How to install DirectAdmin in a Linux server</a>.</p>
           </article>
           <article class="os-vps-guide-card">
             <span class="os-vps-guide-kicker">Control</span>
-            <h2>Root access for server administration</h2>
-            <p>VPS plans include full Linux Root access. You can administer the server and install the components your project requires. You are responsible for regular backups of important data.</p>
-            <p>Root access also means you must manage the server responsibly. Follow the <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a> and keep every workload lawful.</p>
+            <h2>Root access</h2>
+            <p>VPS plans include full Root access. You administer the server. You keep backups. You stay inside the <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a>.</p>
           </article>
           <article class="os-vps-guide-card os-vps-guide-card-wide">
             <span class="os-vps-guide-kicker">Resource fit</span>
-            <h2>Size the server around the bottleneck</h2>
-            <p>Use the catalog above to compare:</p>
-            <ul class="os-vps-check-list"><li><strong>CPU cores:</strong> Allow for application processes, compilation, and concurrent work.</li><li><strong>RAM:</strong> Account for the operating system, web services, databases, caches, and users.</li><li><strong>NVMe storage:</strong> Include application files, database data, logs, backups, and growth.</li><li><strong>Bandwidth:</strong> Review the listed allowance for traffic and updates.</li><li><strong>Region:</strong> Compare the available USA and EU options.</li><li><strong>Billing cycle:</strong> Select the payment period shown at checkout.</li></ul>
-            <p>The cards above use the current catalog and show the displayed monthly price. Checkout confirms the final configuration and billing cycle.</p>
+            <h2>Size the machine to the stack</h2>
+            <p>Count what runs at the same time: OS, web server, app, database, jobs, files.</p>
+            <p>Then compare CPU, RAM, NVMe, bandwidth, region, and billing cycle on the live catalog.</p>
           </article>
           <article class="os-vps-guide-card os-vps-guide-card-wide">
-            <span class="os-vps-guide-kicker">Decision rule</span>
-            <h2>Match common project shapes to resources</h2>
-            <p>A small website may need modest resources, but its database and control panel still count. A multi-service application needs enough RAM for each service to run together. A build or compute-heavy workflow benefits from reviewing CPU requirements. A data-heavy project needs storage for its database, files, logs, and expected growth.</p>
-            <p>Use the documented requirements for your software as the starting point. Then compare the catalog options against those requirements.</p>
+            <span class="os-vps-guide-kicker">Regions</span>
+            <h2>USA or EU</h2>
+            <p>Choose the region that matches your users and your own location. Both are listed for Linux. Confirm the region in checkout.</p>
           </article>
         </div>
         <section class="os-vps-ops-panel">
           <div class="os-vps-ops-copy">
             <span class="included-label">Before you order</span>
-            <h2>Choose the location and know what happens next.</h2>
-            <h3>Choose between USA and EU plans</h3>
-            <p>StealthRDP lists Linux VPS options in USA and EU regions. Compare the region and resources in the <a href="/plans.html#linux-vps">Linux VPS catalog</a>.</p>
-            <h3>Activation and credential delivery</h3>
-            <p>Standard Windows and Linux installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation. StealthRDP sends service credentials by email after payment confirmation.</p>
-            <p>The <a href="/faq.html">FAQ</a> provides account, setup, and service information. Review the <a href="/docs/1737944184-payment-terms.html">payment terms</a> and <a href="/docs/1737944110-termination-of-service.html">termination of service terms</a> for refund and cancellation conditions.</p>
+            <h2>After payment</h2>
+            <p>Standard Linux installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation. Credentials arrive by email after payment confirmation.</p>
           </div>
           <div class="os-vps-ops-copy">
-            <span class="included-label">Support and lawful use</span>
-            <h3>Support and acceptable use</h3>
-            <p>Support is available through the client-area ticketing system and support email. Review the <a href="/faq.html">FAQ</a> for support information.</p>
-            <p>The <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a> require lawful use. They prohibit abuse, scanning, hacking, spam, botnets, and similar misuse. Check the terms before you deploy a workload.</p>
+            <span class="included-label">Support and limits</span>
+            <h3>Support and limits</h3>
+            <p>Support is the client-area ticket system and support email. See the <a href="/faq.html">FAQ</a>.</p>
+            <p>Unlawful use, scanning, hacking, spam, and botnets are prohibited.</p>
           </div>
         </section>
         <section class="os-vps-order-panel">
-          <div><span class="included-label">Order steps</span><h2>Order a Linux VPS</h2><p>Use these steps to move from stack requirements to a selected plan.</p></div>
-          <ol><li>List the software, services, databases, and data your project needs.</li><li>Select the distribution that matches those requirements.</li><li>Compare CPU, RAM, NVMe storage, bandwidth, and region.</li><li>Review the live order details and price.</li><li>Confirm the purchase through StealthRDP.</li></ol>
+          <div><span class="included-label">Order steps</span><h2>Order a Linux VPS</h2><p>Move from your requirements to checkout.</p></div>
+          <ol><li>Write down Ubuntu or another distribution, plus the services you will run.</li><li>Open the <a href="/plans.html#linux-vps">Linux VPS catalog</a>.</li><li>Compare CPU, RAM, disk, region, and the price on the page.</li><li>Continue to checkout. Select Linux there.</li></ol>
           <a class="btn btn-primary" href="/plans.html#linux-vps">Compare Linux VPS plans</a>
         </section>
         <section class="os-vps-faq" aria-labelledby="linux-vps-faq-heading">
-          <div class="os-vps-faq-head"><span class="included-label">Common questions</span><h2 id="linux-vps-faq-heading">Linux VPS questions</h2><p>Quick answers for software, distributions, access, and support.</p></div>
+          <div class="os-vps-faq-head"><span class="included-label">Common questions</span><h2 id="linux-vps-faq-heading">Linux VPS questions</h2><p>Quick answers for price, Ubuntu, access, regions, and activation.</p></div>
           <div class="os-vps-faq-grid">
-            <details class="os-vps-faq-item" open><summary>What can I run on a Linux VPS?</summary><p>Linux VPS hosting can suit websites, web applications, databases, and development environments. Check the requirements of each component in your stack.</p></details>
-            <details class="os-vps-faq-item"><summary>Which Linux distributions are provided?</summary><p>StealthRDP provides Debian, CentOS, Rocky Linux, Ubuntu, Fedora, FreeBSD, Alpine Linux, and AlmaLinux. Confirm the current image and configuration in checkout.</p></details>
-            <details class="os-vps-faq-item"><summary>Do Linux VPS plans include Root access?</summary><p>Yes. The FAQ states that VPS plans include full Root access.</p></details>
-            <details class="os-vps-faq-item"><summary>How much RAM or CPU does my stack need?</summary><p>Count the services that run together. Include database memory, application processes, background jobs, build tasks, and concurrent users. Then use the <a href="/plans.html#comparison">plan comparison</a> to review the available configurations.</p></details>
-            <details class="os-vps-faq-item"><summary>When will my Linux VPS be activated?</summary><p>Standard installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation.</p></details>
-            <details class="os-vps-faq-item"><summary>How will I receive my credentials?</summary><p>StealthRDP sends service credentials by email after payment confirmation.</p></details>
-            <details class="os-vps-faq-item"><summary>Are USA and EU Linux plans available?</summary><p>The public catalog lists USA and EU options. Confirm the current region and configuration in the catalog or checkout.</p></details>
-            <details class="os-vps-faq-item"><summary>Where can I get support?</summary><p>Use the client-area ticketing system or support email. See the <a href="/faq.html">FAQ</a> for current support information.</p></details>
-            <details class="os-vps-faq-item"><summary>Are all uses permitted?</summary><p>No. Use must remain lawful and must follow the <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a>.</p></details>
+            <details class="os-vps-faq-item" open><summary>Can I order a cheap Linux VPS?</summary><p>You can compare current Linux plan prices on the catalog, including Bronze at €9.50/month on the live plans page. Confirm the live price. We do not claim to be the cheapest host.</p></details>
+            <details class="os-vps-faq-item"><summary>Can I run Ubuntu?</summary><p>The FAQ lists Ubuntu 18.04, 20.04, and 22.04. Confirm the image in checkout.</p></details>
+            <details class="os-vps-faq-item"><summary>Do plans include Root?</summary><p>Yes. The FAQ states that VPS plans include full Root access.</p></details>
+            <details class="os-vps-faq-item"><summary>Are USA and EU Linux plans available?</summary><p>Yes. Both appear in the public catalog. Confirm the region at checkout.</p></details>
+            <details class="os-vps-faq-item"><summary>When is it activated?</summary><p>Typically within 5 minutes for standard installs. Most services within 5–10 minutes after payment confirmation.</p></details>
+            <details class="os-vps-faq-item"><summary>How do I get credentials?</summary><p>By email after payment confirmation.</p></details>
           </div>
         </section>
         <section class="os-vps-next"><span class="included-label">Choose another environment</span><h2>Need Windows instead?</h2><p>For familiar Windows software and remote Windows desktop or server access, see <a href="/windows-vps/">Windows VPS hosting</a>.</p></section>`,
