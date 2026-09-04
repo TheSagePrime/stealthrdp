@@ -1,1 +1,70 @@
-[{"_id":"681ea0ea7bfe24c6e835c581","quote":"We migrated our entire development infrastructure to StealthRDP and reduced our hosting costs by 40% while improving performance. The migration was seamless, and we've had zero downtime in 8 months.","authorName":"Michael Robertson","authorPosition":"CEO","authorCompany":"TECH Flow","avatarUrl":"","displayOrder":0,"isFaq":false,"createdAt":"2025-05-10T00:42:18.185Z","updatedAt":"2025-05-10T00:42:18.185Z","__v":0}]
+[
+  {
+    "_id": "681ea0ea7bfe24c6e835c581",
+    "quote": "We migrated our entire development infrastructure to StealthRDP and reduced our hosting costs by 40% while improving performance. The migration was seamless, and we've had zero downtime in 8 months.",
+    "authorName": "Michael Robertson",
+    "authorPosition": "CEO",
+    "authorCompany": "TECH Flow",
+    "avatarUrl": "",
+    "displayOrder": 0,
+    "isFaq": false,
+    "createdAt": "2025-05-10T00:42:18.185Z",
+    "updatedAt": "2025-05-10T00:42:18.185Z",
+    "__v": 0
+  },
+  {
+    "id": "trustpilot-67a99813fd5c011707044ac6",
+    "quote": "great. good supervision and techniques",
+    "publishedOn": "January 25, 2025",
+    "sourceLabel": "Customer feedback · StealthRDP",
+    "sourceUrl": "https://www.trustpilot.com/reviews/67a99813fd5c011707044ac6",
+    "sentiment": "positive",
+    "sourceType": "third-party review",
+    "sourceCompany": "StealthRDP",
+    "authorName": "Trustpilot reviewer"
+  },
+  {
+    "id": "trustpilot-679d80edf68fb16e0a089807",
+    "quote": "Good , strong , fast service i ever used and i will not stop using stealth service.",
+    "publishedOn": "January 25, 2025",
+    "sourceLabel": "Customer feedback · StealthRDP",
+    "sourceUrl": "https://www.trustpilot.com/reviews/679d80edf68fb16e0a089807",
+    "sentiment": "positive",
+    "sourceType": "third-party review",
+    "sourceCompany": "StealthRDP",
+    "authorName": "Trustpilot reviewer"
+  },
+  {
+    "id": "trustpilot-65df7f5b787a79df687c08fe",
+    "quote": "Best support for a reason ❤️. Helps me every time in every situation. Fastest support ever seen. Answered my all queries. No issues yet from\n\nVps server. Works best even at high peak loads",
+    "publishedOn": "February 29, 2024",
+    "sourceLabel": "Customer feedback · StealthRDP",
+    "sourceUrl": "https://www.trustpilot.com/reviews/65df7f5b787a79df687c08fe",
+    "sentiment": "positive",
+    "sourceType": "third-party review",
+    "sourceCompany": "StealthRDP",
+    "authorName": "Trustpilot reviewer"
+  },
+  {
+    "id": "trustpilot-6547ae88070894e566dc20d7",
+    "quote": "Their RDP is the best i've used in a long time its very stable and reliable with no down times",
+    "publishedOn": "June 5, 2023",
+    "sourceLabel": "Customer feedback · StealthRDP",
+    "sourceUrl": "https://www.trustpilot.com/reviews/6547ae88070894e566dc20d7",
+    "sentiment": "positive",
+    "sourceType": "third-party review",
+    "sourceCompany": "StealthRDP",
+    "authorName": "Trustpilot reviewer"
+  },
+  {
+    "id": "trustpilot-654694008dc650712e8d8aa4",
+    "quote": "The service is really nice, support people are also good, I have been buying their RDPs and VPSs since past 4 months, and I really like the RDP speed, it doesn't lag even a bit.",
+    "publishedOn": "July 1, 2023",
+    "sourceLabel": "Customer feedback · StealthRDP",
+    "sourceUrl": "https://www.trustpilot.com/reviews/654694008dc650712e8d8aa4",
+    "sentiment": "positive",
+    "sourceType": "third-party review",
+    "sourceCompany": "StealthRDP",
+    "authorName": "Trustpilot reviewer"
+  }
+]

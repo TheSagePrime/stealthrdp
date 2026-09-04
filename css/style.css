@@ -993,6 +993,15 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
 .plan-card.recommended { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 10px 36px rgba(var(--accent-rgb), .16); }
 .reviews-section { overflow: hidden; }
 .reviews-head { align-items: end; }
+.testimonial-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.testimonial-card { display: flex; min-width: 0; min-height: 230px; flex-direction: column; padding: 21px; background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius); }
+.testimonial-card:hover { border-color: var(--border-strong); }
+.testimonial-card-meta { display: flex; min-width: 0; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 19px; color: var(--text-dim); font: 10px var(--font-mono); letter-spacing: .07em; text-transform: uppercase; }
+.testimonial-mark { color: var(--accent); font: 700 31px/1 var(--font-display); }
+.testimonial-card blockquote { flex: 1; min-width: 0; margin: 0; color: var(--text); font-size: 15px; line-height: 1.65; overflow-wrap: anywhere; white-space: pre-line; }
+.testimonial-card footer { display: flex; flex-wrap: wrap; align-items: end; gap: 7px 14px; margin-top: 24px; color: var(--text-muted); font-size: 12px; }
+.testimonial-card footer b { color: var(--text); font-weight: 600; }
+.testimonial-card footer time { margin-left: auto; color: var(--text-dim); font: 10px var(--font-mono); letter-spacing: .07em; text-transform: uppercase; }
 .review-wall { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; max-height: 720px; overflow: hidden; -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 7%, #000 91%, transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, #000 7%, #000 91%, transparent 100%); }
 .review-mobile-column { display: none; }
 .review-column { height: 720px; overflow: hidden; }
@@ -1198,6 +1207,7 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
   .usecase-chips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .usecase-chips .topic-chip { width: 100%; min-height: 34px; justify-content: center; padding: 7px 8px; text-align: center; }
   .usecase-chips .topic-chip:last-child { grid-column: 1 / -1; width: calc(50% - 4px); justify-self: center; }
+  .testimonial-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .review-wall { grid-template-columns: 1fr; }
 }
 
@@ -1207,6 +1217,8 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
 
 /* ---------- Mobile motion: continuous OS marquee + vertical review reel ---------- */
 @media (max-width: 768px) {
+  .testimonial-grid { grid-template-columns: 1fr; }
+  .testimonial-card { min-height: 0; padding: 17px; }
   .marquee {
     overflow: hidden;
     padding: 16px 0;

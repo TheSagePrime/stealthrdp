@@ -58,7 +58,7 @@ function resolveTokens(body, origin) {
 }
 
 function extraHeaders(req) {
-  if (isPublicIndexHost(req.headers.host)) return {};
+  if (isPublicIndexHost(req.headers["x-forwarded-host"] || req.headers.host)) return {};
   return { "X-Robots-Tag": "noindex, nofollow" };
 }
 
@@ -78,6 +78,28 @@ function readJson(name, fallback) {
     return fallback;
   }
 }
+
+const cleanDocSlug = (slug) => String(slug || "").replace(/^\d+-/, "").replaceAll("_", "-").toLowerCase();
+const DOC_ROUTE_FILES = new Map();
+const LEGACY_DOC_REDIRECTS = new Map();
+for (const article of readJson("docs-articles.json", [])) {
+  const clean = cleanDocSlug(article.slug);
+  DOC_ROUTE_FILES.set(`/docs/${clean}`, `/docs/${clean}.html`);
+  LEGACY_DOC_REDIRECTS.set(`/docs/${article.slug}.html`, `/docs/${clean}`);
+}
+LEGACY_DOC_REDIRECTS.set(
+  "/docs/1737944563-how-to_re_activate-and-extend-your-180_day-windows-trial.html",
+  "/docs/how-to-re-activate-and-extend-your-180-day-windows-trial",
+);
+const ROOT_PAGE_FILES = new Map([
+  ["/docs", "/docs.html"],
+  ["/blog", "/blog.html"],
+  ["/plans", "/plans.html"],
+  ["/status", "/status.html"],
+  ["/faq", "/faq.html"],
+  ["/about", "/about.html"],
+  ["/privacy", "/privacy.html"],
+]);
 
 function isUpStatus(status) {
   return status === "up" || status === 2 || status === "2";
@@ -417,7 +439,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  if (!isPublicIndexHost(req.headers.host)) {
+  if (!isPublicIndexHost(req.headers["x-forwarded-host"] || req.headers.host)) {
     if (url.pathname === "/robots.txt") {
       res.writeHead(200, {
         "Content-Type": "text/plain; charset=utf-8",
@@ -445,25 +467,45 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  if (url.pathname === "/blog" || url.pathname === "/blog/") {
-    res.writeHead(301, { Location: "/blog.html", ...SECURITY_HEADERS, ...extraHeaders(req) });
+  let staticPathname = url.pathname;
+  const rootHtml = url.pathname.match(/^\/(docs|blog|plans|status|faq|about|privacy)\.html$/);
+  if (rootHtml) {
+    res.writeHead(308, { Location: `/${rootHtml[1]}`, ...SECURITY_HEADERS, ...extraHeaders(req) });
     res.end();
     return;
   }
 
+  const rootWithSlash = url.pathname.match(/^\/(docs|blog|plans|status|faq|about|privacy)\/$/);
+  if (rootWithSlash) {
+    res.writeHead(308, { Location: `/${rootWithSlash[1]}`, ...SECURITY_HEADERS, ...extraHeaders(req) });
+    res.end();
+    return;
+  }
+
+  if (url.pathname === "/windows-vps" || url.pathname === "/linux-vps") {
+    res.writeHead(308, { Location: `${url.pathname}/`, ...SECURITY_HEADERS, ...extraHeaders(req) });
+    res.end();
+    return;
+  }
+
+  if (LEGACY_DOC_REDIRECTS.has(url.pathname)) {
+    res.writeHead(308, { Location: LEGACY_DOC_REDIRECTS.get(url.pathname), ...SECURITY_HEADERS, ...extraHeaders(req) });
+    res.end();
+    return;
+  }
+
+  if (/^\/docs\/[a-z0-9-]+\/$/.test(url.pathname)) {
+    res.writeHead(308, { Location: url.pathname.replace(/\/$/, ""), ...SECURITY_HEADERS, ...extraHeaders(req) });
+    res.end();
+    return;
+  }
+
+  if (ROOT_PAGE_FILES.has(url.pathname)) staticPathname = ROOT_PAGE_FILES.get(url.pathname);
+  else if (DOC_ROUTE_FILES.has(url.pathname)) staticPathname = DOC_ROUTE_FILES.get(url.pathname);
+
   const PAGE_REDIRECTS = {
-    "/plans": "/plans.html",
-    "/plans/": "/plans.html",
-    "/status": "/status.html",
-    "/status/": "/status.html",
-    "/faq": "/faq.html",
-    "/faq/": "/faq.html",
-    "/about": "/about.html",
-    "/about/": "/about.html",
-    "/privacy": "/privacy.html",
-    "/privacy/": "/privacy.html",
-    "/docs": "/docs.html",
-    "/docs/": "/docs.html",
+    "/server-status": "/status",
+    "/server-status/": "/status",
     "/features": "/#why",
     "/features/": "/#why",
   };
@@ -480,12 +522,6 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  if (/^\/docs\/[a-z0-9_-]+\/?$/.test(url.pathname)) {
-    const slug = url.pathname.replace(/^\/docs\/|\/$/g, "");
-    res.writeHead(301, { Location: "/docs/" + slug + ".html", ...SECURITY_HEADERS, ...extraHeaders(req) });
-    res.end();
-    return;
-  }
 
   if (url.pathname === "/security.txt") {
     res.writeHead(301, { Location: "/.well-known/security.txt", ...SECURITY_HEADERS, ...extraHeaders(req) });
@@ -495,7 +531,7 @@ const server = http.createServer((req, res) => {
 
   if (url.pathname === "/blog-post.html") {
     const slug = url.searchParams.get("slug");
-    const target = slug ? "/blog/" + slug + ".html" : "/blog.html";
+    const target = slug ? "/blog/" + slug + ".html" : "/blog";
     res.writeHead(301, { Location: target, ...SECURITY_HEADERS });
     res.end();
     return;
@@ -513,7 +549,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  let filePath = path.normalize(path.join(ROOT, url.pathname === "/" ? "index.html" : url.pathname));
+  let filePath = path.normalize(path.join(ROOT, staticPathname === "/" ? "index.html" : staticPathname));
   if (!filePath.startsWith(ROOT + path.sep) && filePath !== ROOT) {
     res.writeHead(403, { "Content-Type": "text/plain", ...SECURITY_HEADERS });
     res.end("Forbidden");
@@ -549,7 +585,7 @@ const server = http.createServer((req, res) => {
       return;
     }
     let text = resolveTokens(data.toString(), tokenOrigin(req));
-    if (!isPublicIndexHost(req.headers.host) && ext === ".html") {
+    if (!isPublicIndexHost(req.headers["x-forwarded-host"] || req.headers.host) && ext === ".html") {
       text = applyPreviewHtml(text);
     }
     res.end(text);

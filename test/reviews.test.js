@@ -1,63 +1,45 @@
 "use strict";
-/* Provenance and honesty checks for the public-source review wall. */
+/* Provenance and honesty checks for the curated testimonial surface. */
 const { test } = require("node:test");
-const assert = require("node:assert");
-const fs = require("fs");
-const path = require("path");
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
 
 const ROOT = path.join(__dirname, "..");
 const read = (file) => fs.readFileSync(path.join(ROOT, file), "utf8");
 const REVIEWS = JSON.parse(read("data/reviews.json"));
+const TESTIMONIALS = JSON.parse(read("data/testimonials.json"));
 const HTML = read("index.html");
-const CSS = read("css/style.css");
-const reviewSection = HTML.match(/<section class="section reviews-section"[\s\S]*?<\/section>/)?.[0] || "";
-const verified = REVIEWS.filter((item) => item.sourceCompany === "StealthRDP" && item.sourceType === "third-party review");
-const excludedCompanies = [...new Set(REVIEWS.filter((item) => item.sourceCompany !== "StealthRDP").map((item) => item.sourceCompany))];
-
+const reviewById = new Map(REVIEWS.map((review) => [review.id, review]));
 
 test("review data preserves the complete source-backed provenance snapshot", () => {
-  assert.strictEqual(REVIEWS.length, 48, "the internal provenance snapshot remains complete");
-  assert.strictEqual(verified.length, 13, "exactly 13 verified StealthRDP reviews remain eligible");
-  assert.strictEqual(new Set(REVIEWS.map((item) => item.id)).size, REVIEWS.length, "review IDs are unique");
+  assert.equal(REVIEWS.length, 48, "the internal provenance snapshot remains complete");
+  assert.equal(new Set(REVIEWS.map((item) => item.id)).size, REVIEWS.length, "review IDs are unique");
   for (const review of REVIEWS) {
     assert.ok(review.quote && review.quote.trim(), `${review.id}: quote`);
-    assert.ok(/^https:\/\//.test(review.sourceUrl), `${review.id}: HTTPS source URL`);
-    assert.ok(review.sourceLabel && /Customer feedback|Community comment/.test(review.sourceLabel), `${review.id}: neutral source label`);
-    assert.ok(review.sourceCompany, `${review.id}: named source company or topic`);
+    assert.match(review.sourceUrl, /^https:\/\//, `${review.id}: HTTPS source URL`);
   }
 });
 
-
-test("generated review wall shows positive and neutral reviews without source links", () => {
-  const expected = REVIEWS.filter((item) => item.quote && item.sentiment !== "critical").length;
-  assert.strictEqual(reviewSection.match(/data-review-count="(\d+)"/)?.[1], String(expected));
-  assert.match(reviewSection, /Customer and community reviews/);
-  assert.match(reviewSection, /real reviews from server owners and remote-desktop users/);
-  assert.doesNotMatch(reviewSection, /<a\b/i, "review section has no visible or clickable source links");
-  assert.doesNotMatch(reviewSection, /https?:\/\//i, "review section has no raw source URLs");
-  const criticalQuotes = REVIEWS.filter((item) => item.sentiment === "critical").map((item) => item.quote);
-  for (const quote of criticalQuotes) {
-    const snippet = quote.split(/\s+/).slice(0, 12).join(" ");
-    assert.doesNotMatch(reviewSection, new RegExp(snippet.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"), "critical wording is not rendered");
-  }
-  const competitorNames = ["Linode", "DigitalOcean", "Digital Ocean", "Vultr", "Contabo", "Hetzner", "OVH", "Kimsufi", "Scaleway", "AWS", "Lightsail", "RackNerd", "BuyVM", "Leaseweb", "Rackspace", "CrystalTech", "Online.net", "RamNode", "RunAbove", "Google Compute", "LowEndBox", "S3", "Route53", "SES", "Trustpilot", "news.ycombinator", "trustpilot.com/reviews", "Hacker News"];
-  for (const name of competitorNames) {
-    assert.doesNotMatch(reviewSection, new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i"), `${name} is not visible in the review section`);
+test("curated testimonials use exact trusted source records", () => {
+  assert.ok(TESTIMONIALS.length >= 4 && TESTIMONIALS.length <= 6);
+  for (const testimonial of TESTIMONIALS) {
+    if (!testimonial.id) continue;
+    const source = reviewById.get(testimonial.id);
+    assert.ok(source, `${testimonial.id}: exists in the trusted review snapshot`);
+    assert.equal(source.sourceCompany, "StealthRDP");
+    assert.equal(source.sourceType, "third-party review");
+    assert.equal(source.sentiment, "positive");
+    assert.equal(testimonial.quote, source.quote);
+    assert.equal(testimonial.authorName, source.authorName);
+    assert.equal(testimonial.publishedOn, source.publishedOn);
   }
 });
 
-
-test("review wall keeps desktop lanes and uses a mobile vertical reel", () => {
-  assert.match(reviewSection, /review-mobile-track/);
-  assert.doesNotMatch(reviewSection, /reviews-more|Show all reviews/i);
-  assert.match(CSS, /\.review-track \{[^}]*min-width: 0;[^}]*width: 100%;/);
-  assert.match(CSS, /\.review-card \{[^}]*width: 100%;[^}]*min-width: 0;/);
-  assert.match(CSS, /\.review-column:hover \.review-track, \.review-column:focus-within \.review-track \{[^}]*animation-play-state: paused;/);
-  assert.match(CSS, /\.review-mobile-column \{ display: none; \}/);
-  assert.match(CSS, /\.review-mobile-track \{[\s\S]*animation: review-reel-mobile 64s ease-in-out infinite alternate;/);
-  assert.match(CSS, /@media \(max-width: 768px\)[\s\S]*?\.review-wall \{[\s\S]*?height: clamp\(/);
-  assert.match(CSS, /@media \(max-width: 768px\)[\s\S]*?\.review-column \{ display: none; \}/);
-  assert.match(CSS, /@media \(max-width: 768px\)[\s\S]*?\.marquee-track \{[\s\S]*?animation: scrollx 36s linear infinite;/);
-  assert.match(CSS, /@media \(max-width: 768px\) and \(prefers-reduced-motion: reduce\)[\s\S]*?\.marquee-track, \.review-mobile-track \{ animation: none; \}/);
-  assert.match(CSS, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.review-track[^}]*animation: none;/);
+test("homepage has a static curated testimonial grid without forum content", () => {
+  const section = HTML.match(/<section class="section reviews-section"[\s\S]*?<\/section>/)?.[0] || "";
+  assert.match(section, /testimonial-grid/);
+  assert.equal((section.match(/<article class="testimonial-card">/g) || []).length, TESTIMONIALS.length);
+  assert.doesNotMatch(section, /review-wall|review-track|Community feedback|the provider/i);
+  assert.doesNotMatch(section, /<a\b|https?:\/\//i, "testimonials do not expose source links");
 });

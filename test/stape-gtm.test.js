@@ -9,6 +9,7 @@ const ROOT = path.join(__dirname, "..");
 const HTML = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 const BLOG = require(path.join(ROOT, "js", "blog-data.js")).SRDP_BLOG;
 const DOCS = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "docs-articles.json"), "utf8"));
+const cleanDocSlug = (slug) => slug.replace(/^\d+-/, "").replaceAll("_", "-").toLowerCase();
 const STAPE_SRC = "https://sgtm.stealthrdp.com/2l3xebiqyzc.js?";
 const STAPE_TOKEN = "yw=Ch5ENj0vSDYwSUBGOjFcXhVHS19YRAEWXgkNFAgOERARHglfCg0I";
 const STAPE_BOOTSTRAP = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src="${STAPE_SRC}"+i;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${STAPE_TOKEN}');`;
@@ -24,7 +25,7 @@ const ROUTES = [
   "docs.html",
   "404.html",
   ...BLOG.map((p) => `blog/${p.slug}.html`),
-  ...DOCS.map((p) => `docs/${p.slug}.html`),
+  ...DOCS.map((p) => `docs/${cleanDocSlug(p.slug)}.html`),
 ];
 
 test("every generated HTML page has exactly one Stape loader and no Google GTM URLs", () => {

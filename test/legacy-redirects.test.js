@@ -36,7 +36,7 @@ test("all legacy store language variants redirect to plans without query leakage
   for (const url of urls) {
     assert.deepEqual(locationFor(url), {
       status: 308,
-      location: "https://www.stealthrdp.com/plans.html",
+      location: "https://www.stealthrdp.com/plans",
     });
   }
 });
@@ -44,20 +44,20 @@ test("all legacy store language variants redirect to plans without query leakage
 test("legacy announcements redirect to the current blog surface", () => {
   assert.deepEqual(locationFor("https://stealthrdp.com/dash/index.php?rp=/announcements/3&language=hebrew"), {
     status: 308,
-    location: "https://www.stealthrdp.com/blog.html",
+    location: "https://www.stealthrdp.com/blog",
   });
 });
 
 test("legacy knowledgebase URLs redirect to the current documentation surface", () => {
   assert.deepEqual(locationFor("https://stealthrdp.com/dash/index.php?rp=/knowledgebase/1/example.html"), {
     status: 308,
-    location: "https://www.stealthrdp.com/docs.html",
+    location: "https://www.stealthrdp.com/docs",
   });
 });
 
 test("legacy dashboard path variants redirect to live destinations", () => {
   const cases = [
-    ["https://stealthrdp.com/dash/index.php/knowledgebase", "https://www.stealthrdp.com/docs.html"],
+    ["https://stealthrdp.com/dash/index.php/knowledgebase", "https://www.stealthrdp.com/docs"],
     ["https://stealthrdp.com/dash/index.php/user/password", "https://dash.stealthrdp.com/index.php?rp=/password/reset"],
     ["https://stealthrdp.com/dash/index.php?rp=/password/reset", "https://dash.stealthrdp.com/index.php?rp=/password/reset"],
   ];
@@ -68,24 +68,24 @@ test("legacy dashboard path variants redirect to live destinations", () => {
 
 test("every screenshot URL maps to its approved canonical destination", () => {
   const cases = [
-    ["https://stealthrdp.com/dash/index.php?rp=/store/dedicated-rdp-usa/&language=spanish", "https://www.stealthrdp.com/plans.html"],
-    ["https://stealthrdp.com/dash/index.php?rp=/store/dedicated-rdp-usa/&language=croatian", "https://www.stealthrdp.com/plans.html"],
-    ["https://stealthrdp.com/dash/index.php?rp=/store/dedicated-rdp-usa/&language=danish", "https://www.stealthrdp.com/plans.html"],
-    ["https://stealthrdp.com/dash/index.php?rp=/store/dedicated-rdp-usa/&language=italian", "https://www.stealthrdp.com/plans.html"],
-    ["https://stealthrdp.com/dash/index.php?rp=/store/dedicated-rdp-usa/&language=czech", "https://www.stealthrdp.com/plans.html"],
+    ["https://stealthrdp.com/dash/index.php?rp=/store/dedicated-rdp-usa/&language=spanish", "https://www.stealthrdp.com/plans"],
+    ["https://stealthrdp.com/dash/index.php?rp=/store/dedicated-rdp-usa/&language=croatian", "https://www.stealthrdp.com/plans"],
+    ["https://stealthrdp.com/dash/index.php?rp=/store/dedicated-rdp-usa/&language=danish", "https://www.stealthrdp.com/plans"],
+    ["https://stealthrdp.com/dash/index.php?rp=/store/dedicated-rdp-usa/&language=italian", "https://www.stealthrdp.com/plans"],
+    ["https://stealthrdp.com/dash/index.php?rp=/store/dedicated-rdp-usa/&language=czech", "https://www.stealthrdp.com/plans"],
     ["https://stealthrdp.com/index.php", "https://www.stealthrdp.com/"],
     ["https://stealthrdp.com/index.html", "https://www.stealthrdp.com/"],
     ["https://stealthrdp.com/dash/login.php", "https://dash.stealthrdp.com/index.php?rp=/login"],
-    ["https://stealthrdp.com/dash/index.php?rp=/store/eu/silver-eu&language=italian", "https://www.stealthrdp.com/plans.html"],
-    ["https://stealthrdp.com/dash/index.php?rp=/store/eu/bronze-eu&language=english", "https://www.stealthrdp.com/plans.html"],
-    ["https://stealthrdp.com/dash/index.php?rp=/knowledgebase/1/How-to-Install-VPS-or-RDP-After-Purchase--Step-by-Step-Guide.html", "https://www.stealthrdp.com/docs.html"],
-    ["https://stealthrdp.com/dash/index.php?rp=/knowledgebase/5/Why-Go-Red-When-You-Can-Stay-Green-Discover-StealthRDP-and-amp039s-Anti-Red-Hosting.html", "https://www.stealthrdp.com/docs.html"],
-    ["https://stealthrdp.com/dash/index.php?rp=/store/dmca-ignored/bronze-eu&language=chinese", "https://www.stealthrdp.com/plans.html"],
-    ["https://stealthrdp.com/dash/index.php?rp=/store/eu/silver-eu&language=catalan", "https://www.stealthrdp.com/plans.html"],
-    ["https://stealthrdp.com/dash/index.php?rp=/store/dedicated-rdp-usa/&language=swedish", "https://www.stealthrdp.com/plans.html"],
-    ["https://stealthrdp.com/dash/index.php?rp=/announcements/2&language=hebrew", "https://www.stealthrdp.com/blog.html"],
-    ["https://stealthrdp.com/dash/index.php?rp=/announcements/3&language=hebrew", "https://www.stealthrdp.com/blog.html"],
-    ["https://stealthrdp.com/dash/index.php?rp=/announcements/3&language=german", "https://www.stealthrdp.com/blog.html"],
+    ["https://stealthrdp.com/dash/index.php?rp=/store/eu/silver-eu&language=italian", "https://www.stealthrdp.com/plans"],
+    ["https://stealthrdp.com/dash/index.php?rp=/store/eu/bronze-eu&language=english", "https://www.stealthrdp.com/plans"],
+    ["https://stealthrdp.com/dash/index.php?rp=/knowledgebase/1/How-to-Install-VPS-or-RDP-After-Purchase--Step-by-Step-Guide.html", "https://www.stealthrdp.com/docs"],
+    ["https://stealthrdp.com/dash/index.php?rp=/knowledgebase/5/Why-Go-Red-When-You-Can-Stay-Green-Discover-StealthRDP-and-amp039s-Anti-Red-Hosting.html", "https://www.stealthrdp.com/docs"],
+    ["https://stealthrdp.com/dash/index.php?rp=/store/dmca-ignored/bronze-eu&language=chinese", "https://www.stealthrdp.com/plans"],
+    ["https://stealthrdp.com/dash/index.php?rp=/store/eu/silver-eu&language=catalan", "https://www.stealthrdp.com/plans"],
+    ["https://stealthrdp.com/dash/index.php?rp=/store/dedicated-rdp-usa/&language=swedish", "https://www.stealthrdp.com/plans"],
+    ["https://stealthrdp.com/dash/index.php?rp=/announcements/2&language=hebrew", "https://www.stealthrdp.com/blog"],
+    ["https://stealthrdp.com/dash/index.php?rp=/announcements/3&language=hebrew", "https://www.stealthrdp.com/blog"],
+    ["https://stealthrdp.com/dash/index.php?rp=/announcements/3&language=german", "https://www.stealthrdp.com/blog"],
   ];
 
   for (const [url, destination] of cases) {

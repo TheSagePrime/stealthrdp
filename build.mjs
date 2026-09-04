@@ -31,7 +31,6 @@ const LOWEST_PLAN = CATALOG.reduce((lowest, plan) => {
 const STARTING_PRICE = pricing.formatAmount(pricing.cycleEntry(LOWEST_PLAN, "monthly").amount);
 const FAQS = DATA("faqs.json");
 const TESTIMONIALS = DATA("testimonials.json");
-const REVIEWS = DATA("reviews.json");
 const UPTIME = DATA("uptime.json");
 const BLOG = require(path.join(ROOT, "js", "blog-data.js")).SRDP_BLOG;
 const BLOG_BODIES = new Map(DATA("blog-articles.json").map((article) => [article.slug, article]));
@@ -42,8 +41,20 @@ const isUp = (monitor) => monitor && (monitor.status === 2 || monitor.status ===
 const UP = MONITORS.filter(isUp).length;
 const TOTAL = MONITORS.length;
 const ALL_UP = TOTAL > 0 && UP === TOTAL;
-const DOC_BY_SLUG = new Map(DOCS.map((article) => [article.slug, article]));
-const TERMS_URL = `/docs/${(DOCS.find((article) => article.slug === "1737944013-use-of-service") || DOCS.find((article) => /terms|service/i.test(article.category)) || DOCS[0]).slug}.html`;
+const cleanDocSlug = (slug) => String(slug || "").replace(/^\d+-/, "").replaceAll("_", "-").toLowerCase();
+const DOC_SLUGS = DOCS.map((article) => cleanDocSlug(article.slug));
+if (new Set(DOC_SLUGS).size !== DOC_SLUGS.length) throw new Error("Duplicate clean documentation slug");
+const docSlug = (article) => cleanDocSlug(article.slug);
+const DOC_BY_SLUG = new Map(DOCS.flatMap((article) => [[article.slug, article], [docSlug(article), article]]));
+const NOINDEX_DOC_SLUGS = new Set([
+  "payment-terms",
+  "use-of-service",
+  "termination-of-service",
+  "user-responsibilities",
+  "how-to-reset-server-change-or-reset-client-area-password",
+  "server-stops-randomly",
+]);
+const TERMS_URL = "/docs/use-of-service";
 
 /* ---------- helpers ---------- */
 const esc = (s) =>
@@ -185,8 +196,8 @@ const EXTERNAL_SVG = '<svg class="inline-arrow" viewBox="0 0 24 24" fill="none" 
 const CHEVRON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
 function navHtml(active) {
   const items = [
-    ["home", "/", "Home"], ["plans", "/plans.html", "Plans"],
-    ["status", "/status.html", "Server Status"], ["docs", "/docs.html", "Docs"], ["blog", "/blog.html", "Blog"], ["faq", "/faq.html", "FAQ"],
+    ["home", "/", "Home"], ["plans", "/plans", "Plans"],
+    ["status", "/status", "Server Status"], ["docs", "/docs", "Docs"], ["blog", "/blog", "Blog"], ["faq", "/faq", "FAQ"],
   ];
   return items.map(([k, href, label]) => `<a href="${href}"${k === active ? ' class="active"' : ""}>${label}</a>`).join("");
 }
@@ -242,43 +253,43 @@ function footerHtml() {
         <div class="footer-status"><span class="dot"></span><span id="footerStatus">Checking live status…</span></div>
       </div>
       <div class="footer-col"><h2>Products</h2><ul>
-        <li><a href="/plans.html">RDP Plans</a></li>
+        <li><a href="/plans">RDP Plans</a></li>
         <li><a href="/windows-vps/">Windows VPS Hosting</a></li>
         <li><a href="/linux-vps/">Linux VPS Hosting</a></li>
-        <li><a href="/plans.html#build-your-own">Build Your Own VPS</a></li>
-        <li><a href="/plans.html">Pricing</a></li>
+        <li><a href="/plans#build-your-own">Build Your Own VPS</a></li>
+        <li><a href="/plans">Pricing</a></li>
       </ul></div>
       <div class="footer-col"><h2>Resources</h2><ul>
-        <li><a href="/docs.html">Documentation</a></li>
-        <li><a href="/blog.html">Tutorials</a></li>
-        <li><a href="/faq.html">FAQ</a></li>
-        <li><a href="/blog.html">Blog</a></li>
-        <li><a href="/status.html">Server Status</a></li>
+        <li><a href="/docs">Documentation</a></li>
+        <li><a href="/blog">Tutorials</a></li>
+        <li><a href="/faq">FAQ</a></li>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="/status">Server Status</a></li>
       </ul></div>
       <div class="footer-col"><h2>Company</h2><ul>
-        <li><a href="/about.html">About Us</a></li>
+        <li><a href="/about">About Us</a></li>
         <li><a href="https://dash.stealthrdp.com/submitticket.php">Contact Support</a></li>
-        <li><a href="/privacy.html">Privacy Policy</a></li>
+        <li><a href="/privacy">Privacy Policy</a></li>
         <li><a href="${TERMS_URL}">Terms of Service</a></li>
       </ul></div>
     </div>
     <div class="footer-mobile-nav" aria-label="Footer navigation">
       <details class="footer-mobile-group"><summary><span>Products</span><small>RDP plans · pricing</small><b aria-hidden="true">+</b></summary><ul>
-        <li><a href="/plans.html">RDP Plans</a></li><li><a href="/windows-vps/">Windows VPS Hosting</a></li><li><a href="/linux-vps/">Linux VPS Hosting</a></li><li><a href="/plans.html#build-your-own">Build Your Own VPS</a></li><li><a href="/plans.html">Pricing</a></li>
+        <li><a href="/plans">RDP Plans</a></li><li><a href="/windows-vps/">Windows VPS Hosting</a></li><li><a href="/linux-vps/">Linux VPS Hosting</a></li><li><a href="/plans#build-your-own">Build Your Own VPS</a></li><li><a href="/plans">Pricing</a></li>
       </ul></details>
       <details class="footer-mobile-group"><summary><span>Resources</span><small>Docs · blog · status</small><b aria-hidden="true">+</b></summary><ul>
-        <li><a href="/docs.html">Documentation</a></li><li><a href="/blog.html">Tutorials</a></li><li><a href="/faq.html">FAQ</a></li><li><a href="/blog.html">Blog</a></li><li><a href="/status.html">Server Status</a></li>
+        <li><a href="/docs">Documentation</a></li><li><a href="/blog">Tutorials</a></li><li><a href="/faq">FAQ</a></li><li><a href="/blog">Blog</a></li><li><a href="/status">Server Status</a></li>
       </ul></details>
       <details class="footer-mobile-group"><summary><span>Company</span><small>About · support · legal</small><b aria-hidden="true">+</b></summary><ul>
-        <li><a href="/about.html">About Us</a></li><li><a href="https://dash.stealthrdp.com/submitticket.php">Contact Support</a></li><li><a href="/privacy.html">Privacy Policy</a></li><li><a href="${TERMS_URL}">Terms of Service</a></li>
+        <li><a href="/about">About Us</a></li><li><a href="https://dash.stealthrdp.com/submitticket.php">Contact Support</a></li><li><a href="/privacy">Privacy Policy</a></li><li><a href="${TERMS_URL}">Terms of Service</a></li>
       </ul></details>
     </div>
     <div class="footer-bottom">
       <span>© 2026 StealthRDP. All rights reserved.</span>
       <span class="links">
-        <a href="/privacy.html">Privacy</a>
+        <a href="/privacy">Privacy</a>
         <a href="${TERMS_URL}">Terms</a>
-        <a href="/status.html">Status</a>
+        <a href="/status">Status</a>
       </span>
     </div>
   </div></footer>`;
@@ -433,53 +444,23 @@ function nodeCardHtml(m) {
   </article>`;
 }
 
-function testimonialHtml() {
-  if (!TESTIMONIALS.length) {
-    return '<div class="quote-empty">10,000+ orders and counting. Deploy in 60 seconds.</div>';
-  }
-  const t = TESTIMONIALS[0];
-  const name = t.authorName || t.name || t.customerName || "StealthRDP Customer";
-  const role = [t.authorPosition, t.authorCompany].filter(Boolean).join(", ");
-  return `<div class="q-mark">“</div><p class="q-text">${esc(t.quote || t.testimonial || t.content || "")}</p><p class="q-who"><b>${esc(name)}</b>${role ? " · " + esc(role) : ""}</p>`;
-}
-
-function reviewCardHtml(review, extraClass = "") {
-  // Keep source URLs in the data snapshot for internal provenance only. Review
-  // cards must not expose clickable links, raw source URLs, or provider names.
-  const neutralLabel = review.sourceType === "third-party review" ? "Customer feedback" : "Community feedback";
-  const source = `<span>${neutralLabel}</span>`;
-  const authorName = (review.authorName || "").split(" · ")[0].trim().replace(/Trustpilot reviewer/i, "Verified customer");
-  let quote = review.quote || "";
-  // Strip competitor/provider names and stray URLs from the visible wording.
-  const providerPattern = /\b(?:Linode|DigitalOcean|Digital Ocean|Vultr|Contabo|Hetzner|Kimsufi|Scaleway|Lightsail|RackNerd|BuyVM|RamNode|Leaseweb|Rackspace|CrystalTech|Online\.net|RunAbove|Google Compute Engine|GCE|LowEndBox|LowEnd Talk|KS-1|Amazon Web Services|AWS)\b/gi;
-  quote = quote.replace(providerPattern, "the provider");
-  quote = quote.replace(/\bOVH\b/gi, "a provider");
-  quote = quote.replace(/\bDO\b/gi, "the provider");
-  quote = quote.replace(/\bS3\b|\bRoute53\b|\bSES\b|\bEC2\b|\bGCP\b/gi, "cloud services");
-  quote = quote.replace(/https?:\/\/\S+/g, "");
-  quote = quote.replace(/\b[A-Za-z0-9][A-Za-z0-9-]*\.(?:com|de|net|io|org|co|dev|cloud|app)\b(?:\/\S*)?/g, "");
-  quote = quote.replace(/\s{2,}/g, " ").trim();
-  quote = quote.replace(/\bthe provider\b/g, "the provider");
-  return `<article class="review-card review-${esc(review.sentiment || "neutral")}${extraClass}">
-    <div class="review-card-meta"><span class="review-mark" aria-hidden="true">“</span><span class="review-source">${source}</span></div>
-    <blockquote>${esc(quote)}</blockquote>
-    <footer>${authorName ? `<b>${esc(authorName)}</b>` : ""}<time>${esc(review.publishedOn || "")}</time></footer>
+function testimonialCardHtml(testimonial) {
+  const role = [testimonial.authorPosition, testimonial.authorCompany].filter(Boolean).join(", ");
+  const source = testimonial.sourceType === "third-party review" ? "Verified third-party customer review" : "Verified customer testimonial";
+  return `<article class="testimonial-card">
+    <div class="testimonial-card-meta"><span class="testimonial-mark" aria-hidden="true">“</span><span>${source}</span></div>
+    <blockquote>${esc(testimonial.quote)}</blockquote>
+    <footer><b>${esc(testimonial.authorName)}</b>${role ? `<span>${esc(role)}</span>` : ""}${testimonial.publishedOn ? `<time>${esc(testimonial.publishedOn)}</time>` : ""}</footer>
   </article>`;
 }
 
-function reviewWallHtml() {
-  // Show the collected positive and neutral reviews on the wall. Critical
-  // entries stay in the data snapshot but are not surfaced. Internal
-  // provenance stays in data/reviews.json; cards never expose links or provider names.
-  const items = REVIEWS.filter((item) => item && item.quote && item.sentiment !== "critical");
-  if (!items.length) return '<div class="quote-empty">Customer and community feedback is being collected.</div>';
-  const columns = [0, 1, 2].map((column) => items.filter((_, index) => index % 3 === column));
-  const mobileItems = items.concat(items);
-  return `<div class="review-wall" data-review-count="${items.length}" aria-label="Customer and community reviews">
-    ${columns.map((column, index) => `<div class="review-column review-column-${index + 1}"><div class="review-track">${column.concat(column).map((review, reviewIndex) => reviewCardHtml(review, reviewIndex >= column.length ? " review-card-copy" : "")).join("")}</div></div>`).join("")}
-    <div class="review-mobile-column"><div class="review-mobile-track">${mobileItems.map((review, reviewIndex) => reviewCardHtml(review, reviewIndex >= items.length ? " review-card-copy" : "")).join("")}</div></div>
-  </div>
-  <p class="review-disclosure">${items.length} real reviews from server owners and remote-desktop users.</p>`;
+function testimonialGridHtml() {
+  if (TESTIMONIALS.length < 4 || TESTIMONIALS.length > 6) {
+    throw new Error(`Expected 4-6 verified testimonials, found ${TESTIMONIALS.length}`);
+  }
+  const unique = new Set(TESTIMONIALS.map((item) => item.quote));
+  if (unique.size !== TESTIMONIALS.length) throw new Error("Duplicate verified testimonial quote");
+  return `<div class="testimonial-grid" aria-label="Verified customer testimonials">${TESTIMONIALS.map(testimonialCardHtml).join("")}</div>`;
 }
 
 function blogCardHtml(p, extraClass = "") {
@@ -515,10 +496,15 @@ function safeDocHref(rawHref) {
   const hash = hashIndex >= 0 ? original.slice(hashIndex) : "";
   for (const article of DOCS) {
     if (base === article.sourceUrl || base.startsWith(article.sourceUrl + "?")) {
-      return `/docs/${article.slug}.html${hash}`;
+      return `/docs/${docSlug(article)}${hash}`;
     }
   }
-  if (/^https?:\/\/docs\.stealthrdp\.com/i.test(base)) return "/docs.html";
+  const internalDoc = base.match(/^\/docs\/([^/?#]+?)(?:\.html)?$/i);
+  if (internalDoc) {
+    const clean = cleanDocSlug(internalDoc[1]);
+    if (DOC_SLUGS.includes(clean)) return `/docs/${clean}${hash}`;
+  }
+  if (/^https?:\/\/docs\.stealthrdp\.com/i.test(base)) return "/docs";
   if (/^(?:javascript|data):/i.test(original)) return "";
   if (/^https?:\/\//i.test(original) || original.startsWith("/")) return redactPublic(original);
   if (original.startsWith("#")) return original;
@@ -724,9 +710,9 @@ function docsWarning(article) {
 function docCardHtml(article) {
   return `<article class="docs-card" data-doc-title="${esc(article.title)}" data-doc-summary="${esc(article.summary)}" data-doc-category="${esc(article.category)}">
     <div class="docs-card-meta"><span class="docs-category">${esc(article.category)}</span><time>${esc(article.date)}</time></div>
-    <h2><a href="/docs/${esc(article.slug)}.html">${esc(article.title)}</a></h2>
+    <h2><a href="/docs/${esc(docSlug(article))}">${esc(article.title)}</a></h2>
     <p>${esc(article.summary)}</p>
-    <a class="docs-card-link" href="/docs/${esc(article.slug)}.html">Read guide <span aria-hidden="true">→</span></a>
+    <a class="docs-card-link" href="/docs/${esc(docSlug(article))}">Read guide <span aria-hidden="true">→</span></a>
   </article>`;
 }
 
@@ -738,8 +724,8 @@ function docsArticleLd(article) {
     description: article.summary,
     author: { "@type": "Organization", name: "StealthRDP" },
     publisher: { "@type": "Organization", name: "StealthRDP", url: "__SRDP_BASE__/" },
-    mainEntityOfPage: `__SRDP_BASE__/docs/${article.slug}.html`,
-    url: `__SRDP_BASE__/docs/${article.slug}.html`,
+    mainEntityOfPage: `__SRDP_BASE__/docs/${docSlug(article)}`,
+    url: `__SRDP_BASE__/docs/${docSlug(article)}`,
     articleSection: article.category,
   };
   if (iso) value.dateModified = iso;
@@ -773,8 +759,8 @@ function buildDocsIndex() {
       </div>
     </div></section>
   </main>`;
-  const jsonLd = [{ "@context": "https://schema.org", "@graph": [breadcrumbLd("Docs", [{ name: "Home", url: "__SRDP_BASE__/" }, { name: "Docs", url: "__SRDP_BASE__/docs.html" }]), { "@type": "ItemList", name: "StealthRDP Documentation", itemListElement: DOCS.map((article, index) => ({ "@type": "ListItem", position: index + 1, item: { "@type": "TechArticle", headline: article.title, url: `__SRDP_BASE__/docs/${article.slug}.html` } })) }] }];
-  return page({ active: "docs", title: "Documentation — StealthRDP", description: docsIndexDescription(), canonical: "__SRDP_BASE__/docs.html", jsonLd, body, extraScripts: ["/js/docs.js"] });
+  const jsonLd = [{ "@context": "https://schema.org", "@graph": [breadcrumbLd("Docs", [{ name: "Home", url: "__SRDP_BASE__/" }, { name: "Docs", url: "__SRDP_BASE__/docs" }]), { "@type": "ItemList", name: "StealthRDP Documentation", itemListElement: DOCS.map((article, index) => ({ "@type": "ListItem", position: index + 1, item: { "@type": "TechArticle", headline: article.title, url: `__SRDP_BASE__/docs/${docSlug(article)}` } })) }] }];
+  return page({ active: "docs", title: "Documentation — StealthRDP", description: docsIndexDescription(), canonical: "__SRDP_BASE__/docs", jsonLd, body, extraScripts: ["/js/docs.js"] });
 }
 
 function buildDocArticle(article, index) {
@@ -783,7 +769,7 @@ function buildDocArticle(article, index) {
   const related = article.relatedSlugs.map((slug) => DOC_BY_SLUG.get(slug)).filter(Boolean);
   const next = DOCS[index + 1] && DOCS[index + 1].slug !== article.slug ? DOCS[index + 1] : null;
   const links = [...related, ...(next && !related.some((item) => item.slug === next.slug) ? [next] : [])].slice(0, 3);
-  const relatedHtml = links.length ? `<nav class="docs-related" aria-label="Related guides"><div class="docs-related-head"><span class="sec-index">Continue exploring</span><h2>Related guides</h2></div><div class="docs-related-grid">${links.map((item) => `<a class="docs-related-link" href="/docs/${esc(item.slug)}.html"><span class="docs-category">${esc(item.category)}</span><strong>${esc(item.title)}</strong><span>Read guide →</span></a>`).join("")}</div></nav>` : "";
+  const relatedHtml = links.length ? `<nav class="docs-related" aria-label="Related guides"><div class="docs-related-head"><span class="sec-index">Continue exploring</span><h2>Related guides</h2></div><div class="docs-related-grid">${links.map((item) => `<a class="docs-related-link" href="/docs/${esc(docSlug(item))}"><span class="docs-category">${esc(item.category)}</span><strong>${esc(item.title)}</strong><span>Read guide →</span></a>`).join("")}</div></nav>` : "";
   const dateIso = docDateIso(article.date);
   const time = dateIso ? `<span>Source date: <time datetime="${dateIso}">${esc(article.date)}</time></span>` : `<span>Source date: ${esc(article.date)}</span>`;
   const migration = article.migration || {};
@@ -791,14 +777,15 @@ function buildDocArticle(article, index) {
   const migrationDate = migration.date ? `Migrated ${migration.date}` : "Migration date not provided";
   const redactionLabel = Array.isArray(migration.redactions) && migration.redactions.length ? "Public examples redacted" : "No public redactions recorded";
   const sourceMeta = `<span>Source: ${esc(sourceLabel)}</span>${time}<span>${esc(migrationDate)}</span><span>${redactionLabel}</span>`;
-  const body = `<main class="docs-article-page docs-surface" data-docs-category="${esc(article.category)}" data-doc-slug="${esc(article.slug)}"><div class="container docs-article-layout"><div class="docs-article-column">
-    <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/docs.html">Docs</a><span aria-hidden="true">/</span><span>${esc(article.category)}</span></nav>
+  const body = `<main class="docs-article-page docs-surface" data-docs-category="${esc(article.category)}" data-doc-slug="${esc(docSlug(article))}"><div class="container docs-article-layout"><div class="docs-article-column">
+    <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/docs">Docs</a><span aria-hidden="true">/</span><span>${esc(article.category)}</span></nav>
     <article class="docs-article"><header class="docs-article-header"><span class="docs-category">${esc(article.category)}</span><h1>${esc(article.title)}</h1>${docsWarning(article)}<p class="docs-summary">${esc(article.summary)}</p><div class="docs-source-meta">${sourceMeta}</div></header><div class="docs-content">${rendered.html}</div><div class="docs-support"><div><span class="sec-index">Need a hand?</span><h2>Need account or server support?</h2><p>For account or server-specific help, use the StealthRDP support portal.</p></div><a class="btn btn-primary" href="${DOC_SUPPORT_URL}">Contact support</a></div>${relatedHtml}</article>
   </div>${contents}</div></main>`;
   const fullTitle = `${article.title} — StealthRDP Docs`;
   const useTitle = fullTitle.length <= SEO_TITLE_LIMIT ? fullTitle : seoTitle(article.title);
-  const jsonLd = [{ "@context": "https://schema.org", "@graph": [breadcrumbLd(article.title, [{ name: "Home", url: "__SRDP_BASE__/" }, { name: "Docs", url: "__SRDP_BASE__/docs.html" }, { name: article.category, url: `__SRDP_BASE__/docs.html?category=${encodeURIComponent(article.category)}` }, { name: article.title, url: `__SRDP_BASE__/docs/${article.slug}.html` }]), docsArticleLd(article)] }];
-  return page({ active: "docs", title: useTitle, description: seoDescription(article.summary.length < 70 ? `${article.summary} Read the verified guide and contact StealthRDP support when you need account-specific help.` : article.summary), canonical: `__SRDP_BASE__/docs/${article.slug}.html`, pageType: "article", jsonLd, body, extraScripts: ["/js/docs.js"] });
+  const route = `/docs/${docSlug(article)}`;
+  const jsonLd = [{ "@context": "https://schema.org", "@graph": [breadcrumbLd(article.title, [{ name: "Home", url: "__SRDP_BASE__/" }, { name: "Docs", url: "__SRDP_BASE__/docs" }, { name: article.category, url: `__SRDP_BASE__/docs?category=${encodeURIComponent(article.category)}` }, { name: article.title, url: `__SRDP_BASE__${route}` }]), docsArticleLd(article)] }];
+  return page({ active: "docs", title: useTitle, description: seoDescription(article.summary.length < 70 ? `${article.summary} Read the verified guide and contact StealthRDP support when you need account-specific help.` : article.summary), canonical: `__SRDP_BASE__${route}`, pageType: "article", jsonLd, body, extraScripts: ["/js/docs.js"], robots: NOINDEX_DOC_SLUGS.has(docSlug(article)) ? "noindex, follow" : "index,follow" });
 }
 
 /* ---------- JSON-LD ---------- */
@@ -840,6 +827,25 @@ function serviceLd(p) {
   };
 }
 
+function productLd({ route, name, description }) {
+  return {
+    "@type": "Product",
+    "@id": `__SRDP_BASE__${route}#product`,
+    name,
+    description,
+    url: `__SRDP_BASE__${route}`,
+    image: "__SRDP_BASE__/assets/og-cover.png",
+    brand: { "@type": "Brand", name: "StealthRDP" },
+    offers: {
+      "@type": "Offer",
+      price: pricing.cycleEntry(LOWEST_PLAN, "monthly").amount,
+      priceCurrency: LOWEST_PLAN.pricing.currency,
+      url: planUrl(LOWEST_PLAN),
+      description: "Bronze USA monthly VPS plan",
+    },
+  };
+}
+
 function faqLd() {
   return {
     "@type": "FAQPage",
@@ -857,7 +863,7 @@ function articleLd(post) {
     headline: post.title,
     description: post.excerpt || "",
     datePublished: post.date,
-    author: { "@type": "Organization", name: post.author || "StealthRDP Team", url: "__SRDP_BASE__/about.html" },
+    author: { "@type": "Organization", name: post.author || "StealthRDP Team", url: "__SRDP_BASE__/about" },
     publisher: { "@type": "Organization", name: "StealthRDP", url: "__SRDP_BASE__/", logo: { "@type": "ImageObject", url: LOGO_DARK_URL } },
     image: "__SRDP_BASE__/assets/og-cover.png",
     mainEntityOfPage: `__SRDP_BASE__/blog/${post.slug}.html`,
@@ -902,7 +908,7 @@ function build404() {
       <div class="container"><span class="eyebrow">Error 404</span><h1>That page is not here.</h1><p>The address may be outdated or the page may have moved. Use one of these paths to continue.</p></div>
     </section>
     <section class="section section-tight" style="padding-top:0">
-      <div class="container"><div class="section-head center"><span class="section-label">Find your way back</span><h2>Start from a trusted StealthRDP page.</h2><p>These links help people and agents recover without guessing the next URL.</p><div class="error-actions"><a class="btn btn-primary" href="/">Return home</a><a class="btn btn-ghost" href="/docs.html">Open documentation</a><a class="btn btn-ghost" href="/sitemap.xml">View sitemap</a><a class="btn btn-ghost" href="/llms.txt">Agent guide</a></div></div></div>
+      <div class="container"><div class="section-head center"><span class="section-label">Find your way back</span><h2>Start from a trusted StealthRDP page.</h2><p>These links help people and agents recover without guessing the next URL.</p><div class="error-actions"><a class="btn btn-primary" href="/">Return home</a><a class="btn btn-ghost" href="/docs">Open documentation</a><a class="btn btn-ghost" href="/sitemap.xml">View sitemap</a><a class="btn btn-ghost" href="/llms.txt">Agent guide</a></div></div></div>
     </section>
   </main>`;
   return page({ active: "404", title: "Page not found — StealthRDP", description: "The requested StealthRDP page could not be found. Return home or use the documentation, sitemap, and agent guide.", canonical: "__SRDP_BASE__/404.html", robots: "noindex,follow", body });
@@ -1021,14 +1027,14 @@ function buildIndex() {
         <div class="finder-field"><span class="control-label">Operating system</span><select id="osSelect" aria-label="Operating system"><option value="any">Any OS</option><option value="windows">Windows</option><option value="linux">Linux</option></select></div>
         <div class="finder-field"><span class="control-label">Use case</span><select id="useCaseSelect" aria-label="Use case"><option value="remote-desktop">Remote desktop</option><option value="web-hosting">Web hosting</option><option value="automation">Automation &amp; bots</option><option value="trading">Trading</option><option value="storage">Storage &amp; backups</option></select></div>
         <p class="finder-note" id="finderNote">Best fit: Bronze USA — any OS included on every plan.</p>
-        <div class="all-link os-links" aria-label="Browse VPS operating system plans"><a class="btn btn-ghost btn-sm" href="/windows-vps/">Windows VPS hosting</a><a class="btn btn-ghost btn-sm" href="/linux-vps/">Linux VPS hosting</a><a class="btn btn-ghost btn-sm" href="/plans.html#windows-vps">Windows VPS</a><a class="btn btn-ghost btn-sm" href="/plans.html#linux-vps">Linux VPS</a><a class="btn btn-ghost btn-sm" href="/plans.html#comparison">Compare VPS resources</a></div>
+        <div class="all-link os-links" aria-label="Browse VPS operating system plans"><a class="btn btn-ghost btn-sm" href="/windows-vps/">Windows VPS hosting</a><a class="btn btn-ghost btn-sm" href="/linux-vps/">Linux VPS hosting</a><a class="btn btn-ghost btn-sm" href="/plans#windows-vps">Windows VPS</a><a class="btn btn-ghost btn-sm" href="/plans#linux-vps">Linux VPS</a><a class="btn btn-ghost btn-sm" href="/plans#comparison">Compare VPS resources</a></div>
       </div>
       <div class="billing-wrap fade-up d2">
         <div class="billing-toggle" id="billingToggle" role="tablist" aria-label="Billing cycle">${billingToggleHtml()}</div>
       </div>
       <div class="plan-grid" id="planGrid" aria-live="polite">${preview}</div>
       <div class="plan-rail-cue" aria-live="polite"><span id="planRailStatus">Plan 1 of 3</span><span class="plan-rail-line" aria-hidden="true"><i></i></span><span>Swipe to compare plans</span></div>
-      <div class="all-link"><a class="btn btn-ghost" href="/plans.html">View All ${USA.length + EU.length} Plans</a></div>
+      <div class="all-link"><a class="btn btn-ghost" href="/plans">View All ${USA.length + EU.length} Plans</a></div>
     </div>
   </section>
 
@@ -1037,7 +1043,7 @@ function buildIndex() {
     <div class="container">
       <div class="compact-section-head">
         <div><h2>Infrastructure that doesn't flinch</h2><p>Speed, protection, and visibility without the extra surface area.</p></div>
-        <a class="text-link" href="/status.html">View server status ${ARROW_SVG}</a>
+        <a class="text-link" href="/status">View server status ${ARROW_SVG}</a>
       </div>
       <div class="infrastructure-board">
         <div class="infrastructure-intro"><span class="infra-signal" aria-hidden="true"></span><span>Core infrastructure</span><span class="infra-count">Live monitoring</span></div>
@@ -1051,13 +1057,13 @@ function buildIndex() {
     </div>
   </section>
 
-  <!-- ============ Reviews ============ -->
+  <!-- ============ Testimonials ============ -->
   <section class="section reviews-section" id="testimonials">
     <div class="container">
       <div class="compact-section-head reviews-head">
-        <div><h2>Customer and community reviews</h2><p>Real feedback from server owners and remote-desktop users. Clean cards, no links, no noise.</p></div>
+        <div><h2>Verified customer testimonials</h2><p>Selected customer feedback from verified testimonial and third-party review sources.</p></div>
       </div>
-      ${reviewWallHtml()}
+      ${testimonialGridHtml()}
     </div>
   </section>
 
@@ -1079,6 +1085,7 @@ function buildIndex() {
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [
     ORG,
     websiteLd(),
+    productLd({ route: "/", name: "StealthRDP VPS hosting", description: "Windows and Linux VPS hosting with USA and EU regions." }),
     { "@type": "ItemList", name: "StealthRDP featured USA VPS plans", itemListElement: USA.slice(0, 3).map((p, i) => ({ "@type": "ListItem", position: i + 1, item: serviceLd(p) })) },
   ] }];
   return page({
@@ -1146,7 +1153,7 @@ function buildPlans() {
     { "@context": "https://schema.org", "@graph": [
       breadcrumbLd("Plans", [
         { name: "Home", url: "__SRDP_BASE__/" },
-        { name: "Windows & Linux VPS Hosting", url: "__SRDP_BASE__/plans.html" },
+        { name: "Windows & Linux VPS Hosting", url: "__SRDP_BASE__/plans" },
       ]),
       { "@type": "ItemList", name: "StealthRDP VPS Plans", itemListElement: USA.concat(EU).map((p, i) => ({ "@type": "ListItem", position: i + 1, item: serviceLd(p) })) },
     ]},
@@ -1155,7 +1162,7 @@ function buildPlans() {
     active: "plans",
     title: "Windows & Linux VPS Hosting | USA & EU | StealthRDP",
     description: "Compare Windows and Linux VPS hosting plans from StealthRDP with USA and EU locations, NVMe storage, flexible billing, and checkout.",
-    canonical: "__SRDP_BASE__/plans.html",
+    canonical: "__SRDP_BASE__/plans",
     jsonLd,
     body,
     planLocation: "USA",
@@ -1201,7 +1208,7 @@ function buildOsVpsPage({
   const body = landingHtml || `<main class="os-vps-page">
     <section class="page-head">
       <div class="container">
-        <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/plans.html">VPS Plans</a><span aria-hidden="true">/</span><span>${label} VPS</span></nav>
+        <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/plans">VPS Plans</a><span aria-hidden="true">/</span><span>${label} VPS</span></nav>
         <span class="eyebrow">${label} VPS hosting</span>
         <h1>${h1}</h1>
         <p>${intro}</p>
@@ -1261,10 +1268,11 @@ function buildOsVpsPage({
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [
     breadcrumbLd(`${label} VPS`, [
       { name: "Home", url: "__SRDP_BASE__/" },
-      { name: "VPS Plans", url: "__SRDP_BASE__/plans.html" },
+      { name: "VPS Plans", url: "__SRDP_BASE__/plans" },
       { name: `${label} VPS`, url: `__SRDP_BASE__/${slug}/` },
     ]),
     osVpsPageLd({ slug, title, description, serviceName, serviceType }),
+    productLd({ route: `/${slug}/`, name: serviceName, description }),
     faqSchema,
   ] }];
   return page({ active: "plans", title, description, canonical: `__SRDP_BASE__/${slug}/`, jsonLd, body, showPalette: false });
@@ -1275,7 +1283,7 @@ function windowsLandingHtml() {
     <section class="page-head os-vps-hero" id="top">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/plans.html">VPS Plans</a><span aria-hidden="true">/</span><span>Windows VPS</span></nav>
+          <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/plans">VPS Plans</a><span aria-hidden="true">/</span><span>Windows VPS</span></nav>
           <img class="os-vps-logo" src="/assets/os-logos/windows-colored.svg" alt="Windows operating system logo" width="64" height="64" decoding="async">
           <span class="eyebrow">Windows VPS hosting</span>
           <h1>Windows VPS hosting for work that belongs on Windows</h1>
@@ -1324,7 +1332,7 @@ function windowsLandingHtml() {
         <div class="os-content-card">
           <p>A Windows VPS gives you a remote Windows environment for software, testing, administration, and business workflows. It can also suit users who need access to a Windows desktop or server without keeping the machine on site.</p>
           <p>Start with the software and users. A plan that fits one application may not fit several concurrent sessions or a larger installation.</p>
-          <div class="os-vps-links"><a class="btn btn-primary" href="/plans.html#windows-vps">Windows VPS catalog</a><a class="btn btn-ghost" href="/plans.html#comparison">Plan comparison</a></div>
+          <div class="os-vps-links"><a class="btn btn-primary" href="/plans#windows-vps">Windows VPS catalog</a><a class="btn btn-ghost" href="/plans#comparison">Plan comparison</a></div>
         </div>
       </div>
     </section>
@@ -1359,7 +1367,7 @@ function windowsLandingHtml() {
               <p>Use when the software or workflow asks for Windows Server 2025.</p>
             </article>
           </div>
-          <a class="os-related-link" href="/docs/1737945157-how-do-i-log-into-windows.html">How do I log into Windows?</a>
+          <a class="os-related-link" href="/docs/how-do-i-log-into-windows">How do I log into Windows?</a>
         </div>
       </div>
     </section>
@@ -1368,7 +1376,7 @@ function windowsLandingHtml() {
         <div class="os-vps-guide-intro"><span class="included-label">Control</span><h2>Administrator access for hands-on control</h2></div>
         <div class="os-content-card">
           <p>VPS plans include full Windows Administrator access. That gives you control over the Windows environment and the software you install. You are responsible for regular backups of important data.</p>
-          <p>For the remote sign-in process, see <a href="/docs/1737945157-how-do-i-log-into-windows.html">How do I log into Windows?</a> StealthRDP sends service credentials by email after payment confirmation.</p>
+          <p>For the remote sign-in process, see <a href="/docs/how-do-i-log-into-windows">How do I log into Windows?</a> StealthRDP sends service credentials by email after payment confirmation.</p>
         </div>
       </div>
     </section>
@@ -1405,7 +1413,7 @@ function windowsLandingHtml() {
       <div class="container">
         <div class="os-vps-guide-intro"><span class="included-label">Support and limits</span><h2>Support and limits</h2></div>
         <div class="os-content-card">
-          <p>Support is available through the client-area ticketing system and support email. Review the <a href="/faq.html">FAQ</a> for support information and the <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a> before you order.</p>
+          <p>Support is available through the client-area ticketing system and support email. Review the <a href="/faq">FAQ</a> for support information and the <a href="/docs/use-of-service">Use of Service terms</a> before you order.</p>
           <ul class="os-vps-check-list">
             <li>Use the client-area ticket system for service support.</li>
             <li>Follow the published Use of Service terms.</li>
@@ -1423,7 +1431,7 @@ function windowsLandingHtml() {
           <li>Compare CPU, RAM, NVMe storage, bandwidth, and region.</li>
           <li>Review the live order details and price, then confirm the purchase through StealthRDP.</li>
         </ol>
-        <div class="os-vps-links"><a class="btn btn-primary" href="/plans.html#windows-vps">Compare Windows VPS plans</a></div>
+        <div class="os-vps-links"><a class="btn btn-primary" href="/plans#windows-vps">Compare Windows VPS plans</a></div>
       </div>
     </section>
     <section class="os-vps-faq" id="faq" aria-labelledby="windows-vps-faq-heading">
@@ -1435,9 +1443,9 @@ function windowsLandingHtml() {
           <details class="os-vps-faq-item"><summary>Which Windows versions are listed?</summary><p>Windows Server 2019, 2022, and 2025.</p></details>
           <details class="os-vps-faq-item"><summary>When will my Windows VPS be activated?</summary><p>Standard installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation.</p></details>
           <details class="os-vps-faq-item"><summary>How will I receive my credentials?</summary><p>StealthRDP sends service credentials by email after payment confirmation.</p></details>
-          <details class="os-vps-faq-item"><summary>How do I choose CPU, RAM, and storage?</summary><p>Use your software requirements, user count, processing needs, and data size. Then use the <a href="/plans.html#comparison">plan comparison</a> to compare the available configurations.</p></details>
-          <details class="os-vps-faq-item"><summary>Where can I get support?</summary><p>Use the client-area ticketing system or support email. The <a href="/faq.html">FAQ</a> provides the current support details.</p></details>
-          <details class="os-vps-faq-item"><summary>Can I run any workload?</summary><p>No. Use must remain lawful and must follow the <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a>.</p></details>
+          <details class="os-vps-faq-item"><summary>How do I choose CPU, RAM, and storage?</summary><p>Use your software requirements, user count, processing needs, and data size. Then use the <a href="/plans#comparison">plan comparison</a> to compare the available configurations.</p></details>
+          <details class="os-vps-faq-item"><summary>Where can I get support?</summary><p>Use the client-area ticketing system or support email. The <a href="/faq">FAQ</a> provides the current support details.</p></details>
+          <details class="os-vps-faq-item"><summary>Can I run any workload?</summary><p>No. Use must remain lawful and must follow the <a href="/docs/use-of-service">Use of Service terms</a>.</p></details>
         </div>
         <section class="os-vps-next"><span class="included-label">Choose another environment</span><h2>Need Linux instead?</h2><p>For websites, applications, databases, or development stacks, see <a href="/linux-vps/">Linux VPS hosting</a>.</p></section>
       </div>
@@ -1445,7 +1453,7 @@ function windowsLandingHtml() {
     <section class="cta-band">
       <div class="container cta-grid">
         <div class="cta-copy"><span class="eyebrow">Windows VPS plans</span><h2>Compare Windows VPS plans</h2></div>
-        <div class="cta-actions"><a class="btn btn-primary" href="/plans.html#windows-vps">Compare Windows VPS plans</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps">Continue to checkout</a></div>
+        <div class="cta-actions"><a class="btn btn-primary" href="/plans#windows-vps">Compare Windows VPS plans</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps">Continue to checkout</a></div>
       </div>
     </section>
   </main>`;
@@ -1463,7 +1471,7 @@ function buildWindowsVps() {
     logoAlt: "Windows operating system logo",
     h1: "Windows VPS hosting for work that belongs on Windows",
     intro: "Use remote Windows access for familiar software, administration, and business workflows. Choose your operating system, compare the resources, and order the configuration that fits the job.",
-    planHref: "/plans.html#windows-vps",
+    planHref: "/plans#windows-vps",
     planLabel: "Compare Windows VPS plans",
     contentHtml: "",
     landingHtml: windowsLandingHtml(),
@@ -1475,7 +1483,7 @@ function linuxLandingHtml() {
     <section class="page-head os-vps-hero" id="top">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/plans.html">VPS Plans</a><span aria-hidden="true">/</span><span>Linux VPS</span></nav>
+          <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/plans">VPS Plans</a><span aria-hidden="true">/</span><span>Linux VPS</span></nav>
           <img class="os-vps-logo" src="/assets/os-logos/linux-colored.svg" alt="Linux operating system logo" width="64" height="64" decoding="async">
           <span class="eyebrow">Linux VPS hosting</span>
           <h1>Linux VPS hosting with Root access and a distro you can confirm</h1>
@@ -1524,7 +1532,7 @@ function linuxLandingHtml() {
         <div class="os-content-card">
           <p>If you searched for cheap Linux VPS: “Cheap” here means see the current catalog, including Bronze at <strong>€9.50/month</strong> on the live plans page (from a €10.00 base). It does not mean we are the cheapest provider on the internet. We do not claim that.</p>
           <p>Bronze USA lists 2 Core, 4 GB RAM, 60 GB NVMe, and Unlimited bandwidth. Bronze EU lists 2 Core, 4 GB RAM, 40 GB NVMe, and Unlimited bandwidth. Confirm the live row before you order. Prices and stock can change.</p>
-          <div class="os-vps-links"><a class="btn btn-primary" href="/plans.html#linux-vps">Linux VPS catalog</a><a class="btn btn-ghost" href="/plans.html#comparison">Plan comparison</a></div>
+          <div class="os-vps-links"><a class="btn btn-primary" href="/plans#linux-vps">Linux VPS catalog</a><a class="btn btn-ghost" href="/plans#comparison">Plan comparison</a></div>
         </div>
       </div>
     </section>
@@ -1543,14 +1551,14 @@ function linuxLandingHtml() {
           <div class="os-distro-panels">
             <article class="os-distro-panel" id="panel-ubuntu" role="tabpanel" aria-labelledby="tab-ubuntu"><h3>Ubuntu</h3><div class="os-distro-versions"><span>18.04 LTS</span><span>20.04 LTS</span><span>22.04 LTS</span><span>24.04 LTS</span><span>26.04 LTS</span></div><p>Fits many websites, panels, and development stacks.</p></article><article class="os-distro-panel" id="panel-debian" role="tabpanel" aria-labelledby="tab-debian" hidden><h3>Debian</h3><div class="os-distro-versions"><span>10</span><span>11</span><span>12</span><span>13</span></div><p>Use when the stack asks for Debian.</p></article><article class="os-distro-panel" id="panel-centos" role="tabpanel" aria-labelledby="tab-centos" hidden><h3>CentOS</h3><div class="os-distro-versions"><span>7</span><span>Stream 8</span><span>Stream 9</span></div><p>Use when the stack asks for CentOS.</p></article><article class="os-distro-panel" id="panel-alma" role="tabpanel" aria-labelledby="tab-alma" hidden><h3>AlmaLinux</h3><div class="os-distro-versions"><span>8</span><span>9</span><span>10</span></div><p>Use when the stack asks for AlmaLinux.</p></article><article class="os-distro-panel" id="panel-rocky" role="tabpanel" aria-labelledby="tab-rocky" hidden><h3>Rocky Linux</h3><div class="os-distro-versions"><span>8</span><span>9</span><span>10</span></div><p>Use when the stack asks for Rocky Linux.</p></article><article class="os-distro-panel" id="panel-fedora" role="tabpanel" aria-labelledby="tab-fedora" hidden><h3>Fedora</h3><div class="os-distro-versions"><span>37</span><span>38</span><span>39</span><span>40</span><span>41</span><span>42</span><span>43</span><span>44</span></div><p>Use when the stack asks for Fedora.</p></article><article class="os-distro-panel" id="panel-alpine" role="tabpanel" aria-labelledby="tab-alpine" hidden><h3>Alpine Linux</h3><div class="os-distro-versions"><span>3.15</span><span>3.19</span><span>3.23</span></div><p>Use when the stack asks for Alpine Linux.</p></article><article class="os-distro-panel" id="panel-freebsd" role="tabpanel" aria-labelledby="tab-freebsd" hidden><h3>FreeBSD</h3><div class="os-distro-versions"><span>13.2</span><span>13.3</span><span>14.0</span><span>14.1</span><span>14.2</span><span>14.3</span><span>15.0</span></div><p>Use when the stack asks for FreeBSD.</p></article><article class="os-distro-panel" id="panel-opensuse" role="tabpanel" aria-labelledby="tab-opensuse" hidden><h3>openSUSE</h3><div class="os-distro-versions"><span>Leap 15</span></div><p>Use when the stack asks for openSUSE Leap 15.</p></article><article class="os-distro-panel" id="panel-cloudlinux" role="tabpanel" aria-labelledby="tab-cloudlinux" hidden><h3>CloudLinux</h3><div class="os-distro-versions"><span>9</span></div><p>Use when the stack asks for CloudLinux 9.</p></article><article class="os-distro-panel" id="panel-arch" role="tabpanel" aria-labelledby="tab-arch" hidden><h3>Arch Linux</h3><div class="os-distro-versions"><span>Latest</span></div><p>Use when the stack asks for Arch Linux.</p></article><article class="os-distro-panel" id="panel-oracle" role="tabpanel" aria-labelledby="tab-oracle" hidden><h3>Oracle Linux</h3><div class="os-distro-versions"><span>8</span><span>9</span></div><p>Use when the stack asks for Oracle Linux.</p></article>
           </div>
-          <a class="os-related-link" href="/docs/1737946490-how-to-install-direct-admin-in-a-linux-server.html">How to install DirectAdmin in a Linux server</a>
+          <a class="os-related-link" href="/docs/how-to-install-direct-admin-in-a-linux-server">How to install DirectAdmin in a Linux server</a>
         </div>
       </div>
     </section>
     <section class="section os-vps-root" id="root-access">
       <div class="container">
         <div class="os-vps-guide-intro"><span class="included-label">Control</span><h2>Root access</h2></div>
-        <div class="os-content-card"><p>VPS plans include full Root access. You administer the server. You keep backups. You stay inside the <a href="/docs/1737944013-use-of-service.html">Use of Service terms</a>.</p></div>
+        <div class="os-content-card"><p>VPS plans include full Root access. You administer the server. You keep backups. You stay inside the <a href="/docs/use-of-service">Use of Service terms</a>.</p></div>
       </div>
     </section>
     <section class="section os-vps-size" id="size">
@@ -1586,7 +1594,7 @@ function linuxLandingHtml() {
       <div class="container">
         <div class="os-vps-guide-intro"><span class="included-label">Support and limits</span><h2>Support and limits</h2></div>
         <div class="os-content-card">
-          <p>Support is the client-area ticket system and support email. See the <a href="/faq.html">FAQ</a>.</p>
+          <p>Support is the client-area ticket system and support email. See the <a href="/faq">FAQ</a>.</p>
           <ul class="os-vps-check-list">
             <li>Use the client-area ticket system for service support.</li>
             <li>Follow the published Use of Service terms.</li>
@@ -1600,11 +1608,11 @@ function linuxLandingHtml() {
         <div class="os-vps-guide-intro"><span class="included-label">Order steps</span><h2>Order a Linux VPS</h2><p>Move from your requirements to checkout.</p></div>
         <ol class="os-order-list">
           <li>Write down the listed Linux image you need, plus the services you will run.</li>
-          <li>Open the <a href="/plans.html#linux-vps">Linux VPS catalog</a>.</li>
+          <li>Open the <a href="/plans#linux-vps">Linux VPS catalog</a>.</li>
           <li>Compare CPU, RAM, disk, region, and the price on the page.</li>
           <li>Continue to checkout. Select Linux there.</li>
         </ol>
-        <div class="os-vps-links"><a class="btn btn-primary" href="/plans.html#linux-vps">Compare Linux VPS plans</a></div>
+        <div class="os-vps-links"><a class="btn btn-primary" href="/plans#linux-vps">Compare Linux VPS plans</a></div>
       </div>
     </section>
     <section class="os-vps-faq" id="faq" aria-labelledby="linux-vps-faq-heading">
@@ -1626,7 +1634,7 @@ function linuxLandingHtml() {
     <section class="cta-band">
       <div class="container cta-grid">
         <div class="cta-copy"><span class="eyebrow">Linux VPS plans</span><h2>Compare Linux VPS plans</h2><p>Check the current plan, region, and displayed price, then confirm Linux and the exact image in checkout.</p></div>
-        <div class="cta-actions"><a class="btn btn-primary" href="/plans.html#linux-vps">Compare Linux VPS plans</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps">Continue to checkout</a></div>
+        <div class="cta-actions"><a class="btn btn-primary" href="/plans#linux-vps">Compare Linux VPS plans</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps">Continue to checkout</a></div>
       </div>
     </section>
   </main>`;
@@ -1644,7 +1652,7 @@ function buildLinuxVps() {
     logoAlt: "Linux operating system logo",
     h1: "Linux VPS hosting with Root access and a distro you can confirm",
     intro: "You need a Linux server you can administer as root. That can be Ubuntu, Debian, CentOS, or another listed image. You also need a price you can verify before you pay.",
-    planHref: "/plans.html#linux-vps",
+    planHref: "/plans#linux-vps",
     planLabel: "Compare Linux VPS plans",
     contentHtml: "",
     landingHtml: linuxLandingHtml(),
@@ -1673,14 +1681,14 @@ function buildStatus() {
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [
     breadcrumbLd("Server Status", [
       { name: "Home", url: "__SRDP_BASE__/" },
-      { name: "Server Status", url: "__SRDP_BASE__/status.html" },
+      { name: "Server Status", url: "__SRDP_BASE__/status" },
     ]),
   ]}];
   return page({
     active: "status",
     title: "Server Status — StealthRDP",
     description: "Live StealthRDP service status, current availability, and 90-day uptime history for protected service components.",
-    canonical: "__SRDP_BASE__/status.html",
+    canonical: "__SRDP_BASE__/status",
     jsonLd,
     body,
   });
@@ -1707,7 +1715,7 @@ function buildBlog() {
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [
     breadcrumbLd("Blog", [
       { name: "Home", url: "__SRDP_BASE__/" },
-      { name: "Blog", url: "__SRDP_BASE__/blog.html" },
+      { name: "Blog", url: "__SRDP_BASE__/blog" },
     ]),
     { "@type": "ItemList", name: "StealthRDP Blog", itemListElement: BLOG.map((p, i) => ({ "@type": "ListItem", position: i + 1, item: { "@type": "BlogPosting", headline: p.title, datePublished: p.date, author: { "@type": "Organization", name: p.author || "StealthRDP Team" }, url: `__SRDP_BASE__/blog/${p.slug}.html` } })) },
   ]}];
@@ -1715,7 +1723,7 @@ function buildBlog() {
     active: "blog",
     title: "Blog — StealthRDP",
     description: "Expert insights, tutorials, and updates on remote desktop security, VPS management, and server infrastructure.",
-    canonical: "__SRDP_BASE__/blog.html",
+    canonical: "__SRDP_BASE__/blog",
     jsonLd,
     body,
   });
@@ -1755,26 +1763,26 @@ const ARTICLE_PLAN_LINKS = {
   "windows-vs-linux-vps-which-os-best-fits-your-business": [
     ["/windows-vps/", "Explore Windows VPS hosting"],
     ["/linux-vps/", "Explore Linux VPS hosting"],
-    ["/plans.html#windows-vps", "Compare Windows VPS plans"],
-    ["/plans.html#linux-vps", "Compare Linux VPS plans"],
+    ["/plans#windows-vps", "Compare Windows VPS plans"],
+    ["/plans#linux-vps", "Compare Linux VPS plans"],
   ],
   "5-ways-to-optimize-your-rdp-performance-for-remote-work": [
     ["/windows-vps/", "Explore Windows VPS hosting"],
-    ["/plans.html#windows-vps", "Compare Windows VPS plans"],
+    ["/plans#windows-vps", "Compare Windows VPS plans"],
   ],
   "8-signs-you-need-to-upgrade-your-vps-resources": [
     ["/windows-vps/", "Review Windows VPS resources"],
     ["/linux-vps/", "Review Linux VPS resources"],
-    ["/plans.html#comparison", "Compare VPS resources"],
+    ["/plans#comparison", "Compare VPS resources"],
   ],
   "common-vps-performance-bottlenecks": [
-    ["/plans.html#comparison", "Compare VPS resources"],
+    ["/plans#comparison", "Compare VPS resources"],
   ],
   "common-vps-hosting-issues-and-their-solutions": [
-    ["/plans.html#linux-vps", "Compare Linux VPS plans"],
+    ["/plans#linux-vps", "Compare Linux VPS plans"],
   ],
   "top-6-vps-management-tools-for-small-businesses": [
-    ["/plans.html#linux-vps", "Compare Linux VPS plans"],
+    ["/plans#linux-vps", "Compare Linux VPS plans"],
   ],
 };
 
@@ -1793,10 +1801,10 @@ function buildBlogPost(post) {
   const body = `
   <main class="docs-article-page blog-article-page"><div class="container"><div class="docs-article-layout">
     <article class="docs-article-column" id="blogPost">
-      <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blog.html">Blog</a><span aria-hidden="true">/</span><span>${esc(post.category)}</span></nav>
+      <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blog">Blog</a><span aria-hidden="true">/</span><span>${esc(post.category)}</span></nav>
       <header class="docs-article-header"><span class="docs-category">${esc(post.category)}</span><h1>${esc(post.title)}</h1><p class="docs-summary">${esc(post.excerpt || "")}</p><div class="docs-source-meta"><span>${esc(post.author)}</span><span>${esc(post.date)}</span></div></header>
       <div class="docs-content blog-article-body">${rendered.html || `<p>${esc(post.excerpt || "")}</p>`}${articlePlanLinksHtml(post)}</div>
-      <footer class="blog-article-footer"><a href="/blog.html">← Back to all articles</a><span class="blog-article-actions"><a class="btn btn-ghost btn-sm" href="/plans.html">View plans</a><a class="btn btn-primary btn-sm" href="https://dash.stealthrdp.com/submitticket.php">Ask support</a></span></footer>
+      <footer class="blog-article-footer"><a href="/blog">← Back to all articles</a><span class="blog-article-actions"><a class="btn btn-ghost btn-sm" href="/plans">View plans</a><a class="btn btn-primary btn-sm" href="https://dash.stealthrdp.com/submitticket.php">Ask support</a></span></footer>
     </article>
     ${toc}
   </div></div></main>`;
@@ -1804,7 +1812,7 @@ function buildBlogPost(post) {
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [
     breadcrumbLd(post.title, [
       { name: "Home", url: "__SRDP_BASE__/" },
-      { name: "Blog", url: "__SRDP_BASE__/blog.html" },
+      { name: "Blog", url: "__SRDP_BASE__/blog" },
       { name: post.title, url: `__SRDP_BASE__/blog/${post.slug}.html` },
     ]),
     articleLd(post),
@@ -1847,7 +1855,7 @@ function buildFaq() {
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [
     breadcrumbLd("FAQ", [
       { name: "Home", url: "__SRDP_BASE__/" },
-      { name: "FAQ", url: "__SRDP_BASE__/faq.html" },
+      { name: "FAQ", url: "__SRDP_BASE__/faq" },
     ]),
     faqLd(),
   ]}];
@@ -1855,7 +1863,7 @@ function buildFaq() {
     active: "faq",
     title: "FAQ — StealthRDP",
     description: "Frequently asked questions about StealthRDP VPS hosting: setup, operating systems, upgrades, refunds, and more.",
-    canonical: "__SRDP_BASE__/faq.html",
+    canonical: "__SRDP_BASE__/faq",
     jsonLd,
     body,
   });
@@ -1888,14 +1896,14 @@ function buildAbout() {
     ORG,
     breadcrumbLd("About", [
       { name: "Home", url: "__SRDP_BASE__/" },
-      { name: "About Us", url: "__SRDP_BASE__/about.html" },
+      { name: "About Us", url: "__SRDP_BASE__/about" },
     ]),
   ]}];
   return page({
     active: "about",
     title: "About Us — StealthRDP",
     description: "StealthRDP provides high-performance remote desktop and VPS infrastructure with 10,000+ orders worldwide.",
-    canonical: "__SRDP_BASE__/about.html",
+    canonical: "__SRDP_BASE__/about",
     jsonLd,
     body,
   });
@@ -1935,16 +1943,17 @@ function buildPrivacy() {
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [
     breadcrumbLd("Privacy Policy", [
       { name: "Home", url: "__SRDP_BASE__/" },
-      { name: "Privacy Policy", url: "__SRDP_BASE__/privacy.html" },
+      { name: "Privacy Policy", url: "__SRDP_BASE__/privacy" },
     ]),
   ]}];
   return page({
     active: "privacy",
     title: "Privacy Policy — StealthRDP",
     description: "StealthRDP privacy policy — how we collect, use, and protect your information.",
-    canonical: "__SRDP_BASE__/privacy.html",
+    canonical: "__SRDP_BASE__/privacy",
     jsonLd,
     body,
+    robots: "noindex, follow",
   });
 }
 
@@ -1973,7 +1982,7 @@ function buildRss() {
 <rss version="2.0">
   <channel>
     <title>StealthRDP Blog</title>
-    <link>__SRDP_BASE__/blog.html</link>
+    <link>__SRDP_BASE__/blog</link>
     <description>VPS, RDP, and server operations articles from StealthRDP.</description>
     <language>en</language>
 ${items}
@@ -1985,18 +1994,19 @@ ${items}
 function buildSitemap() {
   const staticRoutes = [
     ["/", "2026-08-31"],
-    ["/plans.html", "2026-08-31"],
+    ["/plans", "2026-08-31"],
     ["/windows-vps/", "2026-09-02"],
     ["/linux-vps/", "2026-09-02"],
-    ["/status.html", "2026-08-31"],
-    ["/blog.html", "2026-08-31"],
-    ["/faq.html", "2026-08-31"],
-    ["/about.html", "2026-08-31"],
-    ["/privacy.html", "2026-08-31"],
-    ["/docs.html", "2026-08-31"],
+    ["/status", "2026-08-31"],
+    ["/blog", "2026-08-31"],
+    ["/faq", "2026-08-31"],
+    ["/about", "2026-08-31"],
+    ["/docs", "2026-08-31"],
   ];
   const blogRoutes = BLOG.map((p) => [`/blog/${p.slug}.html`, p.date]);
-  const docRoutes = DOCS.map((article) => [`/docs/${article.slug}.html`, docDateIso(article.date) || "2026-08-13"]);
+  const docRoutes = DOCS
+    .filter((article) => !NOINDEX_DOC_SLUGS.has(docSlug(article)))
+    .map((article) => [`/docs/${docSlug(article)}`, docDateIso(article.date) || "2026-08-13"]);
   const urls = staticRoutes.concat(blogRoutes, docRoutes);
   const items = urls
     .map(([loc, lastmod]) => `  <url>\n    <loc>__SRDP_BASE__${loc}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>monthly</changefreq>\n  </url>`)
@@ -2009,6 +2019,7 @@ ${items}
 }
 
 /* ---------- write ---------- */
+fs.rmSync(path.join(ROOT, "docs"), { recursive: true, force: true });
 fs.mkdirSync(path.join(ROOT, "docs"), { recursive: true });
 const OUT = {
   "404.html": build404(),
@@ -2034,11 +2045,7 @@ for (const post of BLOG) {
   OUT[`blog/${post.slug}.html`] = buildBlogPost(post);
 }
 for (const [index, article] of DOCS.entries()) {
-  OUT[`docs/${article.slug}.html`] = buildDocArticle(article, index);
-}
-const windowsEvalArticle = DOCS.find((article) => article.slug === "1737944563-how-to-re_activate-and-extend-your-180_day-windows-trial");
-if (windowsEvalArticle) {
-  OUT[`docs/${windowsEvalArticle.slug.replace("how-to-", "how-to_")}.html`] = buildDocArticle(windowsEvalArticle, DOCS.indexOf(windowsEvalArticle));
+  OUT[`docs/${docSlug(article)}.html`] = buildDocArticle(article, index);
 }
 
 for (const [file, content] of Object.entries(OUT)) {

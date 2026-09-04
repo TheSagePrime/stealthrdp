@@ -15,6 +15,16 @@ const changedFiles = changedOnly
 const isChanged = (file) => !changedFiles || changedFiles.has(rel(file));
 const vercelConfig = JSON.parse(fs.readFileSync(path.join(ROOT, "vercel.json"), "utf8"));
 const redirectSources = new Set((vercelConfig.redirects || []).map((item) => item.source));
+const allowedNoindexFiles = new Set([
+  "404.html",
+  "privacy.html",
+  "docs/payment-terms.html",
+  "docs/use-of-service.html",
+  "docs/termination-of-service.html",
+  "docs/user-responsibilities.html",
+  "docs/how-to-reset-server-change-or-reset-client-area-password.html",
+  "docs/server-stops-randomly.html",
+]);
 const failures = [];
 const warn = [];
 const fail = (message) => failures.push(message);
@@ -77,7 +87,8 @@ for (const file of files) {
   if (!is404 && (!description || description.length < 70 || description.length > 170)) fail(`${name}: meta description length is ${description.length}`);
   if (!is404 && h1Count !== 1) fail(`${name}: expected one H1, found ${h1Count}`);
   if (!canonical || !canonical.startsWith("__SRDP_BASE__/") && canonical !== "__SRDP_BASE__/") fail(`${name}: invalid canonical ${canonical || "missing"}`);
-  if (!is404 && robots.includes("noindex")) fail(`${name}: indexable page has noindex`);
+  if (!allowedNoindexFiles.has(name) && robots.includes("noindex")) fail(`${name}: indexable page has noindex`);
+  if (allowedNoindexFiles.has(name) && !robots.includes("noindex")) fail(`${name}: expected noindex`);
   if (!is404 && schemas.length === 0) fail(`${name}: missing JSON-LD`);
   if (canonical) {
     const route = name === "index.html" ? "/" : `/${name}`;
@@ -116,7 +127,12 @@ if (!fs.existsSync(sitemap)) fail("sitemap.xml: missing");
 else {
   const locs = [...read(sitemap).matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
   if (new Set(locs).size !== locs.length) fail("sitemap.xml: duplicate loc values");
-  for (const loc of locs) if (!loc.startsWith("__SRDP_BASE__/")) fail(`sitemap.xml: non-canonical loc ${loc}`);
+  for (const loc of locs) {
+    if (!loc.startsWith("__SRDP_BASE__/")) fail(`sitemap.xml: non-canonical loc ${loc}`);
+    const route = loc.replace("__SRDP_BASE__", "");
+    if (redirectSources.has(route)) fail(`sitemap.xml: redirect source ${route}`);
+    if (/^\/docs\/\d{10}-|^\/docs\/[^?]*_|^\/(?:docs|blog|plans|status|faq|about|privacy)\.html$/.test(route)) fail(`sitemap.xml: legacy route ${route}`);
+  }
 }
 
 const robotsFile = path.join(ROOT, "robots.txt");

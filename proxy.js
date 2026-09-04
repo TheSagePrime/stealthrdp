@@ -47,7 +47,7 @@ function legacyRedirectFor(url) {
   if (url.pathname.startsWith("/dash/index.php/")) {
     const legacyPath = url.pathname.slice("/dash/index.php".length);
     const destination = legacyPath.startsWith("/knowledgebase")
-      ? "https://www.stealthrdp.com/docs.html"
+      ? "https://www.stealthrdp.com/docs"
       : legacyPath.startsWith("/user/password")
         ? "https://dash.stealthrdp.com/index.php?rp=/password/reset"
         : null;
@@ -63,11 +63,11 @@ function legacyRedirectFor(url) {
 
   const route = url.searchParams.get("rp") || "";
   const destination = route.startsWith("/store/")
-    ? "https://www.stealthrdp.com/plans.html"
+    ? "https://www.stealthrdp.com/plans"
     : route.startsWith("/announcements/")
-      ? "https://www.stealthrdp.com/blog.html"
+      ? "https://www.stealthrdp.com/blog"
       : route.startsWith("/knowledgebase/")
-        ? "https://www.stealthrdp.com/docs.html"
+        ? "https://www.stealthrdp.com/docs"
         : route.startsWith("/password/reset")
           ? "https://dash.stealthrdp.com/index.php?rp=/password/reset"
           : null;

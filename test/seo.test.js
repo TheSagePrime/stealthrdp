@@ -17,6 +17,7 @@ const pricing = require(path.join(ROOT, "js", "pricing.js"));
 const { APPROVED_INDEXABLE_COMMERCIAL_PAGES, checkAiDiscovery } = require(path.join(ROOT, "lib", "ai-discovery.js"));
 const OS_ROUTES = ["windows-vps/index.html", "linux-vps/index.html"];
 const BING_VERIFICATION_TAG = '<meta name="msvalidate.01" content="BC1193DFC35353EA0CED70B0E5F25F09" />';
+const cleanDocSlug = (slug) => slug.replace(/^\d+-/, "").replaceAll("_", "-").toLowerCase();
 
 const ROUTES = [
   "index.html",
@@ -29,8 +30,26 @@ const ROUTES = [
   "privacy.html",
   ...BLOG.map((p) => `blog/${p.slug}.html`),
   "docs.html",
-  ...DOCS.map((p) => `docs/${p.slug}.html`),
+  ...DOCS.map((p) => `docs/${cleanDocSlug(p.slug)}.html`),
 ];
+const NOINDEX_ROUTES = new Set([
+  "privacy.html",
+  "docs/payment-terms.html",
+  "docs/use-of-service.html",
+  "docs/termination-of-service.html",
+  "docs/user-responsibilities.html",
+  "docs/how-to-reset-server-change-or-reset-client-area-password.html",
+  "docs/server-stops-randomly.html",
+]);
+const INDEXABLE_ROUTES = ROUTES.filter((route) => !NOINDEX_ROUTES.has(route));
+
+function canonicalRoute(route) {
+  if (route === "index.html") return "";
+  if (route.endsWith("/index.html")) return route.slice(0, -"index.html".length);
+  if (/^(?:docs|blog|plans|status|faq|about|privacy)\.html$/.test(route)) return route.replace(/\.html$/, "");
+  if (route.startsWith("docs/") && route.endsWith(".html")) return route.slice(0, -5);
+  return route;
+}
 
 function parse(html) {
   const title = (html.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || "";
@@ -110,14 +129,10 @@ test("sitemap.xml is valid XML with all routes; robots.txt allows + references i
   assert.ok(sitemap.startsWith("<?xml"), "sitemap XML declaration");
   assert.ok(sitemap.includes("<urlset"), "sitemap urlset");
   const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-  assert.strictEqual(locs.length, ROUTES.length, `sitemap has ${ROUTES.length} URLs`);
+  assert.strictEqual(locs.length, INDEXABLE_ROUTES.length, `sitemap has ${INDEXABLE_ROUTES.length} URLs`);
   for (const loc of locs) assert.ok(loc.startsWith("__SRDP_BASE__/"), `sitemap absolute loc ${loc}`);
-  for (const route of ROUTES) {
-    const sitemapRoute = route === "index.html"
-      ? ""
-      : route.endsWith("/index.html")
-        ? route.slice(0, -"index.html".length)
-        : route;
+  for (const route of INDEXABLE_ROUTES) {
+    const sitemapRoute = canonicalRoute(route);
     const wanted = `__SRDP_BASE__/${sitemapRoute}`;
     assert.ok(locs.includes(wanted), `sitemap includes ${wanted}`);
   }
@@ -146,8 +161,8 @@ test("sitemap.xml is valid XML with all routes; robots.txt allows + references i
 test("AI-readable guide exists and source templates stay free of raw infrastructure IPs", () => {
   const llms = fs.readFileSync(path.join(ROOT, "llms.txt"), "utf8");
   assert.ok(llms.startsWith("# StealthRDP"), "llms.txt heading");
-  assert.ok(llms.includes("__SRDP_BASE__/plans.html"), "llms.txt links to plans");
-  assert.ok(llms.includes("__SRDP_BASE__/faq.html"), "llms.txt links to FAQ");
+  assert.ok(llms.includes("__SRDP_BASE__/plans"), "llms.txt links to plans");
+  assert.ok(llms.includes("__SRDP_BASE__/faq"), "llms.txt links to FAQ");
   assert.ok(llms.includes("10,000+ orders processed"), "llms.txt matches homepage order proof");
   assert.ok(!llms.includes("10,877"), "llms.txt has no old customer count");
   assert.ok(!llms.includes("25,000+ servers"), "llms.txt has no server-count claim");
@@ -165,8 +180,8 @@ test("AI discovery gate covers every approved commercial page", () => {
   for (const page of APPROVED_INDEXABLE_COMMERCIAL_PAGES) {
     assert.match(llms, new RegExp(`__SRDP_BASE__${page.path.replaceAll("/", "\\/")}`), `${page.label}: llms entry`);
   }
-  assert.match(llms, /Windows VPS hosting].*plans\.html#windows-vps.*dash\.stealthrdp\.com\/index\.php\?rp=\/store\/standard-usa-rdp-vps/);
-  assert.match(llms, /Linux VPS hosting].*plans\.html#linux-vps.*dash\.stealthrdp\.com\/index\.php\?rp=\/store\/standard-usa-rdp-vps/);
+  assert.match(llms, /Windows VPS hosting].*plans#windows-vps.*dash\.stealthrdp\.com\/index\.php\?rp=\/store\/standard-usa-rdp-vps/);
+  assert.match(llms, /Linux VPS hosting].*plans#linux-vps.*dash\.stealthrdp\.com\/index\.php\?rp=\/store\/standard-usa-rdp-vps/);
   assert.match(robots, /# AI guide: __SRDP_BASE__\/llms\.txt/);
 
   const withoutWindows = llms.replace(/^- \[Windows VPS hosting\].*\n/m, "");
@@ -202,7 +217,7 @@ test("baked content is present in raw HTML (plans, faq, status, blog)", () => {
     assert.ok(!article.includes("app.seobotai.com/banner"), `${post.slug}: no seobot banner`);
     assert.ok(article.includes("docs-content"), `${post.slug}: uses structured article layout`);
     assert.ok(article.includes("docs-toc"), `${post.slug}: has on-this-page TOC`);
-    assert.ok(article.includes('href="/plans.html"'), `${post.slug}: links to plans`);
+    assert.ok(article.includes('href="/plans"'), `${post.slug}: links to plans`);
     assert.ok((article.match(/<h2 /g) || []).length >= 2, `${post.slug}: has section headings`);
     assert.ok(article.length > 8000, `${post.slug}: full body baked (${article.length})`);
   }
@@ -227,9 +242,9 @@ test("VPS SEO hub keeps OS anchors, selector, internal links, and checkout paths
   assert.match(plans, /id="linux-vps"/);
   assert.match(plans, /id="comparison"/);
   assert.match(home, /id="osSelect"[\s\S]*value="windows"[\s\S]*value="linux"/);
-  assert.match(home, /href="\/plans\.html#windows-vps">Windows VPS<\/a>/);
-  assert.match(home, /href="\/plans\.html#linux-vps">Linux VPS<\/a>/);
-  assert.match(home, /href="\/plans\.html#comparison">Compare VPS resources<\/a>/);
+  assert.match(home, /href="\/plans#windows-vps">Windows VPS<\/a>/);
+  assert.match(home, /href="\/plans#linux-vps">Linux VPS<\/a>/);
+  assert.match(home, /href="\/plans#comparison">Compare VPS resources<\/a>/);
 
   const checkoutPaths = [
     "standard-usa-rdp-vps/bronze-usa2",
@@ -249,11 +264,11 @@ test("VPS SEO hub keeps OS anchors, selector, internal links, and checkout paths
     assert.match(plans, new RegExp(`https://dash\\.stealthrdp\\.com/index\\.php\\?rp=/store/${escapedPath}&billingcycle=monthly`), `${checkoutPath}: shared WHMCS path`);
   }
 
-  assert.match(HTML("blog/windows-vs-linux-vps-which-os-best-fits-your-business.html"), /href="\/plans\.html#windows-vps"/);
-  assert.match(HTML("blog/windows-vs-linux-vps-which-os-best-fits-your-business.html"), /href="\/plans\.html#linux-vps"/);
-  assert.match(HTML("blog/5-ways-to-optimize-your-rdp-performance-for-remote-work.html"), /href="\/plans\.html#windows-vps"/);
-  assert.match(HTML("blog/8-signs-you-need-to-upgrade-your-vps-resources.html"), /href="\/plans\.html#comparison"/);
-  assert.match(HTML("blog/common-vps-hosting-issues-and-their-solutions.html"), /href="\/plans\.html#linux-vps"/);
+  assert.match(HTML("blog/windows-vs-linux-vps-which-os-best-fits-your-business.html"), /href="\/plans#windows-vps"/);
+  assert.match(HTML("blog/windows-vs-linux-vps-which-os-best-fits-your-business.html"), /href="\/plans#linux-vps"/);
+  assert.match(HTML("blog/5-ways-to-optimize-your-rdp-performance-for-remote-work.html"), /href="\/plans#windows-vps"/);
+  assert.match(HTML("blog/8-signs-you-need-to-upgrade-your-vps-resources.html"), /href="\/plans#comparison"/);
+  assert.match(HTML("blog/common-vps-hosting-issues-and-their-solutions.html"), /href="\/plans#linux-vps"/);
 });
 
 test("OS landing pages have separate commercial intent, page schema, and checkout", () => {
@@ -269,10 +284,10 @@ test("OS landing pages have separate commercial intent, page schema, and checkou
   assert.strictEqual((linux.match(/<h1[\s>]/g) || []).length, 1);
   assert.match(windows, /windows-vps\/.*Windows VPS|Windows VPS.*windows-vps\//s);
   assert.match(linux, /linux-vps\/.*Linux VPS|Linux VPS.*linux-vps\//s);
-  assert.match(windows, /href="\/plans\.html#windows-vps"/);
-  assert.match(linux, /href="\/plans\.html#linux-vps"/);
-  assert.match(windows, /href="\/plans\.html#comparison"/);
-  assert.match(linux, /href="\/plans\.html#comparison"/);
+  assert.match(windows, /href="\/plans#windows-vps"/);
+  assert.match(linux, /href="\/plans#linux-vps"/);
+  assert.match(windows, /href="\/plans#comparison"/);
+  assert.match(linux, /href="\/plans#comparison"/);
   assert.match(windows, /alt="Windows operating system logo"/);
   assert.match(linux, /alt="Linux operating system logo"/);
   for (const html of [windows, linux]) {

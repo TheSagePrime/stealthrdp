@@ -10,7 +10,8 @@ const url = new URL(target);
 const failures = [];
 const fail = (message) => failures.push(message);
 const fetchText = async (value) => {
-  const response = await fetch(value, { redirect: "manual" });
+  const headers = process.env.SEO_CHECK_HOST ? { "X-Forwarded-Host": process.env.SEO_CHECK_HOST } : undefined;
+  const response = await fetch(value, { redirect: "manual", headers });
   return { response, text: await response.text() };
 };
 

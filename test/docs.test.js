@@ -8,9 +8,11 @@ const path = require("path");
 const ROOT = path.join(__dirname, "..");
 const HTML = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 const DOCS = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "docs-articles.json"), "utf8"));
+const cleanSlug = (slug) => slug.replace(/^\d+-/, "").replaceAll("_", "-").toLowerCase();
+const docFile = (article) => `docs/${cleanSlug(article.slug)}.html`;
 const publicRoutes = [
   "index.html", "plans.html", "windows-vps/index.html", "linux-vps/index.html", "status.html", "blog.html", "faq.html", "about.html", "privacy.html", "docs.html",
-  ...DOCS.map((article) => `docs/${article.slug}.html`),
+  ...DOCS.map(docFile),
   ...fs.readdirSync(path.join(ROOT, "blog")).map((file) => `blog/${file}`),
 ];
 
@@ -22,13 +24,13 @@ test("docs index is crawlable and includes every verified article", () => {
   assert.match(html, /data-docs-index/);
   for (const article of DOCS) {
     assert.ok(html.includes(article.title), `${article.slug}: title is baked into docs index`);
-    assert.ok(html.includes(`/docs/${article.slug}.html`), `${article.slug}: native route is linked`);
+    assert.ok(html.includes(`/docs/${cleanSlug(article.slug)}`), `${article.slug}: clean native route is linked`);
   }
 });
 
 test("every native article has metadata, breadcrumbs, readable content, and support", () => {
   for (const article of DOCS) {
-    const html = HTML(`docs/${article.slug}.html`);
+    const html = HTML(docFile(article));
     assert.match(html, /<main[^>]+class="docs-article-page/);
     assert.strictEqual((html.match(/<h1[\s>]/g) || []).length, 1, `${article.slug}: one H1`);
     assert.match(html, /data-docs-category="[^"]+"/);
@@ -42,7 +44,7 @@ test("every native article has metadata, breadcrumbs, readable content, and supp
 });
 
 test("docs renderer keeps commands in copyable code blocks and replaces legacy internal links", () => {
-  const html = DOCS.map((article) => HTML(`docs/${article.slug}.html`)).join("\n");
+  const html = DOCS.map((article) => HTML(docFile(article))).join("\n");
   assert.match(html, /class="docs-code"/);
   assert.match(html, /class="docs-copy"[^>]+data-copy-target/);
   assert.match(html, /slmgr -rearm|systemctl|apt-get|winrm/i);
@@ -102,18 +104,15 @@ test("status rows keep the page simple and responsive", () => {
 });
 
 test("Windows ordered steps stay in one list across source blank lines", () => {
-  const html = HTML("docs/1737944563-how-to-re_activate-and-extend-your-180_day-windows-trial.html");
+  const html = HTML("docs/how-to-re-activate-and-extend-your-180-day-windows-trial.html");
   const content = html.match(/<div class="docs-content">([\s\S]*?)<\/div><div class="docs-support">/);
   assert.ok(content, "Windows article content is present");
   assert.match(content[1], /<ol><li>Press[\s\S]*?<\/li><li>Select[\s\S]*?<\/li><\/ol>/);
   assert.doesNotMatch(content[1], /<\/ol>\s*<ol>/);
 });
 
-test("Windows evaluation article clarifies rearm vs activation and keeps the slug", () => {
-  const html = HTML("docs/1737944563-how-to-re_activate-and-extend-your-180_day-windows-trial.html");
-  const alias = HTML("docs/1737944563-how-to_re_activate-and-extend-your-180_day-windows-trial.html");
-  assert.match(alias, /<h1>How to Extend the Windows Server 180-Day Evaluation Period<\/h1>/);
-  assert.match(alias, /Windows Server Evaluation Notice/);
+test("Windows evaluation article clarifies rearm vs activation on the clean route", () => {
+  const html = HTML("docs/how-to-re-activate-and-extend-your-180-day-windows-trial.html");
   assert.match(html, /<h1>How to Extend the Windows Server 180-Day Evaluation Period<\/h1><aside class="docs-warning">/);
   assert.match(html, /class="docs-warning"/);
   assert.match(html, /Windows Server Evaluation Notice/);
@@ -123,8 +122,9 @@ test("Windows evaluation article clarifies rearm vs activation and keeps the slu
   assert.match(html, /<code>slmgr -ato<\/code>/);
   assert.match(html, /does not convert an Evaluation edition into a licensed production edition/);
   assert.match(html, /This step is not part of extending the evaluation period/);
-  assert.match(html, /canonical" href="__SRDP_BASE__\/docs\/1737944563-how-to-re_activate-and-extend-your-180_day-windows-trial.html"/);
-  assert.doesNotMatch(html, /Re-activate|Re-Activate|permanently activat|indefinitely|Microsoft-approved for commercial|this makes the setup legal/i);
+  assert.match(html, /canonical" href="__SRDP_BASE__\/docs\/how-to-re-activate-and-extend-your-180-day-windows-trial"/);
+  const visible = html.match(/<main[\s\S]*?<\/main>/)?.[0] || html;
+  assert.doesNotMatch(visible, />\s*Re-activate|>\s*Re-Activate|permanently activat|indefinitely|Microsoft-approved for commercial|this makes the setup legal/i);
 });
 
 test("the docs artifact is source-labelled and sanitised before rendering", () => {
@@ -142,8 +142,8 @@ test("the docs artifact is source-labelled and sanitised before rendering", () =
 test("native documentation is present in shared navigation and terms links", () => {
   for (const route of publicRoutes) {
     const html = HTML(route);
-    assert.match(html, /href="\/docs\.html"[^>]*>Documentation|href="\/docs\.html"[^>]*>Docs/);
-    assert.match(html, /href="\/docs\/1737944013-use-of-service\.html"[^>]*>Terms/);
+    assert.match(html, /href="\/docs"[^>]*>Documentation|href="\/docs"[^>]*>Docs/);
+    assert.match(html, /href="\/docs\/use-of-service"[^>]*>Terms/);
   }
 });
 

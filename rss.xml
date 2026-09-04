@@ -2,7 +2,7 @@
 <rss version="2.0">
   <channel>
     <title>StealthRDP Blog</title>
-    <link>__SRDP_BASE__/blog.html</link>
+    <link>__SRDP_BASE__/blog</link>
     <description>VPS, RDP, and server operations articles from StealthRDP.</description>
     <language>en</language>
     <item>

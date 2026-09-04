@@ -39,7 +39,7 @@ test("custom 404 page gives users and agents recovery links", () => {
   assert.match(html, /href="\/"[^>]*>Return home<\/a>/);
   assert.match(html, /href="\/sitemap\.xml"[^>]*>View sitemap<\/a>/);
   assert.match(html, /href="\/llms\.txt"[^>]*>Agent guide<\/a>/);
-  assert.match(html, /href="\/docs\.html"[^>]*>Open documentation<\/a>/);
+  assert.match(html, /href="\/docs"[^>]*>Open documentation<\/a>/);
 });
 
 test("server-status legacy route redirects to the current status page", () => {
@@ -47,7 +47,7 @@ test("server-status legacy route redirects to the current status page", () => {
   const redirect = config.redirects.find((item) => item.source === "/server-status");
   assert.deepEqual(redirect, {
     source: "/server-status",
-    destination: "/status.html",
+    destination: "/status",
     permanent: true,
   });
 });
