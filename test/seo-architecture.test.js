@@ -86,6 +86,22 @@ test("permanent redirects are direct and cannot form loops or chains", () => {
   }
 });
 
+test("Vercel keeps clean routes on explicit rewrites, not cleanUrls normalization", () => {
+  assert.equal(vercel.cleanUrls, undefined, "custom legacy redirects must run before clean route rewrites");
+  const rewrites = new Map((vercel.rewrites || []).map((item) => [item.source, item.destination]));
+  for (const route of ["docs", "blog", "plans", "status", "faq", "about", "privacy"]) {
+    assert.equal(rewrites.get(`/${route}`), `/${route}.html`, `${route}: clean route rewrite`);
+  }
+  assert.equal(rewrites.get("/docs/:slug"), "/docs/:slug.html", "docs articles: clean route rewrite");
+  for (const [, clean] of docsMappings) {
+    assert.deepEqual(redirects.find((item) => item.source === `/docs/${clean}.html`), {
+      source: `/docs/${clean}.html`,
+      destination: `/docs/${clean}`,
+      permanent: true,
+    });
+  }
+});
+
 test("root routes use extensionless canonicals and html redirects", () => {
   const roots = ["docs", "blog", "plans", "status", "faq", "about", "privacy"];
   for (const route of roots) {

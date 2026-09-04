@@ -11,6 +11,7 @@ const docs = JSON.parse(fs.readFileSync(path.join(ROOT, "data/docs-articles.json
 const vercel = JSON.parse(fs.readFileSync(path.join(ROOT, "vercel.json"), "utf8"));
 const cleanSlug = (slug) => slug.replace(/^\d+-/, "").replaceAll("_", "-").toLowerCase();
 const cleanDocs = docs.map((article) => `/docs/${cleanSlug(article.slug)}`);
+const cleanDocsHtml = cleanDocs.map((route) => `${route}.html`);
 const oldDocs = docs.map((article) => `/docs/${article.slug}.html`);
 const malformedLegacy = "/docs/1737944563-how-to_re_activate-and-extend-your-180_day-windows-trial.html";
 const rootRoutes = ["/", "/docs", "/blog", "/plans", "/status", "/faq", "/about", "/privacy"];
@@ -89,6 +90,13 @@ const malformedResult = await request(malformedLegacy);
 if (malformedResult.response.status !== 308) failures.push(`${malformedLegacy}: expected 308, got ${malformedResult.response.status}`);
 if (malformedResult.response.headers.get("location") !== "/docs/how-to-re-activate-and-extend-your-180-day-windows-trial") failures.push(`${malformedLegacy}: wrong destination`);
 
+for (const route of cleanDocsHtml) {
+  const result = await request(route);
+  const expected = route.slice(0, -5);
+  if (result.response.status !== 308) failures.push(`${route}: expected 308, got ${result.response.status}`);
+  if (result.response.headers.get("location") !== expected) failures.push(`${route}: expected ${expected}, got ${result.response.headers.get("location")}`);
+}
+
 for (const route of ["docs", "blog", "plans", "status", "faq", "about", "privacy"]) {
   const result = await request(`/${route}.html`);
   if (result.response.status !== 308) failures.push(`/${route}.html: expected 308, got ${result.response.status}`);
@@ -118,6 +126,7 @@ const report = {
   osRoutesCrawled: osRoutes.length,
   cleanDocsCrawled: cleanDocs.length,
   oldDocsRedirectsCrawled: oldDocs.length + 1,
+  cleanDocsHtmlRedirectsCrawled: cleanDocsHtml.length,
   sitemapUrlCount: sitemapRoutes.length,
   sitemapHttpStatusCounts: sitemapStatusCounts,
   redirectSourceCount: redirectsBySource.size,

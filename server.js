@@ -91,6 +91,9 @@ LEGACY_DOC_REDIRECTS.set(
   "/docs/1737944563-how-to_re_activate-and-extend-your-180_day-windows-trial.html",
   "/docs/how-to-re-activate-and-extend-your-180-day-windows-trial",
 );
+for (const [clean] of DOC_ROUTE_FILES) {
+  LEGACY_DOC_REDIRECTS.set(`${clean}.html`, clean);
+}
 const ROOT_PAGE_FILES = new Map([
   ["/docs", "/docs.html"],
   ["/blog", "/blog.html"],
