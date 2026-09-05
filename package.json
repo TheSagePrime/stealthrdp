@@ -5,8 +5,9 @@
   "description": "StealthRDP v2 — Stealth Control Room marketing site (static, SEO-prerendered)",
   "type": "commonjs",
   "scripts": {
-    "build": "node build.mjs",
-    "vercel-build": "node build.mjs && node scripts/bake-base.mjs && node scripts/build-markdown.mjs && node scripts/stage-vercel-public.mjs",
+    "gate": "node scripts/seo-gates.mjs",
+    "build": "npm run gate && node build.mjs",
+    "vercel-build": "npm run gate && node build.mjs && node scripts/bake-base.mjs && node scripts/build-markdown.mjs && node scripts/stage-vercel-public.mjs",
     "test": "node --test test/*.test.js",
     "start": "node server.js",
     "check": "node --test test/*.test.js",
