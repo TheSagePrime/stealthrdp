@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "owners": {
+    "research": "Senku",
+    "implementation": "Suho"
+  },
+  "researchSource": "OpenSEO/DataForSEO",
+  "rules": {
+    "onePrimaryKeywordPerIndexableCommercialPage": true,
+    "doNotInventMetrics": true,
+    "doNotPublishUntilIntentIsMapped": true,
+    "recheckAfterMeaningfulSerpChange": true
+  },
+  "pages": [
+    {
+      "path": "/",
+      "pageRole": "brand and broad product entry",
+      "primaryKeyword": null,
+      "secondaryKeywords": [],
+      "searchIntent": null,
+      "country": null,
+      "language": "en",
+      "status": "research-needed",
+      "evidenceUpdatedAt": null
+    },
+    {
+      "path": "/plans",
+      "pageRole": "VPS plan comparison hub",
+      "primaryKeyword": null,
+      "secondaryKeywords": [],
+      "searchIntent": null,
+      "country": null,
+      "language": "en",
+      "status": "research-needed",
+      "evidenceUpdatedAt": null
+    },
+    {
+      "path": "/windows-vps/",
+      "pageRole": "Windows VPS commercial landing page",
+      "primaryKeyword": null,
+      "secondaryKeywords": [],
+      "searchIntent": null,
+      "country": null,
+      "language": "en",
+      "status": "research-needed",
+      "evidenceUpdatedAt": null
+    },
+    {
+      "path": "/linux-vps/",
+      "pageRole": "Linux VPS commercial landing page",
+      "primaryKeyword": null,
+      "secondaryKeywords": [],
+      "searchIntent": null,
+      "country": null,
+      "language": "en",
+      "status": "research-needed",
+      "evidenceUpdatedAt": null
+    }
+  ],
+  "contentPageTemplate": {
+    "path": null,
+    "pageRole": "supporting content",
+    "primaryKeyword": null,
+    "secondaryKeywords": [],
+    "searchIntent": null,
+    "country": null,
+    "language": "en",
+    "status": "research-needed",
+    "evidenceUpdatedAt": null
+  },
+  "requiredResearchFields": [
+    "primaryKeyword",
+    "secondaryKeywords",
+    "searchIntent",
+    "country",
+    "language",
+    "evidenceUpdatedAt"
+  ]
+}
