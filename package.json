@@ -6,14 +6,16 @@
   "type": "commonjs",
   "scripts": {
     "gate": "node scripts/seo-gates.mjs",
-    "build": "npm run gate && node build.mjs",
-    "vercel-build": "npm run gate && node build.mjs && node scripts/bake-base.mjs && node scripts/build-markdown.mjs && node scripts/stage-vercel-public.mjs",
+    "seo:post-build": "node scripts/seo-post-build.mjs",
+    "build": "npm run gate && node build.mjs && npm run gate",
+    "vercel-build": "npm run gate && node build.mjs && npm run gate && node scripts/bake-base.mjs && node scripts/build-markdown.mjs && node scripts/stage-vercel-public.mjs && npm run seo:post-build",
     "test": "node --test test/*.test.js",
     "start": "node server.js",
     "check": "node --test test/*.test.js",
     "seo:check": "SEO_CHANGED_ONLY=1 node scripts/seo-gates.mjs",
     "preview:check": "node scripts/check-preview.mjs",
-    "live:check": "node scripts/check-live.mjs"
+    "live:check": "node scripts/check-live.mjs",
+    "docs:migration-check": "node scripts/check-docs-migration.mjs"
   },
   "engines": {
     "node": ">=20"
