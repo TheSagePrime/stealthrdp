@@ -76,8 +76,32 @@ jobs:
           uploadArtifacts: true
           temporaryPublicStorage: false
 
+  production-deploy:
+    name: Automatic production SEO and performance verification
+    if: ${{ github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.event.deployment_status.environment_url != '' && (contains(github.event.deployment.environment, 'Production') || contains(github.event.deployment.environment, 'production')) }}
+    runs-on: ubuntu-latest
+    env:
+      LIVE_URL: ${{ github.event.deployment_status.environment_url }}
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Verify published production URL
+        run: node scripts/check-live.mjs "$LIVE_URL"
+      - name: Run Lighthouse performance checks
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: ${{ env.LIVE_URL }}
+          configPath: ./lighthouserc.json
+          runs: 3
+          uploadArtifacts: true
+          temporaryPublicStorage: false
+
   live:
-    name: Published SEO and performance verification
+    name: Manual published SEO and performance verification
     if: ${{ github.event_name == 'workflow_dispatch' && inputs.live_url != '' }}
     runs-on: ubuntu-latest
     env:
