@@ -6,8 +6,9 @@
   "targetHubPath": "/docs",
   "sourceArticlePattern": "/hc/stealth-rdp-docs/articles/{legacySlug}",
   "targetArticlePattern": "/docs/{cleanSlug}",
-  "requiredRedirectStatus": [301, 308],
-  "status": "external-redirect-required",
-  "externalRequirement": "Redirect the old docs host at its hosting/edge layer. Hub/category-style legacy URLs should consolidate to /docs. Article URLs must redirect directly to their matching clean /docs/{slug} URL without chains.",
-  "note": "This repository controls the new /docs routes but cannot issue redirects for requests that still terminate on docs.stealthrdp.com. Run npm run docs:migration-check after the old host routing is changed."
+  "acceptedInactiveStatus": [404, 410],
+  "acceptedRedirectStatus": [301, 308],
+  "status": "inactive-legacy-host",
+  "requirement": "The retired docs host must not serve competing indexable documentation. Unreachable, 404, 410, or a direct 301/308 to the matching new /docs URL are acceptable. A direct redirect is preferred only when preserving old backlinks or indexed URL equity matters.",
+  "note": "The old docs subdomain is retired. This repository owns the replacement /docs routes. Run npm run docs:migration-check when you want to verify that the retired host has not started serving duplicate content again."
 }
