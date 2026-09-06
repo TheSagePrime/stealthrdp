@@ -18,7 +18,7 @@ on:
         required: false
         type: string
       check_docs_migration:
-        description: "Verify docs.stealthrdp.com redirects to www.stealthrdp.com/docs"
+        description: "Verify retired docs.stealthrdp.com is unreachable, 404/410, or safely redirected"
         required: false
         default: false
         type: boolean
@@ -154,7 +154,7 @@ jobs:
           temporaryPublicStorage: false
 
   docs-migration:
-    name: Legacy docs migration verification
+    name: Legacy docs host safety verification
     if: ${{ github.event_name == 'workflow_dispatch' && inputs.check_docs_migration }}
     runs-on: ubuntu-latest
     steps:
@@ -164,5 +164,5 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Verify legacy docs redirects
+      - name: Verify retired docs host is not serving duplicate content
         run: npm run docs:migration-check
