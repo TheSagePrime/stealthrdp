@@ -11,9 +11,7 @@ const allowedStatus = new Set(contract.requiredRedirectStatus || [301, 308]);
 const cleanSlug = (slug) => slug.replace(/^\d+-/, "").replaceAll("_", "-").toLowerCase();
 const failures = [];
 
-for (const article of docs) {
-  const sourcePath = contract.sourceArticlePattern.replace("{legacySlug}", article.slug);
-  const targetPath = contract.targetArticlePattern.replace("{cleanSlug}", cleanSlug(article.slug));
+async function verifyRedirect(sourcePath, targetPath) {
   const sourceUrl = new URL(sourcePath, `${sourceOrigin}/`);
   const expectedUrl = new URL(targetPath, `${targetOrigin}/`).href;
 
@@ -22,22 +20,30 @@ for (const article of docs) {
     response = await fetch(sourceUrl, { redirect: "manual" });
   } catch (error) {
     failures.push(`${sourceUrl.href}: request failed (${error.message})`);
-    continue;
+    return;
   }
 
   if (!allowedStatus.has(response.status)) {
     failures.push(`${sourceUrl.href}: expected 301/308, received ${response.status}`);
-    continue;
+    return;
   }
 
   const location = response.headers.get("location");
   if (!location) {
     failures.push(`${sourceUrl.href}: redirect missing Location header`);
-    continue;
+    return;
   }
 
   const actualUrl = new URL(location, sourceUrl).href;
   if (actualUrl !== expectedUrl) failures.push(`${sourceUrl.href}: redirects to ${actualUrl}, expected ${expectedUrl}`);
+}
+
+await verifyRedirect(contract.sourceHubPath, contract.targetHubPath);
+
+for (const article of docs) {
+  const sourcePath = contract.sourceArticlePattern.replace("{legacySlug}", article.slug);
+  const targetPath = contract.targetArticlePattern.replace("{cleanSlug}", cleanSlug(article.slug));
+  await verifyRedirect(sourcePath, targetPath);
 }
 
 if (failures.length) {
@@ -46,4 +52,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Docs migration passed for ${docs.length} legacy article URLs.`);
+console.log(`Docs migration passed for the legacy hub and ${docs.length} legacy article URLs.`);
