@@ -1,0 +1,1 @@
+Technical SEO is enforced before build, after final staging, and after deployment. See TECHNICAL-SEO-STATUS.md for current scope.
