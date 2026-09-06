@@ -14,13 +14,18 @@ await import("./seo-gates.mjs");
 const failures = [];
 const fail = (message) => failures.push(message);
 const cleanRootRoutes = new Set(["docs", "blog", "plans", "status", "faq", "about", "privacy"]);
+const nonRouteDirectories = new Set(["data", "assets", "css", "js", "fonts", ".well-known"]);
 
 function htmlFiles(dir = PUBLIC) {
   const out = [];
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) out.push(...htmlFiles(full));
-    else if (entry.isFile() && entry.name.endsWith(".html")) out.push(full);
+    if (entry.isDirectory()) {
+      if (nonRouteDirectories.has(entry.name)) continue;
+      out.push(...htmlFiles(full));
+    } else if (entry.isFile() && entry.name.endsWith(".html")) {
+      out.push(full);
+    }
   }
   return out;
 }
