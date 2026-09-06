@@ -1,1 +1,0 @@
-Temporary review note: validate final artifact, deployment crawls, performance checks, docs migration contract, and keyword ownership before merge.
