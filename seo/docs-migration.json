@@ -1,10 +1,13 @@
 {
   "version": 1,
   "sourceOrigin": "https://docs.stealthrdp.com",
-  "sourceArticlePattern": "/hc/stealth-rdp-docs/articles/{legacySlug}",
+  "sourceHubPath": "/hc/stealth-rdp-docs/en",
   "targetOrigin": "https://www.stealthrdp.com",
+  "targetHubPath": "/docs",
+  "sourceArticlePattern": "/hc/stealth-rdp-docs/articles/{legacySlug}",
   "targetArticlePattern": "/docs/{cleanSlug}",
   "requiredRedirectStatus": [301, 308],
   "status": "external-redirect-required",
-  "note": "This repository controls the new /docs routes. The old docs.stealthrdp.com host must redirect at its own hosting, DNS, or edge layer. Run npm run docs:migration-check after that external redirect is configured."
+  "externalRequirement": "Redirect the old docs host at its hosting/edge layer. Hub/category-style legacy URLs should consolidate to /docs. Article URLs must redirect directly to their matching clean /docs/{slug} URL without chains.",
+  "note": "This repository controls the new /docs routes but cannot issue redirects for requests that still terminate on docs.stealthrdp.com. Run npm run docs:migration-check after the old host routing is changed."
 }
