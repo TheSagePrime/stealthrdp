@@ -4,6 +4,9 @@ on:
   pull_request:
   push:
     branches: [main]
+  deployment_status:
+  schedule:
+    - cron: "17 3 * * 1"
   workflow_dispatch:
     inputs:
       preview_url:
@@ -14,6 +17,11 @@ on:
         description: "Published live URL to verify"
         required: false
         type: string
+      check_docs_migration:
+        description: "Verify docs.stealthrdp.com redirects to www.stealthrdp.com/docs"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -21,6 +29,7 @@ permissions:
 jobs:
   pre-pr:
     name: Pre-PR SEO and build checks
+    if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out source
@@ -38,14 +47,17 @@ jobs:
         run: npm test
       - name: Run strict SEO and AI-discovery gates
         run: npm run seo:check
-      - name: Build site
-        run: npm run build
+      - name: Build deployable artifact and validate final output
+        env:
+          SRDP_BASE: https://www.stealthrdp.com
+        run: npm run vercel-build
 
   preview:
-    name: Preview SEO crawl
-    if: ${{ github.event_name == 'workflow_dispatch' && inputs.preview_url != '' }}
+    name: Automatic preview SEO and performance crawl
+    if: ${{ (github.event_name == 'workflow_dispatch' && inputs.preview_url != '') || (github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.event.deployment_status.environment_url != '' && (contains(github.event.deployment.environment, 'Preview') || contains(github.event.deployment.environment, 'preview'))) }}
     runs-on: ubuntu-latest
-    needs: pre-pr
+    env:
+      PREVIEW_URL: ${{ github.event_name == 'deployment_status' && github.event.deployment_status.environment_url || inputs.preview_url }}
     steps:
       - name: Check out source
         uses: actions/checkout@v4
@@ -54,12 +66,22 @@ jobs:
         with:
           node-version: 20
       - name: Crawl deployed preview
-        run: node scripts/check-preview.mjs "${{ inputs.preview_url }}"
+        run: node scripts/check-preview.mjs "$PREVIEW_URL"
+      - name: Run Lighthouse performance checks
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: ${{ env.PREVIEW_URL }}
+          configPath: ./lighthouserc.json
+          runs: 3
+          uploadArtifacts: true
+          temporaryPublicStorage: false
 
   live:
-    name: Published SEO verification
+    name: Published SEO and performance verification
     if: ${{ github.event_name == 'workflow_dispatch' && inputs.live_url != '' }}
     runs-on: ubuntu-latest
+    env:
+      LIVE_URL: ${{ inputs.live_url }}
     steps:
       - name: Check out source
         uses: actions/checkout@v4
@@ -68,4 +90,55 @@ jobs:
         with:
           node-version: 20
       - name: Verify published URL
-        run: node scripts/check-live.mjs "${{ inputs.live_url }}"
+        run: node scripts/check-live.mjs "$LIVE_URL"
+      - name: Run Lighthouse performance checks
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: ${{ env.LIVE_URL }}
+          configPath: ./lighthouserc.json
+          runs: 3
+          uploadArtifacts: true
+          temporaryPublicStorage: false
+
+  production-monitor:
+    name: Weekly production SEO and performance monitor
+    if: ${{ github.event_name == 'schedule' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Verify core production routes
+        run: |
+          for route in "/" "/plans" "/windows-vps/" "/linux-vps/"; do
+            node scripts/check-live.mjs "https://www.stealthrdp.com${route}"
+          done
+      - name: Run Lighthouse on core production routes
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            https://www.stealthrdp.com/
+            https://www.stealthrdp.com/plans
+            https://www.stealthrdp.com/windows-vps/
+            https://www.stealthrdp.com/linux-vps/
+          configPath: ./lighthouserc.json
+          runs: 1
+          uploadArtifacts: true
+          temporaryPublicStorage: false
+
+  docs-migration:
+    name: Legacy docs migration verification
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.check_docs_migration }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Verify legacy docs redirects
+        run: npm run docs:migration-check
