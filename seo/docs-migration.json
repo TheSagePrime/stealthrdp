@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "sourceOrigin": "https://docs.stealthrdp.com",
+  "sourceArticlePattern": "/hc/stealth-rdp-docs/articles/{legacySlug}",
+  "targetOrigin": "https://www.stealthrdp.com",
+  "targetArticlePattern": "/docs/{cleanSlug}",
+  "requiredRedirectStatus": [301, 308],
+  "status": "external-redirect-required",
+  "note": "This repository controls the new /docs routes. The old docs.stealthrdp.com host must redirect at its own hosting, DNS, or edge layer. Run npm run docs:migration-check after that external redirect is configured."
+}
