@@ -21,6 +21,9 @@ test("Vercel build validates the final staged artifact", () => {
   assert.match(postBuild, /SEO_AUDIT_ROOT/);
   assert.match(postBuild, /public/);
   assert.match(postBuild, /https:\/\/www\.stealthrdp\.com/);
+  assert.match(postBuild, /indexable canonical missing from final sitemap/);
+  assert.match(postBuild, /has no matching indexable staged HTML page/);
+  assert.match(postBuild, /final canonical/);
 
   const gate = read("scripts/seo-gates.mjs");
   assert.match(gate, /SEO_EXPECTED_BASE/);
@@ -50,15 +53,21 @@ test("keyword map covers the four core commercial routes without invented keywor
 test("docs migration contract requires direct permanent redirects", () => {
   const migration = JSON.parse(read("seo/docs-migration.json"));
   assert.equal(migration.sourceOrigin, "https://docs.stealthrdp.com");
+  assert.equal(migration.sourceHubPath, "/hc/stealth-rdp-docs/en");
   assert.equal(migration.targetOrigin, "https://www.stealthrdp.com");
+  assert.equal(migration.targetHubPath, "/docs");
   assert.deepEqual(migration.requiredRedirectStatus, [301, 308]);
-  assert.match(read("scripts/check-docs-migration.mjs"), /redirect: "manual"/);
+  const checker = read("scripts/check-docs-migration.mjs");
+  assert.match(checker, /redirect: "manual"/);
+  assert.match(checker, /sourceHubPath/);
+  assert.match(checker, /sourceArticlePattern/);
 });
 
-test("GitHub workflow automates preview crawl, Lighthouse, and weekly production monitoring", () => {
+test("GitHub workflow automates deployment crawl, Lighthouse, and weekly production monitoring", () => {
   const workflow = read(".github/workflows/seo.yml");
   assert.match(workflow, /deployment_status:/);
   assert.match(workflow, /Automatic preview SEO and performance crawl/);
+  assert.match(workflow, /Automatic production SEO and performance verification/);
   assert.match(workflow, /treosh\/lighthouse-ci-action@v12/);
   assert.match(workflow, /Weekly production SEO and performance monitor/);
   assert.match(workflow, /npm run vercel-build/);
