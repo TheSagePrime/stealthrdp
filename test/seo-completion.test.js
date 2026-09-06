@@ -50,16 +50,18 @@ test("keyword map covers the four core commercial routes without invented keywor
   assert.equal(map.owners.implementation, "Suho");
 });
 
-test("docs migration contract requires direct permanent redirects", () => {
+test("retired docs host contract prevents duplicate content without requiring a redirect", () => {
   const migration = JSON.parse(read("seo/docs-migration.json"));
   assert.equal(migration.sourceOrigin, "https://docs.stealthrdp.com");
   assert.equal(migration.sourceHubPath, "/hc/stealth-rdp-docs/en");
   assert.equal(migration.targetOrigin, "https://www.stealthrdp.com");
   assert.equal(migration.targetHubPath, "/docs");
-  assert.deepEqual(migration.requiredRedirectStatus, [301, 308]);
+  assert.deepEqual(migration.acceptedInactiveStatus, [404, 410]);
+  assert.deepEqual(migration.acceptedRedirectStatus, [301, 308]);
+  assert.equal(migration.status, "inactive-legacy-host");
   const checker = read("scripts/check-docs-migration.mjs");
-  assert.match(checker, /redirect: "manual"/);
-  assert.match(checker, /sourceHubPath/);
+  assert.match(checker, /legacy host unreachable/);
+  assert.match(checker, /retired docs host is serving HTTP/);
   assert.match(checker, /sourceArticlePattern/);
 });
 
@@ -71,7 +73,7 @@ test("GitHub workflow automates deployment crawl, Lighthouse, and weekly product
   assert.match(workflow, /treosh\/lighthouse-ci-action@v12/);
   assert.match(workflow, /Weekly production SEO and performance monitor/);
   assert.match(workflow, /npm run vercel-build/);
-  assert.match(workflow, /Legacy docs migration verification/);
+  assert.match(workflow, /Legacy docs host safety verification/);
 
   const lighthouse = JSON.parse(read("lighthouserc.json"));
   const assertions = lighthouse.ci.assert.assertions;
