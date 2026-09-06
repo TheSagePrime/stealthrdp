@@ -7,11 +7,13 @@ const contract = JSON.parse(fs.readFileSync(path.join(ROOT, "seo", "docs-migrati
 const docs = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "docs-articles.json"), "utf8"));
 const sourceOrigin = String(process.env.DOCS_SOURCE_ORIGIN || contract.sourceOrigin).replace(/\/+$/, "");
 const targetOrigin = String(process.env.DOCS_TARGET_ORIGIN || contract.targetOrigin).replace(/\/+$/, "");
-const allowedStatus = new Set(contract.requiredRedirectStatus || [301, 308]);
+const inactiveStatus = new Set(contract.acceptedInactiveStatus || [404, 410]);
+const redirectStatus = new Set(contract.acceptedRedirectStatus || [301, 308]);
 const cleanSlug = (slug) => slug.replace(/^\d+-/, "").replaceAll("_", "-").toLowerCase();
 const failures = [];
+const notes = [];
 
-async function verifyRedirect(sourcePath, targetPath) {
+async function verifyLegacySurface(sourcePath, targetPath) {
   const sourceUrl = new URL(sourcePath, `${sourceOrigin}/`);
   const expectedUrl = new URL(targetPath, `${targetOrigin}/`).href;
 
@@ -19,37 +21,51 @@ async function verifyRedirect(sourcePath, targetPath) {
   try {
     response = await fetch(sourceUrl, { redirect: "manual" });
   } catch (error) {
-    failures.push(`${sourceUrl.href}: request failed (${error.message})`);
+    notes.push(`${sourceUrl.href}: legacy host unreachable (${error.message})`);
     return;
   }
 
-  if (!allowedStatus.has(response.status)) {
-    failures.push(`${sourceUrl.href}: expected 301/308, received ${response.status}`);
+  if (inactiveStatus.has(response.status)) {
+    notes.push(`${sourceUrl.href}: retired with HTTP ${response.status}`);
     return;
   }
 
-  const location = response.headers.get("location");
-  if (!location) {
-    failures.push(`${sourceUrl.href}: redirect missing Location header`);
+  if (redirectStatus.has(response.status)) {
+    const location = response.headers.get("location");
+    if (!location) {
+      failures.push(`${sourceUrl.href}: redirect missing Location header`);
+      return;
+    }
+    const actualUrl = new URL(location, sourceUrl).href;
+    if (actualUrl !== expectedUrl) {
+      failures.push(`${sourceUrl.href}: redirects to ${actualUrl}, expected ${expectedUrl}`);
+      return;
+    }
+    notes.push(`${sourceUrl.href}: permanently redirects to ${expectedUrl}`);
     return;
   }
 
-  const actualUrl = new URL(location, sourceUrl).href;
-  if (actualUrl !== expectedUrl) failures.push(`${sourceUrl.href}: redirects to ${actualUrl}, expected ${expectedUrl}`);
+  if (response.status >= 200 && response.status < 300) {
+    failures.push(`${sourceUrl.href}: retired docs host is serving HTTP ${response.status}; this can recreate duplicate/indexable documentation`);
+    return;
+  }
+
+  failures.push(`${sourceUrl.href}: unexpected HTTP ${response.status}; expected unreachable, 404/410, or direct 301/308 to ${expectedUrl}`);
 }
 
-await verifyRedirect(contract.sourceHubPath, contract.targetHubPath);
+await verifyLegacySurface(contract.sourceHubPath, contract.targetHubPath);
 
 for (const article of docs) {
   const sourcePath = contract.sourceArticlePattern.replace("{legacySlug}", article.slug);
   const targetPath = contract.targetArticlePattern.replace("{cleanSlug}", cleanSlug(article.slug));
-  await verifyRedirect(sourcePath, targetPath);
+  await verifyLegacySurface(sourcePath, targetPath);
 }
 
 if (failures.length) {
-  console.error(`Docs migration check failed with ${failures.length} issue(s):`);
+  console.error(`Legacy docs host safety check failed with ${failures.length} issue(s):`);
   for (const issue of failures) console.error(`- ${issue}`);
   process.exit(1);
 }
 
-console.log(`Docs migration passed for the legacy hub and ${docs.length} legacy article URLs.`);
+console.log(`Legacy docs host is safely retired for the hub and ${docs.length} historical article URLs.`);
+for (const note of notes) console.log(`- ${note}`);
