@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VPS Hosting for Minecraft: How to Choose a Server</title>
+  <meta name="description" content="Choose VPS hosting for Minecraft by edition, player load, mods, resources, location, backups, and access." />
+  <meta name="robots" content="index,follow" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <meta name="author" content="StealthRDP" />
+  <meta name="msvalidate.01" content="BC1193DFC35353EA0CED70B0E5F25F09" />
+  <link rel="canonical" href="__SRDP_BASE__/vps-hosting-minecraft/" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="alternate" type="application/rss+xml" title="StealthRDP Blog" href="__SRDP_BASE__/rss.xml" />
+  <meta name="theme-color" content="#07111f" />
+  <meta property="og:title" content="VPS Hosting for Minecraft: How to Choose a Server" />
+  <meta property="og:description" content="Choose VPS hosting for Minecraft by edition, player load, mods, resources, location, backups, and access." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="__SRDP_BASE__/vps-hosting-minecraft/" />
+  <meta property="og:image" content="__SRDP_BASE__/assets/og-cover.png" />
+  <meta property="og:site_name" content="StealthRDP" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@stealthrdp" />
+  <meta name="twitter:title" content="VPS Hosting for Minecraft: How to Choose a Server" />
+  <meta name="twitter:description" content="Choose VPS hosting for Minecraft by edition, player load, mods, resources, location, backups, and access." />
+  <meta name="twitter:image" content="__SRDP_BASE__/assets/og-cover.png" />
+  <meta name="color-scheme" content="dark light" />
+  <script>
+    (function () {
+      try {
+        var savedTheme = window.localStorage.getItem("stealthrdp-preview-theme");
+        if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
+      } catch (e) {}
+    }());
+  </script>
+  <script>
+    (function () {
+      try {
+        var host = window.location.hostname;
+        var preview = host === "preview.antah.de" || host === "localhost";
+        var saved = preview ? window.localStorage.getItem("stealthrdp-preview-palette") : "";
+        var allowed = ["cobalt","gold","cyan","violet","coral","mint","rose","orange","indigo","ice"];
+        if (preview && allowed.indexOf(saved) !== -1) document.documentElement.setAttribute("data-palette", saved);
+      } catch (e) {}
+    }());
+  </script>
+  <link rel="stylesheet" href="/css/style.css?v=2026-09-07T22-19-24-955Z" />
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src="https://sgtm.stealthrdp.com/2l3xebiqyzc.js?"+i;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','yw=Ch5ENj0vSDYwSUBGOjFcXhVHS19YRAEWXgkNFAgOERARHglfCg0I');</script>
+  <!-- End Google Tag Manager -->
+  <script defer data-website-id="dfid_6O4WzLRhSgrGULypBOc8I" data-domain="stealthrdp.com" src="https://datafa.st/js/script.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"__SRDP_BASE__/"},{"@type":"ListItem","position":2,"name":"Blog","item":"__SRDP_BASE__/blog"},{"@type":"ListItem","position":3,"name":"VPS Hosting for Minecraft: How to Choose a Server","item":"__SRDP_BASE__/vps-hosting-minecraft/"}]},{"@type":"BlogPosting","headline":"VPS Hosting for Minecraft: How to Choose a Server","description":"Choose VPS hosting for Minecraft by edition, player load, mods, resources, location, backups, and access.","datePublished":"2026-09-07","author":{"@type":"Organization","name":"StealthRDP Team","url":"__SRDP_BASE__/about"},"publisher":{"@type":"Organization","name":"StealthRDP","url":"__SRDP_BASE__/","logo":{"@type":"ImageObject","url":"https://cdn.stealthrdp.com/images/new/6.png"}},"image":"__SRDP_BASE__/assets/og-cover.png","mainEntityOfPage":"__SRDP_BASE__/vps-hosting-minecraft/","url":"__SRDP_BASE__/vps-hosting-minecraft/"}]}</script>
+</head>
+<body data-page="blog">
+  <header class="header"><div class="container header-inner">
+    <a href="/" class="logo" aria-label="StealthRDP home">
+      <span class="logo-image" aria-hidden="true"><img class="logo-image-dark" src="https://cdn.stealthrdp.com/images/new/6.png" alt="StealthRDP dark logo" width="700" height="170" decoding="async"><img class="logo-image-light" src="https://cdn.stealthrdp.com/images/new/5.png" alt="StealthRDP light logo" width="700" height="170" decoding="async"></span>
+    </a>
+    <nav class="nav" aria-label="Main navigation"><a href="/">Home</a><a href="/plans">Plans</a><a href="/status">Server Status</a><a href="/docs">Docs</a><a href="/blog" class="active">Blog</a><a href="/faq">FAQ</a></nav>
+    <div class="header-actions">
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Use light theme" aria-pressed="false"><span class="theme-icon theme-icon-sun" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg></span><span class="theme-icon theme-icon-moon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"/></svg></span></button>
+      <div class="palette-lab" id="paletteLab">
+      <button type="button" class="palette-trigger" id="paletteTrigger" aria-expanded="false" aria-controls="palettePanel">
+        <span class="palette-trigger-swatch" id="paletteTriggerSwatch" style="--swatch: #5b8cff" aria-hidden="true"></span><span>Palette</span><span class="palette-trigger-chevron" aria-hidden="true">⌄</span>
+      </button>
+      <div class="palette-panel" id="palettePanel" role="region" aria-label="Preview palette chooser" hidden>
+        <div class="palette-panel-head"><div><span class="palette-kicker">Preview lab</span><strong>Choose an accent</strong></div><span class="palette-current" id="paletteCurrent">Cobalt</span></div>
+        <div class="palette-options" role="group" aria-label="Accent palettes"><button type="button" class="palette-option active" data-palette="cobalt" aria-pressed="true">
+      <span class="palette-swatch" style="--swatch: #5b8cff" aria-hidden="true"></span><span>Cobalt</span>
+    </button><button type="button" class="palette-option" data-palette="gold" aria-pressed="false">
+      <span class="palette-swatch" style="--swatch: #f5b93b" aria-hidden="true"></span><span>Gold</span>
+    </button><button type="button" class="palette-option" data-palette="cyan" aria-pressed="false">
+      <span class="palette-swatch" style="--swatch: #3dd6d0" aria-hidden="true"></span><span>Cyan</span>
+    </button><button type="button" class="palette-option" data-palette="violet" aria-pressed="false">
+      <span class="palette-swatch" style="--swatch: #a78bfa" aria-hidden="true"></span><span>Violet</span>
+    </button><button type="button" class="palette-option" data-palette="coral" aria-pressed="false">
+      <span class="palette-swatch" style="--swatch: #ff7a66" aria-hidden="true"></span><span>Coral</span>
+    </button><button type="button" class="palette-option" data-palette="mint" aria-pressed="false">
+      <span class="palette-swatch" style="--swatch: #4ade80" aria-hidden="true"></span><span>Mint</span>
+    </button><button type="button" class="palette-option" data-palette="rose" aria-pressed="false">
+      <span class="palette-swatch" style="--swatch: #f472b6" aria-hidden="true"></span><span>Rose</span>
+    </button><button type="button" class="palette-option" data-palette="orange" aria-pressed="false">
+      <span class="palette-swatch" style="--swatch: #ff9f43" aria-hidden="true"></span><span>Orange</span>
+    </button><button type="button" class="palette-option" data-palette="indigo" aria-pressed="false">
+      <span class="palette-swatch" style="--swatch: #818cf8" aria-hidden="true"></span><span>Indigo</span>
+    </button><button type="button" class="palette-option" data-palette="ice" aria-pressed="false">
+      <span class="palette-swatch" style="--swatch: #7dd3fc" aria-hidden="true"></span><span>Ice</span>
+    </button></div>
+        <p class="palette-note">10 variants · saved in this browser</p>
+      </div>
+    </div>
+      <a class="btn btn-sm btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login">Client Area</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobileNav"><a href="/">Home</a><a href="/plans">Plans</a><a href="/status">Server Status</a><a href="/docs">Docs</a><a href="/blog" class="active">Blog</a><a href="/faq">FAQ</a><a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login">Client Area</a></div>
+  </header>
+
+  <main class="docs-article-page blog-article-page"><div class="container"><div class="docs-article-layout">
+    <article class="docs-article-column" id="blogPost">
+      <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blog">Blog</a><span aria-hidden="true">/</span><span>VPS Management</span></nav>
+      <header class="docs-article-header"><span class="docs-category">VPS Management</span><h1>VPS hosting for Minecraft: choose a server that fits</h1><p class="docs-summary">Choose VPS hosting for Minecraft by edition, player load, mods, resources, location, backups, and access.</p><div class="docs-source-meta"><span>StealthRDP Team</span><span>2026-09-07</span></div></header>
+      <div class="docs-content blog-article-body"><p>For a private Minecraft server, a VPS is a practical middle ground. It keeps the world online without leaving a home computer running. It also gives you control over files, server software, and the operating system. That control means you handle setup, updates, access, and backups.[1][3]</p>
+<p>Choose the edition and software first. Then match the plan to peak activity, world growth, storage, and player location. Leave room for the operating system and backups. A RAM figure or “gaming VPS” label alone cannot tell you whether a plan fits.</p>
+<div class="docs-table-wrap"><table><thead><tr><th>Your priority</th><th>Start by comparing</th><th>Check before buying</th></tr></thead><tbody>
+<tr><td>Java private world</td><td>Java server path and runtime</td><td>Java version, ports, and software stack</td></tr>
+<tr><td>Bedrock private world</td><td>Bedrock Dedicated Server path</td><td>Supported OS, ports, and installation path</td></tr>
+<tr><td>Plugins or mods</td><td>Exact version and loader</td><td>Software compatibility and access</td></tr>
+<tr><td>Little system administration</td><td>Managed host or Realms</td><td>Maintenance and control trade-off</td></tr>
+</tbody></table></div>
+<h2 id="when-a-vps-is-the-right-fit">When a VPS is the right fit</h2>
+<p>A VPS makes sense when you want an internet-reachable server, control over server files, and software choice. It also suits an owner who can handle basic system administration.</p>
+<p>A VPS may be the wrong fit when you want zero maintenance, guaranteed Minecraft administration, or a simple game console. A managed Minecraft host or Realms may fit that priority better. Realms is an official subscription hosting option, but it has limitations compared with a normal server.[3]</p>
+<h2 id="start-with-java-or-bedrock">Start with Java or Bedrock</h2>
+<p>Choose the edition before you compare plans. Java and Bedrock use different server paths, and their <code>server.properties</code> variants are not compatible.[1][2]</p>
+<div class="docs-table-wrap"><table><thead><tr><th>Edition</th><th>Server path</th><th>What to verify before ordering</th></tr></thead><tbody>
+<tr><td>Java</td><td>Java server software with a compatible Java runtime</td><td>Current Java version, <code>server.jar</code> setup, TCP port access, and the software stack you plan to run</td></tr>
+<tr><td>Bedrock</td><td>Bedrock Dedicated Server package and executable</td><td>Supported Windows or Linux image, package version, default ports, firewall rules, and the provider's installation path</td></tr>
+</tbody></table></div>
+<p>The documented Java server setup applies only to Java Edition.[1] Official Java and Bedrock server software is free to download, but the VPS, storage, backups, and administration still cost money.[1]</p>
+<p>Bedrock Dedicated Server supports specified Windows and Linux versions.[1] Check that the provider offers the required image and installation path before paying.</p>
+<p>Do not assume Java and Bedrock cross-play. Confirm that the exact server software and client combination supports your intended players.</p>
+<h2 id="size-the-workload-not-the-player-cap">Size the workload, not the player cap</h2>
+<p>The <code>max-players</code> setting defines a simultaneous-player limit.[2] It does not guarantee smooth play at that number. Player activity, world generation, entities, redstone, and farms can change the load sharply.[3]</p>
+<h3 id="player-count-and-world-size">Player count and world size</h3>
+<p>Player count and world size are the first workload inputs. Larger or busier worlds need more hardware.[3]</p>
+<p>A quiet private world and an active public world can have the same player cap. They can still create different loads. New chunk generation and large player-built structures also increase the work over time.[3]</p>
+<p>For a small survival world, four to eight players is a useful general reference.[3] Treat it as guidance, not a provider promise or a fixed VPS tier.</p>
+<p>As a starting reference, a small server may use at least 2 GB of RAM, while larger servers may need 4 GB.[3] Reserve additional memory for the operating system, management tools, and backups.</p>
+<p>Worlds grow, so reserve at least 5 GB for the world.[3] That is world space, not the full disk requirement. Add room for server files, logs, mods, configuration copies, and backups.</p>
+<h3 id="vanilla-plugins-or-mods">Vanilla, plugins, or mods</h3>
+<p>Vanilla is the simplest starting point. It keeps the server software and compatibility surface smaller.</p>
+<p>Plugin and modded servers need more planning. Match the game version with the server software, loaders, plugins, or mods. Some client-side components may also need matching versions.</p>
+<p>Software choices include Paper, SpigotMC, Fabric, Forge, and Velocity.[3] Match the exact choice to your game version instead of trusting a generic Minecraft label.</p>
+<p>Use vanilla for a straightforward private world. Use a plugin-based server for server-side extensions. Use a modded server when gameplay depends on a loader and matching mods.</p>
+<h2 id="choose-cpu-ram-storage-and-network">Choose CPU, RAM, storage, and network</h2>
+<h3 id="cpu">CPU</h3>
+<p>Many Java workloads benefit from strong per-core performance. The main server thread can become a limit as a Java server grows, so single-thread performance can still matter.[3]</p>
+<p>More listed vCPUs do not automatically solve a slow game tick. Compare the CPU model and resource allocation, especially when the plan shares hardware.</p>
+<h3 id="ram">RAM</h3>
+<p>Use the 2 GB and 4 GB figures as baseline references, not guarantees.[3] Allocate enough memory for the server process and leave room for the operating system.</p>
+<p>Do not hand every available megabyte to Java. The VPS needs memory for system services, monitoring, updates, and recovery work.</p>
+<h3 id="storage">Storage</h3>
+<p>Size storage for the whole server, not only the current world. Include world files, server software, logs, configuration, mods, plugins, and backup copies.</p>
+<p>Compare the storage type and usable capacity after the operating system and provider tooling are installed.</p>
+<h3 id="network">Network</h3>
+<p>Minecraft servers need a stable internet connection. Bandwidth usually matters less unless the server is large.[3]</p>
+<p>Firewall and network configuration may be required, including TCP port 25565 for Java.[1] Check which ports you can open and whether the provider blocks or filters required traffic.</p>
+<p>A high network-speed number does not prove low latency. Compare the data-center location, traffic policy, public IP details, and upgrade path.</p>
+<h2 id="pick-a-region-for-the-players">Pick a region for the players</h2>
+<p>Choose a region that keeps most players close to the server. A physical location near the players supports lower, more consistent ping.[3]</p>
+<p>If players live across several countries, choose a central location for the group.[5]</p>
+<p>Do not choose your own region by habit. List the players who will join most often, then compare the available locations. More CPU or RAM cannot move the server closer to a distant player.</p>
+<h2 id="plan-access-backups-and-safety">Plan access, backups, and safety</h2>
+<p>A VPS is not complete when the order finishes. You still need a reliable way to operate the server.</p>
+<p>Full console and file-transfer access make troubleshooting easier. SFTP and console access are practical choices for server maintenance.[3] For Linux, check SSH. For Windows, check remote desktop access.</p>
+<p>Before uploading a valuable world, check:</p>
+<ul><li>How often does the backup run?</li><li>How long does the provider retain it?</li><li>Can you download it?</li><li>Can you restore one file or only the whole server?</li><li>Can you test a restore without overwriting the live world?</li></ul>
+<p>Keep at least one usable copy outside the VPS. A backup that you cannot download or restore is not a complete recovery plan.</p>
+<p>For an internet server, understand account verification before changing settings. The <code>online-mode</code> property controls verification against the Minecraft account database.[2] A whitelist can block unwanted players on a private server.[3]</p>
+<p>Give operator privileges only to people who need them. An operator can change important server settings and affect the world.[3]</p>
+<h2 id="12-questions-to-ask-before-buying-a-minecraft-vps">12 questions to ask before buying a Minecraft VPS</h2>
+<p>Use these questions before buying. Save the answers with the order details.</p>
+<ol><li><strong>Edition:</strong> Can the current OS images run my Java or Bedrock server software?</li><li><strong>Version:</strong> Can I install the game version, Java version, loader, plugin set, or mod set I need?</li><li><strong>Resources:</strong> What CPU model or allocation, usable RAM, storage capacity, and storage type do I receive?</li><li><strong>Resource model:</strong> Are CPU and memory dedicated, shared, or subject to a fair-use policy?</li><li><strong>Network:</strong> Which ports, public IPs, protocols, and traffic rules apply?</li><li><strong>Region:</strong> Which data-center locations are available for the majority of my players?</li><li><strong>Access:</strong> Do I receive root or administrator access, SSH or remote desktop, SFTP, and a full console?</li><li><strong>Recovery:</strong> What are the backup schedule, retention period, download method, and restore process?</li><li><strong>Support:</strong> Does support cover the VPS only, or does it cover my Minecraft software and mods?</li><li><strong>Terms:</strong> Do current terms allow the software, traffic pattern, and community use I plan?</li><li><strong>Change path:</strong> Can I upgrade resources or move the world without losing files?</li><li><strong>Exit:</strong> How do I export the world, configuration, and backups if I leave?</li></ol>
+<p>Treat words such as “lag-free,” “unlimited,” and “gaming optimized” as prompts for questions. They are not substitutes for resource, network, backup, or support details.</p>
+<p>Resource selectors and backup labels help only when you can confirm what they include.[4] Providers also connect larger communities and mod packs with resource needs, location, and backup options.[5] Treat those statements as provider-specific details, not universal VPS facts.</p>
+<h2 id="how-stealthrdp-fits-this-decision">How StealthRDP fits this decision</h2>
+<p>StealthRDP's plan information lists USA and EU VPS options. It also lists Root access for Linux and Administrator access for Windows. Those details make it a candidate for comparison, not a Minecraft capacity claim.</p>
+<p>Check current resources, operating-system choices, backup terms, network details, availability, and service terms before ordering. A general VPS listing does not prove Minecraft support.</p>
+<p>You can review the <a href="/plans.html#comparison">current VPS plan comparison</a>. If the operating system is the deciding factor, compare the <a href="/linux-vps/">Linux VPS information</a> and <a href="/windows-vps/">Windows VPS information</a> pages. Read the <a href="/faq.html">current FAQ</a> and <a href="/docs/1737944013-use-of-service.html">service terms</a> before ordering.</p>
+<h2 id="choose-your-minecraft-vps-in-this-order">Choose your Minecraft VPS in this order</h2>
+<p>Make the decision in this order:</p>
+<ol><li>Choose Java or Bedrock.</li><li>List the server version and software stack.</li><li>Estimate peak active players and world growth.</li><li>Choose CPU, RAM, storage, and network capacity.</li><li>Select the region that suits the players.</li><li>Verify access, backups, ports, support boundaries, and terms.</li><li>Compare current VPS plans only after the workload passes those checks.</li></ol>
+<p>That sequence keeps the purchase grounded in the server you intend to run, rather than in a generic plan label.</p>
+<h2 id="sources">Sources</h2>
+<p>[1] https://www.minecraft.net/en-us/download/server — Minecraft Server Download: Host Your Own World | Minecraft [2] https://minecraft.wiki/w/Server.properties — server.properties – Minecraft Wiki [3] https://minecraft.wiki/w/Tutorial:Setting_up_a_Java_Edition_server — Tutorial: Setting up a Java Edition server – Minecraft Wiki [4] https://www.vpsserver.com/minecraft-vps — Minecraft VPS Hosting | Enhance Your Gaming Experience [5] https://us.ovhcloud.com/vps/uc-vps-minecraft — Host Minecraft on an OVHcloud VPS</p></div>
+      <footer class="blog-article-footer"><a href="/blog">← Back to all articles</a><span class="blog-article-actions"><a class="btn btn-ghost btn-sm" href="/plans">View plans</a><a class="btn btn-primary btn-sm" href="https://dash.stealthrdp.com/submitticket.php">Ask support</a></span></footer>
+    </article>
+    <aside class="docs-toc" aria-label="On this page"><span class="docs-toc-title">On this page</span><ol><li class="toc-level-2"><a href="#when-a-vps-is-the-right-fit">When a VPS is the right fit</a></li><li class="toc-level-2"><a href="#start-with-java-or-bedrock">Start with Java or Bedrock</a></li><li class="toc-level-2"><a href="#size-the-workload-not-the-player-cap">Size the workload, not the player cap</a></li><li class="toc-level-3"><a href="#player-count-and-world-size">Player count and world size</a></li><li class="toc-level-3"><a href="#vanilla-plugins-or-mods">Vanilla, plugins, or mods</a></li><li class="toc-level-2"><a href="#choose-cpu-ram-storage-and-network">Choose CPU, RAM, storage, and network</a></li><li class="toc-level-3"><a href="#cpu">CPU</a></li><li class="toc-level-3"><a href="#ram">RAM</a></li><li class="toc-level-3"><a href="#storage">Storage</a></li><li class="toc-level-3"><a href="#network">Network</a></li><li class="toc-level-2"><a href="#pick-a-region-for-the-players">Pick a region for the players</a></li><li class="toc-level-2"><a href="#plan-access-backups-and-safety">Plan access, backups, and safety</a></li><li class="toc-level-2"><a href="#12-questions-to-ask-before-buying-a-minecraft-vps">12 questions to ask before buying a Minecraft VPS</a></li><li class="toc-level-2"><a href="#how-stealthrdp-fits-this-decision">How StealthRDP fits this decision</a></li><li class="toc-level-2"><a href="#choose-your-minecraft-vps-in-this-order">Choose your Minecraft VPS in this order</a></li><li class="toc-level-2"><a href="#sources">Sources</a></li></ol></aside>
+  </div></div></main>
+  <footer class="footer"><div class="container">
+    <div class="footer-grid">
+      <div class="footer-about">
+        <a href="/" class="logo" aria-label="StealthRDP home"><span class="logo-image" aria-hidden="true"><img class="logo-image-dark" src="https://cdn.stealthrdp.com/images/new/6.png" alt="StealthRDP dark logo" width="700" height="170" decoding="async"><img class="logo-image-light" src="https://cdn.stealthrdp.com/images/new/5.png" alt="StealthRDP light logo" width="700" height="170" decoding="async"></span></a>
+        <p>Enterprise-grade remote desktop infrastructure with unmatched security and performance.</p>
+        <div class="footer-social"><a href="https://x.com/stealthrdp" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L2.8 2h6.4l4.4 5.9L18.9 2zm-1.1 18h1.7L7.1 3.9H5.3L17.8 20z"/></svg></a><a href="https://www.instagram.com/stealth_rdp" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg></a><a href="https://discord.gg/9JJFs4DDyF" target="_blank" rel="noopener noreferrer" aria-label="Discord"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12h.01M12 12h.01M16 12h.01M8.5 19c-2.5-.5-4.5-2-5.5-4.5C2 10 3.5 5 8.5 4.5c.5-1 3.5-1 3.5-1s3 0 3.5 1c5 .5 6.5 5.5 6 10-1 2.5-3 4-5.5 4.5"/></svg></a><a href="https://t.me/StealthRDP" target="_blank" rel="noopener noreferrer" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></a></div>
+        <div class="footer-status"><span class="dot"></span><span id="footerStatus">Checking live status…</span></div>
+      </div>
+      <div class="footer-col"><h2>Products</h2><ul>
+        <li><a href="/plans">RDP Plans</a></li>
+        <li><a href="/windows-vps/">Windows VPS Hosting</a></li>
+        <li><a href="/linux-vps/">Linux VPS Hosting</a></li>
+        <li><a href="/plans#build-your-own">Build Your Own VPS</a></li>
+        <li><a href="/plans">Pricing</a></li>
+      </ul></div>
+      <div class="footer-col"><h2>Resources</h2><ul>
+        <li><a href="/docs">Documentation</a></li>
+        <li><a href="/blog">Tutorials</a></li>
+        <li><a href="/faq">FAQ</a></li>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="/status">Server Status</a></li>
+      </ul></div>
+      <div class="footer-col"><h2>Company</h2><ul>
+        <li><a href="/about">About Us</a></li>
+        <li><a href="https://dash.stealthrdp.com/submitticket.php">Contact Support</a></li>
+        <li><a href="/privacy">Privacy Policy</a></li>
+        <li><a href="/docs/use-of-service">Terms of Service</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-mobile-nav" aria-label="Footer navigation">
+      <details class="footer-mobile-group"><summary><span>Products</span><small>RDP plans · pricing</small><b aria-hidden="true">+</b></summary><ul>
+        <li><a href="/plans">RDP Plans</a></li><li><a href="/windows-vps/">Windows VPS Hosting</a></li><li><a href="/linux-vps/">Linux VPS Hosting</a></li><li><a href="/plans#build-your-own">Build Your Own VPS</a></li><li><a href="/plans">Pricing</a></li>
+      </ul></details>
+      <details class="footer-mobile-group"><summary><span>Resources</span><small>Docs · blog · status</small><b aria-hidden="true">+</b></summary><ul>
+        <li><a href="/docs">Documentation</a></li><li><a href="/blog">Tutorials</a></li><li><a href="/faq">FAQ</a></li><li><a href="/blog">Blog</a></li><li><a href="/status">Server Status</a></li>
+      </ul></details>
+      <details class="footer-mobile-group"><summary><span>Company</span><small>About · support · legal</small><b aria-hidden="true">+</b></summary><ul>
+        <li><a href="/about">About Us</a></li><li><a href="https://dash.stealthrdp.com/submitticket.php">Contact Support</a></li><li><a href="/privacy">Privacy Policy</a></li><li><a href="/docs/use-of-service">Terms of Service</a></li>
+      </ul></details>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 StealthRDP. All rights reserved.</span>
+      <span class="links">
+        <a href="/privacy">Privacy</a>
+        <a href="/docs/use-of-service">Terms</a>
+        <a href="/status">Status</a>
+      </span>
+    </div>
+  </div></footer>
+  <script src="/js/main.js?v=2026-09-07T22-19-24-955Z"></script>
+</body>
+</html>

@@ -507,6 +507,8 @@ const server = http.createServer((req, res) => {
   else if (DOC_ROUTE_FILES.has(url.pathname)) staticPathname = DOC_ROUTE_FILES.get(url.pathname);
 
   const PAGE_REDIRECTS = {
+    "/vps-hosting-minecraft": "/vps-hosting-minecraft/",
+    "/vps-hosting-minecraft/index.html": "/vps-hosting-minecraft/",
     "/server-status": "/status",
     "/server-status/": "/status",
     "/features": "/#why",

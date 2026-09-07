@@ -18,6 +18,11 @@ const { APPROVED_INDEXABLE_COMMERCIAL_PAGES, checkAiDiscovery } = require(path.j
 const OS_ROUTES = ["windows-vps/index.html", "linux-vps/index.html"];
 const BING_VERIFICATION_TAG = '<meta name="msvalidate.01" content="BC1193DFC35353EA0CED70B0E5F25F09" />';
 const cleanDocSlug = (slug) => slug.replace(/^\d+-/, "").replaceAll("_", "-").toLowerCase();
+const articleRoute = (post) => post.route || `/blog/${post.slug}.html`;
+const articleFile = (post) => {
+  const route = articleRoute(post).replace(/^\/+/, "");
+  return route.endsWith("/") ? `${route}index.html` : route;
+};
 
 const ROUTES = [
   "index.html",
@@ -28,7 +33,7 @@ const ROUTES = [
   "faq.html",
   "about.html",
   "privacy.html",
-  ...BLOG.map((p) => `blog/${p.slug}.html`),
+  ...BLOG.map(articleFile),
   "docs.html",
   ...DOCS.map((p) => `docs/${cleanDocSlug(p.slug)}.html`),
 ];
@@ -114,7 +119,7 @@ test("homepage JSON-LD has Organization + WebSite; plans has Service offers; faq
 
 test("blog post pages carry Article JSON-LD + breadcrumbs", () => {
   for (const post of BLOG) {
-    const s = parse(HTML(`blog/${post.slug}.html`));
+    const s = parse(HTML(articleFile(post)));
     const graph = s.ldBlocks.flatMap((b) => JSON.parse(b)["@graph"] || [JSON.parse(b)]);
     const types = graph.map((x) => x["@type"]);
     assert.ok(types.includes("BlogPosting"), `${post.slug}: BlogPosting`);
@@ -122,6 +127,18 @@ test("blog post pages carry Article JSON-LD + breadcrumbs", () => {
     const art = graph.find((x) => x["@type"] === "BlogPosting");
     assert.ok(art.headline === post.title && art.datePublished === post.date, `${post.slug}: article metadata matches`);
   }
+});
+
+test("Minecraft guide preserves approved metadata and excludes FAQPage and HowTo schema", () => {
+  const post = BLOG.find((item) => item.slug === "vps-hosting-minecraft");
+  const html = HTML(articleFile(post));
+  const parsed = parse(html);
+  assert.strictEqual(parsed.title, "VPS Hosting for Minecraft: How to Choose a Server");
+  assert.match(html, /<h1>VPS hosting for Minecraft: choose a server that fits<\/h1>/);
+  assert.strictEqual(parsed.desc, "Choose VPS hosting for Minecraft by edition, player load, mods, resources, location, backups, and access.");
+  assert.strictEqual(parsed.canonical, "__SRDP_BASE__/vps-hosting-minecraft/");
+  assert.match(html, /\"@type\":\"BlogPosting\"/);
+  assert.doesNotMatch(html, /\"@type\":\"FAQPage\"|\"@type\":\"HowTo\"/);
 });
 
 test("sitemap.xml is valid XML with all routes; robots.txt allows + references it", () => {
@@ -208,11 +225,13 @@ test("baked content is present in raw HTML (plans, faq, status, blog)", () => {
   assert.ok(status.includes("node-card"), "status: node cards baked");
 
   const blog = HTML("blog.html");
-  assert.strictEqual((blog.match(/<article class="blog-card/g) || []).length, 11, "blog: 11 baked cards");
+  assert.strictEqual((blog.match(/<article class="blog-card/g) || []).length, BLOG.length, `blog: ${BLOG.length} baked cards`);
   assert.ok(blog.includes(`/blog/${BLOG[0].slug}.html`), "blog: links to clean article URLs");
+  assert.ok(blog.includes('href="/vps-hosting-minecraft/"'), "blog: Minecraft guide uses its clean route");
+  assert.ok(!blog.includes('/blog/vps-hosting-minecraft.html'), "blog: no duplicate Minecraft route");
 
   for (const post of BLOG) {
-    const article = HTML(`blog/${post.slug}.html`);
+    const article = HTML(articleFile(post));
     assert.ok(!article.includes("Full article content is managed"), `${post.slug}: no placeholder`);
     assert.ok(!article.includes("app.seobotai.com/banner"), `${post.slug}: no seobot banner`);
     assert.ok(article.includes("docs-content"), `${post.slug}: uses structured article layout`);
@@ -460,6 +479,7 @@ test("rss, security.txt, HowTo schema, and checkout events exist", () => {
   const rss = fs.readFileSync(path.join(ROOT, "rss.xml"), "utf8");
   assert.ok(rss.includes("<rss"), "rss feed");
   assert.ok(rss.includes("__SRDP_BASE__/blog/"), "rss uses host token");
+  assert.ok(rss.includes("__SRDP_BASE__/vps-hosting-minecraft/"), "rss includes Minecraft guide route");
   assert.strictEqual((rss.match(/<item>/g) || []).length, BLOG.length, "rss has every post");
 
   const security = fs.readFileSync(path.join(ROOT, ".well-known/security.txt"), "utf8");

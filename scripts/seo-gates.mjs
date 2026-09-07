@@ -15,6 +15,7 @@ const changedFiles = changedOnly
 const isChanged = (file) => !changedFiles || changedFiles.has(rel(file));
 const vercelConfig = JSON.parse(fs.readFileSync(path.join(ROOT, "vercel.json"), "utf8"));
 const redirectSources = new Set((vercelConfig.redirects || []).map((item) => item.source));
+const redirectTargets = new Map((vercelConfig.redirects || []).map((item) => [item.source, item.destination]));
 const allowedNoindexFiles = new Set([
   "404.html",
   "privacy.html",
@@ -52,8 +53,12 @@ function hrefTargets(html) {
     .filter((href) => href.startsWith("/"));
 }
 
-function resolveLocal(href) {
+function resolveLocal(href, seen = new Set()) {
   const clean = href.split("?")[0];
+  if (seen.has(clean)) return null;
+  seen.add(clean);
+  const redirect = redirectTargets.get(clean);
+  if (redirect && redirect.startsWith("/")) return resolveLocal(redirect, seen);
   if (clean === "/") return path.join(ROOT, "index.html");
   const candidate = path.join(ROOT, clean.replace(/^\//, ""));
   if (fs.existsSync(candidate) && fs.statSync(candidate).isFile()) return candidate;

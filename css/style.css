@@ -889,15 +889,15 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
 .docs-content h2 { margin: 39px 0 13px; font-size: 27px; }
 .docs-content h3 { margin: 32px 0 11px; font-size: 21px; }
 .docs-content h4 { margin: 25px 0 9px; font-size: 18px; }
-.docs-content p { margin: 0 0 17px; color: var(--text-muted); font-size: 15.5px; line-height: 1.8; }
+.docs-content p { margin: 0 0 17px; color: var(--text-muted); font-size: 15.5px; line-height: 1.8; overflow-wrap: anywhere; }
 .docs-content strong { color: var(--text); font-weight: 600; }
 .docs-content em { color: var(--text); }
-.docs-content a { color: var(--accent); text-decoration: underline; text-decoration-color: rgba(var(--accent-rgb),.35); text-underline-offset: 3px; }
+.docs-content a { color: var(--accent); text-decoration: underline; text-decoration-color: rgba(var(--accent-rgb),.35); text-underline-offset: 3px; overflow-wrap: anywhere; }
 .docs-content a:hover { color: var(--accent-hover); }
 .docs-content ul, .docs-content ol { display: grid; gap: 10px; margin: 0 0 21px; padding-left: 22px; }
 .docs-content ul { list-style: none; }
 .docs-content ol { list-style: decimal; }
-.docs-content ul li, .docs-content ol li { color: var(--text-muted); font-size: 15px; line-height: 1.7; padding-left: 4px; }
+.docs-content ul li, .docs-content ol li { color: var(--text-muted); font-size: 15px; line-height: 1.7; padding-left: 4px; overflow-wrap: anywhere; }
 .docs-content ul li { position: relative; }
 .docs-content ul li::before { content: ""; position: absolute; left: -17px; top: .68em; width: 6px; height: 6px; border-radius: 1px; background: var(--accent); }
 .docs-content code { color: var(--accent-hover); background: rgba(var(--accent-rgb),.08); border: 1px solid rgba(var(--accent-rgb),.15); border-radius: 4px; padding: 2px 5px; font-size: .9em; }

@@ -463,13 +463,26 @@ function testimonialGridHtml() {
   return `<div class="testimonial-grid" aria-label="Verified customer testimonials">${TESTIMONIALS.map(testimonialCardHtml).join("")}</div>`;
 }
 
+function articleRoute(post) {
+  return post.route || `/blog/${post.slug}.html`;
+}
+
+function articleFilePath(post) {
+  const route = articleRoute(post).replace(/^\/+/, "");
+  return route.endsWith("/") ? `${route}index.html` : route;
+}
+
+function articleTokenUrl(post) {
+  return `__SRDP_BASE__${articleRoute(post)}`;
+}
+
 function blogCardHtml(p, extraClass = "") {
   return `<article class="blog-card${extraClass}" data-blog-category="${esc(p.category || "Insights")}" data-blog-title="${esc(p.title)}"><div class="bc-body">
     <span class="bc-cat">${esc(p.category)}</span>
     <h2>${esc(p.title)}</h2>
     <p>${esc(p.excerpt || "")}</p>
     <div class="bc-meta"><span>${esc(p.author)}</span><span>${esc(p.date)}</span></div>
-    <a class="bc-link" href="/blog/${esc(p.slug)}.html">Read article →</a>
+    <a class="bc-link" href="${esc(articleRoute(p))}">Read article →</a>
   </div></article>`;
 }
 
@@ -866,12 +879,13 @@ function articleLd(post) {
     author: { "@type": "Organization", name: post.author || "StealthRDP Team", url: "__SRDP_BASE__/about" },
     publisher: { "@type": "Organization", name: "StealthRDP", url: "__SRDP_BASE__/", logo: { "@type": "ImageObject", url: LOGO_DARK_URL } },
     image: "__SRDP_BASE__/assets/og-cover.png",
-    mainEntityOfPage: `__SRDP_BASE__/blog/${post.slug}.html`,
-    url: `__SRDP_BASE__/blog/${post.slug}.html`,
+    mainEntityOfPage: articleTokenUrl(post),
+    url: articleTokenUrl(post),
   };
 }
 
 function howToLd(post, headings) {
+  if (post.noHowTo === true) return null;
   if (!/how to|tips|checklist|signs|ways/i.test(post.title || "")) return null;
   const steps = (headings || []).filter((heading) => heading.level === 2).slice(0, 12);
   if (steps.length < 3) return null;
@@ -883,7 +897,7 @@ function howToLd(post, headings) {
       "@type": "HowToStep",
       position: index + 1,
       name: heading.text,
-      url: `__SRDP_BASE__/blog/${post.slug}.html#${heading.id}`,
+      url: `${articleTokenUrl(post)}#${heading.id}`,
     })),
   };
 }
@@ -1717,7 +1731,7 @@ function buildBlog() {
       { name: "Home", url: "__SRDP_BASE__/" },
       { name: "Blog", url: "__SRDP_BASE__/blog" },
     ]),
-    { "@type": "ItemList", name: "StealthRDP Blog", itemListElement: BLOG.map((p, i) => ({ "@type": "ListItem", position: i + 1, item: { "@type": "BlogPosting", headline: p.title, datePublished: p.date, author: { "@type": "Organization", name: p.author || "StealthRDP Team" }, url: `__SRDP_BASE__/blog/${p.slug}.html` } })) },
+    { "@type": "ItemList", name: "StealthRDP Blog", itemListElement: BLOG.map((p, i) => ({ "@type": "ListItem", position: i + 1, item: { "@type": "BlogPosting", headline: p.title, datePublished: p.date, author: { "@type": "Organization", name: p.author || "StealthRDP Team" }, url: articleTokenUrl(p) } })) },
   ]}];
   return page({
     active: "blog",
@@ -1802,7 +1816,7 @@ function buildBlogPost(post) {
   <main class="docs-article-page blog-article-page"><div class="container"><div class="docs-article-layout">
     <article class="docs-article-column" id="blogPost">
       <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blog">Blog</a><span aria-hidden="true">/</span><span>${esc(post.category)}</span></nav>
-      <header class="docs-article-header"><span class="docs-category">${esc(post.category)}</span><h1>${esc(post.title)}</h1><p class="docs-summary">${esc(post.excerpt || "")}</p><div class="docs-source-meta"><span>${esc(post.author)}</span><span>${esc(post.date)}</span></div></header>
+      <header class="docs-article-header"><span class="docs-category">${esc(post.category)}</span><h1>${esc(post.h1 || post.title)}</h1><p class="docs-summary">${esc(post.excerpt || "")}</p><div class="docs-source-meta"><span>${esc(post.author)}</span><span>${esc(post.date)}</span></div></header>
       <div class="docs-content blog-article-body">${rendered.html || `<p>${esc(post.excerpt || "")}</p>`}${articlePlanLinksHtml(post)}</div>
       <footer class="blog-article-footer"><a href="/blog">← Back to all articles</a><span class="blog-article-actions"><a class="btn btn-ghost btn-sm" href="/plans">View plans</a><a class="btn btn-primary btn-sm" href="https://dash.stealthrdp.com/submitticket.php">Ask support</a></span></footer>
     </article>
@@ -1813,18 +1827,18 @@ function buildBlogPost(post) {
     breadcrumbLd(post.title, [
       { name: "Home", url: "__SRDP_BASE__/" },
       { name: "Blog", url: "__SRDP_BASE__/blog" },
-      { name: post.title, url: `__SRDP_BASE__/blog/${post.slug}.html` },
+      { name: post.title, url: articleTokenUrl(post) },
     ]),
     articleLd(post),
     ...(howto ? [howto] : []),
   ]}];
   const fullTitle = `${post.title} — StealthRDP Blog`;
-  const useTitle = fullTitle.length <= SEO_TITLE_LIMIT ? fullTitle : seoTitle(post.title);
+  const useTitle = post.seoTitle || (fullTitle.length <= SEO_TITLE_LIMIT ? fullTitle : seoTitle(post.title));
   return page({
     active: "blog",
     title: useTitle,
     description: (post.excerpt || "").slice(0, 155) || `StealthRDP article: ${post.title}`,
-    canonical: `__SRDP_BASE__/blog/${post.slug}.html`,
+    canonical: articleTokenUrl(post),
     pageType: "article",
     jsonLd,
     body,
@@ -1973,8 +1987,8 @@ Sitemap: __SRDP_BASE__/sitemap.xml
 function buildRss() {
   const items = BLOG.map((post) => `    <item>
       <title>${esc(post.title)}</title>
-      <link>__SRDP_BASE__/blog/${post.slug}.html</link>
-      <guid>__SRDP_BASE__/blog/${post.slug}.html</guid>
+      <link>${articleTokenUrl(post)}</link>
+      <guid>${articleTokenUrl(post)}</guid>
       <pubDate>${new Date(post.date + "T00:00:00Z").toUTCString()}</pubDate>
       <description>${esc(post.excerpt || "")}</description>
     </item>`).join("\n");
@@ -2003,7 +2017,7 @@ function buildSitemap() {
     ["/about", "2026-08-31"],
     ["/docs", "2026-08-31"],
   ];
-  const blogRoutes = BLOG.map((p) => [`/blog/${p.slug}.html`, p.date]);
+  const blogRoutes = BLOG.map((p) => [articleRoute(p), p.date]);
   const docRoutes = DOCS
     .filter((article) => !NOINDEX_DOC_SLUGS.has(docSlug(article)))
     .map((article) => [`/docs/${docSlug(article)}`, docDateIso(article.date) || "2026-08-13"]);
@@ -2042,7 +2056,9 @@ fs.rmSync(path.join(ROOT, "features.html"), { force: true });
 
 fs.mkdirSync(path.join(ROOT, "blog"), { recursive: true });
 for (const post of BLOG) {
-  OUT[`blog/${post.slug}.html`] = buildBlogPost(post);
+  const file = articleFilePath(post);
+  fs.mkdirSync(path.dirname(path.join(ROOT, file)), { recursive: true });
+  OUT[file] = buildBlogPost(post);
 }
 for (const [index, article] of DOCS.entries()) {
   OUT[`docs/${docSlug(article)}.html`] = buildDocArticle(article, index);
