@@ -1,0 +1,605 @@
+@import url('/css/visual-reframe-v8.css?v=2026-09-08-v8');
+
+/*
+ * StealthRDP preview visual system v10
+ * Windows uses the yyqyu/win11 UI proportions and public CC0 visual assets.
+ * Linux keeps the Alpine/i3 interaction from v8.
+ * Both OS demos are forced into the same 1107:623 landscape rectangle.
+ */
+
+:root {
+  --win11-source-width: 1107;
+  --win11-source-height: 623;
+  --win11-source-ratio: 1107 / 623;
+}
+
+/* ---------- Shared rectangular demo geometry ---------- */
+.hero-console.ref-os-host,
+.hero-console.win11-exact-host,
+.hero-console.v9-win-host {
+  width: 100% !important;
+  min-width: 0 !important;
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+.ref-shell,
+.win11-exact-frame,
+.ref-os-compare {
+  width: 100% !important;
+  min-height: 0 !important;
+  aspect-ratio: var(--win11-source-ratio) !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+.ref-shell > .ref-linux-desktop,
+.ref-shell > .ref-i3-desktop,
+.ref-linux-desktop,
+.ref-i3-desktop {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+.ref-os-compare {
+  min-height: 0 !important;
+}
+
+/* ---------- Exact-source Windows canvas ---------- */
+.win11-exact-frame {
+  position: relative;
+  background: #111;
+  border: 1px solid color-mix(in srgb, var(--border-strong) 88%, transparent);
+  box-shadow: 0 18px 48px rgba(0,0,0,.20);
+}
+
+.win11-exact-scale {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.win11-exact-canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1107px;
+  height: 623px;
+  overflow: hidden;
+  transform-origin: 0 0;
+  color: #111;
+  font-family: "Segoe UI", Inter, Arial, sans-serif;
+  background-color: #1b5a97;
+  background-image: url('https://raw.githubusercontent.com/yyqyu/win11/master/public/img/wallpaper/default/img0.jpg');
+  background-size: cover;
+  background-position: center;
+  user-select: none;
+}
+
+/* Desktop icons retain the source demo's small, centered treatment. */
+.win11-desk-icons {
+  position: absolute;
+  top: 8px;
+  left: 6px;
+  display: grid;
+  grid-auto-flow: row;
+  gap: 2px;
+  z-index: 2;
+}
+
+.win11-desk-app {
+  width: 76px;
+  min-height: 74px;
+  margin: 2px;
+  padding: 8px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  color: #fafafa;
+  font: 12px/1.2 "Segoe UI", Arial, sans-serif;
+  text-shadow: 0 0 4px rgba(0,0,0,.6);
+  cursor: default;
+  transition: background 120ms ease;
+}
+
+.win11-desk-app:hover,
+.win11-desk-app:focus-visible {
+  background: rgba(255,255,255,.25);
+  outline: none;
+}
+
+.win11-desk-app img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+/* ---------- Source taskbar geometry ---------- */
+.win11-taskbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  width: 1107px;
+  height: 39px;
+  background: rgba(254,254,254,.80);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+
+.win11-taskcont {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.win11-tasks-cont {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.win11-tsbar {
+  width: auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  transition: all ease-in-out 200ms;
+}
+
+.win11-tsicon {
+  position: relative;
+  width: 33px;
+  height: 33px;
+  margin: auto 3px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 0;
+  background: rgba(254,254,254,0);
+  display: grid;
+  place-items: center;
+  transform-origin: center;
+  animation: win11-popintro 800ms ease-in-out;
+  cursor: default;
+}
+
+.win11-tsicon:hover {
+  background: rgba(254,254,254,.64);
+  border-radius: 4px;
+  transition: all ease-in-out 200ms;
+}
+
+.win11-tsicon img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.win11-tsicon[data-open="true"]::after {
+  content: "";
+  position: absolute;
+  display: block;
+  bottom: 0;
+  width: 6px;
+  height: 3px;
+  border-radius: 4px;
+  background: #858585;
+}
+
+.win11-tsicon[data-active="true"]::after {
+  width: 12px;
+  background: #1f4dcd;
+}
+
+.win11-taskright {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: auto;
+  height: 100%;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.win11-taskright-icon {
+  width: 24px;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+}
+
+.win11-taskright-icon img {
+  max-width: 16px;
+  max-height: 16px;
+  object-fit: contain;
+}
+
+.win11-task-date {
+  width: 52px;
+  height: 100%;
+  display: flex;
+  padding: 5px 8px 5px 4px;
+  box-sizing: border-box;
+  font-size: 10px;
+  line-height: 1.15;
+  flex-direction: column;
+  justify-content: center;
+  color: #202020;
+}
+
+.win11-task-date div {
+  width: 100%;
+  text-align: right;
+  font-weight: 400;
+}
+
+.win11-task-edge {
+  width: 6px;
+  height: 100%;
+  border-left: 2px solid #c3c3c3;
+}
+
+@keyframes win11-popintro {
+  0% { transform: scale(0); }
+  40% { transform: scale(1.125); }
+  70% { transform: scale(.725); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- Source Start menu geometry ---------- */
+.win11-start-menu {
+  --roundRad: 6px;
+  position: absolute;
+  z-index: 9999;
+  left: 50%;
+  bottom: 49px;
+  width: 520px;
+  height: 480px;
+  overflow: hidden;
+  transform: translateX(-50%);
+  border-radius: var(--roundRad);
+  background: rgba(255,255,255,.88);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  transition: all ease-in-out 200ms;
+  box-shadow: 0 18px 42px rgba(18,38,65,.22);
+}
+
+.win11-start-menu[hidden] {
+  display: block !important;
+  bottom: -500px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.win11-menu-up {
+  height: 426px;
+  padding: 36px 48px;
+  box-sizing: border-box;
+}
+
+.win11-start-search {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border-radius: 4px;
+  background: rgba(255,255,255,.9);
+  border-bottom: 2px solid #1f4dcd;
+  box-shadow: 0 1px 3px rgba(34,34,34,.16);
+  color: #555;
+  font-size: 11px;
+}
+
+.win11-start-search img {
+  width: 15px;
+  height: 15px;
+}
+
+.win11-stacbar {
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.win11-stacbar .gpname {
+  font-weight: 600;
+  font-size: 12px;
+  color: #111;
+}
+
+.win11-stacbar .gpbtn {
+  background: rgba(255,255,255,.9);
+  padding: 3px 8px 4px;
+  font-size: 10px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  border-radius: 3px;
+  box-shadow: 1px 1px 2px rgba(34,34,34,.25);
+}
+
+.win11-pnapps {
+  min-height: 150px;
+  padding: 16px 0 6px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 7px 2px;
+}
+
+.win11-pnapp {
+  min-width: 0;
+  min-height: 58px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 5px 3px;
+  position: relative;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #2f2f2f;
+  font: 500 10px/1.15 "Segoe UI", Arial, sans-serif;
+  cursor: default;
+}
+
+.win11-pnapp:hover { background: rgba(255,255,255,.5); }
+.win11-pnapp img { width: 24px; height: 24px; object-fit: contain; margin-bottom: 5px; }
+.win11-pnapp span { max-width: 58px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.win11-rec-head {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #111;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.win11-recapps {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px 18px;
+}
+
+.win11-recapp {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 4px 5px;
+  border-radius: 4px;
+}
+
+.win11-recapp:hover { background: rgba(255,255,255,.42); }
+.win11-recapp img { width: 28px; height: 28px; object-fit: contain; }
+.win11-recapp b { display: block; color: #2f2f2f; font-size: 10px; }
+.win11-recapp small { display: block; margin-top: 2px; color: #656565; font-size: 9px; }
+
+.win11-menu-bar {
+  height: 54px;
+  padding: 0 48px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(175,175,175,.10);
+  box-sizing: border-box;
+}
+
+.win11-profile {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #111;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.win11-profile img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.win11-power {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+}
+
+.win11-power:hover { background: rgba(255,255,255,.5); }
+.win11-power img { width: 16px; height: 16px; }
+
+/* ---------- Application windows ---------- */
+.win11-app-window {
+  position: absolute;
+  z-index: 40;
+  left: 188px;
+  top: 62px;
+  width: 690px;
+  height: 430px;
+  overflow: hidden;
+  border: 1px solid rgba(35,45,58,.22);
+  border-radius: 7px;
+  background: #f9fafc;
+  box-shadow: 0 18px 48px rgba(5,24,48,.32);
+}
+
+.win11-app-window[hidden] { display: none !important; }
+
+.win11-app-titlebar {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 12px;
+  background: #f5f6f8;
+  border-bottom: 1px solid #e2e4e8;
+  color: #252525;
+  font-size: 11px;
+  touch-action: none;
+}
+
+.win11-app-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.win11-app-title img { width: 17px; height: 17px; object-fit: contain; }
+
+.win11-window-controls {
+  height: 100%;
+  display: flex;
+}
+
+.win11-window-controls button {
+  width: 46px;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.win11-window-controls button:hover { background: #e8e8e8; }
+.win11-window-controls button:last-child:hover { background: #e81123; color: #fff; }
+
+.win11-app-body {
+  height: calc(100% - 32px);
+  background: #fff;
+}
+
+.win11-explorer {
+  display: grid;
+  grid-template-columns: 165px 1fr;
+  height: 100%;
+}
+
+.win11-explorer aside {
+  padding: 18px 10px;
+  border-right: 1px solid #e6e7e9;
+  background: #f7f8fa;
+}
+
+.win11-explorer aside span {
+  display: block;
+  padding: 8px 10px;
+  margin-bottom: 2px;
+  border-radius: 4px;
+  color: #454545;
+  font-size: 11px;
+}
+
+.win11-explorer aside .active { background: #e7f1ff; color: #174ea6; }
+.win11-explorer main { padding: 18px 20px; }
+.win11-path { padding: 8px 10px; border: 1px solid #d9dadd; border-radius: 4px; color: #535353; font-size: 11px; }
+.win11-drive-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
+.win11-drive { padding: 14px; border: 1px solid #e0e1e4; border-radius: 4px; }
+.win11-drive b { display: block; font-size: 12px; color: #222; }
+.win11-drive small { display: block; margin-top: 7px; color: #6a6a6a; font-size: 10px; }
+.win11-drive-bar { height: 6px; margin-top: 9px; background: #e6e6e6; overflow: hidden; }
+.win11-drive-bar i { display: block; height: 100%; background: #2878d7; }
+
+.win11-terminal {
+  height: 100%;
+  padding: 14px 16px;
+  box-sizing: border-box;
+  background: #0c0c0c;
+  color: #eee;
+  font: 12px/1.55 Consolas, "JetBrains Mono", monospace;
+}
+
+.win11-terminal-output { height: calc(100% - 28px); overflow: auto; }
+.win11-terminal form label { display: flex; align-items: center; gap: 6px; }
+.win11-terminal input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; color: #fff; font: inherit; }
+
+.win11-stealth-panel {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  background: #f6f7f9;
+}
+
+.win11-stealth-panel aside {
+  padding: 18px 14px;
+  color: #f2f5fb;
+  background: #233a5d;
+}
+
+.win11-stealth-panel aside strong { display: block; margin-bottom: 18px; font-size: 16px; }
+.win11-stealth-panel aside span { display: block; padding: 8px 6px; color: #c8d4e4; font-size: 11px; }
+.win11-stealth-panel main { padding: 24px; }
+.win11-stealth-panel h3 { margin: 0; font-size: 24px; color: #1b2430; }
+.win11-stealth-panel p { margin: 6px 0 22px; color: #6b7280; font-size: 12px; }
+.win11-stealth-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.win11-stealth-grid div { padding: 14px; border: 1px solid #dde2e8; background: white; }
+.win11-stealth-grid b { display: block; color: #6a7380; font-size: 10px; }
+.win11-stealth-grid span { display: block; margin-top: 5px; color: #1c2530; font-size: 13px; }
+
+/* ---------- Fresh install overlays ---------- */
+.v10-install-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20000;
+  display: grid;
+  place-items: center;
+  background: #05070b;
+  color: #f5f7fb;
+  opacity: 1;
+  transition: opacity .38s ease;
+}
+
+.v10-install-overlay.done { opacity: 0; pointer-events: none; }
+.v10-install-card { width: min(76%, 420px); text-align: center; }
+.v10-install-card img { width: 54px; height: 54px; object-fit: contain; margin-bottom: 18px; }
+.v10-install-card h3 { margin: 0; font: 600 16px/1.2 "Segoe UI", Arial, sans-serif; }
+.v10-install-status { min-height: 18px; margin-top: 9px; color: #aeb6c4; font: 11px/1.5 "JetBrains Mono", monospace; }
+.v10-install-track { height: 3px; margin-top: 19px; overflow: hidden; background: rgba(255,255,255,.12); border-radius: 99px; }
+.v10-install-track i { display: block; width: 4%; height: 100%; background: #3478e5; transition: width .32s ease; }
+.v10-install-percent { display: block; margin-top: 8px; color: #7f8998; font: 10px/1.2 "JetBrains Mono", monospace; }
+
+.v10-linux-install {
+  place-items: stretch;
+  padding: 18px;
+  box-sizing: border-box;
+  background: #050805;
+}
+
+.v10-linux-install .v10-install-card { width: 100%; max-width: none; text-align: left; }
+.v10-linux-tty { height: calc(100% - 26px); overflow: hidden; color: #b9c7bd; font: 10px/1.55 "JetBrains Mono", monospace; }
+.v10-linux-tty .ok { color: #78d996; }
+.v10-linux-tty .dim { color: #748079; }
+
+/* Keep motion optional. */
+@media (prefers-reduced-motion: reduce) {
+  .win11-tsicon { animation: none !important; }
+  .win11-start-menu,
+  .v10-install-overlay,
+  .v10-install-track i { transition: none !important; }
+}
