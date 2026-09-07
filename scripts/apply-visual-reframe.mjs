@@ -7,7 +7,8 @@ import fs from "fs";
 import path from "path";
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname));
-const LINK = '  <link rel="stylesheet" href="/css/visual-reframe-v2.css?v=2026-09-07-v2" />';
+const LINK = '  <link rel="stylesheet" href="/css/visual-reframe-v3.css?v=2026-09-07-v3" />';
+const SCRIPT = '  <script defer src="/js/os-guide-flow.js?v=2026-09-07-v3"></script>';
 const SKIP_DIRS = new Set([".git", "node_modules", "public"]);
 
 function collectHtml(dir, out = []) {
@@ -25,11 +26,12 @@ for (const file of collectHtml(ROOT)) {
   let html = fs.readFileSync(file, "utf8");
   if (!html.includes("</head>")) continue;
 
-  // Remove any older preview-only visual layer before inserting the current one.
-  html = html.replace(/\s*<link rel="stylesheet" href="\/css\/visual-reframe(?:-v2)?\.css[^>]*>\s*/g, "\n");
-  html = html.replace("</head>", `${LINK}\n</head>`);
+  // Remove older preview-only visual layers/scripts before inserting the current one.
+  html = html.replace(/\s*<link rel="stylesheet" href="\/css\/visual-reframe(?:-v2|-v3)?\.css[^>]*>\s*/g, "\n");
+  html = html.replace(/\s*<script defer src="\/js\/os-guide-flow\.js[^>]*><\/script>\s*/g, "\n");
+  html = html.replace("</head>", `${LINK}\n${SCRIPT}\n</head>`);
   fs.writeFileSync(file, html);
   changed += 1;
 }
 
-console.log(`apply-visual-reframe: applied v2 to ${changed} HTML files`);
+console.log(`apply-visual-reframe: applied v3 to ${changed} HTML files`);
