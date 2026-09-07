@@ -1,0 +1,576 @@
+/*
+ * StealthRDP preview visual system v2
+ * Layout and presentation only. Existing copy, SEO content, metadata, prices and URLs stay unchanged.
+ */
+
+:root {
+  --ui-max: 1180px;
+  --ui-gap: 16px;
+  --ui-radius: 12px;
+  --ui-radius-sm: 9px;
+  --ui-line: color-mix(in srgb, var(--border) 88%, transparent);
+  --ui-line-strong: color-mix(in srgb, var(--border-strong) 88%, transparent);
+  --ui-accent-line: color-mix(in srgb, var(--accent) 48%, var(--border));
+  --ui-accent-wash: color-mix(in srgb, var(--accent) 8%, var(--surface));
+}
+
+/* ---------------------------------------------------------
+   Global frame
+   --------------------------------------------------------- */
+html { scroll-padding-top: 84px; }
+body { background-image: none !important; }
+.container { max-width: var(--ui-max); }
+
+.header {
+  min-height: 64px;
+  background: color-mix(in srgb, var(--bg) 94%, transparent) !important;
+  border-bottom: 1px solid var(--ui-line) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.header-inner { min-height: 64px; }
+.nav { gap: 2px; }
+.nav a {
+  border-radius: 7px !important;
+  padding: 8px 11px !important;
+  font-size: 13px;
+}
+.nav a:hover,
+.nav a.active {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+}
+
+.btn {
+  min-height: 40px;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+.btn:hover { transform: none !important; }
+.btn-primary { border-color: var(--accent) !important; }
+
+.section { padding-block: 48px; }
+.section + .section { border-top: 1px solid var(--ui-line); }
+
+/* ---------------------------------------------------------
+   Homepage: calm product hierarchy
+   --------------------------------------------------------- */
+body[data-page="home"] .hero {
+  padding: 60px 0 52px !important;
+  background: transparent !important;
+  border-bottom: 1px solid var(--ui-line);
+}
+body[data-page="home"] .hero::before,
+body[data-page="home"] .hero::after { display: none !important; }
+body[data-page="home"] .hero-grid {
+  grid-template-columns: minmax(0, 1.08fr) minmax(390px, .92fr) !important;
+  gap: 56px !important;
+  align-items: center;
+}
+body[data-page="home"] .hero h1 {
+  max-width: 720px;
+  font-size: clamp(44px, 5.5vw, 70px) !important;
+  line-height: 1 !important;
+  letter-spacing: -.045em !important;
+}
+body[data-page="home"] .hero .sub {
+  max-width: 650px;
+  font-size: 17px;
+  line-height: 1.62;
+}
+body[data-page="home"] .hero-console,
+body[data-page="home"] .console-card {
+  transform: none !important;
+  animation: none !important;
+  filter: none !important;
+}
+body[data-page="home"] .console-card {
+  border: 1px solid var(--ui-line-strong) !important;
+  border-radius: var(--ui-radius) !important;
+  box-shadow: none !important;
+  background: var(--surface) !important;
+}
+body[data-page="home"] .marquee {
+  overflow-x: auto;
+  padding: 10px 0 !important;
+  scrollbar-width: none;
+}
+body[data-page="home"] .marquee::-webkit-scrollbar { display: none; }
+body[data-page="home"] .marquee-track {
+  animation: none !important;
+  transform: none !important;
+  width: max-content !important;
+  min-width: 100%;
+}
+body[data-page="home"] .marquee-set { gap: 14px !important; }
+body[data-page="home"] .marquee-set + .marquee-set { display: none !important; }
+body[data-page="home"] .marquee-item {
+  border: 1px solid var(--ui-line);
+  border-radius: 8px;
+  padding: 7px 10px;
+  background: var(--surface);
+}
+body[data-page="home"] .bento-card,
+body[data-page="home"] .review-card {
+  border-radius: var(--ui-radius) !important;
+  box-shadow: none !important;
+  background: var(--surface) !important;
+  transform: none !important;
+}
+
+/* ---------------------------------------------------------
+   Shared plan presentation
+   --------------------------------------------------------- */
+.plan-card {
+  border-radius: var(--ui-radius) !important;
+  box-shadow: none !important;
+  transform: none !important;
+  background: var(--surface) !important;
+}
+.plan-card:hover {
+  transform: none !important;
+  border-color: var(--ui-line-strong) !important;
+}
+.plan-card.popular {
+  border-color: var(--ui-accent-line) !important;
+  background: var(--ui-accent-wash) !important;
+  box-shadow: none !important;
+}
+.plan-popular {
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+
+/* ---------------------------------------------------------
+   Windows / Linux VPS pages
+   --------------------------------------------------------- */
+main.os-vps-page {
+  width: min(var(--ui-max), calc(100% - 36px));
+  margin: 28px auto 0;
+  padding: 0 0 40px;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--ui-gap);
+}
+main.os-vps-page > section {
+  min-width: 0;
+  margin: 0 !important;
+  border-top: 0 !important;
+}
+main.os-vps-page > .os-vps-hero,
+main.os-vps-page > .os-vps-catalog,
+main.os-vps-page > .os-vps-checkout-note,
+main.os-vps-page > .os-vps-cheap,
+main.os-vps-page > .os-vps-distros,
+main.os-vps-page > .os-vps-faq,
+main.os-vps-page > .cta-band {
+  grid-column: 1 / -1;
+}
+main.os-vps-page > .os-vps-root,
+main.os-vps-page > .os-vps-regions,
+main.os-vps-page > .os-vps-support {
+  grid-column: 1 / 7;
+}
+main.os-vps-page > .os-vps-size,
+main.os-vps-page > .os-vps-activation,
+main.os-vps-page > .os-vps-order {
+  grid-column: 7 / -1;
+}
+
+/* Hero */
+main.os-vps-page > .os-vps-hero {
+  padding: 0 !important;
+  border: 1px solid var(--ui-line-strong) !important;
+  border-radius: var(--ui-radius);
+  background: var(--surface) !important;
+  overflow: hidden;
+  box-shadow: none !important;
+}
+main.os-vps-page > .os-vps-hero::before,
+main.os-vps-page > .os-vps-hero::after { display: none !important; }
+main.os-vps-page > .os-vps-hero .container {
+  width: 100% !important;
+  max-width: none !important;
+  padding: 38px 40px !important;
+}
+main.os-vps-page > .os-vps-hero .hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(340px, .85fr) !important;
+  gap: 48px !important;
+  align-items: center;
+}
+main.os-vps-page > .os-vps-hero .docs-breadcrumbs { margin-bottom: 18px; }
+main.os-vps-page > .os-vps-hero .os-vps-logo {
+  width: 46px !important;
+  height: 46px !important;
+  padding: 8px;
+  border: 1px solid var(--ui-line);
+  border-radius: 10px;
+  background: var(--bg);
+}
+main.os-vps-page > .os-vps-hero h1 {
+  max-width: 720px;
+  margin-top: 10px !important;
+  font-size: clamp(40px, 4.7vw, 60px) !important;
+  line-height: 1.02 !important;
+  letter-spacing: -.042em !important;
+}
+main.os-vps-page > .os-vps-hero .sub {
+  max-width: 690px;
+  margin-top: 13px !important;
+  font-size: 15.5px;
+  line-height: 1.58;
+}
+main.os-vps-page > .os-vps-hero .hero-cta { margin-top: 22px !important; }
+main.os-vps-page > .os-vps-hero .os-hero-chips {
+  margin-top: 16px !important;
+  gap: 7px !important;
+}
+main.os-vps-page > .os-vps-hero .os-hero-chip {
+  padding: 6px 9px !important;
+  border: 1px solid var(--ui-line) !important;
+  border-radius: 7px !important;
+  background: var(--bg) !important;
+}
+main.os-vps-page > .os-vps-hero .hero-console,
+main.os-vps-page > .os-vps-hero .console-card {
+  transform: none !important;
+  animation: none !important;
+  filter: none !important;
+}
+main.os-vps-page > .os-vps-hero .console-card {
+  border: 1px solid var(--ui-line-strong) !important;
+  border-radius: 10px !important;
+  background: var(--bg) !important;
+  box-shadow: none !important;
+}
+main.os-vps-page > .os-vps-hero .console-body { padding-block: 18px !important; }
+
+/* Plans */
+main.os-vps-page > .os-vps-catalog {
+  padding: 26px 0 0 !important;
+}
+main.os-vps-page > .os-vps-catalog > .container {
+  width: 100% !important;
+  max-width: none !important;
+}
+main.os-vps-page .os-vps-catalog-head {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 430px);
+  gap: 28px;
+  align-items: end;
+  margin-bottom: 14px !important;
+}
+main.os-vps-page .os-vps-catalog-head h2 {
+  margin-top: 4px !important;
+  font-size: clamp(29px, 3.2vw, 40px) !important;
+  letter-spacing: -.03em;
+}
+main.os-vps-page .os-vps-catalog-head p {
+  margin: 0 !important;
+  line-height: 1.55;
+}
+main.os-vps-page .os-vps-region-control {
+  margin: 0 0 12px !important;
+  padding: 9px 10px !important;
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-radius-sm);
+  background: var(--surface) !important;
+}
+main.os-vps-page .location-tabs { border-radius: 7px !important; }
+main.os-vps-page .location-tabs button { border-radius: 6px !important; }
+main.os-vps-page .os-vps-plan-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  overflow: visible !important;
+  padding: 0 !important;
+}
+main.os-vps-page .os-vps-plan-grid .plan-card {
+  min-width: 0 !important;
+  padding: 18px !important;
+}
+main.os-vps-page .os-vps-plan-grid .p-name { font-size: 18px !important; }
+main.os-vps-page .os-vps-plan-grid .p-desc,
+main.os-vps-page .os-vps-plan-grid .p-location { font-size: 12px !important; }
+main.os-vps-page .os-vps-plan-grid .plan-price { margin-top: 13px !important; }
+main.os-vps-page .os-vps-plan-grid .plan-price .cur { font-size: 27px !important; }
+main.os-vps-page .os-vps-plan-grid .plan-specs { margin: 14px 0 !important; }
+main.os-vps-page .os-vps-plan-grid .plan-spec { padding-block: 6px !important; }
+main.os-vps-page .os-vps-plan-grid .btn { width: 100%; }
+
+/* Checkout bridge */
+main.os-vps-page > .os-vps-checkout-note {
+  padding: 0 !important;
+}
+main.os-vps-page > .os-vps-checkout-note > .container {
+  width: 100% !important;
+  max-width: none !important;
+}
+main.os-vps-page > .os-vps-checkout-note .byo-panel {
+  margin: 0 !important;
+  padding: 18px 20px !important;
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-radius);
+  background: var(--surface) !important;
+  box-shadow: none !important;
+}
+main.os-vps-page > .os-vps-checkout-note h2 {
+  font-size: 20px !important;
+  margin: 4px 0 5px !important;
+}
+
+/* Editorial / SEO sections: preserve all copy, remove the stacked-card feeling. */
+main.os-vps-page > .os-vps-cheap,
+main.os-vps-page > .os-vps-distros,
+main.os-vps-page > .os-vps-root,
+main.os-vps-page > .os-vps-size,
+main.os-vps-page > .os-vps-regions,
+main.os-vps-page > .os-vps-activation,
+main.os-vps-page > .os-vps-support,
+main.os-vps-page > .os-vps-order {
+  padding: 0 !important;
+}
+main.os-vps-page > .os-vps-cheap > .container,
+main.os-vps-page > .os-vps-distros > .container,
+main.os-vps-page > .os-vps-root > .container,
+main.os-vps-page > .os-vps-size > .container,
+main.os-vps-page > .os-vps-regions > .container,
+main.os-vps-page > .os-vps-activation > .container,
+main.os-vps-page > .os-vps-support > .container,
+main.os-vps-page > .os-vps-order > .container {
+  width: 100% !important;
+  max-width: none !important;
+  height: 100%;
+  padding: 24px !important;
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-radius);
+  background: var(--surface) !important;
+}
+main.os-vps-page > .os-vps-cheap > .container,
+main.os-vps-page > .os-vps-distros > .container {
+  padding: 26px 28px !important;
+}
+main.os-vps-page .os-vps-guide-intro { margin-bottom: 14px !important; }
+main.os-vps-page .os-vps-guide-intro h2 {
+  margin: 4px 0 0 !important;
+  font-size: clamp(22px, 2.4vw, 31px) !important;
+  letter-spacing: -.025em;
+}
+main.os-vps-page .os-vps-guide-intro p { margin-top: 7px !important; }
+main.os-vps-page .os-content-card {
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+main.os-vps-page .os-content-card p { line-height: 1.58; }
+main.os-vps-page .os-vps-links { margin-top: 15px !important; }
+
+/* OS selectors become compact navigation, not a wall of cards. */
+main.os-vps-page .os-distro-wrap {
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+main.os-vps-page .os-distro-label { margin-bottom: 8px !important; }
+main.os-vps-page .os-distro-tabs,
+main.os-vps-page .os-distro-tabs-3 {
+  display: flex !important;
+  grid-template-columns: none !important;
+  gap: 7px !important;
+  overflow-x: auto;
+  padding: 0 0 9px !important;
+  scrollbar-width: thin;
+}
+main.os-vps-page .os-distro-tab {
+  flex: 0 0 auto;
+  min-width: 150px;
+  min-height: 66px !important;
+  padding: 10px 12px !important;
+  border: 1px solid var(--ui-line) !important;
+  border-radius: 8px !important;
+  background: var(--bg) !important;
+  box-shadow: none !important;
+}
+main.os-vps-page .os-distro-tab[aria-selected="true"] {
+  border-color: var(--ui-accent-line) !important;
+  background: var(--ui-accent-wash) !important;
+}
+main.os-vps-page .os-distro-tab img { width: 26px !important; height: 26px !important; }
+main.os-vps-page .os-distro-panels { margin-top: 8px !important; }
+main.os-vps-page .os-distro-panel {
+  padding: 17px 18px !important;
+  border: 1px solid var(--ui-line) !important;
+  border-radius: 8px !important;
+  background: var(--bg) !important;
+  box-shadow: none !important;
+}
+main.os-vps-page .os-distro-versions { gap: 6px !important; }
+main.os-vps-page .os-distro-versions span { border-radius: 6px !important; }
+main.os-vps-page .os-related-link { margin-top: 10px !important; }
+
+/* Resource / regions / support blocks */
+main.os-vps-page .os-mini-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+main.os-vps-page .os-mini-card {
+  padding: 13px !important;
+  border: 1px solid var(--ui-line) !important;
+  border-radius: 8px !important;
+  background: var(--bg) !important;
+  box-shadow: none !important;
+}
+main.os-vps-page .os-mini-card h3 { margin: 5px 0 4px !important; font-size: 15px !important; }
+main.os-vps-page .os-mini-card p { font-size: 12.5px !important; line-height: 1.45; }
+main.os-vps-page .os-two-col { gap: 8px !important; }
+main.os-vps-page .os-two-col .os-content-card {
+  padding: 14px !important;
+  border: 1px solid var(--ui-line) !important;
+  border-radius: 8px !important;
+  background: var(--bg) !important;
+}
+main.os-vps-page .os-vps-check-list { margin-top: 12px !important; }
+main.os-vps-page .os-vps-check-list li { margin-block: 6px !important; }
+main.os-vps-page .os-order-list {
+  margin: 12px 0 0 !important;
+  gap: 7px !important;
+}
+main.os-vps-page .os-order-list li { padding: 10px 12px !important; }
+
+/* FAQ */
+main.os-vps-page > .os-vps-faq {
+  padding: 0 !important;
+}
+main.os-vps-page > .os-vps-faq > .container {
+  width: 100% !important;
+  max-width: none !important;
+  padding: 28px !important;
+  border: 1px solid var(--ui-line);
+  border-radius: var(--ui-radius);
+  background: var(--surface) !important;
+}
+main.os-vps-page .os-vps-faq-head { margin-bottom: 16px !important; }
+main.os-vps-page .os-vps-faq-head h2 { margin: 4px 0 0 !important; }
+main.os-vps-page .os-vps-faq-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+main.os-vps-page .os-vps-faq-item {
+  border: 1px solid var(--ui-line) !important;
+  border-radius: 8px !important;
+  background: var(--bg) !important;
+}
+main.os-vps-page .os-vps-faq-item summary { padding: 13px 14px !important; }
+main.os-vps-page .os-vps-faq-item p { padding: 0 14px 13px !important; }
+main.os-vps-page .os-vps-next {
+  margin-top: 16px !important;
+  padding: 17px 18px !important;
+  border: 1px solid var(--ui-line) !important;
+  border-radius: 8px !important;
+  background: var(--bg) !important;
+}
+
+/* Final CTA */
+main.os-vps-page > .cta-band {
+  padding: 0 !important;
+  background: transparent !important;
+}
+main.os-vps-page > .cta-band > .container {
+  width: 100% !important;
+  max-width: none !important;
+  padding: 24px 26px !important;
+  border: 1px solid var(--ui-accent-line);
+  border-radius: var(--ui-radius);
+  background: var(--ui-accent-wash) !important;
+}
+
+/* ---------------------------------------------------------
+   Docs / Blog / Status: denser utility surfaces
+   --------------------------------------------------------- */
+body[data-page="docs"] .docs-card,
+body[data-page="blog"] .blog-card,
+body[data-page="status"] .status-card,
+body[data-page="status"] .status-node {
+  border-radius: var(--ui-radius-sm) !important;
+  box-shadow: none !important;
+  background: var(--surface) !important;
+}
+body[data-page="docs"] .docs-card { min-height: 0 !important; }
+body[data-page="blog"] .blog-card { min-height: 0 !important; }
+
+/* ---------------------------------------------------------
+   Responsive
+   --------------------------------------------------------- */
+@media (max-width: 980px) {
+  body[data-page="home"] .hero-grid,
+  main.os-vps-page > .os-vps-hero .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+  }
+  main.os-vps-page .os-vps-catalog-head {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  main.os-vps-page .os-vps-plan-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  main.os-vps-page > .os-vps-root,
+  main.os-vps-page > .os-vps-regions,
+  main.os-vps-page > .os-vps-support,
+  main.os-vps-page > .os-vps-size,
+  main.os-vps-page > .os-vps-activation,
+  main.os-vps-page > .os-vps-order {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 680px) {
+  .section { padding-block: 38px; }
+  main.os-vps-page {
+    width: min(100% - 24px, var(--ui-max));
+    margin-top: 14px;
+    gap: 10px;
+  }
+  main.os-vps-page > .os-vps-hero .container { padding: 26px 20px !important; }
+  main.os-vps-page > .os-vps-hero h1 {
+    font-size: clamp(36px, 11vw, 48px) !important;
+  }
+  main.os-vps-page .os-vps-plan-grid { grid-template-columns: 1fr !important; }
+  main.os-vps-page > .os-vps-cheap > .container,
+  main.os-vps-page > .os-vps-distros > .container,
+  main.os-vps-page > .os-vps-root > .container,
+  main.os-vps-page > .os-vps-size > .container,
+  main.os-vps-page > .os-vps-regions > .container,
+  main.os-vps-page > .os-vps-activation > .container,
+  main.os-vps-page > .os-vps-support > .container,
+  main.os-vps-page > .os-vps-order > .container,
+  main.os-vps-page > .os-vps-faq > .container {
+    padding: 20px !important;
+  }
+  main.os-vps-page .os-mini-grid,
+  main.os-vps-page .os-vps-faq-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+  }
+  .hero-console,
+  .console-card,
+  .marquee-track,
+  .review-reel,
+  .plan-card,
+  .bento-card {
+    animation: none !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
