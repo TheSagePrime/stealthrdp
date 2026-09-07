@@ -1,0 +1,52 @@
+@import url('/css/visual-reframe-v4.css?v=2026-09-08-v4');
+
+/*
+ * StealthRDP preview visual system v5
+ * Scroll stability/performance patch.
+ * Native vertical scrolling owns the viewport. No observer-driven scroll movement.
+ */
+
+html,
+body {
+  scroll-behavior: auto !important;
+  overscroll-behavior-y: auto !important;
+}
+
+/* Sticky blurred layers are expensive during continuous scroll. */
+.header,
+main.os-vps-page > .behavior-journey {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+main.os-vps-page > .behavior-journey {
+  scroll-behavior: auto !important;
+  background: var(--bg) !important;
+}
+
+/* Horizontal carousels must not introduce extra smooth-scroll work while page scrolling. */
+.behavior-plan-rail,
+.behavior-review-rail,
+main.os-vps-page .os-distro-tabs,
+main.os-vps-page .os-guide-nav {
+  scroll-behavior: auto !important;
+}
+
+/* Keep snapping gentle so diagonal trackpad gestures do not feel captured. */
+main.os-vps-page .behavior-plan-rail,
+body[data-page="plans"] .behavior-plan-rail {
+  scroll-snap-type: x proximity !important;
+}
+
+/* Anchor/click navigation lands below sticky chrome without global smooth-scroll. */
+main.os-vps-page > section,
+main.os-vps-page .os-guide-pane {
+  scroll-margin-top: 112px;
+}
+
+@media (max-width: 900px) {
+  main.os-vps-page > section,
+  main.os-vps-page .os-guide-pane {
+    scroll-margin-top: 104px;
+  }
+}
