@@ -1,0 +1,231 @@
+@import url('/css/visual-reframe-v6.css?v=2026-09-08-v6');
+
+/* Mini OS interaction layer. */
+.mini-os-shell { min-height: 372px; }
+.mini-os-shell .os-visual-stage { min-height: 300px; }
+
+.mini-win-desktop {
+  position: relative;
+  min-height: 300px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 72% 18%, rgba(66,125,246,.34), transparent 30%),
+    linear-gradient(140deg, #0b2148 0%, #0f3976 48%, #08172e 100%);
+  color: #f4f7fb;
+}
+.mini-win-wallpaper-mark {
+  position: absolute;
+  right: 42px;
+  top: 44px;
+  width: 104px;
+  height: 104px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 5px;
+  opacity: .16;
+  transform: skewY(-6deg);
+}
+.mini-win-wallpaper-mark span { background: #fff; }
+
+.mini-win-icons {
+  position: absolute;
+  top: 18px;
+  left: 16px;
+  display: grid;
+  gap: 10px;
+  z-index: 4;
+}
+.mini-win-icons button {
+  width: 66px;
+  min-height: 58px;
+  padding: 5px 4px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+.mini-win-icons button:hover,
+.mini-win-icons button:focus-visible { background: rgba(255,255,255,.10); }
+.mini-desktop-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin: 0 auto 4px;
+  border-radius: 6px;
+  background: rgba(255,255,255,.15);
+  font: 700 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.mini-win-icons small { display:block; font-size: 9px; line-height:1.2; text-shadow:0 1px 3px rgba(0,0,0,.8); }
+
+.mini-win-window {
+  position: absolute;
+  left: 88px;
+  top: 46px;
+  width: min(72%, 390px);
+  min-width: 260px;
+  min-height: 190px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 8px;
+  background: #f5f6f8;
+  color: #162033;
+  box-shadow: 0 18px 42px rgba(0,0,0,.32);
+  z-index: 10;
+}
+.mini-win-window[hidden] { display:none !important; }
+.mini-win-window.is-dragging { user-select:none; box-shadow:0 22px 54px rgba(0,0,0,.42); }
+.mini-win-titlebar {
+  min-height: 32px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding-left:10px;
+  background:#ffffff;
+  border-bottom:1px solid #d9dde5;
+  font-size:10px;
+  font-weight:600;
+  cursor:grab;
+  touch-action:none;
+}
+.mini-win-titlebar:active { cursor:grabbing; }
+.mini-win-controls { align-self:stretch; display:flex; }
+.mini-win-controls button {
+  width:34px;
+  border:0;
+  background:transparent;
+  color:#3e4654;
+  cursor:pointer;
+}
+.mini-win-controls button:hover { background:#e9ebef; }
+.mini-win-controls button[data-close]:hover { background:#d63b31; color:#fff; }
+.mini-win-body { min-height: 158px; background:#f5f6f8; }
+
+.mini-explorer { display:grid; grid-template-columns:86px 1fr; min-height:158px; }
+.mini-explorer aside { padding:10px 6px; background:#eef1f5; border-right:1px solid #d9dde5; }
+.mini-explorer aside button { width:100%; padding:6px 7px; border:0; border-radius:4px; background:transparent; text-align:left; font-size:9px; color:#414a59; }
+.mini-explorer aside button.is-selected { background:#dce8f9; color:#0d376b; }
+.mini-explorer main { padding:10px; min-width:0; }
+.mini-explorer-path { margin-bottom:10px; padding:5px 7px; border:1px solid #d9dde5; background:#fff; font-size:9px; }
+.mini-drive-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.mini-drive-grid button { padding:9px; border:1px solid #d9dde5; border-radius:5px; background:#fff; text-align:left; color:#202a39; }
+.mini-drive-grid b,.mini-drive-grid small { display:block; font-size:8px; }
+.mini-drive-grid span { display:block; height:4px; margin:7px 0; border-radius:99px; background:#e1e5ea; overflow:hidden; }
+.mini-drive-grid i { display:block; height:100%; background:#4a8ce6; }
+.mini-drive-grid small { color:#747e8d; }
+
+.mini-server-manager { display:grid; grid-template-columns:92px 1fr; min-height:158px; }
+.mini-server-sidebar { padding:12px 8px; background:#283645; color:#dfe6ee; }
+.mini-server-sidebar b,.mini-server-sidebar span { display:block; margin-bottom:9px; font-size:8px; }
+.mini-server-main { padding:12px; background:#f7f8fa; }
+.mini-server-main h4 { margin:0; font-size:13px; }
+.mini-server-main p { margin:3px 0 10px; font-size:8px; color:#697487; }
+.mini-server-tiles { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+.mini-server-tiles span { padding:8px; border:1px solid #d9dde5; background:#fff; }
+.mini-server-tiles b,.mini-server-tiles small { display:block; font-size:8px; }
+.mini-server-tiles small { margin-top:3px; color:#567; }
+
+.mini-ps { min-height:158px; padding:10px; background:#081b4b; color:#f3f6ff; font:10px/1.5 'JetBrains Mono',ui-monospace,monospace; }
+.mini-ps-output { max-height:115px; overflow:auto; scrollbar-width:thin; }
+.mini-ps-gap { height:7px; }
+.mini-ps-prompt,.mini-ps form span { color:#dfe8ff; }
+.mini-ps form label { display:flex; align-items:center; gap:5px; }
+.mini-ps input { min-width:0; flex:1; padding:2px 0; border:0; outline:0; background:transparent; color:#fff; font:inherit; }
+
+.mini-win-start {
+  position:absolute;
+  left:8px;
+  bottom:40px;
+  width:184px;
+  padding:10px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:9px;
+  background:rgba(20,28,44,.96);
+  box-shadow:0 18px 40px rgba(0,0,0,.38);
+  z-index:60;
+}
+.mini-win-start[hidden] { display:none !important; }
+.mini-start-user { display:flex; align-items:center; gap:8px; padding:4px 4px 10px; color:#fff; font-size:10px; }
+.mini-start-user span { width:24px; height:24px; display:grid; place-items:center; border-radius:50%; background:#4c83dc; }
+.mini-start-apps { display:grid; gap:3px; }
+.mini-start-apps button { padding:7px 8px; border:0; border-radius:5px; background:transparent; color:#fff; text-align:left; font-size:9px; cursor:pointer; }
+.mini-start-apps button:hover { background:rgba(255,255,255,.10); }
+
+.mini-win-taskbar {
+  position:absolute;
+  left:0;right:0;bottom:0;
+  height:38px;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:0 7px;
+  border-top:1px solid rgba(255,255,255,.12);
+  background:rgba(11,18,31,.88);
+  z-index:70;
+}
+.mini-win-taskbar button,.mini-win-taskbar>span:not(.mini-win-clock) {
+  width:30px;height:30px;
+  display:grid;place-items:center;
+  border:0;border-radius:5px;
+  background:transparent;
+  color:#fff;
+  font:700 11px/1 ui-monospace,monospace;
+  cursor:pointer;
+}
+.mini-win-taskbar button:hover { background:rgba(255,255,255,.10); }
+.mini-win-start-btn { color:#63a0ff !important; font-size:18px !important; }
+.mini-win-clock { margin-left:auto; padding-right:4px; font-size:9px; color:#fff; }
+
+.mini-linux-terminal {
+  min-height:300px;
+  display:flex;
+  flex-direction:column;
+  background:#07100d;
+  color:#dbe9e1;
+  font:11px/1.55 'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+.mini-linux-bar {
+  min-height:34px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:0 10px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  background:#0e1714;
+}
+.mini-linux-bar i { width:8px;height:8px;border-radius:50%;background:#53625c; }
+.mini-linux-bar i:nth-child(1){background:#e2675b}.mini-linux-bar i:nth-child(2){background:#d6a84f}.mini-linux-bar i:nth-child(3){background:#55b878}
+.mini-linux-bar span { margin-left:4px; color:#91a39a; font-size:9px; }
+.mini-linux-screen { flex:1; min-height:215px; max-height:215px; overflow:auto; padding:14px 14px 4px; scrollbar-width:thin; }
+.mini-linux-screen div { min-height:16px; white-space:pre-wrap; overflow-wrap:anywhere; }
+.mini-linux-screen b,.mini-linux-form span { color:#70d99a; }
+.mini-linux-gap { height:8px; }
+.mini-linux-form { padding:6px 14px 14px; }
+.mini-linux-form label { display:flex; gap:7px; align-items:center; }
+.mini-linux-form input { flex:1; min-width:0; padding:3px 0; border:0; outline:0; background:transparent; color:#e4eee9; font:inherit; caret-color:#7be7a5; }
+
+.is-home-preview.mini-win-desktop,.is-home-preview.mini-linux-terminal { min-height:370px; height:100%; }
+.is-home-preview .mini-win-preview-window { position:absolute; left:18%; top:24%; width:62%; padding:12px; border:1px solid rgba(255,255,255,.18); border-radius:7px; background:rgba(244,247,251,.94); color:#1b2638; box-shadow:0 18px 45px rgba(0,0,0,.28); }
+.is-home-preview .mini-win-preview-window b,.is-home-preview .mini-win-preview-window small { display:block; }
+.is-home-preview .mini-win-preview-window b { font-size:12px; }.is-home-preview .mini-win-preview-window small { margin-top:2px;font-size:8px;color:#667; }
+.is-home-preview .mini-win-preview-window div { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-top:10px; }
+.is-home-preview .mini-win-preview-window i { height:34px; border:1px solid #dce1e7; background:#fff; }
+.mini-linux-preview-lines { padding:54px 20px; }
+.mini-linux-preview-lines p { margin:0 0 10px; font-size:11px; }.mini-linux-preview-lines b{color:#70d99a}.mini-linux-preview-lines i{display:inline-block;width:7px;height:13px;background:#c8dad0;vertical-align:-2px}
+
+@media (max-width:900px){
+  .mini-win-window { width:min(76%,360px); }
+}
+@media (max-width:620px){
+  .mini-os-shell { min-height:330px; }
+  .mini-win-desktop,.mini-linux-terminal { min-height:255px; }
+  .mini-win-window { width:76%; min-width:220px; left:70px; }
+  .mini-win-icons { left:8px; }
+  .mini-win-icons button { width:56px; }
+  .mini-drive-grid,.mini-server-tiles { grid-template-columns:1fr; }
+  .mini-linux-screen { min-height:174px; max-height:174px; }
+}
