@@ -7,8 +7,9 @@ ENV NODE_ENV=production PORT=8080
 
 WORKDIR /app
 
-# No runtime dependencies — server.js is zero-dependency Node.
+# Runtime remains dependency-free. The preview visual pass uses Node built-ins only.
 COPY . .
+RUN node scripts/apply-visual-reframe.mjs
 
 EXPOSE 8080
 
