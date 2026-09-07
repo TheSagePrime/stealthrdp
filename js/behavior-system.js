@@ -113,7 +113,14 @@
       button.type = 'button';
       button.className = 'behavior-journey-item';
       button.textContent = sectionLabel(section) || `${index + 1}`;
-      button.addEventListener('click', () => section.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+
+      // Smooth vertical scrolling is allowed only after an explicit user click.
+      // Passive observers must never move the page viewport.
+      button.addEventListener('click', () => {
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        section.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+      });
+
       rail.appendChild(button);
       return button;
     });
@@ -122,13 +129,17 @@
 
     const setActive = (section) => {
       const index = sections.indexOf(section);
+      if (index < 0) return;
+
       buttons.forEach((button, buttonIndex) => {
         const active = index === buttonIndex;
         button.classList.toggle('is-active', active);
         button.setAttribute('aria-current', active ? 'location' : 'false');
       });
-      const activeButton = buttons[index];
-      activeButton?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+
+      // IMPORTANT: do not call scrollIntoView() here.
+      // This function is driven by IntersectionObserver while the user scrolls.
+      // Moving the viewport from here causes scroll-jacking and upward snapping.
     };
 
     const observer = new IntersectionObserver((entries) => {
