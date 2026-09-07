@@ -7,9 +7,10 @@ import fs from "fs";
 import path from "path";
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname));
-const LINK = '  <link rel="stylesheet" href="/css/visual-reframe-v7.css?v=2026-09-08-v7" />';
+const LINK = '  <link rel="stylesheet" href="/css/visual-reframe-v8.css?v=2026-09-08-v8" />';
 const GUIDE_SCRIPT = '  <script defer src="/js/os-guide-flow.js?v=2026-09-08-v3"></script>';
-const BEHAVIOR_SCRIPT = '  <script defer src="/js/behavior-system.js?v=2026-09-08-v7"></script>';
+const BEHAVIOR_SCRIPT = '  <script defer src="/js/behavior-system-v8.js?v=2026-09-08-v8"></script>';
+const OS_DEMO_SCRIPT = '  <script defer src="/js/os-reference-demo-v8.js?v=2026-09-08-v8"></script>';
 const SKIP_DIRS = new Set([".git", "node_modules", "public"]);
 
 function collectHtml(dir, out = []) {
@@ -27,11 +28,11 @@ for (const file of collectHtml(ROOT)) {
   let html = fs.readFileSync(file, "utf8");
   if (!html.includes("</head>")) continue;
 
-  html = html.replace(/\s*<link rel="stylesheet" href="\/css\/visual-reframe(?:-v2|-v3|-v4|-v5|-v6|-v7)?\.css[^>]*>\s*/g, "\n");
-  html = html.replace(/\s*<script defer src="\/js\/(?:os-guide-flow|behavior-system)\.js[^>]*><\/script>\s*/g, "\n");
-  html = html.replace("</head>", `${LINK}\n${GUIDE_SCRIPT}\n${BEHAVIOR_SCRIPT}\n</head>`);
+  html = html.replace(/\s*<link rel="stylesheet" href="\/css\/visual-reframe(?:-v2|-v3|-v4|-v5|-v6|-v7|-v8)?\.css[^>]*>\s*/g, "\n");
+  html = html.replace(/\s*<script defer src="\/js\/(?:os-guide-flow|behavior-system(?:-v8)?|os-reference-demo-v8)\.js[^>]*><\/script>\s*/g, "\n");
+  html = html.replace("</head>", `${LINK}\n${GUIDE_SCRIPT}\n${BEHAVIOR_SCRIPT}\n${OS_DEMO_SCRIPT}\n</head>`);
   fs.writeFileSync(file, html);
   changed += 1;
 }
 
-console.log(`apply-visual-reframe: applied interactive OS v7 to ${changed} HTML files`);
+console.log(`apply-visual-reframe: applied reference OS v8 to ${changed} HTML files`);
