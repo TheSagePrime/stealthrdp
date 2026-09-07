@@ -1,0 +1,167 @@
+@import url('/css/visual-reframe-v8.css?v=2026-09-08-v8');
+
+/*
+ * StealthRDP preview visual system v11
+ * Windows = actual locally-built yyqyu/win11 React app.
+ * Linux = existing Alpine/i3 v8 demo.
+ * Both render in the same 1107:623 landscape frame.
+ */
+
+:root { --os-demo-ratio: 1107 / 623; }
+
+.hero-console.full-os-demo-host,
+.hero-console.ref-os-host {
+  width: 100% !important;
+  min-width: 0 !important;
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+.full-os-demo-frame,
+.ref-shell,
+.ref-os-compare {
+  position: relative;
+  width: 100% !important;
+  min-height: 0 !important;
+  aspect-ratio: var(--os-demo-ratio) !important;
+  overflow: hidden !important;
+  border: 1px solid color-mix(in srgb, var(--border-strong) 88%, transparent);
+  border-radius: 12px !important;
+  background: #080b10;
+  box-shadow: 0 18px 48px rgba(0,0,0,.20);
+}
+
+/* The iframe itself always believes it is on the original 1107x623 desktop. */
+.full-os-demo-viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #080b10;
+}
+
+.full-os-demo-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1107px;
+  height: 623px;
+  border: 0;
+  margin: 0;
+  transform-origin: 0 0;
+  background: #1d5f9d;
+}
+
+/* Linux keeps its existing i3 UI but now obeys the same landscape box. */
+.ref-shell > .ref-linux-desktop,
+.ref-shell > .ref-i3-desktop,
+.ref-linux-desktop,
+.ref-i3-desktop {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+/* Fresh-install layer shown on every Windows/Linux page open. */
+.os-fresh-install {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #05070b;
+  color: #f5f7fb;
+  opacity: 1;
+  transition: opacity .38s ease;
+}
+
+.os-fresh-install.is-done {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.os-fresh-install-card {
+  width: min(78%, 420px);
+  text-align: center;
+}
+
+.os-fresh-install-logo {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 18px;
+  object-fit: contain;
+}
+
+.os-fresh-install h3 {
+  margin: 0;
+  color: #fff;
+  font: 600 16px/1.25 "Segoe UI", Inter, sans-serif;
+}
+
+.os-fresh-install-status {
+  min-height: 18px;
+  margin-top: 9px;
+  color: #aeb6c4;
+  font: 11px/1.5 "JetBrains Mono", ui-monospace, monospace;
+}
+
+.os-fresh-install-track {
+  height: 3px;
+  margin-top: 19px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255,255,255,.12);
+}
+
+.os-fresh-install-track > i {
+  display: block;
+  width: 4%;
+  height: 100%;
+  border-radius: inherit;
+  background: #3478e5;
+  transition: width .32s ease;
+}
+
+.os-fresh-install-percent {
+  display: block;
+  margin-top: 8px;
+  color: #7f8998;
+  font: 10px/1.2 "JetBrains Mono", ui-monospace, monospace;
+}
+
+.os-fresh-install.is-linux {
+  place-items: stretch;
+  padding: 18px;
+  box-sizing: border-box;
+  background: #050805;
+}
+
+.os-fresh-install.is-linux .os-fresh-install-card {
+  width: 100%;
+  max-width: none;
+  text-align: left;
+}
+
+.os-fresh-install-tty {
+  height: calc(100% - 24px);
+  overflow: hidden;
+  color: #b9c7bd;
+  font: 10px/1.55 "JetBrains Mono", ui-monospace, monospace;
+}
+
+.os-fresh-install-tty .ok { color: #78d996; }
+.os-fresh-install-tty .dim { color: #748079; }
+
+@media (max-width: 680px) {
+  .full-os-demo-frame,
+  .ref-shell,
+  .ref-os-compare {
+    border-radius: 9px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .os-fresh-install,
+  .os-fresh-install-track > i { transition: none !important; }
+}
