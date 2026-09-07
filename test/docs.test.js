@@ -11,7 +11,7 @@ const DOCS = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "docs-articles.j
 const cleanSlug = (slug) => slug.replace(/^\d+-/, "").replaceAll("_", "-").toLowerCase();
 const docFile = (article) => `docs/${cleanSlug(article.slug)}.html`;
 const publicRoutes = [
-  "index.html", "plans.html", "windows-vps/index.html", "linux-vps/index.html", "status.html", "blog.html", "faq.html", "about.html", "privacy.html", "docs.html",
+  "index.html", "plans.html", "windows-vps/index.html", "linux-vps/index.html", "vps-hosting-minecraft/index.html", "status.html", "blog.html", "faq.html", "about.html", "privacy.html", "docs.html",
   ...DOCS.map(docFile),
   ...fs.readdirSync(path.join(ROOT, "blog")).map((file) => `blog/${file}`),
 ];

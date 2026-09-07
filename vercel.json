@@ -17,7 +17,10 @@
     { "source": "/docs/:slug", "destination": "/docs/:slug.html" }
   ],
   "redirects": [
+    { "source": "/vps-hosting-minecraft", "destination": "/vps-hosting-minecraft/", "permanent": true },
+    { "source": "/vps-hosting-minecraft/index.html", "destination": "/vps-hosting-minecraft/", "permanent": true },
     { "source": "/docs/1737944563-how-to-re_activate-and-extend-your-180_day-windows-trial.html", "destination": "/docs/how-to-re-activate-and-extend-your-180-day-windows-trial", "permanent": true },
+    { "source": "/docs/1737944563-how-to_re_activate-and-extend-your-180_day-windows-trial.html", "destination": "/docs/how-to-re-activate-and-extend-your-180-day-windows-trial", "permanent": true },
     { "source": "/docs/1737946054-how-to-setup-your-vpn-on-linux-server-using-outline.html", "destination": "/docs/how-to-setup-your-vpn-on-linux-server-using-outline", "permanent": true },
     { "source": "/docs/1737946569-install-fast-panel-in-linux-good-web-hosting-free-panel.html", "destination": "/docs/install-fast-panel-in-linux-good-web-hosting-free-panel", "permanent": true },
     { "source": "/docs/1737944013-use-of-service.html", "destination": "/docs/use-of-service", "permanent": true },
@@ -39,7 +42,6 @@
     { "source": "/docs/1740916941-how-to-rebuild-a-server.html", "destination": "/docs/how-to-rebuild-a-server", "permanent": true },
     { "source": "/docs/1740917234-how-to-reset-server-change-or-reset-client-area-password.html", "destination": "/docs/how-to-reset-server-change-or-reset-client-area-password", "permanent": true },
     { "source": "/docs/1742181117-step_by_step-guide-to-fix-win_rm-and-install-net-framework.html", "destination": "/docs/step-by-step-guide-to-fix-win-rm-and-install-net-framework", "permanent": true },
-    { "source": "/docs/1737944563-how-to_re_activate-and-extend-your-180_day-windows-trial.html", "destination": "/docs/how-to-re-activate-and-extend-your-180-day-windows-trial", "permanent": true },
     { "source": "/docs/10-ways-to-optimize-your-word-press-website-for-speed.html", "destination": "/docs/10-ways-to-optimize-your-word-press-website-for-speed", "permanent": true },
     { "source": "/docs/how-to-re-activate-and-extend-your-180-day-windows-trial.html", "destination": "/docs/how-to-re-activate-and-extend-your-180-day-windows-trial", "permanent": true },
     { "source": "/docs/how-to-setup-your-vpn-on-linux-server-using-outline.html", "destination": "/docs/how-to-setup-your-vpn-on-linux-server-using-outline", "permanent": true },

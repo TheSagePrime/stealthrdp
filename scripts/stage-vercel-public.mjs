@@ -21,7 +21,7 @@ const files = [
   "favicon.ico",
   "favicon.svg",
 ];
-const dirs = ["css", "js", "fonts", "assets", "blog", "docs", "data", "windows-vps", "linux-vps", ".well-known"];
+const dirs = ["css", "js", "fonts", "assets", "blog", "docs", "data", "windows-vps", "linux-vps", "vps-hosting-minecraft", ".well-known"];
 
 for (const name of fs.readdirSync(ROOT)) {
   if (name.endsWith(".html")) files.push(name);

@@ -82,5 +82,12 @@
       <pubDate>Fri, 16 May 2025 00:00:00 GMT</pubDate>
       <description>Enhance your remote desktop experience with strategies to reduce lag, improve speed, and secure your RDP sessions effectively.</description>
     </item>
+    <item>
+      <title>VPS Hosting for Minecraft: How to Choose a Server</title>
+      <link>__SRDP_BASE__/vps-hosting-minecraft/</link>
+      <guid>__SRDP_BASE__/vps-hosting-minecraft/</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description>Choose VPS hosting for Minecraft by edition, player load, mods, resources, location, backups, and access.</description>
+    </item>
   </channel>
 </rss>
