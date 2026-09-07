@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 /**
- * Inject the preview visual system into generated/static HTML.
- * This does not rewrite visible copy, metadata, schema, links, pricing, or data.
+ * Inject the preview UX/behavior system into generated/static HTML.
+ * Existing visible copy, metadata, schema, links, pricing and data are not rewritten.
  */
 import fs from "fs";
 import path from "path";
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname));
-const LINK = '  <link rel="stylesheet" href="/css/visual-reframe-v3.css?v=2026-09-07-v3" />';
-const SCRIPT = '  <script defer src="/js/os-guide-flow.js?v=2026-09-07-v3"></script>';
+const LINK = '  <link rel="stylesheet" href="/css/visual-reframe-v4.css?v=2026-09-07-v4" />';
+const GUIDE_SCRIPT = '  <script defer src="/js/os-guide-flow.js?v=2026-09-07-v3"></script>';
+const BEHAVIOR_SCRIPT = '  <script defer src="/js/behavior-system.js?v=2026-09-07-v4"></script>';
 const SKIP_DIRS = new Set([".git", "node_modules", "public"]);
 
 function collectHtml(dir, out = []) {
@@ -26,12 +27,12 @@ for (const file of collectHtml(ROOT)) {
   let html = fs.readFileSync(file, "utf8");
   if (!html.includes("</head>")) continue;
 
-  // Remove older preview-only visual layers/scripts before inserting the current one.
-  html = html.replace(/\s*<link rel="stylesheet" href="\/css\/visual-reframe(?:-v2|-v3)?\.css[^>]*>\s*/g, "\n");
-  html = html.replace(/\s*<script defer src="\/js\/os-guide-flow\.js[^>]*><\/script>\s*/g, "\n");
-  html = html.replace("</head>", `${LINK}\n${SCRIPT}\n</head>`);
+  // Remove older preview-only layers before inserting the current version.
+  html = html.replace(/\s*<link rel="stylesheet" href="\/css\/visual-reframe(?:-v2|-v3|-v4)?\.css[^>]*>\s*/g, "\n");
+  html = html.replace(/\s*<script defer src="\/js\/(?:os-guide-flow|behavior-system)\.js[^>]*><\/script>\s*/g, "\n");
+  html = html.replace("</head>", `${LINK}\n${GUIDE_SCRIPT}\n${BEHAVIOR_SCRIPT}\n</head>`);
   fs.writeFileSync(file, html);
   changed += 1;
 }
 
-console.log(`apply-visual-reframe: applied v3 to ${changed} HTML files`);
+console.log(`apply-visual-reframe: applied behavioral v4 to ${changed} HTML files`);
