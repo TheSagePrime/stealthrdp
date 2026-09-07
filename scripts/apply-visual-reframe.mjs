@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /**
- * Inject the visual-only reframe stylesheet into prerendered HTML.
- * This deliberately does not alter visible copy, metadata, schema, links, or data.
+ * Inject the preview visual system into generated/static HTML.
+ * This does not rewrite visible copy, metadata, schema, links, pricing, or data.
  */
 import fs from "fs";
 import path from "path";
 
 const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname));
-const LINK = '  <link rel="stylesheet" href="/css/visual-reframe.css?v=2026-09-07-v1" />';
+const LINK = '  <link rel="stylesheet" href="/css/visual-reframe-v2.css?v=2026-09-07-v2" />';
 const SKIP_DIRS = new Set([".git", "node_modules", "public"]);
 
 function collectHtml(dir, out = []) {
@@ -22,11 +22,14 @@ function collectHtml(dir, out = []) {
 
 let changed = 0;
 for (const file of collectHtml(ROOT)) {
-  const html = fs.readFileSync(file, "utf8");
-  if (html.includes('/css/visual-reframe.css')) continue;
+  let html = fs.readFileSync(file, "utf8");
   if (!html.includes("</head>")) continue;
-  fs.writeFileSync(file, html.replace("</head>", `${LINK}\n</head>`));
+
+  // Remove any older preview-only visual layer before inserting the current one.
+  html = html.replace(/\s*<link rel="stylesheet" href="\/css\/visual-reframe(?:-v2)?\.css[^>]*>\s*/g, "\n");
+  html = html.replace("</head>", `${LINK}\n</head>`);
+  fs.writeFileSync(file, html);
   changed += 1;
 }
 
-console.log(`apply-visual-reframe: injected stylesheet into ${changed} HTML files`);
+console.log(`apply-visual-reframe: applied v2 to ${changed} HTML files`);
