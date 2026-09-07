@@ -1,0 +1,471 @@
+@import url('/css/visual-reframe-v5.css?v=2026-09-08-v5');
+
+/*
+ * StealthRDP preview visual system v6
+ * Consistency + plan-grid + OS visual pass.
+ * Existing marketing/SEO copy, pricing, links and metadata remain unchanged.
+ */
+
+:root {
+  --v6-space-1: 8px;
+  --v6-space-2: 12px;
+  --v6-space-3: 16px;
+  --v6-space-4: 20px;
+  --v6-space-5: 28px;
+  --v6-space-6: 36px;
+  --v6-radius: 12px;
+  --v6-line: color-mix(in srgb, var(--border) 84%, transparent);
+  --v6-line-strong: color-mix(in srgb, var(--border-strong) 92%, transparent);
+  --v6-panel: color-mix(in srgb, var(--surface) 82%, var(--bg));
+  --v6-soft: color-mix(in srgb, var(--surface) 54%, var(--bg));
+  --v6-accent-soft: color-mix(in srgb, var(--accent) 9%, var(--surface));
+}
+
+/* ---------- Geometry consistency ---------- */
+.cta-band .cta-grid {
+  align-items: center !important;
+  gap: clamp(32px, 5vw, 72px) !important;
+  padding-top: 34px !important;
+  padding-bottom: 34px !important;
+}
+.cta-band .cta-copy {
+  min-width: 0;
+  padding: 4px 0 8px !important;
+}
+.cta-band .cta-copy .eyebrow,
+.cta-band .cta-copy .included-label {
+  display: inline-flex;
+  margin-bottom: 10px !important;
+}
+.cta-band .cta-copy h2 {
+  margin: 0 !important;
+  line-height: 1.06 !important;
+}
+.cta-band .cta-copy p {
+  max-width: 680px;
+  margin: 18px 0 0 !important;
+  padding-bottom: 2px;
+  line-height: 1.6 !important;
+}
+.cta-band .cta-actions {
+  display: grid !important;
+  gap: 12px !important;
+  align-self: center !important;
+}
+.cta-band .cta-actions .btn {
+  min-height: 48px !important;
+}
+
+/* Content must never visually touch a framed edge. */
+.byo-panel,
+.plan-card,
+.docs-card,
+.blog-card,
+.status-card,
+.os-vps-faq-item,
+.os-mini-card,
+.os-content-card {
+  box-sizing: border-box;
+}
+
+/* ---------- Plans: show the full selected region at once ---------- */
+.behavior-plan-controls { display: none !important; }
+
+main.os-vps-page .os-vps-plan-grid,
+main.os-vps-page .behavior-plan-grid,
+body[data-page="plans"] .plan-grid.behavior-plan-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  overflow: visible !important;
+  scroll-snap-type: none !important;
+  scroll-behavior: auto !important;
+  padding: 0 !important;
+}
+
+main.os-vps-page .os-vps-plan-grid > .plan-card,
+main.os-vps-page .behavior-plan-grid > .plan-card,
+body[data-page="plans"] .plan-grid.behavior-plan-grid > .plan-card {
+  min-width: 0 !important;
+  width: auto !important;
+  flex: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  padding: 22px !important;
+  border-radius: var(--v6-radius) !important;
+  border-color: var(--v6-line) !important;
+  background: transparent !important;
+}
+
+main.os-vps-page .os-vps-plan-grid > .plan-card[hidden],
+body[data-page="plans"] .plan-grid.behavior-plan-grid > .plan-card[hidden] {
+  display: none !important;
+}
+
+main.os-vps-page .os-vps-plan-grid .plan-card.behavior-priority-plan,
+body[data-page="plans"] .plan-grid.behavior-plan-grid .plan-card.behavior-priority-plan {
+  border-color: color-mix(in srgb, var(--accent) 58%, var(--border)) !important;
+  background: var(--v6-accent-soft) !important;
+}
+
+main.os-vps-page .os-vps-plan-grid .plan-price,
+body[data-page="plans"] .plan-grid.behavior-plan-grid .plan-price {
+  margin-top: 16px !important;
+}
+main.os-vps-page .os-vps-plan-grid .plan-specs,
+body[data-page="plans"] .plan-grid.behavior-plan-grid .plan-specs {
+  margin: 18px 0 20px !important;
+  padding-top: 14px !important;
+}
+main.os-vps-page .os-vps-plan-grid .plan-card > .btn,
+body[data-page="plans"] .plan-grid.behavior-plan-grid .plan-card > .btn {
+  margin-top: auto !important;
+  min-height: 44px !important;
+}
+
+/* ---------- Hero visual replacement ---------- */
+.hero-console.behavior-os-visual {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+  min-width: 0;
+}
+
+.os-visual-shell {
+  position: relative;
+  width: 100%;
+  min-height: 350px;
+  overflow: hidden;
+  border: 1px solid var(--v6-line-strong);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: 0 18px 52px rgba(0,0,0,.18);
+}
+
+.os-visual-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 42px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--v6-line);
+  background: color-mix(in srgb, var(--surface) 82%, var(--bg));
+}
+.os-visual-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--text);
+}
+.os-visual-title img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+.os-visual-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.os-visual-status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ok, #49c97d);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok, #49c97d) 15%, transparent);
+}
+
+/* Windows hero */
+.windows-visual {
+  background:
+    linear-gradient(135deg, rgba(41,100,220,.22), rgba(11,32,74,.08)),
+    var(--surface);
+}
+.windows-desktop {
+  position: relative;
+  min-height: 307px;
+  padding: 24px 22px 54px;
+  background:
+    radial-gradient(circle at 72% 20%, rgba(91,140,255,.18), transparent 32%),
+    linear-gradient(145deg, color-mix(in srgb, var(--bg) 78%, #0c3c91 22%), var(--bg));
+}
+.windows-panel {
+  width: min(88%, 430px);
+  min-height: 205px;
+  margin: 0 auto;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--surface) 93%, transparent);
+  box-shadow: 0 20px 60px rgba(0,0,0,.28);
+}
+.windows-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 36px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--v6-line);
+  font-size: 11px;
+  color: var(--muted);
+}
+.windows-panel-body {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  min-height: 168px;
+}
+.windows-panel-nav {
+  padding: 12px 9px;
+  border-right: 1px solid var(--v6-line);
+  background: color-mix(in srgb, var(--bg) 70%, transparent);
+}
+.windows-panel-nav span,
+.windows-panel-main span {
+  display: block;
+  border-radius: 5px;
+}
+.windows-panel-nav span {
+  height: 7px;
+  margin-bottom: 10px;
+  background: color-mix(in srgb, var(--muted) 20%, transparent);
+}
+.windows-panel-nav span:nth-child(2) { width: 72%; }
+.windows-panel-nav span:nth-child(3) { width: 86%; }
+.windows-panel-main {
+  padding: 18px;
+}
+.windows-version-name {
+  margin-bottom: 18px;
+  font-size: 18px;
+  font-weight: 680;
+  color: var(--text);
+}
+.windows-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 10px;
+}
+.windows-metric {
+  min-height: 54px;
+  padding: 11px;
+  border: 1px solid var(--v6-line);
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--surface) 82%, var(--bg));
+}
+.windows-metric b,
+.windows-metric small { display: block; }
+.windows-metric b { font-size: 12px; }
+.windows-metric small { margin-top: 4px; color: var(--muted); font-size: 10px; }
+.windows-taskbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  background: rgba(5,11,22,.72);
+}
+.windows-taskbar span {
+  width: 19px;
+  height: 19px;
+  border-radius: 5px;
+  background: rgba(255,255,255,.12);
+}
+.windows-taskbar span:first-child { background: var(--accent); }
+
+/* Linux hero */
+.linux-visual {
+  background: color-mix(in srgb, var(--bg) 92%, #0c1e18 8%);
+}
+.linux-terminal {
+  min-height: 307px;
+  padding: 22px;
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  background:
+    linear-gradient(rgba(255,255,255,.014) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.012) 1px, transparent 1px),
+    #07100d;
+  background-size: 24px 24px;
+}
+.linux-line {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 13px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: #d4e5dc;
+}
+.linux-prompt { color: #70d99a; }
+.linux-dim { color: #7f9489; }
+.linux-ok { color: #73d89a; }
+.linux-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  margin-left: 2px;
+  vertical-align: -2px;
+  background: #b7c9c0;
+  animation: v6-cursor 1s steps(1) infinite;
+}
+@keyframes v6-cursor { 50% { opacity: 0; } }
+
+/* Shared visual selector uses existing OS/version names. */
+.os-visual-selector {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  padding: 11px 12px;
+  border-top: 1px solid var(--v6-line);
+  scrollbar-width: none;
+}
+.os-visual-selector::-webkit-scrollbar { display:none; }
+.os-visual-selector button {
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  border: 1px solid var(--v6-line);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+.os-visual-selector button:hover,
+.os-visual-selector button.is-active {
+  border-color: color-mix(in srgb, var(--accent) 54%, var(--border));
+  background: var(--v6-accent-soft);
+  color: var(--text);
+}
+
+/* Homepage Windows/Linux comparison slider */
+.os-compare {
+  --compare-split: 50%;
+  position: relative;
+  min-height: 370px;
+  overflow: hidden;
+  border: 1px solid var(--v6-line-strong);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: 0 18px 52px rgba(0,0,0,.18);
+}
+.os-compare-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.os-compare-layer.windows-side {
+  clip-path: inset(0 calc(100% - var(--compare-split)) 0 0);
+}
+.os-compare-layer.linux-side {
+  clip-path: inset(0 0 0 var(--compare-split));
+}
+.os-compare-label {
+  position: absolute;
+  top: 14px;
+  z-index: 4;
+  padding: 6px 9px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 7px;
+  background: rgba(4,10,19,.72);
+  color: #eef3ff;
+  font-size: 11px;
+  font-weight: 650;
+  backdrop-filter: blur(4px);
+}
+.os-compare-label.windows-label { left: 14px; }
+.os-compare-label.linux-label { right: 14px; }
+.os-compare-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--compare-split);
+  z-index: 5;
+  width: 1px;
+  background: rgba(255,255,255,.65);
+  transform: translateX(-.5px);
+  pointer-events: none;
+}
+.os-compare-handle {
+  position: absolute;
+  left: var(--compare-split);
+  top: 50%;
+  z-index: 6;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.4);
+  border-radius: 50%;
+  background: #0b111d;
+  color: #fff;
+  transform: translate(-50%,-50%);
+  pointer-events: none;
+  box-shadow: 0 8px 28px rgba(0,0,0,.3);
+}
+.os-compare-handle::before { content: "↔"; font-size: 17px; }
+.os-compare input[type="range"] {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: ew-resize;
+}
+.os-compare .windows-desktop,
+.os-compare .linux-terminal {
+  min-height: 370px;
+  height: 100%;
+  padding-top: 54px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  main.os-vps-page .os-vps-plan-grid,
+  main.os-vps-page .behavior-plan-grid,
+  body[data-page="plans"] .plan-grid.behavior-plan-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .cta-band .cta-grid { gap: 26px !important; }
+}
+
+@media (max-width: 620px) {
+  main.os-vps-page .os-vps-plan-grid,
+  main.os-vps-page .behavior-plan-grid,
+  body[data-page="plans"] .plan-grid.behavior-plan-grid {
+    grid-template-columns: 1fr !important;
+  }
+  main.os-vps-page .os-vps-plan-grid > .plan-card,
+  body[data-page="plans"] .plan-grid.behavior-plan-grid > .plan-card {
+    padding: 20px !important;
+  }
+  .cta-band .cta-grid {
+    padding-top: 28px !important;
+    padding-bottom: 28px !important;
+  }
+  .os-visual-shell,
+  .os-compare { min-height: 320px; }
+  .windows-desktop,
+  .linux-terminal,
+  .os-compare .windows-desktop,
+  .os-compare .linux-terminal { min-height: 320px; }
+  .windows-panel { width: 100%; }
+  .windows-panel-body { grid-template-columns: 70px 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .linux-cursor { animation: none !important; }
+}
