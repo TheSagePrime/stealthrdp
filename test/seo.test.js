@@ -129,16 +129,56 @@ test("blog post pages carry Article JSON-LD + breadcrumbs", () => {
   }
 });
 
-test("Minecraft guide preserves approved metadata and excludes FAQPage and HowTo schema", () => {
+test("Minecraft guide preserves approved metadata, source UX, direct links, and schema exclusions", () => {
   const post = BLOG.find((item) => item.slug === "vps-hosting-minecraft");
   const html = HTML(articleFile(post));
   const parsed = parse(html);
+  assert.strictEqual(post.date, "2026-09-08");
   assert.strictEqual(parsed.title, "VPS Hosting for Minecraft: How to Choose a Server");
   assert.match(html, /<h1>VPS hosting for Minecraft: choose a server that fits<\/h1>/);
+  assert.match(html, /<div class="docs-source-meta"><span>StealthRDP Team<\/span><span>2026-09-08<\/span>/);
   assert.strictEqual(parsed.desc, "Choose VPS hosting for Minecraft by edition, player load, mods, resources, location, backups, and access.");
   assert.strictEqual(parsed.canonical, "__SRDP_BASE__/vps-hosting-minecraft/");
   assert.match(html, /\"@type\":\"BlogPosting\"/);
   assert.doesNotMatch(html, /\"@type\":\"FAQPage\"|\"@type\":\"HowTo\"/);
+  assert.match(html, /For a small Java Edition survival setup, four to eight players/);
+  assert.match(html, /As a starting reference for a Java server setup, a small server may use at least 2 GB/);
+  assert.doesNotMatch(html, /For a small survival world, four to eight players/);
+  assert.match(html, /<details>\s*<summary>Sources &amp; references<\/summary>\s*<ol>/);
+  assert.doesNotMatch(html, /<details\s+open/);
+  assert.match(html, /<li id="source-1"><a href="https:\/\/www\.minecraft\.net\/en-us\/download\/server"[^>]*>Minecraft Server Download: Host Your Own World \| Minecraft<\/a><\/li>/);
+  const body = (html.match(/<div class="docs-content blog-article-body">([\s\S]*?)<\/div>\s*<footer/) || [])[1] || "";
+  assert.doesNotMatch(body, />https?:\/\/[^<]+</);
+  const citationTargets = [...body.matchAll(/href="#source-(\d+)"/g)].map((match) => match[1]);
+  assert.deepStrictEqual([...new Set(citationTargets)].sort(), ["1", "2", "3", "4", "5"]);
+  assert.match(html, /href="\/plans#comparison"/);
+  assert.match(html, /href="\/faq"/);
+  assert.match(html, /href="\/docs\/use-of-service"/);
+  assert.doesNotMatch(html, /\/plans\.html#comparison|\/faq\.html|\/docs\/1737944013-use-of-service\.html/);
+});
+
+test("Minecraft publication surfaces are newest first and receive contextual links", () => {
+  const blog = parse(HTML("blog.html"));
+  const blogGraph = blog.ldBlocks.flatMap((block) => JSON.parse(block)["@graph"] || [JSON.parse(block)]);
+  const itemList = blogGraph.find((item) => item["@type"] === "ItemList");
+  assert.strictEqual(itemList.itemListElement[0].item.headline, "VPS Hosting for Minecraft: How to Choose a Server");
+  assert.strictEqual(itemList.itemListElement[0].item.datePublished, "2026-09-08");
+
+  const rss = HTML("rss.xml");
+  const firstItem = (rss.match(/<item>[\s\S]*?<\/item>/) || [""])[0];
+  assert.match(firstItem, /<title>VPS Hosting for Minecraft: How to Choose a Server<\/title>/);
+  assert.match(firstItem, /<pubDate>Tue, 08 Sep 2026 00:00:00 GMT<\/pubDate>/);
+
+  const sitemap = HTML("sitemap.xml");
+  const sitemapEntry = (sitemap.match(/<url>\s*<loc>__SRDP_BASE__\/vps-hosting-minecraft\/<\/loc>[\s\S]*?<\/url>/) || [""])[0];
+  assert.match(sitemapEntry, /<lastmod>2026-09-08<\/lastmod>/);
+
+  for (const file of [
+    "blog/common-vps-performance-bottlenecks.html",
+    "blog/how-to-set-up-automated-backups-for-vps-hosting.html",
+    "blog/windows-vs-linux-vps-which-os-best-fits-your-business.html",
+    "blog/8-signs-you-need-to-upgrade-your-vps-resources.html",
+  ]) assert.match(HTML(file), /href="\/vps-hosting-minecraft\/"/);
 });
 
 test("sitemap.xml is valid XML with all routes; robots.txt allows + references it", () => {
@@ -226,7 +266,7 @@ test("baked content is present in raw HTML (plans, faq, status, blog)", () => {
 
   const blog = HTML("blog.html");
   assert.strictEqual((blog.match(/<article class="blog-card/g) || []).length, BLOG.length, `blog: ${BLOG.length} baked cards`);
-  assert.ok(blog.includes(`/blog/${BLOG[0].slug}.html`), "blog: links to clean article URLs");
+  assert.ok(blog.includes(articleRoute(BLOG[0])), "blog: links to clean article URLs");
   assert.ok(blog.includes('href="/vps-hosting-minecraft/"'), "blog: Minecraft guide uses its clean route");
   assert.ok(!blog.includes('/blog/vps-hosting-minecraft.html'), "blog: no duplicate Minecraft route");
 

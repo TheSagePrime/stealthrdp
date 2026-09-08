@@ -46,6 +46,11 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>__SRDP_BASE__/vps-hosting-minecraft/</loc>
+    <lastmod>2026-09-08</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>__SRDP_BASE__/blog/top-6-vps-management-tools-for-small-businesses.html</loc>
     <lastmod>2025-12-09</lastmod>
     <changefreq>monthly</changefreq>
@@ -98,11 +103,6 @@
   <url>
     <loc>__SRDP_BASE__/blog/5-ways-to-optimize-your-rdp-performance-for-remote-work.html</loc>
     <lastmod>2025-05-16</lastmod>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>__SRDP_BASE__/vps-hosting-minecraft/</loc>
-    <lastmod>2026-09-07</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
