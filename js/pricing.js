@@ -47,7 +47,11 @@
     const suffix = selected.suffix || (CYCLES[selectedKey] || CYCLES.monthly).fallbackSuffix;
     const condition = selectedKey === "monthly"
       ? `Monthly · ${escapeHtml(currency)}`
-      : `${escapeHtml(selected.discountLabel || "")} · billed ${escapeHtml(selected.periodLabel || cycleLabel(selectedKey).toLowerCase())} · ${escapeHtml(currency)}`;
+      : [
+        selected.discountLabel ? escapeHtml(selected.discountLabel) : "",
+        `billed ${escapeHtml(selected.periodLabel || cycleLabel(selectedKey).toLowerCase())}`,
+        escapeHtml(currency),
+      ].filter(Boolean).join(" · ");
     const reference = Number.isFinite(Number(selected.referenceAmount))
       ? `<span class="was">${symbol}${formatAmount(selected.referenceAmount)}</span>`
       : "";

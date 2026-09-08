@@ -17,11 +17,11 @@ const EXPECTED_MONTHLY = {
   "Platinum USA": 33.24,
   "Diamond USA": 42.75,
   "Emerald USA": 51.30,
-  "Bronze EU": 9.50,
-  "Silver EU": 17.10,
-  "GOLD EU": 28.49,
-  "Platinum EU": 33.24,
-  "Diamond EU": 37.99,
+  "Bronze EU": 11.97,
+  "Silver EU": 21.55,
+  "GOLD EU": 35.90,
+  "Platinum EU": 41.88,
+  "Diamond EU": 47.87,
 };
 
 function cardBlock(html, displayName, location = "") {
@@ -61,6 +61,19 @@ test("catalog is the single verified source for current monthly prices", () => {
     assert.equal(plan.pricing.currency, "EUR", `${name}: currency`);
     assert.equal(plan.pricing.monthly.amount, expected, `${name}: verified live monthly amount`);
     assert.match(plan.source.url, /^https:\/\/dash\.stealthrdp\.com\//, `${name}: WHMCS source`);
+  }
+});
+
+test("Bronze EU billing totals match the current WHMCS product page", () => {
+  const plan = planFromName("Bronze EU");
+  assert.deepEqual(
+    Object.fromEntries(["monthly", "quarterly", "biannual", "annual"].map((key) => [key, plan.pricing[key].amount])),
+    { monthly: 11.97, quarterly: 35.91, biannual: 71.82, annual: 143.64 },
+  );
+  for (const key of ["quarterly", "annual", "biannual"]) {
+    const markup = pricing.priceMarkup(plan, key);
+    assert.doesNotMatch(markup, /Save/);
+    assert.doesNotMatch(markup, /· ·/);
   }
 });
 

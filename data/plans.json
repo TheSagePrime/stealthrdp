@@ -6,7 +6,7 @@
       "https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps",
       "https://dash.stealthrdp.com/index.php?rp=/store/eu"
     ],
-    "verifiedAt": "2026-08-31T12:39:57Z"
+    "verifiedAt": "2026-09-08T23:34:25Z"
   },
   "billingCycles": {
     "monthly": { "label": "Monthly", "urlKey": "monthly" },
@@ -121,10 +121,10 @@
       "source": { "url": "https://dash.stealthrdp.com/index.php?rp=/store/eu/bronze-eu&billingcycle=monthly", "availability": "in-stock" },
       "pricing": {
         "currency": "EUR",
-        "monthly": { "amount": 9.5, "suffix": "/mo", "periodLabel": "every month" },
-        "quarterly": { "amount": 27, "referenceAmount": 28.5, "suffix": "/3mo", "periodLabel": "every 3 months", "discountLabel": "Save 5%" },
-        "annual": { "amount": 96, "referenceAmount": 114, "suffix": "/yr", "periodLabel": "every year", "discountLabel": "Save 16%" },
-        "biannual": { "amount": 168, "referenceAmount": 228, "suffix": "/2yr", "periodLabel": "every 2 years", "discountLabel": "Save 26%" }
+        "monthly": { "amount": 11.97, "suffix": "/mo", "periodLabel": "every month" },
+        "quarterly": { "amount": 35.91, "suffix": "/3mo", "periodLabel": "every 3 months" },
+        "annual": { "amount": 143.64, "suffix": "/yr", "periodLabel": "every year" },
+        "biannual": { "amount": 71.82, "suffix": "/2yr", "periodLabel": "every 2 years" }
       }
     },
     {
@@ -135,7 +135,7 @@
       "specs": { "cpu": "4 Core", "ram": "8 GB", "storage": "80 GB NVMe", "bandwidth": "Unlimited" },
       "purchaseUrl": "https://dash.stealthrdp.com/index.php?rp=/store/eu/silver-eu&billingcycle=monthly",
       "source": { "url": "https://dash.stealthrdp.com/index.php?rp=/store/eu", "availability": "out-of-stock", "cycleNote": "WHMCS product page returns Out of Stock; cycle totals are not published." },
-      "pricing": { "currency": "EUR", "monthly": { "amount": 17.1, "suffix": "/mo", "periodLabel": "every month" } }
+      "pricing": { "currency": "EUR", "monthly": { "amount": 21.55, "suffix": "/mo", "periodLabel": "every month" } }
     },
     {
       "name": "GOLD EU",
@@ -145,7 +145,7 @@
       "specs": { "cpu": "4 Core", "ram": "16 GB", "storage": "100 GB NVMe", "bandwidth": "Unlimited" },
       "purchaseUrl": "https://dash.stealthrdp.com/index.php?rp=/store/eu/gold-eu&billingcycle=monthly",
       "source": { "url": "https://dash.stealthrdp.com/index.php?rp=/store/eu", "availability": "out-of-stock", "cycleNote": "WHMCS product page returns Out of Stock; cycle totals are not published." },
-      "pricing": { "currency": "EUR", "monthly": { "amount": 28.49, "suffix": "/mo", "periodLabel": "every month" } }
+      "pricing": { "currency": "EUR", "monthly": { "amount": 35.9, "suffix": "/mo", "periodLabel": "every month" } }
     },
     {
       "name": "Platinum EU",
@@ -155,7 +155,7 @@
       "specs": { "cpu": "6 Core", "ram": "16 GB", "storage": "100 GB NVMe", "bandwidth": "Unlimited" },
       "purchaseUrl": "https://dash.stealthrdp.com/index.php?rp=/store/eu/platinum-eu&billingcycle=monthly",
       "source": { "url": "https://dash.stealthrdp.com/index.php?rp=/store/eu", "availability": "out-of-stock", "cycleNote": "WHMCS product page returns Out of Stock; cycle totals are not published." },
-      "pricing": { "currency": "EUR", "monthly": { "amount": 33.24, "suffix": "/mo", "periodLabel": "every month" } }
+      "pricing": { "currency": "EUR", "monthly": { "amount": 41.88, "suffix": "/mo", "periodLabel": "every month" } }
     },
     {
       "name": "Diamond EU",
@@ -165,7 +165,7 @@
       "specs": { "cpu": "6 Core", "ram": "24 GB", "storage": "120 GB NVMe", "bandwidth": "Unlimited" },
       "purchaseUrl": "https://dash.stealthrdp.com/index.php?rp=/store/eu/diamond-eu&billingcycle=monthly",
       "source": { "url": "https://dash.stealthrdp.com/index.php?rp=/store/eu", "availability": "out-of-stock", "cycleNote": "WHMCS product page returns Out of Stock; cycle totals are not published." },
-      "pricing": { "currency": "EUR", "monthly": { "amount": 37.99, "suffix": "/mo", "periodLabel": "every month" } }
+      "pricing": { "currency": "EUR", "monthly": { "amount": 47.87, "suffix": "/mo", "periodLabel": "every month" } }
     }
   ]
 }
