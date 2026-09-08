@@ -16,6 +16,7 @@ const isChanged = (file) => !changedFiles || changedFiles.has(rel(file));
 const vercelConfig = JSON.parse(fs.readFileSync(path.join(ROOT, "vercel.json"), "utf8"));
 const redirectSources = new Set((vercelConfig.redirects || []).map((item) => item.source));
 const redirectTargets = new Map((vercelConfig.redirects || []).map((item) => [item.source, item.destination]));
+const publicHosts = new Set(["stealthrdp.com", "www.stealthrdp.com"]);
 const allowedNoindexFiles = new Set([
   "404.html",
   "privacy.html",
@@ -32,6 +33,16 @@ const fail = (message) => failures.push(message);
 const read = (file) => fs.readFileSync(file, "utf8");
 const rel = (file) => path.relative(ROOT, file).replaceAll(path.sep, "/");
 
+for (const [source, destination] of redirectTargets) {
+  try {
+    const destinationPath = new URL(destination, "https://www.stealthrdp.com").pathname;
+    if (destinationPath === source) fail(`${source}: redirect loops to itself`);
+    else if (redirectSources.has(destinationPath)) fail(`${source}: redirect chain points to ${destinationPath}`);
+  } catch {
+    fail(`${source}: invalid redirect destination ${destination}`);
+  }
+}
+
 function htmlFiles(dir = ROOT) {
   const output = [];
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -47,14 +58,30 @@ function first(html, expression) {
   return (html.match(expression) || [])[1] || "";
 }
 
+function internalHref(href) {
+  if (href.startsWith("/") && !href.startsWith("//")) {
+    return { host: "", path: href.split(/[?#]/, 1)[0] || "/" };
+  }
+  try {
+    const url = new URL(href);
+    const host = url.hostname.toLowerCase();
+    if (!publicHosts.has(host)) return null;
+    return { host, path: url.pathname || "/" };
+  } catch {
+    return null;
+  }
+}
+
 function hrefTargets(html) {
   return [...html.matchAll(/\bhref\s*=\s*["']([^"'#]+)(?:#[^"']*)?["']/gi)]
     .map((match) => match[1])
-    .filter((href) => href.startsWith("/"));
+    .filter((href) => internalHref(href));
 }
 
 function resolveLocal(href, seen = new Set()) {
-  const clean = href.split("?")[0];
+  const internal = internalHref(href);
+  if (!internal) return null;
+  const clean = internal.path;
   if (seen.has(clean)) return null;
   seen.add(clean);
   const redirect = redirectTargets.get(clean);
@@ -114,7 +141,10 @@ for (const file of files) {
     if (/\b(?:TODO|TBD|PLACEHOLDER|LOREM IPSUM)\b/i.test(visibleText)) fail(`${name}: placeholder text remains`);
   }
   for (const href of hrefTargets(html)) {
-    if (/^(https?:|mailto:|tel:|javascript:)/i.test(href)) continue;
+    const internal = internalHref(href);
+    if (!internal) continue;
+    if (internal.host === "stealthrdp.com") fail(`${name}: internal link uses non-canonical host ${href}`);
+    if (redirectSources.has(internal.path)) fail(`${name}: internal link points to redirect source ${href}`);
     if (!resolveLocal(href)) fail(`${name}: broken internal link ${href}`);
   }
   for (const block of schemas) {

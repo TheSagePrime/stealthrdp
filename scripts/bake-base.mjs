@@ -24,6 +24,7 @@ function collectFiles() {
     path.join(ROOT, "docs"),
     path.join(ROOT, "windows-vps"),
     path.join(ROOT, "linux-vps"),
+    path.join(ROOT, "vps-hosting-minecraft"),
     path.join(ROOT, ".well-known"),
   ];
   for (const dir of roots) {

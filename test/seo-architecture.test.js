@@ -2,7 +2,9 @@
 
 const { test } = require("node:test");
 const assert = require("node:assert/strict");
+const { spawnSync } = require("node:child_process");
 const fs = require("node:fs");
+const os = require("node:os");
 const path = require("node:path");
 
 const ROOT = path.join(__dirname, "..");
@@ -171,4 +173,61 @@ test("homepage and OS landing pages include valid Product and Offer schema", () 
     assert.ok(!("availability" in offer), `${file}: availability is not invented`);
     assert.ok(JSON.stringify(product).includes(`__SRDP_BASE__${canonical}`), `${file}: Product URL follows canonical routing`);
   }
+});
+
+test("Vercel staging rejects unresolved base tokens in production text output", () => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "stealthrdp-stage-"));
+  const tempScripts = path.join(tempRoot, "scripts");
+  fs.mkdirSync(tempScripts, { recursive: true });
+  fs.copyFileSync(path.join(ROOT, "scripts", "stage-vercel-public.mjs"), path.join(tempScripts, "stage-vercel-public.mjs"));
+  fs.writeFileSync(path.join(tempRoot, "index.html"), "<!doctype html><title>Fixture</title>");
+  fs.writeFileSync(path.join(tempRoot, "robots.txt"), "Sitemap: __SRDP_BASE__/sitemap.xml\n");
+  try {
+    const result = spawnSync(process.execPath, [path.join(tempScripts, "stage-vercel-public.mjs")], { encoding: "utf8" });
+    assert.notEqual(result.status, 0, `${result.stdout}\n${result.stderr}`);
+    assert.match(`${result.stdout}\n${result.stderr}`, /unresolved __SRDP_BASE__ tokens in staged output/);
+  } finally {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  }
+});
+
+test("demand-bearing legacy blog URLs redirect directly to their canonical articles", () => {
+  const expected = [
+    ["/blog/5-ways-to-optimize-your-rdp-performance-for-remote-work/", "/blog/5-ways-to-optimize-your-rdp-performance-for-remote-work.html"],
+    ["/blog/7-best-tools-for-server-uptime-monitoring-2025", "/blog/7-best-tools-for-server-uptime-monitoring-2025.html"],
+    ["/blog/common-vps-hosting-issues-and-their-solutions", "/blog/common-vps-hosting-issues-and-their-solutions.html"],
+    ["/blog/top-6-vps-management-tools-for-small-businesses", "/blog/top-6-vps-management-tools-for-small-businesses.html"],
+    ["/blog/windows-vs-linux-vps-which-os-best-fits-your-business", "/blog/windows-vs-linux-vps-which-os-best-fits-your-business.html"],
+  ];
+  const destinationBySource = new Map(redirects.map((item) => [item.source, item.destination]));
+  for (const [source, destination] of expected) {
+    assert.deepEqual(redirects.find((item) => item.source === source), { source, destination, permanent: true });
+    assert.notEqual(destinationBySource.get(source), source);
+    assert.equal(destination.includes("?"), false, `${source}: query string remains caller-controlled`);
+    assert.equal(destinationBySource.has(destination), false, `${source}: destination is not another redirect source`);
+    assert.ok(fs.existsSync(path.join(ROOT, destination.slice(1))), `${destination}: canonical article exists`);
+  }
+});
+
+test("nested OS index aliases redirect directly to slash routes", () => {
+  for (const [source, destination] of [["/windows-vps/index.html", "/windows-vps/"], ["/linux-vps/index.html", "/linux-vps/"]]) {
+    assert.deepEqual(redirects.find((item) => item.source === source), { source, destination, permanent: true });
+    assert.equal(redirects.some((item) => item.source === destination), false, `${source}: no redirect chain`);
+  }
+});
+
+test("article data uses direct canonical targets for confirmed internal links", () => {
+  const blog = JSON.parse(read("data/blog-articles.json"));
+  const docs = JSON.parse(read("data/docs-articles.json"));
+  const blogHrefs = blog.flatMap((article) => [...article.html.matchAll(/href=["']([^"']+)["']/gi)].map((match) => match[1]));
+  const markdownLinks = docs.flatMap((article) => [...article.content.matchAll(/\]\(([^)]+)\)/g)].map((match) => match[1]));
+  const forbidden = new Set([
+    "https://stealthrdp.com",
+    "https://stealthrdp.com/",
+    "https://stealthrdp.com/dash/login.php",
+    "https://www.stealthrdp.com/status.html",
+    "https://www.stealthrdp.com/docs.html",
+  ]);
+  assert.deepEqual(blogHrefs.filter((href) => forbidden.has(href)), []);
+  assert.deepEqual(markdownLinks.filter((href) => forbidden.has(href)), []);
 });
