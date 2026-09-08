@@ -7,7 +7,7 @@
   "scripts": {
     "gate": "node scripts/seo-gates.mjs",
     "build": "npm run gate && node build.mjs",
-    "vercel-build": "npm run gate && node build.mjs && node scripts/bake-base.mjs && node scripts/build-markdown.mjs && node scripts/stage-vercel-public.mjs",
+    "build:vercel": "npm run gate && node build.mjs && node scripts/bake-base.mjs && node scripts/build-markdown.mjs && node scripts/stage-vercel-public.mjs",
     "test": "node --test test/*.test.js",
     "start": "node server.js",
     "check": "node --test test/*.test.js",

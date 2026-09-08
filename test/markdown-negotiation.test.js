@@ -249,7 +249,7 @@ test("Vercel negotiates Markdown while browsers keep static HTML", async () => {
   const vercel = JSON.parse(fs.readFileSync(path.join(ROOT, "vercel.json"), "utf8"));
   assert.strictEqual(vercel.proxy.entrypoint, "proxy.js");
   const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, "package.json"), "utf8"));
-  assert.match(pkg.scripts["vercel-build"], /build-markdown\.mjs/);
+  assert.match(pkg.scripts["build:vercel"], /build-markdown\.mjs/);
   assert.strictEqual(pkg.dependencies.turndown, "7.2.4");
   assert.strictEqual(pkg.dependencies["@mixmark-io/domino"], "2.2.0");
   assert.strictEqual(pkg.dependencies["@vercel/functions"], "3.9.3");
