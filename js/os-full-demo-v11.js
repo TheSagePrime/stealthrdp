@@ -1,13 +1,17 @@
 (() => {
   const qs = (selector, root = document) => root.querySelector(selector);
 
+  function windowsLogo() {
+    return '<svg class="os-fresh-install-logo" viewBox="0 0 64 64" aria-hidden="true"><path fill="#42a5f5" d="M5 8.5 29 5v24H5zm28-4L59 1v28H33zM5 33h24v24L5 53.5zm28 0h26v30l-26-4z"/></svg>';
+  }
+
   function installOverlay(type, label) {
     const overlay = document.createElement('div');
     overlay.className = `os-fresh-install is-${type}`;
     if (type === 'linux') {
       overlay.innerHTML = `<div class="os-fresh-install-card"><div class="os-fresh-install-tty" data-fresh-tty></div><div class="os-fresh-install-track"><i data-fresh-bar></i></div></div>`;
     } else {
-      overlay.innerHTML = `<div class="os-fresh-install-card"><img class="os-fresh-install-logo" src="/img/windows11.png" alt=""><h3>Installing ${label}</h3><div class="os-fresh-install-status" data-fresh-status>Preparing installation</div><div class="os-fresh-install-track"><i data-fresh-bar></i></div><span class="os-fresh-install-percent" data-fresh-percent>0%</span></div>`;
+      overlay.innerHTML = `<div class="os-fresh-install-card">${windowsLogo()}<h3>Installing ${label}</h3><div class="os-fresh-install-status" data-fresh-status>Preparing installation</div><div class="os-fresh-install-track"><i data-fresh-bar></i></div><span class="os-fresh-install-percent" data-fresh-percent>0%</span></div>`;
     }
     return overlay;
   }
