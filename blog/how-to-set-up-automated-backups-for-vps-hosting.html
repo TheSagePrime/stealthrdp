@@ -47,7 +47,7 @@
       } catch (e) {}
     }());
   </script>
-  <link rel="stylesheet" href="/css/style.css?v=2026-09-04T15-12-27-564Z" />
+  <link rel="stylesheet" href="/css/style.css?v=2026-09-08T20-58-27-264Z" />
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src="https://sgtm.stealthrdp.com/2l3xebiqyzc.js?"+i;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','yw=Ch5ENj0vSDYwSUBGOjFcXhVHS19YRAEWXgkNFAgOERARHglfCg0I');</script>
   <!-- End Google Tag Manager -->
@@ -189,7 +189,7 @@ tar -czf /backup/www/website-$(date +%Y%m%d).tar.gz /var/www/html/
 </code></pre>
 <p>Schedule these scripts to run automatically. On Linux, use <code>cron</code> (e.g., <code>0 2 * * 1 /backup/www-backup.sh</code>), and on Windows, use Task Scheduler to execute PowerShell or batch file backups.</p>
 <p>Regular testing is critical. Scripts can fail due to permission issues, disk space shortages, or system updates. Add error handling, logging, and email notifications to monitor backup status <a href="https://avenacloud.com/blog/how-to-schedule-backup-scripts-for-vps-security" target="_blank" rel="nofollow noopener noreferrer"><sup>[5]</sup></a>.</p>
-<h3 id="configuring-backups-on-stealthrdp-vps">Configuring Backups on <a href="https://stealthrdp.com/">StealthRDP</a> VPS</h3>
+<h3 id="configuring-backups-on-stealthrdp-vps">Configuring Backups on <a href="/">StealthRDP</a> VPS</h3>
 <p><figure class="blog-figure"><img src="https://assets.seobotai.com/stealthrdp.com/688c06e90d660161d1d30a21/60b3d0a0cd41408f4eab799549db166b.jpg" alt="StealthRDP" loading="lazy" /></figure></p>
 <p>With StealthRDP VPS, you can take advantage of full root access and multi-OS support to set up flexible backup systems. This level of control allows you to install backup software, modify configurations, and access all directories.</p>
 <p>For Linux environments, script-based automation using tools like <code>tar</code> or <code>rsync</code> works well. On Windows, Microsoft’s backup utilities can handle the task effectively. Organize your backups into directories like <code>/backup/</code>, <code>/backup/www/</code>, and <code>/backup/sql/</code> to keep files, websites, and databases separate <a href="https://zomro.com/blog/faq/357-creating-a-backup-from-the-console-through-the-cron-scheduler" target="_blank" rel="nofollow noopener noreferrer"><sup>[6]</sup></a>.</p>
@@ -346,6 +346,6 @@ tar -czf /backup/www/website-$(date +%Y%m%d).tar.gz /var/www/html/
       </span>
     </div>
   </div></footer>
-  <script src="/js/main.js?v=2026-09-04T15-12-27-564Z"></script>
+  <script src="/js/main.js?v=2026-09-08T20-58-27-264Z"></script>
 </body>
 </html>

@@ -2,6 +2,8 @@
 
 const { test } = require("node:test");
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
 const { legacyRedirectFor } = require("../proxy.js");
 
 function locationFor(url) {
@@ -95,4 +97,21 @@ test("every screenshot URL maps to its approved canonical destination", () => {
 
 test("unrelated dashboard routes are not redirected by the legacy cleanup", () => {
   assert.equal(locationFor("https://stealthrdp.com/dash/index.php?rp=/login"), null);
+});
+
+test("self-contained server redirects nested OS index aliases", () => {
+  const server = fs.readFileSync(path.join(__dirname, "..", "server.js"), "utf8");
+  assert.match(server, /"\/windows-vps\/index\.html": "\/windows-vps\/"/);
+  assert.match(server, /"\/linux-vps\/index\.html": "\/linux-vps\/"/);
+});
+
+test("self-contained server preserves query strings on blog aliases", () => {
+  const server = fs.readFileSync(path.join(__dirname, "..", "server.js"), "utf8");
+  assert.match(server, /const destination = "\/blog\/" \+ slug \+ "\.html" \+ url\.search;/);
+  assert.match(server, /Location: destination/);
+});
+
+test("self-contained server preserves query strings on index aliases", () => {
+  const server = fs.readFileSync(path.join(__dirname, "..", "server.js"), "utf8");
+  assert.match(server, /PAGE_REDIRECTS\[url\.pathname\] \+ \(url\.pathname\.endsWith\("\/index\.html"\) \? url\.search : ""\)/);
 });

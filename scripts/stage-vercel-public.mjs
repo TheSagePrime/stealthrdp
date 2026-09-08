@@ -22,6 +22,26 @@ const files = [
   "favicon.svg",
 ];
 const dirs = ["css", "js", "fonts", "assets", "blog", "docs", "data", "windows-vps", "linux-vps", "vps-hosting-minecraft", ".well-known"];
+const TEXT_OUTPUT_EXTENSIONS = new Set([".html", ".xml", ".txt"]);
+
+function stagedTextFiles(dir) {
+  const output = [];
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) output.push(...stagedTextFiles(full));
+    else if (entry.isFile() && TEXT_OUTPUT_EXTENSIONS.has(path.extname(entry.name).toLowerCase())) output.push(full);
+  }
+  return output;
+}
+
+function assertNoUnresolvedTokens(dir) {
+  const offenders = stagedTextFiles(dir)
+    .filter((file) => fs.readFileSync(file, "utf8").includes("__SRDP_BASE__"))
+    .map((file) => path.relative(dir, file).replaceAll(path.sep, "/"));
+  if (offenders.length) {
+    throw new Error(`stage-vercel-public: unresolved __SRDP_BASE__ tokens in staged output: ${offenders.join(", ")}`);
+  }
+}
 
 for (const name of fs.readdirSync(ROOT)) {
   if (name.endsWith(".html")) files.push(name);
@@ -45,4 +65,5 @@ if (!fs.existsSync(path.join(OUT, "index.html"))) {
   console.error("stage-vercel-public: missing public/index.html");
   process.exit(1);
 }
+assertNoUnresolvedTokens(OUT);
 console.log(`stage-vercel-public: staged ${copied} entries into public/`);

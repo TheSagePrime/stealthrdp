@@ -19,6 +19,13 @@
   "redirects": [
     { "source": "/vps-hosting-minecraft", "destination": "/vps-hosting-minecraft/", "permanent": true },
     { "source": "/vps-hosting-minecraft/index.html", "destination": "/vps-hosting-minecraft/", "permanent": true },
+    { "source": "/blog/5-ways-to-optimize-your-rdp-performance-for-remote-work/", "destination": "/blog/5-ways-to-optimize-your-rdp-performance-for-remote-work.html", "permanent": true },
+    { "source": "/blog/7-best-tools-for-server-uptime-monitoring-2025", "destination": "/blog/7-best-tools-for-server-uptime-monitoring-2025.html", "permanent": true },
+    { "source": "/blog/common-vps-hosting-issues-and-their-solutions", "destination": "/blog/common-vps-hosting-issues-and-their-solutions.html", "permanent": true },
+    { "source": "/blog/top-6-vps-management-tools-for-small-businesses", "destination": "/blog/top-6-vps-management-tools-for-small-businesses.html", "permanent": true },
+    { "source": "/blog/windows-vs-linux-vps-which-os-best-fits-your-business", "destination": "/blog/windows-vs-linux-vps-which-os-best-fits-your-business.html", "permanent": true },
+    { "source": "/windows-vps/index.html", "destination": "/windows-vps/", "permanent": true },
+    { "source": "/linux-vps/index.html", "destination": "/linux-vps/", "permanent": true },
     { "source": "/docs/1737944563-how-to-re_activate-and-extend-your-180_day-windows-trial.html", "destination": "/docs/how-to-re-activate-and-extend-your-180-day-windows-trial", "permanent": true },
     { "source": "/docs/1737944563-how-to_re_activate-and-extend-your-180_day-windows-trial.html", "destination": "/docs/how-to-re-activate-and-extend-your-180-day-windows-trial", "permanent": true },
     { "source": "/docs/1737946054-how-to-setup-your-vpn-on-linux-server-using-outline.html", "destination": "/docs/how-to-setup-your-vpn-on-linux-server-using-outline", "permanent": true },

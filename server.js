@@ -509,20 +509,24 @@ const server = http.createServer((req, res) => {
   const PAGE_REDIRECTS = {
     "/vps-hosting-minecraft": "/vps-hosting-minecraft/",
     "/vps-hosting-minecraft/index.html": "/vps-hosting-minecraft/",
+    "/windows-vps/index.html": "/windows-vps/",
+    "/linux-vps/index.html": "/linux-vps/",
     "/server-status": "/status",
     "/server-status/": "/status",
     "/features": "/#why",
     "/features/": "/#why",
   };
   if (PAGE_REDIRECTS[url.pathname]) {
-    res.writeHead(301, { Location: PAGE_REDIRECTS[url.pathname], ...SECURITY_HEADERS, ...extraHeaders(req) });
+    const destination = PAGE_REDIRECTS[url.pathname] + (url.pathname.endsWith("/index.html") ? url.search : "");
+    res.writeHead(301, { Location: destination, ...SECURITY_HEADERS, ...extraHeaders(req) });
     res.end();
     return;
   }
 
   if (/^\/blog\/[a-z0-9-]+\/?$/.test(url.pathname)) {
     const slug = url.pathname.replace(/^\/blog\/|\/$/g, "");
-    res.writeHead(301, { Location: "/blog/" + slug + ".html", ...SECURITY_HEADERS, ...extraHeaders(req) });
+    const destination = "/blog/" + slug + ".html" + url.search;
+    res.writeHead(301, { Location: destination, ...SECURITY_HEADERS, ...extraHeaders(req) });
     res.end();
     return;
   }
