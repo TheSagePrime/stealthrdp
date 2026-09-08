@@ -9,6 +9,19 @@ const ROOT = path.join(__dirname, "..");
 const read = (file) => fs.readFileSync(path.join(ROOT, file), "utf8");
 const CSS = read("css/style.css");
 const HTML = read("blog.html");
+const BLOG = require(path.join(ROOT, "js", "blog-data.js")).SRDP_BLOG;
+
+test("blog data and generated cards are newest first", () => {
+  const timestamps = BLOG.map((post) => {
+    const value = Date.parse(`${post.date || ""}T00:00:00Z`);
+    return Number.isFinite(value) ? value : 0;
+  });
+  assert.deepStrictEqual(timestamps, [...timestamps].sort((left, right) => right - left));
+  assert.strictEqual(BLOG[0].slug, "vps-hosting-minecraft");
+  const firstCard = HTML.match(/<article class="blog-card"[^>]*data-blog-title="([^"]+)"/);
+  assert.ok(firstCard, "blog index has a first card");
+  assert.strictEqual(firstCard[1], BLOG[0].title);
+});
 
 test("blog index ships topic chips, filterable cards, and visible hiding rules", () => {
   assert.match(HTML, /data-blog-topic=/);
