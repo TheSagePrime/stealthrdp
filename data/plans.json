@@ -6,7 +6,7 @@
       "https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps",
       "https://dash.stealthrdp.com/index.php?rp=/store/eu"
     ],
-    "verifiedAt": "2026-09-08T23:34:25Z"
+    "verifiedAt": "2026-09-09T08:21:02Z"
   },
   "billingCycles": {
     "monthly": { "label": "Monthly", "urlKey": "monthly" },
@@ -134,8 +134,14 @@
       "popular": true,
       "specs": { "cpu": "4 Core", "ram": "8 GB", "storage": "80 GB NVMe", "bandwidth": "Unlimited" },
       "purchaseUrl": "https://dash.stealthrdp.com/index.php?rp=/store/eu/silver-eu&billingcycle=monthly",
-      "source": { "url": "https://dash.stealthrdp.com/index.php?rp=/store/eu", "availability": "out-of-stock", "cycleNote": "WHMCS product page returns Out of Stock; cycle totals are not published." },
-      "pricing": { "currency": "EUR", "monthly": { "amount": 21.55, "suffix": "/mo", "periodLabel": "every month" } }
+      "source": { "url": "https://dash.stealthrdp.com/index.php?rp=/store/eu", "availability": "out-of-stock" },
+      "pricing": {
+        "currency": "EUR",
+        "monthly": { "amount": 21.55, "suffix": "/mo", "periodLabel": "every month" },
+        "quarterly": { "amount": 61.42, "referenceAmount": 64.65, "suffix": "/3mo", "periodLabel": "every 3 months", "discountLabel": "Save 5%" },
+        "annual": { "amount": 217.22, "referenceAmount": 258.6, "suffix": "/yr", "periodLabel": "every year", "discountLabel": "Save 16%" },
+        "biannual": { "amount": 95.68, "referenceAmount": 129.3, "suffix": "/2yr", "periodLabel": "every 2 years", "discountLabel": "Save 26%" }
+      }
     },
     {
       "name": "GOLD EU",
@@ -144,8 +150,14 @@
       "popular": false,
       "specs": { "cpu": "4 Core", "ram": "16 GB", "storage": "100 GB NVMe", "bandwidth": "Unlimited" },
       "purchaseUrl": "https://dash.stealthrdp.com/index.php?rp=/store/eu/gold-eu&billingcycle=monthly",
-      "source": { "url": "https://dash.stealthrdp.com/index.php?rp=/store/eu", "availability": "out-of-stock", "cycleNote": "WHMCS product page returns Out of Stock; cycle totals are not published." },
-      "pricing": { "currency": "EUR", "monthly": { "amount": 35.9, "suffix": "/mo", "periodLabel": "every month" } }
+      "source": { "url": "https://dash.stealthrdp.com/index.php?rp=/store/eu", "availability": "out-of-stock" },
+      "pricing": {
+        "currency": "EUR",
+        "monthly": { "amount": 35.9, "suffix": "/mo", "periodLabel": "every month" },
+        "quarterly": { "amount": 102.32, "referenceAmount": 107.7, "suffix": "/3mo", "periodLabel": "every 3 months", "discountLabel": "Save 5%" },
+        "annual": { "amount": 361.87, "referenceAmount": 430.8, "suffix": "/yr", "periodLabel": "every year", "discountLabel": "Save 16%" },
+        "biannual": { "amount": 159.4, "referenceAmount": 215.4, "suffix": "/2yr", "periodLabel": "every 2 years", "discountLabel": "Save 26%" }
+      }
     },
     {
       "name": "Platinum EU",
@@ -154,8 +166,14 @@
       "popular": true,
       "specs": { "cpu": "6 Core", "ram": "16 GB", "storage": "100 GB NVMe", "bandwidth": "Unlimited" },
       "purchaseUrl": "https://dash.stealthrdp.com/index.php?rp=/store/eu/platinum-eu&billingcycle=monthly",
-      "source": { "url": "https://dash.stealthrdp.com/index.php?rp=/store/eu", "availability": "out-of-stock", "cycleNote": "WHMCS product page returns Out of Stock; cycle totals are not published." },
-      "pricing": { "currency": "EUR", "monthly": { "amount": 41.88, "suffix": "/mo", "periodLabel": "every month" } }
+      "source": { "url": "https://dash.stealthrdp.com/index.php?rp=/store/eu", "availability": "out-of-stock" },
+      "pricing": {
+        "currency": "EUR",
+        "monthly": { "amount": 41.88, "suffix": "/mo", "periodLabel": "every month" },
+        "quarterly": { "amount": 119.36, "referenceAmount": 125.64, "suffix": "/3mo", "periodLabel": "every 3 months", "discountLabel": "Save 5%" },
+        "annual": { "amount": 422.15, "referenceAmount": 502.56, "suffix": "/yr", "periodLabel": "every year", "discountLabel": "Save 16%" },
+        "biannual": { "amount": 185.95, "referenceAmount": 251.28, "suffix": "/2yr", "periodLabel": "every 2 years", "discountLabel": "Save 26%" }
+      }
     },
     {
       "name": "Diamond EU",
@@ -164,8 +182,14 @@
       "popular": false,
       "specs": { "cpu": "6 Core", "ram": "24 GB", "storage": "120 GB NVMe", "bandwidth": "Unlimited" },
       "purchaseUrl": "https://dash.stealthrdp.com/index.php?rp=/store/eu/diamond-eu&billingcycle=monthly",
-      "source": { "url": "https://dash.stealthrdp.com/index.php?rp=/store/eu", "availability": "out-of-stock", "cycleNote": "WHMCS product page returns Out of Stock; cycle totals are not published." },
-      "pricing": { "currency": "EUR", "monthly": { "amount": 47.87, "suffix": "/mo", "periodLabel": "every month" } }
+      "source": { "url": "https://dash.stealthrdp.com/index.php?rp=/store/eu", "availability": "out-of-stock" },
+      "pricing": {
+        "currency": "EUR",
+        "monthly": { "amount": 47.87, "suffix": "/mo", "periodLabel": "every month" },
+        "quarterly": { "amount": 136.43, "referenceAmount": 143.61, "suffix": "/3mo", "periodLabel": "every 3 months", "discountLabel": "Save 5%" },
+        "annual": { "amount": 482.53, "referenceAmount": 574.44, "suffix": "/yr", "periodLabel": "every year", "discountLabel": "Save 16%" },
+        "biannual": { "amount": 212.54, "referenceAmount": 287.22, "suffix": "/2yr", "periodLabel": "every 2 years", "discountLabel": "Save 26%" }
+      }
     }
   ]
 }

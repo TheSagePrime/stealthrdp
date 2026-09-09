@@ -23,6 +23,13 @@ const EXPECTED_MONTHLY = {
   "Platinum EU": 41.88,
   "Diamond EU": 47.87,
 };
+const EXPECTED_EU_CYCLES = {
+  "Bronze EU": { quarterly: 35.91, biannual: 71.82, annual: 143.64 },
+  "Silver EU": { quarterly: 61.42, biannual: 95.68, annual: 217.22 },
+  "GOLD EU": { quarterly: 102.32, biannual: 159.40, annual: 361.87 },
+  "Platinum EU": { quarterly: 119.36, biannual: 185.95, annual: 422.15 },
+  "Diamond EU": { quarterly: 136.43, biannual: 212.54, annual: 482.53 },
+};
 
 function cardBlock(html, displayName, location = "") {
   return [...html.matchAll(/<article class="plan-card[^>]*>[\s\S]*?<\/article>/g)]
@@ -74,6 +81,16 @@ test("Bronze EU billing totals match the current WHMCS product page", () => {
     const markup = pricing.priceMarkup(plan, key);
     assert.doesNotMatch(markup, /Save/);
     assert.doesNotMatch(markup, /· ·/);
+  }
+});
+
+test("all EU billing totals match the supplied pricing schedule", () => {
+  for (const [name, expectedCycles] of Object.entries(EXPECTED_EU_CYCLES)) {
+    const plan = planFromName(name);
+    for (const [key, expected] of Object.entries(expectedCycles)) {
+      assert.equal(plan.pricing[key].amount, expected, `${name}: ${key} amount`);
+      assert.match(pricing.priceMarkup(plan, key), new RegExp(`€${expected.toFixed(2)}`), `${name}: ${key} display`);
+    }
   }
 });
 
