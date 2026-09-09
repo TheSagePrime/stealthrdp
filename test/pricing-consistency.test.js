@@ -94,6 +94,15 @@ test("all EU billing totals match the supplied pricing schedule", () => {
   }
 });
 
+test("EU semi-annual entries use six-month display semantics", () => {
+  for (const name of Object.keys(EXPECTED_EU_CYCLES)) {
+    const plan = planFromName(name);
+    assert.equal(plan.pricing.biannual.suffix, "/6mo", `${name}: semi-annual suffix`);
+    assert.equal(plan.pricing.biannual.periodLabel, "every 6 months", `${name}: semi-annual period`);
+    assert.match(pricing.priceMarkup(plan, "biannual"), /<small>\/6mo<\/small>/, `${name}: semi-annual display`);
+  }
+});
+
 test("the shared price helper renders exact monthly and cycle conditions", () => {
   for (const plan of catalog.plans) {
     const monthly = pricing.priceMarkup(plan, "monthly");
