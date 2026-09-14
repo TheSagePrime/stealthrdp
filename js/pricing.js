@@ -35,34 +35,38 @@
     return pricing[key] || null;
   }
 
+  function isAvailable(plan) {
+    return String((plan && plan.source && plan.source.availability) || "in-stock").toLowerCase() !== "out-of-stock";
+  }
+
   function priceMarkup(plan, key = "monthly") {
     const selectedKey = CYCLES[key] ? key : "monthly";
-    const selected = cycleEntry(plan, selectedKey);
     const currency = String((plan && plan.pricing && plan.pricing.currency) || "EUR");
     const symbol = currency === "EUR" ? "€" : currency + " ";
-    if (!selected || !Number.isFinite(Number(selected.amount))) {
-      return `<div class="plan-price plan-price-unavailable" data-price-cycle="${selectedKey}"><span class="cur">See checkout<small>/${selectedKey}</small></span><span class="price-note">${cycleLabel(selectedKey)} total not published while this plan is out of stock · ${escapeHtml(currency)}</span></div>`;
+    if (!isAvailable(plan)) {
+      return '<div class="plan-price plan-price-unavailable" data-price-cycle="' + selectedKey + '"><span class="cur">Currently unavailable</span><span class="price-note">This plan is out of stock in the current catalog · ' + escapeHtml(currency) + '</span></div>';
     }
-
+    const selected = cycleEntry(plan, selectedKey);
+    if (!selected || !Number.isFinite(Number(selected.amount))) {
+      return '<div class="plan-price plan-price-unavailable" data-price-cycle="' + selectedKey + '"><span class="cur">Not published</span><span class="price-note">' + cycleLabel(selectedKey) + ' total is not published for this plan · ' + escapeHtml(currency) + '</span></div>';
+    }
     const suffix = selected.suffix || (CYCLES[selectedKey] || CYCLES.monthly).fallbackSuffix;
     const condition = selectedKey === "monthly"
-      ? `Monthly · ${escapeHtml(currency)}`
-      : `${escapeHtml(selected.discountLabel || "")} · billed ${escapeHtml(selected.periodLabel || cycleLabel(selectedKey).toLowerCase())} · ${escapeHtml(currency)}`;
+      ? "Monthly · " + escapeHtml(currency)
+      : escapeHtml(selected.discountLabel || "") + " · billed " + escapeHtml(selected.periodLabel || cycleLabel(selectedKey).toLowerCase()) + " · " + escapeHtml(currency);
     const reference = Number.isFinite(Number(selected.referenceAmount))
-      ? `<span class="was">${symbol}${formatAmount(selected.referenceAmount)}</span>`
+      ? '<span class="was">' + symbol + formatAmount(selected.referenceAmount) + '</span>'
       : "";
-    return `<div class="plan-price" data-price-cycle="${selectedKey}"><span class="cur">${symbol}${formatAmount(selected.amount)}<small>${escapeHtml(suffix)}</small></span>${reference}<span class="price-note">${condition}</span></div>`;
-  }
-
-  function tablePrice(plan) {
-    const monthly = cycleEntry(plan, "monthly");
-    if (!monthly || !Number.isFinite(Number(monthly.amount))) return "See checkout";
+    return '<div class="plan-price" data-price-cycle="' + selectedKey + '"><span class="cur">' + symbol + formatAmount(selected.amount) + '<small>' + escapeHtml(suffix) + '</small></span>' + reference + '<span class="price-note">' + condition + '</span></div>';
+  }  function tablePrice(plan, key = "monthly") {
+    if (!isAvailable(plan)) return "Unavailable";
+    const selected = cycleEntry(plan, CYCLES[key] ? key : "monthly");
+    if (!selected || !Number.isFinite(Number(selected.amount))) return "Not published";
     const currency = String((plan && plan.pricing && plan.pricing.currency) || "EUR");
     const symbol = currency === "EUR" ? "€" : currency + " ";
-    return `${symbol}${formatAmount(monthly.amount)}/mo · ${currency}`;
-  }
-
-  function cycleButtonMarkup(key, billingCycles = {}) {
+    const suffix = selected.suffix || (CYCLES[key] || CYCLES.monthly).fallbackSuffix;
+    return symbol + formatAmount(selected.amount) + suffix + " · " + currency;
+  }  function cycleButtonMarkup(key, billingCycles = {}) {
     const cycle = billingCycles[key] || CYCLES[key] || CYCLES.monthly;
     const label = cycle.label || CYCLES[key].label;
     const discount = cycle.discountLabel || "";
@@ -72,6 +76,7 @@
   return {
     CYCLES,
     cycleEntry,
+    isAvailable,
     cycleLabel,
     cycleUrlKey,
     formatAmount,

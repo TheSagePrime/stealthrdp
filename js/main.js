@@ -19,6 +19,10 @@
     return container && container.querySelector("article, .faq-item, .node-card, .q-text");
   }
 
+  function isPlanAvailable(plan) {
+    return !plan || !plan.source || String(plan.source.availability || "in-stock").toLowerCase() !== "out-of-stock";
+  }
+
   function isMonitorUp(monitor) {
     var status = monitor && monitor.status;
     return status === "up" || status === 2 || status === "2";
@@ -450,6 +454,9 @@
     for (var i = 0; i < plans.length; i++) { if (plans[i].popular) { popularIdx = i; break; } }
     var html = plans.map(function (p, i) {
       var isPop = i === popularIdx;
+      var action = isPlanAvailable(p)
+        ? '<a class="btn btn-primary" href="' + planUrl(p, currentCycle) + '">Buy Now</a>'
+        : '<span class="btn btn-primary btn-disabled" role="status" aria-disabled="true">Currently unavailable</span>';
       return (
         '<article class="plan-card' + (isPop ? " popular" : "") + '">' +
           (isPop ? '<span class="plan-popular">Most Popular</span>' : "") +
@@ -462,7 +469,7 @@
             specRow("Storage", p.specs && p.specs.storage) +
             specRow("Bandwidth", p.specs && p.specs.bandwidth) +
           "</div>" +
-          '<a class="btn btn-primary" href="' + planUrl(p, currentCycle) + '">Buy Now</a>' +
+          action +
         "</article>"
       );
     }).join("");
@@ -498,6 +505,7 @@
       currentCycle = btn.getAttribute("data-cycle");
       $$("button", billingToggle).forEach(function (b) { var selected = b === btn; b.classList.toggle("active", selected); b.setAttribute("aria-selected", selected ? "true" : "false"); });
       if (cachedPlans.length) renderPlans(cachedPlans.slice(0, PLAN_LIMIT));
+      syncCompareTable();
     });
   }
   if (isOsVpsCatalog) syncOsVpsCards(PLAN_LOCATION);
@@ -515,38 +523,44 @@
         syncOsVpsCards(PLAN_LOCATION);
         return;
       }
+      syncCompareTable();
       cachedPlans = [];
       planGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--text-dim);padding:40px">Loading plans…</div>';
       loadPlans();
     });
   }
 
-  /* ---------- Compare table (plans page; baked rows stay on API failure) ---------- */
+  /* ---------- Compare table (plans page; follows selected region and billing cycle) ---------- */
   var compareBody = $("#compareBody");
-  if (compareBody && !hasBaked(compareBody)) {
-    fetch(API + "/plans?location=USA")
-      .then(function (r) { return r.json(); })
-      .then(function (usa) {
-        return fetch(API + "/plans?location=EU").then(function (r) { return r.json(); }).then(function (eu) { return { usa: usa, eu: eu }; });
-      })
-      .then(function (both) {
-        var all = (both.usa || []).concat(both.eu || []);
-        compareBody.innerHTML = all.map(function (p) {
-          return (
-            "<tr>" +
-              "<td class=\\\"k\\\">" + esc(p.name) + "</td>" +
-              '<td class="v">' + esc(p.specs && p.specs.cpu || "—") + "</td>" +
-              '<td class="v">' + esc(p.specs && p.specs.ram || "—") + "</td>" +
-              '<td class="v">' + esc(p.specs && p.specs.storage || "—") + "</td>" +
-              '<td class="v">' + esc(p.specs && p.specs.bandwidth || "—") + "</td>" +
-              '<td class="v">' + pricing.tablePrice(p) + "</td>" +
-              '<td><a class="btn btn-sm btn-primary" href="' + planUrl(p, "monthly") + '">Buy Now</a></td>' +
-            "</tr>"
-          );
-        }).join("");
-      })
-      .catch(function () { /* baked compare rows remain */ });
+  function comparePrice(row) {
+    if (row.getAttribute("data-plan-available") === "false") return "Unavailable";
+    var raw = row.getAttribute("data-price-" + currentCycle);
+    var amount = Number(raw);
+    if (!Number.isFinite(amount)) return "Not published";
+    var currency = row.getAttribute("data-plan-currency") || "EUR";
+    var symbol = currency === "EUR" ? "€" : currency + " ";
+    var suffix = { monthly: "/mo", quarterly: "/3mo", annual: "/yr", biannual: "/2yr" }[currentCycle] || "";
+    return symbol + amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + suffix + " · " + currency;
   }
+  function syncCompareTable() {
+    if (!compareBody) return;
+    var heading = $("#comparePriceHeading");
+    var note = $("#compareSelectionNote");
+    var cycleLabel = pricing.cycleLabel(currentCycle);
+    if (heading) heading.textContent = "Price/" + (currentCycle === "monthly" ? "mo" : currentCycle === "quarterly" ? "3mo" : currentCycle === "annual" ? "yr" : "2yr");
+    if (note) note.textContent = "Showing " + PLAN_LOCATION + " plans · " + cycleLabel + " billing.";
+    $$('tr[data-plan-location]', compareBody).forEach(function (row) {
+      row.hidden = row.getAttribute("data-plan-location") !== PLAN_LOCATION;
+      var price = $("[data-compare-price]", row);
+      if (price) price.textContent = comparePrice(row);
+      var cta = $("[data-compare-cta]", row);
+      if (cta && cta.tagName === "A" && row.getAttribute("data-plan-available") !== "false") {
+        var url = row.getAttribute("data-url-" + currentCycle) || row.getAttribute("data-url-monthly");
+        if (url) cta.href = url;
+      }
+    });
+  }
+  if (compareBody) syncCompareTable();
 
   /* ---------- FAQ accordion (baked items get handlers immediately) ---------- */
   var faqList = $("#faqList");
@@ -556,7 +570,16 @@
       btn.dataset.bound = "1";
       btn.addEventListener("click", function () {
         var item = btn.closest(".faq-item");
-        var open = item.classList.toggle("open");
+        var open = !item.classList.contains("open");
+        $(".faq-item.open", faqList).forEach(function (peer) {
+          if (peer === item) return;
+          peer.classList.remove("open");
+          var peerButton = $(".faq-q", peer);
+          if (peerButton) peerButton.setAttribute("aria-expanded", "false");
+          var peerAnswer = $(".faq-a", peer);
+          if (peerAnswer) peerAnswer.style.maxHeight = "0";
+        });
+        item.classList.toggle("open", open);
         btn.setAttribute("aria-expanded", open ? "true" : "false");
         var a = btn.nextElementSibling;
         a.style.maxHeight = open ? a.scrollHeight + "px" : "0";

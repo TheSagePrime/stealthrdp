@@ -90,6 +90,13 @@ const planUrl = (p) => {
   if (p.purchaseUrl) return p.purchaseUrl;
   return "https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps";
 };
+const planAvailability = (p) => String((p && p.source && p.source.availability) || "in-stock").toLowerCase();
+const planIsAvailable = (p) => planAvailability(p) !== "out-of-stock";
+const planUrlForCycle = (p, cycle = "monthly") => planUrl(p).replace(/billingcycle=[^&]+/i, "billingcycle=" + pricing.cycleUrlKey(cycle));
+const planActionHtml = (p, { cycle = "monthly", label = "Buy Now", className = "btn btn-primary", attributes = "" } = {}) => {
+  if (!planIsAvailable(p)) return '<span class="' + className + ' btn-disabled" role="status" aria-disabled="true">Currently unavailable</span>';
+  return '<a class="' + className + '"' + attributes + ' href="' + esc(planUrlForCycle(p, cycle)) + '">' + esc(label) + '</a>';
+};
 const planName = (p) => p.name.replace(" USA", "").replace(" EU", "");
 const displayPlanName = (p) => planName(p).replace(/[A-Za-z]+/g, (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
 function planSpecLine(p) {
@@ -305,6 +312,7 @@ function scripts(extra = [], includePricing = false) {
 function planCardHtml(p, { showPopular = true, showLocation = false, ctaLabel = "Buy Now", hidden = false } = {}) {
   const isPop = showPopular && p.popular;
   const location = esc(p.location || "");
+  const action = planActionHtml(p, { label: ctaLabel });
   return `<article class="plan-card${isPop ? " popular" : ""}" data-plan-location="${location}"${hidden ? " hidden" : ""}>
 ${isPop ? `    <span class="plan-popular">Most Popular</span>\n` : ""}    <div class="p-name">${esc(displayPlanName(p))}</div>
     <div class="p-desc">${esc(p.description || "")}</div>
@@ -315,7 +323,7 @@ ${showLocation ? `    <div class="p-location">Region: ${esc(p.location || "Not l
       ${specRow("Storage", p.specs && p.specs.storage)}
       ${specRow("Bandwidth", p.specs && p.specs.bandwidth)}
     </div>
-    <a class="btn btn-primary" href="${planUrl(p)}">${esc(ctaLabel)}</a>
+    ${action}
   </article>`;
 }
 
@@ -353,15 +361,23 @@ function specRow(k, v) {
 }
 
 function compareRowHtml(p) {
-  return `<tr>
-    <td class="k">${esc(p.name)}</td>
-    <td class="v">${esc((p.specs && p.specs.cpu) || "—")}</td>
-    <td class="v">${esc((p.specs && p.specs.ram) || "—")}</td>
-    <td class="v">${esc((p.specs && p.specs.storage) || "—")}</td>
-    <td class="v">${esc((p.specs && p.specs.bandwidth) || "—")}</td>
-    <td class="v">${pricing.tablePrice(p)}</td>
-    <td><a class="btn btn-sm btn-primary" href="${planUrl(p)}">Buy Now</a></td>
-  </tr>`;
+  const available = planIsAvailable(p);
+  const currency = String((p && p.pricing && p.pricing.currency) || "EUR");
+  const dataAttrs = Object.keys(pricing.CYCLES).map((key) => {
+    const entry = pricing.cycleEntry(p, key);
+    const amount = entry && Number.isFinite(Number(entry.amount)) ? entry.amount : "";
+    return ' data-price-' + key + '="' + esc(amount) + '" data-url-' + key + '="' + esc(planUrlForCycle(p, key)) + '"';
+  }).join("");
+  const action = planActionHtml(p, { cycle: "monthly", className: "btn btn-sm btn-primary", attributes: ' data-compare-cta="true"' });
+  return '<tr data-plan-location="' + esc(p.location || "") + '" data-plan-available="' + (available ? "true" : "false") + '" data-plan-currency="' + esc(currency) + '"' + dataAttrs + '>' +
+    '<td class="k">' + esc(p.name) + '</td>' +
+    '<td class="v">' + esc((p.specs && p.specs.cpu) || "—") + '</td>' +
+    '<td class="v">' + esc((p.specs && p.specs.ram) || "—") + '</td>' +
+    '<td class="v">' + esc((p.specs && p.specs.storage) || "—") + '</td>' +
+    '<td class="v">' + esc((p.specs && p.specs.bandwidth) || "—") + '</td>' +
+    '<td class="v compare-price" data-compare-price="true">' + pricing.tablePrice(p, "monthly") + '</td>' +
+    '<td>' + action + '</td>' +
+  '</tr>';
 }
 
 function billingToggleHtml() {
@@ -552,10 +568,25 @@ function looksLikeDocCode(line) {
   return /^(?:\$\s+|sudo\s|apt(?:-get)?\s|yum\s|dnf\s|systemctl\s|service\s|mkdir\s|mknod\s|chmod\s|wget\s|curl\s|bash\s|sh\s|winrm\s|slmgr\s|docker\s|python\s|Rewrite(?:Engine|Cond|Rule)\b|apt-get\s)/i.test(value);
 }
 
+function docCompareText(value) {
+  return String(value == null ? "" : value).replace(/[\*_]/g, "").replace(/\s+/g, " ").trim().toLowerCase();
+}
+
 function articleBodyLines(article) {
   const lines = String(article.content || "").replace(/\r/g, "").split("\n");
   const updatedIndex = lines.findIndex((line) => /^\s*Last updated on\b/i.test(line));
-  return updatedIndex >= 0 ? lines.slice(updatedIndex + 1) : lines;
+  const body = updatedIndex >= 0 ? lines.slice(updatedIndex + 1) : lines;
+  const summary = docCompareText(article.summary);
+  if (!summary) return body;
+  let cursor = 0;
+  while (cursor < body.length && !body[cursor].trim()) cursor += 1;
+  const paragraph = [];
+  while (cursor < body.length && body[cursor].trim()) paragraph.push(body[cursor++]);
+  if (docCompareText(paragraph.join(" ")) === summary) {
+    while (cursor < body.length && !body[cursor].trim()) cursor += 1;
+    return body.slice(cursor);
+  }
+  return body;
 }
 
 function renderDocMarkdown(article) {
@@ -634,7 +665,8 @@ function renderDocMarkdown(article) {
     }
     if (!trimmed) {
       flushParagraph();
-      if (!(list && /^\d+[.)]\s+/.test(next) || /^(?:[-*+]\s+|[–~]\s*)/.test(next))) flushList();
+      const nextIsList = /^\s*(?:\d+[.)]\s+|[-*+]\s+|[–~]\s*)/.test(next);
+      if (!(list && nextIsList)) flushList();
       flushCode();
       continue;
     }
@@ -652,6 +684,14 @@ function renderDocMarkdown(article) {
     }
     if (/^(?:(?:\*\s*){3,}|(?:-\s*){3,}|(?:_\s*){3,})$/.test(trimmed)) {
       addRule();
+      continue;
+    }
+
+    const nestedListItem = raw.match(/^\s{4,}(?:\d+[.)]\s+|[-*+]\s+|[–~]\s*)(.*)$/);
+    if (nestedListItem && list) {
+      flushParagraph();
+      flushCode();
+      list.items.push(nestedListItem[1]);
       continue;
     }
 
@@ -741,7 +781,7 @@ function buildDocsIndex() {
   const options = categories.map((category) => `<option value="${esc(category)}">${esc(category)}</option>`).join("");
   const cards = DOCS.map(docCardHtml).join("");
   const topicChips = `<button type="button" class="topic-chip active" data-docs-topic="all">All<span>${DOCS.length}</span></button>` + categories.map((category) => `<button type="button" class="topic-chip" data-docs-topic="${esc(category)}">${esc(category)}<span>${DOCS.filter((article) => article.category === category).length}</span></button>`).join("");
-  const groupedCards = categories.map((category) => `<div class="docs-group" data-docs-group="${esc(category)}"><div class="docs-group-head"><h2>${esc(category)}</h2><span>${DOCS.filter((article) => article.category === category).length} guides</span></div><div class="docs-group-grid">${DOCS.filter((article) => article.category === category).map(docCardHtml).join("")}</div></div>`).join("");
+  const groupedCards = categories.map((category) => `<div class="docs-group" data-docs-group="${esc(category)}"><div class="docs-group-head"><h2>${esc(category)}</h2><span data-docs-group-count="${esc(category)}">${DOCS.filter((article) => article.category === category).length} guides</span></div><div class="docs-group-grid">${DOCS.filter((article) => article.category === category).map(docCardHtml).join("")}</div></div>`).join("");
   const body = `<main class="docs-index docs-surface">
     <section class="page-head docs-page-head">
       <div class="container">
@@ -1139,10 +1179,10 @@ function buildPlans() {
         <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/build-your-own-rdp-vps">Configure &amp; Deploy</a>
       </div>
       <div class="comparison-section" id="comparison">
-        <div class="comparison-head"><div><span class="sec-index">02 / Compare precisely</span><h2>See the difference in one view. <span class="visually-hidden">VPS Features Comparison</span></h2></div><p>Use this table for a quick resource check. Checkout confirms the current price and availability.</p></div>
+        <div class="comparison-head"><div><span class="sec-index">02 / Compare precisely</span><h2>See the difference in one view. <span class="visually-hidden">VPS Features Comparison</span></h2></div><p><span id="compareSelectionNote">Showing USA plans · Monthly billing.</span> Checkout confirms the current price and availability.</p></div>
         <div class="compare-wrap">
           <table class="compare-table">
-            <thead><tr><th>Plan</th><th>CPU</th><th>RAM</th><th>Storage</th><th>Bandwidth</th><th>Price/mo</th><th></th></tr></thead>
+            <thead><tr><th>Plan</th><th>CPU</th><th>RAM</th><th>Storage</th><th>Bandwidth</th><th id="comparePriceHeading">Price/mo</th><th></th></tr></thead>
             <tbody id="compareBody">${compare}</tbody>
           </table>
         </div>
@@ -1275,7 +1315,7 @@ function buildOsVpsPage({
     productLd({ route: `/${slug}/`, name: serviceName, description }),
     faqSchema,
   ] }];
-  return page({ active: "plans", title, description, canonical: `__SRDP_BASE__/${slug}/`, jsonLd, body, showPalette: false });
+  return page({ active: "plans", title, description, canonical: `__SRDP_BASE__/${slug}/`, jsonLd, body, showPalette: true });
 }
 
 function windowsLandingHtml() {

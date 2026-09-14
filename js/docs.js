@@ -71,8 +71,11 @@
       var visible = filterItems(items, search.value, category.value);
       items.forEach(function (item) { item.element.hidden = visible.indexOf(item) === -1; });
       groups.forEach(function (group) {
-        var visibleInGroup = items.some(function (item) { return item.category === group.getAttribute("data-docs-group") && !item.element.hidden; });
-        group.hidden = !visibleInGroup;
+        var groupItems = items.filter(function (item) { return item.category === group.getAttribute("data-docs-group"); });
+        var visibleInGroup = groupItems.filter(function (item) { return !item.element.hidden; }).length;
+        group.hidden = visibleInGroup === 0;
+        var groupCount = group.querySelector("[data-docs-group-count]");
+        if (groupCount) groupCount.textContent = visibleInGroup + (visibleInGroup === 1 ? " guide" : " guides");
       });
       syncChips();
       if (count) count.textContent = visible.length + (visible.length === 1 ? " guide" : " guides");
