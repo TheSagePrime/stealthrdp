@@ -55,6 +55,11 @@ const NOINDEX_DOC_SLUGS = new Set([
   "server-stops-randomly",
 ]);
 const TERMS_URL = "/docs/use-of-service";
+const WINDOWS_LICENSING_URL = "/docs/windows-licensing";
+const WINDOWS_LICENSING_NOTICE = "Microsoft Windows licensing is not included unless explicitly stated. Windows Server Evaluation may be provided for evaluation/testing purposes. Customers are responsible for appropriate Microsoft licensing for continued or production use.";
+function windowsLicensingNoteHtml() {
+  return `<aside class="windows-licensing-note"><p><strong>Windows licensing:</strong> ${WINDOWS_LICENSING_NOTICE} <a href="${WINDOWS_LICENSING_URL}">Read the Windows licensing page</a>.</p></aside>`;
+}
 
 /* ---------- helpers ---------- */
 const esc = (s) =>
@@ -271,6 +276,7 @@ function footerHtml() {
         <li><a href="https://dash.stealthrdp.com/submitticket.php">Contact Support</a></li>
         <li><a href="/privacy">Privacy Policy</a></li>
         <li><a href="${TERMS_URL}">Terms of Service</a></li>
+        <li><a href="${WINDOWS_LICENSING_URL}">Windows licensing</a></li>
       </ul></div>
     </div>
     <div class="footer-mobile-nav" aria-label="Footer navigation">
@@ -281,7 +287,7 @@ function footerHtml() {
         <li><a href="/docs">Documentation</a></li><li><a href="/blog">Tutorials</a></li><li><a href="/faq">FAQ</a></li><li><a href="/blog">Blog</a></li><li><a href="/status">Server Status</a></li>
       </ul></details>
       <details class="footer-mobile-group"><summary><span>Company</span><small>About · support · legal</small><b aria-hidden="true">+</b></summary><ul>
-        <li><a href="/about">About Us</a></li><li><a href="https://dash.stealthrdp.com/submitticket.php">Contact Support</a></li><li><a href="/privacy">Privacy Policy</a></li><li><a href="${TERMS_URL}">Terms of Service</a></li>
+        <li><a href="/about">About Us</a></li><li><a href="https://dash.stealthrdp.com/submitticket.php">Contact Support</a></li><li><a href="/privacy">Privacy Policy</a></li><li><a href="${TERMS_URL}">Terms of Service</a></li><li><a href="${WINDOWS_LICENSING_URL}">Windows licensing</a></li>
       </ul></details>
     </div>
     <div class="footer-bottom">
@@ -289,6 +295,7 @@ function footerHtml() {
       <span class="links">
         <a href="/privacy">Privacy</a>
         <a href="${TERMS_URL}">Terms</a>
+        <a href="${WINDOWS_LICENSING_URL}">Windows licensing</a>
         <a href="/status">Status</a>
       </span>
     </div>
@@ -1040,7 +1047,7 @@ function buildIndex() {
         </div></div>
         <div class="finder-field"><span class="control-label">Operating system</span><select id="osSelect" aria-label="Operating system"><option value="any">Any OS</option><option value="windows">Windows</option><option value="linux">Linux</option></select></div>
         <div class="finder-field"><span class="control-label">Use case</span><select id="useCaseSelect" aria-label="Use case"><option value="remote-desktop">Remote desktop</option><option value="web-hosting">Web hosting</option><option value="automation">Automation &amp; bots</option><option value="trading">Trading</option><option value="storage">Storage &amp; backups</option></select></div>
-        <p class="finder-note" id="finderNote">Best fit: Bronze USA — any OS included on every plan.</p>
+        <p class="finder-note" id="finderNote">Best fit: Bronze USA — Windows and Linux images available on every plan.</p>
         <div class="all-link os-links" aria-label="Browse VPS operating system plans"><a class="btn btn-ghost btn-sm" href="/windows-vps/">Windows VPS hosting</a><a class="btn btn-ghost btn-sm" href="/linux-vps/">Linux VPS hosting</a><a class="btn btn-ghost btn-sm" href="/plans#windows-vps">Windows VPS</a><a class="btn btn-ghost btn-sm" href="/plans#linux-vps">Linux VPS</a><a class="btn btn-ghost btn-sm" href="/plans#comparison">Compare VPS resources</a></div>
       </div>
       <div class="billing-wrap fade-up d2">
@@ -1139,7 +1146,7 @@ function buildPlans() {
           <p>Windows and Linux VPS plans use the same resource comparison. Select the operating system that matches your software, administration, and remote-access needs during checkout.</p>
         </div>
         <article class="byo-panel" id="windows-vps">
-          <div><span class="included-label">Windows VPS</span><h2>Windows VPS for graphical remote access.</h2><p>Choose Windows when your workflow needs a graphical desktop or Microsoft-compatible software. Compare CPU, RAM, NVMe storage, bandwidth, region, and billing cycle above. <a href="/windows-vps/">Read the Windows VPS hosting guide</a>.</p></div>
+          <div><span class="included-label">Windows VPS</span><h2>Windows VPS for graphical remote access.</h2><p>Choose Windows when your workflow needs a graphical desktop or Microsoft-compatible software. Compare CPU, RAM, NVMe storage, bandwidth, region, and billing cycle above. <a href="/windows-vps/">Read the Windows VPS hosting guide</a>.</p>${windowsLicensingNoteHtml()}</div>
           <a class="btn btn-ghost" href="#plan-grid">Compare Windows VPS resources</a>
         </article>
         <article class="byo-panel" id="linux-vps">
@@ -1259,6 +1266,7 @@ function buildOsVpsPage({
         {"@type": "Question", "name": "Can I use familiar Windows software?", "acceptedAnswer": {"@type": "Answer", "text": "A Windows VPS provides a Windows environment for compatible software. Check each application's system requirements before ordering."}},
         {"@type": "Question", "name": "Do Windows VPS plans include Administrator access?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The FAQ states that VPS plans include full Administrator access."}},
         {"@type": "Question", "name": "Which Windows versions are listed?", "acceptedAnswer": {"@type": "Answer", "text": "Windows Server 2019, 2022, and 2025."}},
+        {"@type": "Question", "name": "Is a Microsoft Windows licence included?", "acceptedAnswer": {"@type": "Answer", "text": "No. Microsoft Windows licensing is not included unless explicitly stated. Windows Server Evaluation may be provided for evaluation/testing purposes. Customers are responsible for appropriate Microsoft licensing for continued or production use."}},
         {"@type": "Question", "name": "When will my Windows VPS be activated?", "acceptedAnswer": {"@type": "Answer", "text": "Standard installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation."}},
         {"@type": "Question", "name": "How will I receive my credentials?", "acceptedAnswer": {"@type": "Answer", "text": "StealthRDP sends service credentials by email after payment confirmation."}},
         {"@type": "Question", "name": "How do I choose CPU, RAM, and storage?", "acceptedAnswer": {"@type": "Answer", "text": "Use your software requirements, user count, processing needs, and data size. Then use the plan comparison to compare the available configurations."}},
@@ -1356,6 +1364,7 @@ function windowsLandingHtml() {
           <span class="included-label">Environment</span>
           <h2>Choose the Windows version your software needs</h2>
           <p>The Services &amp; Plans FAQ lists these Windows options. Confirm the operating-system option during ordering.</p>
+          ${windowsLicensingNoteHtml()}
         </div>
         <div class="os-distro-wrap">
           <span class="os-distro-label" id="windows-version-label">Windows version</span>
@@ -1427,7 +1436,7 @@ function windowsLandingHtml() {
       <div class="container">
         <div class="os-vps-guide-intro"><span class="included-label">Support and limits</span><h2>Support and limits</h2></div>
         <div class="os-content-card">
-          <p>Support is available through the client-area ticketing system and support email. Review the <a href="/faq">FAQ</a> for support information and the <a href="/docs/use-of-service">Use of Service terms</a> before you order.</p>
+          <p>Support is available through the client-area ticketing system and support email. Review the <a href="/faq">FAQ</a> for support information, the <a href="/docs/use-of-service">Use of Service terms</a>, and the <a href="${WINDOWS_LICENSING_URL}">Windows licensing</a> page before you order.</p>
           <ul class="os-vps-check-list">
             <li>Use the client-area ticket system for service support.</li>
             <li>Follow the published Use of Service terms.</li>
@@ -1455,6 +1464,7 @@ function windowsLandingHtml() {
           <details class="os-vps-faq-item" open><summary>Can I use familiar Windows software?</summary><p>A Windows VPS provides a Windows environment for compatible software. Check each application's system requirements before ordering.</p></details>
           <details class="os-vps-faq-item"><summary>Do Windows VPS plans include Administrator access?</summary><p>Yes. The FAQ states that VPS plans include full Administrator access.</p></details>
           <details class="os-vps-faq-item"><summary>Which Windows versions are listed?</summary><p>Windows Server 2019, 2022, and 2025.</p></details>
+          <details class="os-vps-faq-item"><summary>Is a Microsoft Windows licence included?</summary><p>No. ${WINDOWS_LICENSING_NOTICE} StealthRDP provides the infrastructure and does not currently provide Windows licences under SPLA. Customer-supplied licensing may be used where Microsoft's licensing terms permit it. <a href="${WINDOWS_LICENSING_URL}">Read the Windows licensing page</a>.</p></details>
           <details class="os-vps-faq-item"><summary>When will my Windows VPS be activated?</summary><p>Standard installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation.</p></details>
           <details class="os-vps-faq-item"><summary>How will I receive my credentials?</summary><p>StealthRDP sends service credentials by email after payment confirmation.</p></details>
           <details class="os-vps-faq-item"><summary>How do I choose CPU, RAM, and storage?</summary><p>Use your software requirements, user count, processing needs, and data size. Then use the <a href="/plans#comparison">plan comparison</a> to compare the available configurations.</p></details>
@@ -1861,6 +1871,7 @@ function buildFaq() {
         <div class="faq-controls"><label for="faqSearch">Search questions</label><input id="faqSearch" type="search" placeholder="Try: refund, Windows, upgrade…" autocomplete="off" /><select id="faqCategory" hidden><option value="all">All topics</option>${categoryOptions}</select></div>
         <div class="topic-chips faq-topics" role="group" aria-label="Filter by topic">${topicChips}</div>
         <div class="faq-results-bar"><span id="faqResultsCount">${FAQS.length} questions</span><span>Source-backed answers · updated with the site snapshot</span></div>
+        ${windowsLicensingNoteHtml()}
         <div class="faq-list" id="faqList" aria-live="polite">${items}</div><p class="faq-empty" id="faqEmpty" hidden>No questions match that search. Try another phrase or choose all topics.</p>
         <div class="faq-support"><div><span class="sec-index">Still need a hand?</span><h2>Take the question to support.</h2><p>Account, billing, and server-specific requests are handled in the client portal.</p></div><a class="btn btn-primary" href="${DOC_SUPPORT_URL}">Contact support</a></div>
       </div>
@@ -2008,14 +2019,14 @@ ${items}
 function buildSitemap() {
   const staticRoutes = [
     ["/", "2026-08-31"],
-    ["/plans", "2026-08-31"],
-    ["/windows-vps/", "2026-09-02"],
+    ["/plans", "2026-09-16"],
+    ["/windows-vps/", "2026-09-16"],
     ["/linux-vps/", "2026-09-02"],
     ["/status", "2026-08-31"],
     ["/blog", "2026-08-31"],
-    ["/faq", "2026-08-31"],
+    ["/faq", "2026-09-16"],
     ["/about", "2026-08-31"],
-    ["/docs", "2026-08-31"],
+    ["/docs", "2026-09-16"],
   ];
   const blogRoutes = BLOG.map((p) => [articleRoute(p), p.date]);
   const docRoutes = DOCS

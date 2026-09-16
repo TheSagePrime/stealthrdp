@@ -372,7 +372,7 @@
     if (finderNote) {
       if (tier) {
         var os = osSelect ? osSelect.value : "any";
-        finderNote.textContent = "Best fit: " + target + " — " + (os === "any" ? "any OS" : os + " OS") + " included on every plan.";
+        finderNote.textContent = "Best fit: " + target + " — " + (os === "any" ? "Windows and Linux images" : os + " image") + " available on every plan.";
       } else {
         finderNote.textContent = "Every plan supports Windows and Linux. Pick a workload to see the recommended tier.";
       }

@@ -47,7 +47,7 @@
       } catch (e) {}
     }());
   </script>
-  <link rel="stylesheet" href="/css/style.css?v=2026-09-08T20-58-27-264Z" />
+  <link rel="stylesheet" href="/css/style.css?v=2026-09-16T21-36-36-228Z" />
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src="https://sgtm.stealthrdp.com/2l3xebiqyzc.js?"+i;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','yw=Ch5ENj0vSDYwSUBGOjFcXhVHS19YRAEWXgkNFAgOERARHglfCg0I');</script>
   <!-- End Google Tag Manager -->
@@ -157,13 +157,13 @@
 <p>The costs of Windows and Linux VPS vary significantly due to factors like licensing fees, resource requirements, and overall operating expenses.</p>
 <h3 id="setup-costs-and-license-fees">Setup Costs and License Fees</h3>
 <p>One major difference between Linux and Windows VPS is the cost of licensing. Linux VPS stands out as a budget-friendly option because it relies on free, open-source distributions. This eliminates licensing fees entirely, making it a cost-effective choice for many users. Popular Linux distributions like <strong><a href="https://ubuntu.com/" target="_blank" rel="nofollow noopener noreferrer">Ubuntu</a></strong>, <strong><a href="https://www.centos.org/" target="_blank" rel="nofollow noopener noreferrer">CentOS</a></strong>, and <strong><a href="https://www.debian.org/" target="_blank" rel="nofollow noopener noreferrer">Debian</a></strong> are all available without any added cost.</p>
-<p>On the other hand, Windows VPS includes licensing fees that can significantly increase both setup and monthly costs. Microsoft's pricing for Windows Server 2025 highlights this:</p>
+<p>On the other hand, a production Windows Server environment can involve Microsoft licensing costs that are separate from VPS infrastructure pricing. Microsoft's pricing for Windows Server 2025 highlights this:</p>
 <ul>
 <li><strong>Windows Server 2025 Standard</strong>: $1,176 MSRP </li>
 <li><strong>Windows Server 2025 Datacenter</strong>: $6,771 MSRP </li>
 <li><strong>Pay-as-you-go option</strong>: $33.58 per CPU core monthly (or $0.046 per hour) </li>
 </ul>
-<p>Most hosting providers bundle these licensing fees into their packages, which raises the monthly price of a Windows VPS.</p>
+<p>StealthRDP does not currently provide Microsoft Windows licences under SPLA. Microsoft Windows licensing is not included unless a product explicitly says otherwise. Windows Server Evaluation may be provided for evaluation/testing purposes. Customers are responsible for appropriate Microsoft licensing for continued or production use. See the <a href="/docs/windows-licensing">Windows licensing</a> page.</p>
 <h3 id="resource-usage-and-running-costs">Resource Usage and Running Costs</h3>
 <p>Linux VPS is known for its efficient use of resources, which helps keep running costs low. It can operate smoothly on minimal hardware, making it a practical option for those with limited budgets. In contrast, Windows VPS requires more RAM and CPU power due to its graphical interface and additional services, which drives up resource usage - and, consequently, costs.</p>
 <p>Here’s a quick comparison of typical VPS costs:</p>
@@ -412,7 +412,7 @@
 <p><strong>Windows VPS</strong> comes equipped with built-in tools designed to protect your system. Features like Windows Defender guard against malware, BitLocker ensures data encryption, and the Windows Firewall adds an extra layer of defense. Updates are streamlined through Windows Server Update Services (WSUS), allowing administrators to deploy and manage updates across networks with ease.</p>
 <p>In contrast, <strong>Linux VPS</strong> thrives on its open-source flexibility, offering customizable security measures like SELinux and AppArmor. These tools grant precise control over application permissions, giving users the ability to tailor their security setup. Updates are managed via command-line tools such as <code>apt</code> for Debian-based systems or <code>dnf</code> for Red Hat-based systems. These updates can also be automated, ensuring smooth and consistent patch management. While Windows emphasizes an integrated and user-friendly experience, Linux appeals to those seeking flexibility and the ability to fine-tune their systems, making it a great choice for users with specific technical needs.</p>
 <h3 id="which-vps-operating-system-is-more-cost-effective-and-flexible-for-businesses">Which VPS operating system is more cost-effective and flexible for businesses?</h3>
-<p>If your business values <strong>affordability</strong> and <strong>adaptability</strong>, a Linux VPS might be the way to go. Since Linux is an open-source operating system, you won't have to worry about licensing fees, making it a more budget-friendly option compared to Windows VPS, which comes with added costs for licenses. Plus, Linux is less demanding on system resources, which can help reduce expenses on hardware and hosting.</p>
+<p>If your business values <strong>affordability</strong> and <strong>adaptability</strong>, a Linux VPS might be the way to go. Since Linux is an open-source operating system, typical Linux distributions do not add Microsoft licensing costs. A Windows VPS still requires appropriate Microsoft licensing for continued or production use; StealthRDP does not include that licensing unless a product explicitly says otherwise. Plus, Linux is less demanding on system resources, which can help reduce expenses on hardware and hosting.</p>
 <p>Another advantage of Linux is its <strong>flexibility</strong>. It offers extensive customization and scalability, letting businesses fine-tune software and resources to meet their unique requirements. This makes it especially appealing to startups and small to medium-sized businesses that need to stretch their budgets without sacrificing performance. For companies aiming to combine cost savings with reliable functionality, Linux VPS stands out as a practical choice.</p><p class="article-plan-links"><strong>Continue your VPS research:</strong> <a href="/windows-vps/">Explore Windows VPS hosting</a> · <a href="/linux-vps/">Explore Linux VPS hosting</a> · <a href="/plans#windows-vps">Compare Windows VPS plans</a> · <a href="/plans#linux-vps">Compare Linux VPS plans</a></p></div>
       <footer class="blog-article-footer"><a href="/blog">← Back to all articles</a><span class="blog-article-actions"><a class="btn btn-ghost btn-sm" href="/plans">View plans</a><a class="btn btn-primary btn-sm" href="https://dash.stealthrdp.com/submitticket.php">Ask support</a></span></footer>
     </article>
@@ -445,6 +445,7 @@
         <li><a href="https://dash.stealthrdp.com/submitticket.php">Contact Support</a></li>
         <li><a href="/privacy">Privacy Policy</a></li>
         <li><a href="/docs/use-of-service">Terms of Service</a></li>
+        <li><a href="/docs/windows-licensing">Windows licensing</a></li>
       </ul></div>
     </div>
     <div class="footer-mobile-nav" aria-label="Footer navigation">
@@ -455,7 +456,7 @@
         <li><a href="/docs">Documentation</a></li><li><a href="/blog">Tutorials</a></li><li><a href="/faq">FAQ</a></li><li><a href="/blog">Blog</a></li><li><a href="/status">Server Status</a></li>
       </ul></details>
       <details class="footer-mobile-group"><summary><span>Company</span><small>About · support · legal</small><b aria-hidden="true">+</b></summary><ul>
-        <li><a href="/about">About Us</a></li><li><a href="https://dash.stealthrdp.com/submitticket.php">Contact Support</a></li><li><a href="/privacy">Privacy Policy</a></li><li><a href="/docs/use-of-service">Terms of Service</a></li>
+        <li><a href="/about">About Us</a></li><li><a href="https://dash.stealthrdp.com/submitticket.php">Contact Support</a></li><li><a href="/privacy">Privacy Policy</a></li><li><a href="/docs/use-of-service">Terms of Service</a></li><li><a href="/docs/windows-licensing">Windows licensing</a></li>
       </ul></details>
     </div>
     <div class="footer-bottom">
@@ -463,10 +464,11 @@
       <span class="links">
         <a href="/privacy">Privacy</a>
         <a href="/docs/use-of-service">Terms</a>
+        <a href="/docs/windows-licensing">Windows licensing</a>
         <a href="/status">Status</a>
       </span>
     </div>
   </div></footer>
-  <script src="/js/main.js?v=2026-09-08T20-58-27-264Z"></script>
+  <script src="/js/main.js?v=2026-09-16T21-36-36-228Z"></script>
 </body>
 </html>

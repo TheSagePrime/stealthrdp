@@ -71,6 +71,7 @@
     { "source": "/docs/how-to-rebuild-a-server.html", "destination": "/docs/how-to-rebuild-a-server", "permanent": true },
     { "source": "/docs/how-to-reset-server-change-or-reset-client-area-password.html", "destination": "/docs/how-to-reset-server-change-or-reset-client-area-password", "permanent": true },
     { "source": "/docs/step-by-step-guide-to-fix-win-rm-and-install-net-framework.html", "destination": "/docs/step-by-step-guide-to-fix-win-rm-and-install-net-framework", "permanent": true },
+    { "source": "/docs/windows-licensing.html", "destination": "/docs/windows-licensing", "permanent": true },
 
     { "source": "/docs.html", "destination": "/docs", "permanent": true },
     { "source": "/blog.html", "destination": "/blog", "permanent": true },

@@ -930,6 +930,10 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
 .docs-code code { padding: 0; color: inherit; background: transparent; border: 0; font-size: inherit; }
 .docs-warning { margin: 25px 0 0; padding: 16px 18px; color: var(--text-muted); background: rgba(var(--accent-rgb),.07); border: 1px solid rgba(var(--accent-rgb),.3); border-left: 3px solid var(--accent); border-radius: 8px; font-size: 14px; line-height: 1.65; }
 .docs-warning strong { color: var(--accent-hover); }
+.windows-licensing-note { margin: 16px 0 0; padding: 14px 16px; color: var(--text-muted); background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius-lg); font-size: 14px; line-height: 1.65; }
+.windows-licensing-note p { margin: 0; }
+.windows-licensing-note strong { color: var(--text); }
+.byo-panel .windows-licensing-note { margin-top: 14px; }
 .docs-support { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 48px; padding: 25px; background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius); }
 .docs-support h2 { margin: 12px 0 5px; font-size: 21px; }
 .docs-support p { margin: 0; color: var(--text-muted); font-size: 13px; }

@@ -54,9 +54,9 @@ test("homepage renders four to six verified testimonials without review redactio
   assert.doesNotMatch(build, /DATA\("reviews\.json"\)|reviewCardHtml|reviewWallHtml|providerPattern|the provider/i);
 });
 
-test("all 22 docs slugs map once to unique clean extensionless routes", () => {
-  assert.equal(docsMappings.length, 22);
-  assert.equal(new Set(docsMappings.map(([, clean]) => clean)).size, 22, "clean slugs are unique");
+test("all 23 docs slugs map once to unique clean extensionless routes", () => {
+  assert.equal(docsMappings.length, 23);
+  assert.equal(new Set(docsMappings.map(([, clean]) => clean)).size, 23, "clean slugs are unique");
   for (const [oldSlug, clean] of docsMappings) {
     assert.doesNotMatch(clean, /^\d{10}-|_/);
     const source = `/docs/${oldSlug}.html`;
