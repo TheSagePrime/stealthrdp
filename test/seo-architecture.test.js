@@ -216,6 +216,31 @@ test("nested OS index aliases redirect directly to slash routes", () => {
   }
 });
 
+test("Vercel staging strips private documentation metadata from public data", () => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "stealthrdp-public-data-"));
+  const tempScripts = path.join(tempRoot, "scripts");
+  const tempData = path.join(tempRoot, "data");
+  fs.mkdirSync(tempScripts, { recursive: true });
+  fs.mkdirSync(tempData, { recursive: true });
+  fs.copyFileSync(path.join(ROOT, "scripts", "stage-vercel-public.mjs"), path.join(tempScripts, "stage-vercel-public.mjs"));
+  fs.writeFileSync(path.join(tempRoot, "index.html"), "<!doctype html><title>Fixture</title>");
+  fs.writeFileSync(path.join(tempData, "docs-articles.json"), `${JSON.stringify([{
+    slug: "fixture",
+    title: "Fixture",
+    sourceTitle: "Private source title",
+    sourceUrl: "https://docs.example.test/articles/fixture",
+    migration: { source: "Private migration label", date: "2026-08-13", redactions: [] },
+  }])}\n`);
+  try {
+    const result = spawnSync(process.execPath, [path.join(tempScripts, "stage-vercel-public.mjs")], { encoding: "utf8" });
+    assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
+    const publicData = JSON.parse(fs.readFileSync(path.join(tempRoot, "public", "data", "docs-articles.json"), "utf8"));
+    assert.deepEqual(publicData, [{ slug: "fixture", title: "Fixture" }]);
+  } finally {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  }
+});
+
 test("article data uses direct canonical targets for confirmed internal links", () => {
   const blog = JSON.parse(read("data/blog-articles.json"));
   const docs = JSON.parse(read("data/docs-articles.json"));

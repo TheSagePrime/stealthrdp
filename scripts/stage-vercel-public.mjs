@@ -43,6 +43,14 @@ function assertNoUnresolvedTokens(dir) {
   }
 }
 
+function stripPrivateDocsMetadata(dir) {
+  const file = path.join(dir, "data", "docs-articles.json");
+  if (!fs.existsSync(file)) return;
+  const articles = JSON.parse(fs.readFileSync(file, "utf8"));
+  const publicArticles = articles.map(({ sourceTitle, sourceUrl, migration, ...article }) => article);
+  fs.writeFileSync(file, `${JSON.stringify(publicArticles, null, 2)}\n`);
+}
+
 for (const name of fs.readdirSync(ROOT)) {
   if (name.endsWith(".html")) files.push(name);
 }
@@ -60,6 +68,7 @@ for (const rel of dirs) {
   fs.cpSync(src, path.join(OUT, rel), { recursive: true });
   copied += 1;
 }
+stripPrivateDocsMetadata(OUT);
 
 if (!fs.existsSync(path.join(OUT, "index.html"))) {
   console.error("stage-vercel-public: missing public/index.html");
