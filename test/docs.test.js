@@ -28,14 +28,14 @@ test("docs index is crawlable and includes every verified article", () => {
   }
 });
 
-test("every native article has metadata, breadcrumbs, readable content, and support", () => {
+test("every native article has breadcrumbs, readable content, and support", () => {
   for (const article of DOCS) {
     const html = HTML(docFile(article));
     assert.match(html, /<main[^>]+class="docs-article-page/);
     assert.strictEqual((html.match(/<h1[\s>]/g) || []).length, 1, `${article.slug}: one H1`);
     assert.match(html, /data-docs-category="[^"]+"/);
     assert.match(html, /class="docs-breadcrumbs"/);
-    assert.match(html, /class="docs-source-meta"/);
+    assert.doesNotMatch(html, /class="docs-source-meta"|Source date:|Migrated \d{4}-\d{2}-\d{2}|No public redactions recorded|Public examples redacted/);
     assert.match(html, /class="docs-content"/);
     assert.match(html, /https:\/\/dash\.stealthrdp\.com\/submitticket\.php/);
     assert.ok(!html.includes("docs.stealthrdp.com"), `${article.slug}: no legacy docs host`);

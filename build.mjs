@@ -724,12 +724,12 @@ function docsWarning(article) {
     return `<aside class="docs-warning"><strong>Windows Server Evaluation Notice</strong> Windows Server Evaluation editions are intended solely for testing, evaluation, and demonstration purposes. They are Evaluation software, not a permanently licensed Windows installation. StealthRDP does not supply Microsoft Windows licences, SPLA licences, RDS licences, or activation keys. The <code>slmgr /rearm</code> procedure described in this guide only extends the Microsoft evaluation period where permitted by the installed evaluation edition; it does not activate Windows or replace a valid Microsoft Windows Server licence. Customers using Windows are responsible for obtaining and maintaining any Microsoft licences required for their intended use.</aside>`;
   }
   if (!/(fresh(?:ly)? installed|reinstall|reformat|no uninstaller|rebuild|terminate|deleted|without backups)/i.test(article.content || "")) return "";
-  return `<aside class="docs-warning"><strong>Read before acting.</strong> The verified source content mentions a fresh operating system or an irreversible server change. Confirm prerequisites and backups before continuing.</aside>`;
+  return `<aside class="docs-warning"><strong>Read before acting.</strong> This guide describes a fresh operating system or an irreversible server change. Confirm prerequisites and backups before continuing.</aside>`;
 }
 
 function docCardHtml(article) {
   return `<article class="docs-card" data-doc-title="${esc(article.title)}" data-doc-summary="${esc(article.summary)}" data-doc-category="${esc(article.category)}">
-    <div class="docs-card-meta"><span class="docs-category">${esc(article.category)}</span><time>${esc(article.date)}</time></div>
+    <div class="docs-card-meta"><span class="docs-category">${esc(article.category)}</span></div>
     <h2><a href="/docs/${esc(docSlug(article))}">${esc(article.title)}</a></h2>
     <p>${esc(article.summary)}</p>
     <a class="docs-card-link" href="/docs/${esc(docSlug(article))}">Read guide <span aria-hidden="true">→</span></a>
@@ -774,7 +774,7 @@ function buildDocsIndex() {
       <div class="docs-results">
         <div class="docs-controls"><label class="docs-search-label" for="docsSearch">Search guides</label><input id="docsSearch" type="search" placeholder="Try: rebuild, VPN, PowerShell…" autocomplete="off" /><select id="docsCategory" hidden><option value="all">All categories</option>${options}</select></div>
         <div class="topic-chips docs-topics" role="group" aria-label="Filter by category">${topicChips}</div>
-        <div class="docs-results-bar"><span id="docsResultsCount">${DOCS.length} guides</span><span>Verified source snapshot · ${DOCS.length} articles</span></div>
+        <div class="docs-results-bar"><span id="docsResultsCount">${DOCS.length} guides</span></div>
         <div class="docs-card-grid" id="docsResults" data-docs-index>${groupedCards}</div><p class="docs-empty" id="docsEmpty" hidden>No guides match that search. Try a broader term or another category.</p>
       </div>
     </div></section>
@@ -790,16 +790,9 @@ function buildDocArticle(article, index) {
   const next = DOCS[index + 1] && DOCS[index + 1].slug !== article.slug ? DOCS[index + 1] : null;
   const links = [...related, ...(next && !related.some((item) => item.slug === next.slug) ? [next] : [])].slice(0, 3);
   const relatedHtml = links.length ? `<nav class="docs-related" aria-label="Related guides"><div class="docs-related-head"><span class="sec-index">Continue exploring</span><h2>Related guides</h2></div><div class="docs-related-grid">${links.map((item) => `<a class="docs-related-link" href="/docs/${esc(docSlug(item))}"><span class="docs-category">${esc(item.category)}</span><strong>${esc(item.title)}</strong><span>Read guide →</span></a>`).join("")}</div></nav>` : "";
-  const dateIso = docDateIso(article.date);
-  const time = dateIso ? `<span>Source date: <time datetime="${dateIso}">${esc(article.date)}</time></span>` : `<span>Source date: ${esc(article.date)}</span>`;
-  const migration = article.migration || {};
-  const sourceLabel = migration.source || "Verified StealthRDP documentation snapshot";
-  const migrationDate = migration.date ? `Migrated ${migration.date}` : "Migration date not provided";
-  const redactionLabel = Array.isArray(migration.redactions) && migration.redactions.length ? "Public examples redacted" : "No public redactions recorded";
-  const sourceMeta = `<span>Source: ${esc(sourceLabel)}</span>${time}<span>${esc(migrationDate)}</span><span>${redactionLabel}</span>`;
   const body = `<main class="docs-article-page docs-surface" data-docs-category="${esc(article.category)}" data-doc-slug="${esc(docSlug(article))}"><div class="container docs-article-layout"><div class="docs-article-column">
     <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/docs">Docs</a><span aria-hidden="true">/</span><span>${esc(article.category)}</span></nav>
-    <article class="docs-article"><header class="docs-article-header"><span class="docs-category">${esc(article.category)}</span><h1>${esc(article.title)}</h1>${docsWarning(article)}<p class="docs-summary">${esc(article.summary)}</p><div class="docs-source-meta">${sourceMeta}</div></header><div class="docs-content">${rendered.html}</div><div class="docs-support"><div><span class="sec-index">Need a hand?</span><h2>Need account or server support?</h2><p>For account or server-specific help, use the StealthRDP support portal.</p></div><a class="btn btn-primary" href="${DOC_SUPPORT_URL}">Contact support</a></div>${relatedHtml}</article>
+    <article class="docs-article"><header class="docs-article-header"><span class="docs-category">${esc(article.category)}</span><h1>${esc(article.title)}</h1>${docsWarning(article)}<p class="docs-summary">${esc(article.summary)}</p></header><div class="docs-content">${rendered.html}</div><div class="docs-support"><div><span class="sec-index">Need a hand?</span><h2>Need account or server support?</h2><p>For account or server-specific help, use the StealthRDP support portal.</p></div><a class="btn btn-primary" href="${DOC_SUPPORT_URL}">Contact support</a></div>${relatedHtml}</article>
   </div>${contents}</div></main>`;
   const fullTitle = `${article.title} — StealthRDP Docs`;
   const useTitle = fullTitle.length <= SEO_TITLE_LIMIT ? fullTitle : seoTitle(article.title);
@@ -1825,7 +1818,7 @@ function buildBlogPost(post) {
   const body = `<main class="docs-article-page blog-article-page"><div class="container"><div class="docs-article-layout">
     <article class="docs-article-column" id="blogPost">
       <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blog">Blog</a><span aria-hidden="true">/</span><span>${esc(post.category)}</span></nav>
-      <header class="docs-article-header"><span class="docs-category">${esc(post.category)}</span><h1>${esc(post.h1 || post.title)}</h1><p class="docs-summary">${esc(post.excerpt || "")}</p><div class="docs-source-meta"><span>${esc(post.author)}</span><span>${esc(post.date)}</span></div></header>
+      <header class="docs-article-header"><span class="docs-category">${esc(post.category)}</span><h1>${esc(post.h1 || post.title)}</h1><p class="docs-summary">${esc(post.excerpt || "")}</p><div class="article-meta"><span>${esc(post.author)}</span><span>${esc(post.date)}</span></div></header>
       <div class="docs-content blog-article-body">${rendered.html || `<p>${esc(post.excerpt || "")}</p>`}${articlePlanLinksHtml(post)}</div>
       <footer class="blog-article-footer"><a href="/blog">← Back to all articles</a><span class="blog-article-actions"><a class="btn btn-ghost btn-sm" href="/plans">View plans</a><a class="btn btn-primary btn-sm" href="https://dash.stealthrdp.com/submitticket.php">Ask support</a></span></footer>
     </article>
@@ -1869,7 +1862,7 @@ function buildFaq() {
       <div class="faq-results">
         <div class="faq-controls"><label for="faqSearch">Search questions</label><input id="faqSearch" type="search" placeholder="Try: refund, Windows, upgrade…" autocomplete="off" /><select id="faqCategory" hidden><option value="all">All topics</option>${categoryOptions}</select></div>
         <div class="topic-chips faq-topics" role="group" aria-label="Filter by topic">${topicChips}</div>
-        <div class="faq-results-bar"><span id="faqResultsCount">${FAQS.length} questions</span><span>Source-backed answers · updated with the site snapshot</span></div>
+        <div class="faq-results-bar"><span id="faqResultsCount">${FAQS.length} questions</span></div>
         ${windowsLicensingNoteHtml()}
         <div class="faq-list" id="faqList" aria-live="polite">${items}</div><p class="faq-empty" id="faqEmpty" hidden>No questions match that search. Try another phrase or choose all topics.</p>
         <div class="faq-support"><div><span class="sec-index">Still need a hand?</span><h2>Take the question to support.</h2><p>Account, billing, and server-specific requests are handled in the client portal.</p></div><a class="btn btn-primary" href="${DOC_SUPPORT_URL}">Contact support</a></div>

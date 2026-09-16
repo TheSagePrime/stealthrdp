@@ -882,8 +882,8 @@ html[data-color-scheme="light"] .marquee-item .os-logo { filter: brightness(0); 
 .docs-article-header { padding: 16px 0 29px; border-bottom: 1px solid var(--border); }
 .docs-article-header h1 { margin: 14px 0 15px; font-size: clamp(31px, 4.7vw, 51px); }
 .docs-summary { max-width: 680px; color: var(--text-muted); font-size: 17px; line-height: 1.7; }
-.docs-source-meta { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 21px; color: var(--text-dim); font: 11px var(--font-mono); }
-.docs-source-meta span:first-child { color: var(--text-muted); }
+.article-meta { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 21px; color: var(--text-dim); font: 11px var(--font-mono); }
+.article-meta span:first-child { color: var(--text-muted); }
 .docs-content { padding-top: 30px; }
 .docs-content h2, .docs-content h3, .docs-content h4 { scroll-margin-top: 90px; }
 .docs-content h2 { margin: 39px 0 13px; font-size: 27px; }

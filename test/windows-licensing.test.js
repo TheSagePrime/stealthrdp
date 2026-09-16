@@ -22,6 +22,7 @@ test("dedicated Windows licensing page states the current position", () => {
   assert.match(html, /responsible for determining whether their licence is valid/);
   assert.doesNotMatch(html, /BYOL is available to everyone|Customers use BYOL/i);
   assert.doesNotMatch(html, /Contact us for a Windows licence|Licensing available on request|We can provide a licence if required/i);
+  assert.doesNotMatch(html, /docs-source-meta|Source date:|Migrated \d{4}-\d{2}-\d{2}|No public redactions recorded/);
   assert.match(html, /canonical" href="__SRDP_BASE__\/docs\/windows-licensing"/);
 });
 
@@ -47,6 +48,14 @@ test("Windows, plans, FAQ, and terms surface the licensing notice", () => {
   assert.match(stopsGuide, /customers may use their own eligible Microsoft licences/i);
   assert.match(stopsGuide, /not included and is not supplied by StealthRDP/);
   assert.doesNotMatch(stopsGuide, /your windows license expired|apply appropriate Microsoft licensing that you supply/i);
+});
+
+test("public pages do not expose internal provenance labels", () => {
+  assert.doesNotMatch(read("docs.html"), /Verified source snapshot|class="docs-card-meta">[^<]*<time>/);
+  assert.doesNotMatch(read("faq.html"), /Source-backed answers|site snapshot/);
+  assert.doesNotMatch(read("js/main.js"), /verified snapshot/);
+  assert.doesNotMatch(read("docs/how-to-rebuild-a-server.html"), /verified source content/);
+  assert.match(read("blog/windows-vs-linux-vps-which-os-best-fits-your-business.html"), /class="article-meta"/);
 });
 
 test("homepage finder does not claim a Windows licence is included", () => {

@@ -311,7 +311,7 @@
   function renderStatusFailure() {
     var sourceNote = $("#statusSourceNote");
     if (sourceNote) {
-      sourceNote.textContent = "Live status unavailable · showing the verified snapshot below.";
+      sourceNote.textContent = "Live status unavailable · showing the latest available status below.";
       sourceNote.classList.add("status-source-note-failure");
       sourceNote.setAttribute("role", "status");
     }

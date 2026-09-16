@@ -136,7 +136,7 @@ test("Minecraft guide preserves approved metadata, source UX, direct links, and 
   assert.strictEqual(post.date, "2026-09-08");
   assert.strictEqual(parsed.title, "VPS Hosting for Minecraft: How to Choose a Server");
   assert.match(html, /<h1>VPS hosting for Minecraft: choose a server that fits<\/h1>/);
-  assert.match(html, /<div class="docs-source-meta"><span>StealthRDP Team<\/span><span>2026-09-08<\/span>/);
+  assert.match(html, /<div class="article-meta"><span>StealthRDP Team<\/span><span>2026-09-08<\/span>/);
   assert.strictEqual(parsed.desc, "Choose VPS hosting for Minecraft by edition, player load, mods, resources, location, backups, and access.");
   assert.strictEqual(parsed.canonical, "__SRDP_BASE__/vps-hosting-minecraft/");
   assert.match(html, /\"@type\":\"BlogPosting\"/);
