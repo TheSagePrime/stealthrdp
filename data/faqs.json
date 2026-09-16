@@ -57,7 +57,7 @@
   {
     "_id": "6824a1ca105d77ad34fbf09b",
     "question": "What features are included with StealthRDP plans?",
-    "answer": "All our plans include: dedicated IPv4 addresses, high-speed network connections (1Gbps standard), unlimited bandwidth (fair usage policy applies), full Administrator/Root access, 99.99% uptime guarantee, DDoS protection, and responsive technical support. Higher-tier plans include additional features like priority support, enhanced DDoS protection, and faster provisioning times.",
+    "answer": "All our plans include: dedicated IPv4 addresses, high-speed network connections (1Gbps standard), unlimited bandwidth (fair usage policy applies), full Administrator/Root access, 99.99% uptime guarantee, and responsive technical support. Higher-tier plans include additional features like priority support, and faster provisioning times.",
     "category": "Services & Plans",
     "displayOrder": 6,
     "isPublished": true,
@@ -189,7 +189,7 @@
   {
     "_id": "6824a38b105d77ad34fbf0be",
     "question": "How is my data protected with StealthRDP?",
-    "answer": "We implement multiple security measures to protect your data:\n1) Physical security at our data centers including biometric access controls and 24/7 surveillance\n2) Network security with enterprise-grade firewalls and DDoS protection\n3) Regular security patches and updates for host systems\n4) Encrypted storage options available on request\n\nHowever, we recommend maintaining your own regular backups of critical data as an additional precaution.",
+    "answer": "We implement multiple security measures to protect your data:\n1) Physical security at our data centers including biometric access controls and 24/7 surveillance\n2) Network security with enterprise-grade firewalls\n3) Regular security patches and updates for host systems\n4) Encrypted storage options available on request\n\nHowever, we recommend maintaining your own regular backups of critical data as an additional precaution.",
     "category": "Technical Support & Security",
     "displayOrder": 18,
     "isPublished": true,
@@ -220,20 +220,9 @@
     "__v": 0
   },
   {
-    "_id": "6824a3f1105d77ad34fbf0c5",
-    "question": "Is DDoS protection included with all plans?",
-    "answer": "Yes, all our plans include basic DDoS protection that mitigates common attacks up to 10Gbps. Higher-tier plans include enhanced DDoS protection with coverage up to 50Gbps. For customers requiring additional protection, we offer premium DDoS mitigation as an add-on service, providing coverage up to 100Gbps with advanced traffic filtering capabilities.",
-    "category": "Technical Support & Security",
-    "displayOrder": 21,
-    "isPublished": true,
-    "createdAt": "2025-05-14T14:08:49.503Z",
-    "updatedAt": "2025-05-14T14:08:49.503Z",
-    "__v": 0
-  },
-  {
     "_id": "68c9a0114f70a98a746b0001",
     "question": "Is Microsoft Windows licensing included?",
-    "answer": "No. Microsoft Windows licensing is not included unless explicitly stated. Windows Server Evaluation may be provided for evaluation/testing purposes. Customers are responsible for appropriate Microsoft licensing for continued or production use. StealthRDP provides the infrastructure and does not currently provide Windows licences under SPLA. Customer-supplied licensing may be used where Microsoft's licensing terms permit it. Full details are on the Windows licensing page in Docs.",
+    "answer": "No. StealthRDP provides the infrastructure only. Microsoft Windows licensing is not included and is not supplied by StealthRDP. StealthRDP does not provide SPLA licences, RDS licences, activation keys, or licensing services, even if requested. Windows Server Evaluation may be provided for evaluation/testing purposes and is Evaluation software, not a permanently licensed Windows installation. Customers using Windows are responsible for obtaining and maintaining any Microsoft licences required for their intended use. Customers may use their own eligible Microsoft licences where permitted by Microsoft's applicable licensing terms. Customers are responsible for determining whether their licence is valid for their intended hosted deployment. Full details are on the Windows licensing page in Docs.",
     "category": "Services & Plans",
     "displayOrder": 22,
     "isPublished": true,

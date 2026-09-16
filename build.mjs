@@ -56,7 +56,7 @@ const NOINDEX_DOC_SLUGS = new Set([
 ]);
 const TERMS_URL = "/docs/use-of-service";
 const WINDOWS_LICENSING_URL = "/docs/windows-licensing";
-const WINDOWS_LICENSING_NOTICE = "Microsoft Windows licensing is not included unless explicitly stated. Windows Server Evaluation may be provided for evaluation/testing purposes. Customers are responsible for appropriate Microsoft licensing for continued or production use.";
+const WINDOWS_LICENSING_NOTICE = "StealthRDP provides the infrastructure only. Microsoft Windows licensing is not included and is not supplied by StealthRDP. Customers using Windows are responsible for their own licensing compliance.";
 function windowsLicensingNoteHtml() {
   return `<aside class="windows-licensing-note"><p><strong>Windows licensing:</strong> ${WINDOWS_LICENSING_NOTICE} <a href="${WINDOWS_LICENSING_URL}">Read the Windows licensing page</a>.</p></aside>`;
 }
@@ -386,7 +386,7 @@ function includedFeaturesHtml() {
   const items = [
     ["Full admin access", "Control your server from day one"],
     ["NVMe SSD storage", "Fast disk for everyday workloads"],
-    ["DDoS protection", "Protection at the network edge"],
+    ["Isolated VMs", "Separate virtual machines per server"],
     ["Instant activation", "Ready after checkout"],
     ["24/7 support", "Help when you need it"],
   ];
@@ -721,7 +721,7 @@ function docDateIso(dateText) {
 
 function docsWarning(article) {
   if (article.slug === "1737944563-how-to-re_activate-and-extend-your-180_day-windows-trial") {
-    return `<aside class="docs-warning"><strong>Windows Server Evaluation Notice</strong> Windows Server Evaluation editions are intended solely for testing, evaluation, and demonstration purposes. They are not licensed for production or commercial workloads. The <code>slmgr /rearm</code> procedure described in this guide only extends the Microsoft evaluation period where permitted by the installed evaluation edition; it does not activate Windows, provide a commercial license, or replace a valid Microsoft Windows Server license. Users requiring Windows Server for production use must obtain appropriate Microsoft licensing.</aside>`;
+    return `<aside class="docs-warning"><strong>Windows Server Evaluation Notice</strong> Windows Server Evaluation editions are intended solely for testing, evaluation, and demonstration purposes. They are Evaluation software, not a permanently licensed Windows installation. StealthRDP does not supply Microsoft Windows licences, SPLA licences, RDS licences, or activation keys. The <code>slmgr /rearm</code> procedure described in this guide only extends the Microsoft evaluation period where permitted by the installed evaluation edition; it does not activate Windows or replace a valid Microsoft Windows Server licence. Customers using Windows are responsible for obtaining and maintaining any Microsoft licences required for their intended use.</aside>`;
   }
   if (!/(fresh(?:ly)? installed|reinstall|reformat|no uninstaller|rebuild|terminate|deleted|without backups)/i.test(article.content || "")) return "";
   return `<aside class="docs-warning"><strong>Read before acting.</strong> The verified source content mentions a fresh operating system or an irreversible server change. Confirm prerequisites and backups before continuing.</aside>`;
@@ -815,7 +815,7 @@ const ORG = {
   name: "StealthRDP",
   url: "__SRDP_BASE__/",
   logo: LOGO_DARK_URL,
-  description: "Windows and Linux remote desktop infrastructure and VPS hosting with DDoS protection, full administrative access, live status monitoring, and a 99.9% uptime SLA.",
+  description: "Windows and Linux remote desktop infrastructure and VPS hosting with full administrative access, live status monitoring, and a 99.9% uptime SLA.",
   sameAs: SOCIAL.map((s) => s.href),
 };
 
@@ -953,7 +953,7 @@ function buildIndex() {
       <div class="hero-copy">
         <span class="eyebrow fade-up">Windows &amp; Linux VPS · Instant Setup</span>
         <h1 class="fade-up d1">Your server. <span class="gold">Live in 60 seconds.</span></h1>
-        <p class="sub fade-up d2">High-performance remote desktop infrastructure without the complexity. Enterprise hardware, DDoS protection, and a 99.9% uptime SLA — online the moment you pay.</p>
+        <p class="sub fade-up d2">High-performance remote desktop infrastructure without the complexity. Enterprise hardware and a 99.9% uptime SLA — online the moment you pay.</p>
         <div class="hero-cta fade-up d3">
           <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps">Deploy Your Server Now
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -974,7 +974,7 @@ function buildIndex() {
             <div class="console-line con-1"><span class="dim">▸ reserving dedicated vCPU</span></div>
             <div class="console-line con-2"><span class="dim">▸ provisioning NVMe storage</span></div>
             <div class="console-line con-3"><span class="dim">▸ installing Windows Server 2022</span></div>
-            <div class="console-line con-4"><span class="dim">▸ applying DDoS protection rules</span></div>
+            <div class="console-line con-4"><span class="dim">▸ provisioning an isolated VM</span></div>
             <div class="console-progress"><div class="bar" data-con-bar></div></div>
             <div class="console-line con-5"><span class="ok">✓ Windows Server 2022 ready in 60s</span></div>
           </div>
@@ -1070,7 +1070,7 @@ function buildIndex() {
         <div class="infrastructure-intro"><span class="infra-signal" aria-hidden="true"></span><span>Core infrastructure</span><span class="infra-count">Live monitoring</span></div>
         <ul class="infra-list">
           <li><strong>NVMe SSD storage</strong><span>Fast disk I/O for applications, databases, and terminals.</span><b>Performance</b></li>
-          <li><strong>DDoS protection</strong><span>Isolated VM instances and protection for production workloads.</span><b>Protection</b></li>
+          <li><strong>Isolated VMs</strong><span>Separate virtual machines for each server.</span><b>Isolation</b></li>
           <li><strong>Global network</strong><span>Strategic locations with 1Gbps network speeds.</span><b>Reach</b></li>
           <li><strong>24/7 monitoring</strong><span>Automated monitoring with a public status page.</span><b>Visibility</b></li>
         </ul>
@@ -1112,7 +1112,7 @@ function buildIndex() {
   return page({
     active: "home",
     title: "StealthRDP — Secure Remote Desktop & VPS Infrastructure",
-    description: `Deploy a Windows or Linux VPS in 60 seconds. Enterprise-grade hardware, DDoS protection, 99.9% uptime SLA and 24/7 support — from €${STARTING_PRICE}/month.`,
+    description: `Deploy a Windows or Linux VPS in 60 seconds. Enterprise-grade hardware, 99.9% uptime SLA and 24/7 support — from €${STARTING_PRICE}/month.`,
     canonical: "__SRDP_BASE__/",
     jsonLd,
     body,
@@ -1266,7 +1266,7 @@ function buildOsVpsPage({
         {"@type": "Question", "name": "Can I use familiar Windows software?", "acceptedAnswer": {"@type": "Answer", "text": "A Windows VPS provides a Windows environment for compatible software. Check each application's system requirements before ordering."}},
         {"@type": "Question", "name": "Do Windows VPS plans include Administrator access?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The FAQ states that VPS plans include full Administrator access."}},
         {"@type": "Question", "name": "Which Windows versions are listed?", "acceptedAnswer": {"@type": "Answer", "text": "Windows Server 2019, 2022, and 2025."}},
-        {"@type": "Question", "name": "Is a Microsoft Windows licence included?", "acceptedAnswer": {"@type": "Answer", "text": "No. Microsoft Windows licensing is not included unless explicitly stated. Windows Server Evaluation may be provided for evaluation/testing purposes. Customers are responsible for appropriate Microsoft licensing for continued or production use."}},
+        {"@type": "Question", "name": "Is a Microsoft Windows licence included?", "acceptedAnswer": {"@type": "Answer", "text": "No. StealthRDP provides the infrastructure only. Microsoft Windows licensing is not included and is not supplied by StealthRDP. Customers using Windows are responsible for their own licensing compliance."}},
         {"@type": "Question", "name": "When will my Windows VPS be activated?", "acceptedAnswer": {"@type": "Answer", "text": "Standard installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation."}},
         {"@type": "Question", "name": "How will I receive my credentials?", "acceptedAnswer": {"@type": "Answer", "text": "StealthRDP sends service credentials by email after payment confirmation."}},
         {"@type": "Question", "name": "How do I choose CPU, RAM, and storage?", "acceptedAnswer": {"@type": "Answer", "text": "Use your software requirements, user count, processing needs, and data size. Then use the plan comparison to compare the available configurations."}},
@@ -1464,7 +1464,7 @@ function windowsLandingHtml() {
           <details class="os-vps-faq-item" open><summary>Can I use familiar Windows software?</summary><p>A Windows VPS provides a Windows environment for compatible software. Check each application's system requirements before ordering.</p></details>
           <details class="os-vps-faq-item"><summary>Do Windows VPS plans include Administrator access?</summary><p>Yes. The FAQ states that VPS plans include full Administrator access.</p></details>
           <details class="os-vps-faq-item"><summary>Which Windows versions are listed?</summary><p>Windows Server 2019, 2022, and 2025.</p></details>
-          <details class="os-vps-faq-item"><summary>Is a Microsoft Windows licence included?</summary><p>No. ${WINDOWS_LICENSING_NOTICE} StealthRDP provides the infrastructure and does not currently provide Windows licences under SPLA. Customer-supplied licensing may be used where Microsoft's licensing terms permit it. <a href="${WINDOWS_LICENSING_URL}">Read the Windows licensing page</a>.</p></details>
+          <details class="os-vps-faq-item"><summary>Is a Microsoft Windows licence included?</summary><p>No. ${WINDOWS_LICENSING_NOTICE} Windows Server Evaluation may be provided for evaluation/testing purposes and is Evaluation software, not a permanently licensed Windows installation. Customers may use their own eligible Microsoft licences where permitted by Microsoft's applicable licensing terms. Customers are responsible for determining whether their licence is valid for their intended hosted deployment. <a href="${WINDOWS_LICENSING_URL}">Read the Windows licensing page</a>.</p></details>
           <details class="os-vps-faq-item"><summary>When will my Windows VPS be activated?</summary><p>Standard installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation.</p></details>
           <details class="os-vps-faq-item"><summary>How will I receive my credentials?</summary><p>StealthRDP sends service credentials by email after payment confirmation.</p></details>
           <details class="os-vps-faq-item"><summary>How do I choose CPU, RAM, and storage?</summary><p>Use your software requirements, user count, processing needs, and data size. Then use the <a href="/plans#comparison">plan comparison</a> to compare the available configurations.</p></details>
@@ -1822,8 +1822,7 @@ function buildBlogPost(post) {
   const toc = rendered.headings.length
     ? `<aside class="docs-toc" aria-label="On this page"><span class="docs-toc-title">On this page</span><ol>${rendered.headings.map((heading) => `<li class="toc-level-${heading.level}"><a href="#${esc(heading.id)}">${esc(heading.text)}</a></li>`).join("")}</ol></aside>`
     : "";
-  const body = `
-  <main class="docs-article-page blog-article-page"><div class="container"><div class="docs-article-layout">
+  const body = `<main class="docs-article-page blog-article-page"><div class="container"><div class="docs-article-layout">
     <article class="docs-article-column" id="blogPost">
       <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blog">Blog</a><span aria-hidden="true">/</span><span>${esc(post.category)}</span></nav>
       <header class="docs-article-header"><span class="docs-category">${esc(post.category)}</span><h1>${esc(post.h1 || post.title)}</h1><p class="docs-summary">${esc(post.excerpt || "")}</p><div class="docs-source-meta"><span>${esc(post.author)}</span><span>${esc(post.date)}</span></div></header>
@@ -1903,11 +1902,11 @@ function buildAbout() {
   <section class="section" style="padding-top:0">
     <div class="container prose">
       <h2>What we do</h2>
-      <p>We provide high-performance remote desktop and virtual private server infrastructure. Every StealthRDP server ships with NVMe storage, DDoS protection, dedicated IPs, and 1Gbps network connectivity — online the moment you pay.</p>
+      <p>We provide high-performance remote desktop and virtual private server infrastructure. Every StealthRDP server ships with NVMe storage, dedicated IPs, and 1Gbps network connectivity — online the moment you pay.</p>
       <h2>Why people choose us</h2>
       <ul>
         <li><strong>Speed of deployment</strong> — full server access within 60 seconds of purchase. No waiting, no manual provisioning.</li>
-        <li><strong>Enterprise-grade hardware</strong> — NVMe storage, isolated VM instances, and DDoS-protected infrastructure.</li>
+        <li><strong>Enterprise-grade hardware</strong> — NVMe storage and isolated VM instances.</li>
         <li><strong>Transparent operations</strong> — live status page showing every production node, monitored 24/7.</li>
         <li><strong>Support that answers</strong> — 24/7 technical assistance with an average response under 2 hours.</li>
         <li><strong>Flexible plans</strong> — USA and EU locations, monthly to biannual billing, and a build-your-own configurator.</li>
@@ -1957,7 +1956,7 @@ function buildPrivacy() {
       <h2>4. Data sharing</h2>
       <p>We do not sell your personal data. We share information only with service providers who help us operate our business (payment processing, infrastructure, support tools) and only to the extent necessary to provide our services or as required by law.</p>
       <h2>5. Data retention &amp; security</h2>
-      <p>We retain account and billing records as required for business and legal purposes. We apply appropriate technical and organizational measures — including isolated infrastructure, restricted access, and DDoS protection — to safeguard your data.</p>
+      <p>We retain account and billing records as required for business and legal purposes. We apply appropriate technical and organizational measures — including isolated infrastructure and restricted access — to safeguard your data.</p>
       <h2>6. Your rights</h2>
       <p>You may request access to, correction of, or deletion of your personal data at any time by contacting our support team. We respond to all privacy requests promptly.</p>
       <h2>7. Contact</h2>

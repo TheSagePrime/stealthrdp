@@ -114,7 +114,7 @@ test("homepage JSON-LD has Organization + WebSite; plans has Service offers; faq
   const faq = parse(HTML("faq.html"));
   const faqGraph = faq.ldBlocks.flatMap((b) => JSON.parse(b)["@graph"] || [JSON.parse(b)]);
   const faqPage = faqGraph.find((x) => x["@type"] === "FAQPage");
-  assert.ok(faqPage && faqPage.mainEntity.length === 22, `faq: FAQPage with 22 Q&A (got ${faqPage && faqPage.mainEntity.length})`);
+  assert.ok(faqPage && faqPage.mainEntity.length === 21, `faq: FAQPage with 21 Q&A (got ${faqPage && faqPage.mainEntity.length})`);
 });
 
 test("blog post pages carry Article JSON-LD + breadcrumbs", () => {
@@ -258,7 +258,7 @@ test("baked content is present in raw HTML (plans, faq, status, blog)", () => {
 
   const faq = HTML("faq.html");
   assert.ok(faq.includes("What services does StealthRDP offer?"), "faq: baked first question");
-  assert.strictEqual((faq.match(/<div class="faq-item/g) || []).length, 22, "faq: 22 baked items");
+  assert.strictEqual((faq.match(/<div class="faq-item/g) || []).length, 21, "faq: 21 baked items");
 
   const status = HTML("status.html");
   assert.ok(status.includes("All services are online"), "status: service heading baked");
