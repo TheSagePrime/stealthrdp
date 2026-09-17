@@ -222,7 +222,7 @@
   {
     "_id": "68c9a0114f70a98a746b0001",
     "question": "Is Microsoft Windows licensing included?",
-    "answer": "No. StealthRDP provides the infrastructure only. Microsoft Windows licensing is not included and is not supplied by StealthRDP. StealthRDP does not provide SPLA licences, RDS licences, activation keys, or licensing services, even if requested. Windows Server Evaluation may be provided for evaluation/testing purposes and is Evaluation software, not a permanently licensed Windows installation. Customers using Windows are responsible for obtaining and maintaining any Microsoft licences required for their intended use. Customers may use their own eligible Microsoft licences where permitted by Microsoft's applicable licensing terms. Customers are responsible for determining whether their licence is valid for their intended hosted deployment. Full details are on the Windows licensing page in Docs.",
+    "answer": "No. StealthRDP does not provide Microsoft Windows licences, SPLA licences, RDS licences, activation keys, or licensing services, even if requested. Windows Server Evaluation may be provided for evaluation/testing purposes and is Evaluation software, not a permanently licensed Windows installation. Customers using Windows are responsible for obtaining and maintaining any Microsoft licences required for their intended use. Customers may use their own eligible Microsoft licences where permitted by Microsoft's applicable licensing terms. Customers are responsible for determining whether their licence is valid for their intended hosted deployment. Full details are on the Windows licensing page in Docs.",
     "category": "Services & Plans",
     "displayOrder": 22,
     "isPublished": true,

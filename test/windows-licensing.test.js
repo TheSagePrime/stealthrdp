@@ -8,6 +8,19 @@ const path = require("node:path");
 const ROOT = path.join(__dirname, "..");
 const read = (file) => fs.readFileSync(path.join(ROOT, file), "utf8");
 const NOTICE = "StealthRDP provides the infrastructure only. Microsoft Windows licensing is not included and is not supplied by StealthRDP. Customers using Windows are responsible for their own licensing compliance.";
+const visibleMain = (html) => {
+  const main = (html.match(/<main[\s\S]*?<\/main>/) || [html])[0];
+  return main.replace(/<[^>]+>/g, " ");
+};
+function htmlFiles(dir, prefix = "") {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    if (entry.name === "node_modules" || entry.name === ".git") return [];
+    const relative = path.join(prefix, entry.name);
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) return htmlFiles(full, relative);
+    return entry.isFile() && entry.name.endsWith(".html") ? [relative] : [];
+  });
+}
 
 test("dedicated Windows licensing page states the current position", () => {
   const html = read("docs/windows-licensing.html");
@@ -24,6 +37,17 @@ test("dedicated Windows licensing page states the current position", () => {
   assert.doesNotMatch(html, /Contact us for a Windows licence|Licensing available on request|We can provide a licence if required/i);
   assert.doesNotMatch(html, /docs-source-meta|Source date:|Migrated \d{4}-\d{2}-\d{2}|No public redactions recorded/);
   assert.match(html, /canonical" href="__SRDP_BASE__\/docs\/windows-licensing"/);
+});
+
+test("visible licensing notices are not repeated on any generated page", () => {
+  for (const file of htmlFiles(ROOT)) {
+    const main = visibleMain(read(file));
+    const occurrences = main.split(NOTICE).length - 1;
+    assert.ok(occurrences <= 1, `${file}: ${occurrences} visible copies of the short notice`);
+  }
+  const article = JSON.parse(read("data/docs-articles.json")).find((item) => item.slug === "windows-licensing");
+  assert.ok(article, "Windows licensing article exists");
+  assert.doesNotMatch(article.content, /\*\*Windows licensing:\*\*|Customers using Windows are responsible for their own licensing compliance\.\\n\\nStealthRDP does not provide/);
 });
 
 test("Windows, plans, FAQ, and terms surface the licensing notice", () => {
