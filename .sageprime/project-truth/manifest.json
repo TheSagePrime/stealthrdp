@@ -12,129 +12,23 @@
   },
   "sources": [
     {
-      "source_id": "whmcs_catalog",
+      "source_id": "live_public_site",
       "project_id": "stealthrdp",
       "brand_id": "stealthrdp",
-      "source_type": "BILLING_API",
-      "binding_id": "whmcs:stealthrdp-prod",
+      "source_type": "OTHER",
+      "binding_id": "web:https://www.stealthrdp.com",
       "authority": "AUTHORITATIVE",
       "priority": 1,
       "allowed_fact_categories": [
         "pricing",
         "billing_cycle",
         "plan_spec",
-        "stock",
         "availability",
-        "catalog_region"
-      ],
-      "binding": {
-        "system": "WHMCS",
-        "scope": "StealthRDP production catalog"
-      },
-      "refresh": {
-        "mode": "EVENT_AND_SCHEDULE",
-        "ttl_hours": 6,
-        "event_triggers": [
-          "catalog_change",
-          "plan_change",
-          "pricing_change",
-          "stock_change"
-        ]
-      }
-    },
-    {
-      "source_id": "github_legal",
-      "project_id": "stealthrdp",
-      "brand_id": "stealthrdp",
-      "source_type": "LEGAL_DOCS",
-      "binding_id": "github:TheSagePrime/stealthrdp:legal",
-      "authority": "AUTHORITATIVE",
-      "priority": 1,
-      "allowed_fact_categories": [
-        "windows_licensing",
-        "refund_policy",
-        "legal_policy",
-        "backup_policy",
-        "acceptable_use"
-      ],
-      "binding": {
-        "repository": "TheSagePrime/stealthrdp",
-        "branch": "main",
-        "paths": "docs/windows-licensing.html,docs/payment-terms.html,docs/use-of-service.html,docs/user-responsibilities.html"
-      },
-      "refresh": {
-        "mode": "EVENT_AND_SCHEDULE",
-        "ttl_hours": 24,
-        "event_triggers": [
-          "github_merge",
-          "legal_docs_change"
-        ]
-      }
-    },
-    {
-      "source_id": "infrastructure_registry",
-      "project_id": "stealthrdp",
-      "brand_id": "stealthrdp",
-      "source_type": "INFRASTRUCTURE_API",
-      "binding_id": "infra:stealthrdp-prod",
-      "authority": "AUTHORITATIVE",
-      "priority": 1,
-      "allowed_fact_categories": [
-        "datacenter_country",
-        "datacenter_city",
-        "network",
-        "ddos_capacity",
-        "infrastructure_region"
-      ],
-      "binding": {
-        "scope": "Approved StealthRDP production infrastructure registry"
-      },
-      "refresh": {
-        "mode": "EVENT_AND_SCHEDULE",
-        "ttl_hours": 168,
-        "event_triggers": [
-          "server_change",
-          "vendor_change",
-          "location_change",
-          "network_change"
-        ]
-      }
-    },
-    {
-      "source_id": "status",
-      "project_id": "stealthrdp",
-      "brand_id": "stealthrdp",
-      "source_type": "STATUS_API",
-      "binding_id": "status:stealthrdp-prod",
-      "authority": "AUTHORITATIVE",
-      "priority": 1,
-      "allowed_fact_categories": [
-        "observed_availability",
-        "incident_status",
-        "service_status"
-      ],
-      "binding": {
-        "scope": "StealthRDP production status data"
-      },
-      "refresh": {
-        "mode": "EVENT_AND_SCHEDULE",
-        "ttl_hours": 1,
-        "event_triggers": [
-          "status_change",
-          "incident_change"
-        ]
-      }
-    },
-    {
-      "source_id": "github_public_site",
-      "project_id": "stealthrdp",
-      "brand_id": "stealthrdp",
-      "source_type": "GITHUB",
-      "binding_id": "github:TheSagePrime/stealthrdp:public",
-      "authority": "SUPPORTING",
-      "priority": 2,
-      "allowed_fact_categories": [
         "public_copy",
+        "refund_policy",
+        "windows_licensing",
+        "legal_policy",
+        "acceptable_use",
         "provisioning_claim",
         "support_claim",
         "uptime_claim",
@@ -144,9 +38,35 @@
         "product_positioning"
       ],
       "binding": {
+        "origin": "https://www.stealthrdp.com",
+        "scope": "Live public frontend and public docs only"
+      },
+      "refresh": {
+        "mode": "EVENT_AND_SCHEDULE",
+        "ttl_hours": 24,
+        "event_triggers": [
+          "deploy",
+          "public_content_change"
+        ]
+      }
+    },
+    {
+      "source_id": "github_public_source",
+      "project_id": "stealthrdp",
+      "brand_id": "stealthrdp",
+      "source_type": "GITHUB",
+      "binding_id": "github:TheSagePrime/stealthrdp:public",
+      "authority": "SUPPORTING",
+      "priority": 2,
+      "allowed_fact_categories": [
+        "public_copy",
+        "legal_policy",
+        "product_positioning"
+      ],
+      "binding": {
         "repository": "TheSagePrime/stealthrdp",
         "branch": "main",
-        "scope": "Current public marketing and product pages"
+        "scope": "Public-site implementation source only; never backend truth"
       },
       "refresh": {
         "mode": "EVENT_AND_SCHEDULE",
@@ -155,26 +75,6 @@
           "github_merge",
           "deploy"
         ]
-      }
-    },
-    {
-      "source_id": "legacy_content",
-      "project_id": "stealthrdp",
-      "brand_id": "stealthrdp",
-      "source_type": "OTHER",
-      "binding_id": "legacy:stealthrdp-content",
-      "authority": "LEGACY",
-      "priority": 99,
-      "allowed_fact_categories": [
-        "historical_claim"
-      ],
-      "binding": {
-        "scope": "Historical or retired project evidence only"
-      },
-      "refresh": {
-        "mode": "MANUAL",
-        "ttl_hours": 8760,
-        "event_triggers": []
       }
     }
   ]
