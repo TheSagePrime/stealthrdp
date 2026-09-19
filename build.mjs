@@ -981,8 +981,8 @@ function buildIndex() {
         <p class="hero-micro fade-up d3">Starting at only <b>€9.50/month</b> · No hidden fees · Cancel anytime</p>
         <div class="hero-stats fade-up d4">
           <div class="hero-stat"><div class="num"><b data-count-up="10000">10,000</b><span class="plus">+</span></div><div class="lbl">Orders</div></div>
-          <div class="hero-stat"><div class="num"><b data-count-up="60">60</b><span class="plus">s</span></div><div class="lbl">Average deploy</div></div>
-          <div class="hero-stat"><div class="num"><b data-count-up="99.9">99.9</b><span class="plus">%</span></div><div class="lbl">Uptime SLA</div></div>
+          <div class="hero-stat"><div class="num"><b>USA + EU</b></div><div class="lbl">Regions</div></div>
+          <div class="hero-stat"><div class="num"><b>24/7</b></div><div class="lbl">Support</div></div>
         </div>
       </div>
       <div class="hero-console fade-up d2" aria-label="Deployment showcase">
@@ -995,7 +995,7 @@ function buildIndex() {
             <div class="console-line con-3"><span class="dim">▸ installing Windows Server 2022</span></div>
             <div class="console-line con-4"><span class="dim">▸ applying DDoS protection rules</span></div>
             <div class="console-progress"><div class="bar" data-con-bar></div></div>
-            <div class="console-line con-5"><span class="ok">✓ Windows Server 2022 ready in 60s</span></div>
+            <div class="console-line con-5"><span class="ok">✓ Windows Server 2022 provisioning complete</span></div>
           </div>
           <div class="console-foot"><span class="chip">2 <b>vCPU</b></span><span class="chip">4 <b>GB RAM</b></span><span class="chip">60 <b>GB NVMe</b></span><span class="chip">1 <b>Gbps</b></span></div>
         </div>
@@ -1039,7 +1039,7 @@ function buildIndex() {
       <span class="trust-heading" style="color:var(--text);font-weight:600">By the numbers</span>
       <span class="trust-item"><b style="color:var(--text)">10,000+</b> orders</span><span class="trust-divider" style="color:var(--border-strong)">/</span>
       <span class="trust-item"><b style="color:var(--text)">USA + EU</b> locations</span><span class="trust-divider" style="color:var(--border-strong)">/</span>
-      <span class="trust-item"><b style="color:var(--text)">60-second</b> setup</span>
+      <span class="trust-item"><b style="color:var(--text)">Automated</b> setup</span>
     </div>
   </div>
 
@@ -1924,7 +1924,7 @@ function buildAbout() {
         <li><strong>Speed of deployment</strong> — automated provisioning designed to get your server ready without manual setup delays.</li>
         <li><strong>Enterprise-grade hardware</strong> — NVMe storage, isolated VM instances, and DDoS-protected infrastructure.</li>
         <li><strong>Transparent operations</strong> — live status page showing every production node, monitored 24/7.</li>
-        <li><strong>Support that answers</strong> — 24/7 technical assistance with an average response under 2 hours.</li>
+        <li><strong>Support that answers</strong> — 24/7 technical assistance through the support portal.</li>
         <li><strong>Flexible plans</strong> — USA and EU locations, monthly to biannual billing, and a build-your-own configurator.</li>
       </ul>
       <h2>Trusted at scale</h2>
