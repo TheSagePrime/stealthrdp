@@ -1,0 +1,56 @@
+{
+  "artifact_type": "project_truth_source_manifest",
+  "version": 1,
+  "project": {
+    "project_id": "stealthrdp",
+    "brand_id": "stealthrdp",
+    "canonical_domain": "www.stealthrdp.com"
+  },
+  "resolution_policy": {
+    "cross_project_fact_reuse": "FORBIDDEN",
+    "allow_supporting_fallback": false
+  },
+  "sources": [
+    {
+      "source_id": "live_public_site",
+      "project_id": "stealthrdp",
+      "brand_id": "stealthrdp",
+      "source_type": "PUBLIC_WEB",
+      "binding_id": "web:https://www.stealthrdp.com",
+      "visibility": "PUBLIC",
+      "authority": "AUTHORITATIVE",
+      "priority": 1,
+      "allowed_fact_categories": [
+        "pricing",
+        "pricing_period",
+        "plan_spec",
+        "availability",
+        "public_copy",
+        "refund_policy",
+        "windows_licensing",
+        "legal_policy",
+        "acceptable_use",
+        "provisioning_claim",
+        "support_claim",
+        "uptime_claim",
+        "location_claim",
+        "backup_claim",
+        "ddos_claim",
+        "product_positioning"
+      ],
+      "binding": {
+        "origin": "https://www.stealthrdp.com",
+        "scope": "Live public frontend and public docs only"
+      },
+      "refresh": {
+        "mode": "EVENT_AND_SCHEDULE",
+        "ttl_hours": 24,
+        "event_triggers": [
+          "deploy",
+          "public_content_change"
+        ]
+      },
+      "access_mode": "READ_ONLY"
+    }
+  ]
+}
