@@ -15,8 +15,9 @@
       "source_id": "live_public_site",
       "project_id": "stealthrdp",
       "brand_id": "stealthrdp",
-      "source_type": "OTHER",
+      "source_type": "PUBLIC_WEB",
       "binding_id": "web:https://www.stealthrdp.com",
+      "visibility": "PUBLIC",
       "authority": "AUTHORITATIVE",
       "priority": 1,
       "allowed_fact_categories": [
@@ -47,33 +48,6 @@
         "event_triggers": [
           "deploy",
           "public_content_change"
-        ]
-      }
-    },
-    {
-      "source_id": "github_public_source",
-      "project_id": "stealthrdp",
-      "brand_id": "stealthrdp",
-      "source_type": "GITHUB",
-      "binding_id": "github:TheSagePrime/stealthrdp:public",
-      "authority": "SUPPORTING",
-      "priority": 2,
-      "allowed_fact_categories": [
-        "public_copy",
-        "legal_policy",
-        "product_positioning"
-      ],
-      "binding": {
-        "repository": "TheSagePrime/stealthrdp",
-        "branch": "main",
-        "scope": "Public-site implementation source only; never backend truth"
-      },
-      "refresh": {
-        "mode": "EVENT_AND_SCHEDULE",
-        "ttl_hours": 24,
-        "event_triggers": [
-          "github_merge",
-          "deploy"
         ]
       }
     }
