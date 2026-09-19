@@ -835,7 +835,7 @@ const ORG = {
   name: "StealthRDP",
   url: "__SRDP_BASE__/",
   logo: LOGO_DARK_URL,
-  description: "Windows and Linux remote desktop infrastructure and VPS hosting with DDoS protection, full administrative access, live status monitoring, and a 99.9% uptime SLA.",
+  description: "Windows and Linux remote desktop infrastructure and VPS hosting with full administrative access and live status monitoring.",
   sameAs: SOCIAL.map((s) => s.href),
 };
 
@@ -971,18 +971,18 @@ function buildIndex() {
     <div class="container hero-grid">
       <div class="hero-copy">
         <span class="eyebrow fade-up">Windows &amp; Linux VPS · Instant Setup</span>
-        <h1 class="fade-up d1">Your server. <span class="gold">Live in 60 seconds.</span></h1>
-        <p class="sub fade-up d2">High-performance remote desktop infrastructure without the complexity. Enterprise hardware, DDoS protection, and a 99.9% uptime SLA — online the moment you pay.</p>
+        <h1 class="fade-up d1">Your server. <span class="gold">Ready without the wait.</span></h1>
+        <p class="sub fade-up d2">High-performance remote desktop infrastructure without the complexity, with automated provisioning and live service status.</p>
         <div class="hero-cta fade-up d3">
           <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps">Deploy Your Server Now
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           <a class="btn btn-ghost" href="https://dash.stealthrdp.com/submitticket.php">Ask a Pre-Sales Question</a>
         </div>
-        <p class="hero-micro fade-up d3">Starting at only <b>€9.50/month</b> · No hidden fees · Cancel anytime · 7-day money-back</p>
+        <p class="hero-micro fade-up d3">Starting at only <b>€9.50/month</b> · No hidden fees · Cancel anytime</p>
         <div class="hero-stats fade-up d4">
           <div class="hero-stat"><div class="num"><b data-count-up="10000">10,000</b><span class="plus">+</span></div><div class="lbl">Orders</div></div>
-          <div class="hero-stat"><div class="num"><b data-count-up="60">60</b><span class="plus">s</span></div><div class="lbl">Average deploy</div></div>
-          <div class="hero-stat"><div class="num"><b data-count-up="99.9">99.9</b><span class="plus">%</span></div><div class="lbl">Uptime SLA</div></div>
+          <div class="hero-stat"><div class="num"><b>USA + EU</b></div><div class="lbl">Regions</div></div>
+          <div class="hero-stat"><div class="num"><b>24/7</b></div><div class="lbl">Support</div></div>
         </div>
       </div>
       <div class="hero-console fade-up d2" aria-label="Deployment showcase">
@@ -995,7 +995,7 @@ function buildIndex() {
             <div class="console-line con-3"><span class="dim">▸ installing Windows Server 2022</span></div>
             <div class="console-line con-4"><span class="dim">▸ applying DDoS protection rules</span></div>
             <div class="console-progress"><div class="bar" data-con-bar></div></div>
-            <div class="console-line con-5"><span class="ok">✓ Windows Server 2022 ready in 60s</span></div>
+            <div class="console-line con-5"><span class="ok">✓ Windows Server 2022 provisioning complete</span></div>
           </div>
           <div class="console-foot"><span class="chip">2 <b>vCPU</b></span><span class="chip">4 <b>GB RAM</b></span><span class="chip">60 <b>GB NVMe</b></span><span class="chip">1 <b>Gbps</b></span></div>
         </div>
@@ -1039,7 +1039,7 @@ function buildIndex() {
       <span class="trust-heading" style="color:var(--text);font-weight:600">By the numbers</span>
       <span class="trust-item"><b style="color:var(--text)">10,000+</b> orders</span><span class="trust-divider" style="color:var(--border-strong)">/</span>
       <span class="trust-item"><b style="color:var(--text)">USA + EU</b> locations</span><span class="trust-divider" style="color:var(--border-strong)">/</span>
-      <span class="trust-item"><b style="color:var(--text)">60-second</b> setup</span>
+      <span class="trust-item"><b style="color:var(--text)">Automated</b> setup</span>
     </div>
   </div>
 
@@ -1113,8 +1113,8 @@ function buildIndex() {
       <div class="cta-copy">
         <span class="eyebrow fade-up">Backed by 10,000+ orders</span>
         <h2 class="fade-up d1">Ready to stop wasting time on server management?</h2>
-        <p class="fade-up d2">Deploy your high-performance VPS in the next 60 seconds and focus on what matters — your actual work.</p>
-        <p class="micro fade-up d3">Starting at just <b>€${STARTING_PRICE}/month</b> · 7-day money-back guarantee · Cancel anytime</p>
+        <p class="fade-up d2">Deploy your high-performance VPS and focus on what matters — your actual work.</p>
+        <p class="micro fade-up d3">Starting at just <b>€${STARTING_PRICE}/month</b> · Cancel anytime</p>
       </div>
       <div class="cta-actions fade-up d3">
         <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps">Deploy Your Server Now</a>
@@ -1131,7 +1131,7 @@ function buildIndex() {
   return page({
     active: "home",
     title: "StealthRDP — Secure Remote Desktop & VPS Infrastructure",
-    description: `Deploy a Windows or Linux VPS in 60 seconds. Enterprise-grade hardware, DDoS protection, 99.9% uptime SLA and 24/7 support — from €${STARTING_PRICE}/month.`,
+    description: `Windows and Linux VPS hosting with automated provisioning, live service status and 24/7 support — from €${STARTING_PRICE}/month.`,
     canonical: "__SRDP_BASE__/",
     jsonLd,
     body,
@@ -1913,7 +1913,7 @@ function buildFaq() {
 function buildAbout() {
   const body = `
   <section class="page-hero">
-    <div class="container"><span class="eyebrow">Who we are</span><h1>Built for people who need servers that just work</h1><p>StealthRDP exists to remove the friction from remote infrastructure — deploy in 60 seconds, get full control, and never worry about the hardware again.</p></div>
+    <div class="container"><span class="eyebrow">Who we are</span><h1>Built for people who need servers that just work</h1><p>StealthRDP exists to remove the friction from remote infrastructure — deploy quickly, get full control, and avoid manual setup delays.</p></div>
   </section>
   <section class="section" style="padding-top:0">
     <div class="container prose">
@@ -1921,14 +1921,14 @@ function buildAbout() {
       <p>We provide high-performance remote desktop and virtual private server infrastructure. Every StealthRDP server ships with NVMe storage, DDoS protection, dedicated IPs, and 1Gbps network connectivity — online the moment you pay.</p>
       <h2>Why people choose us</h2>
       <ul>
-        <li><strong>Speed of deployment</strong> — full server access within 60 seconds of purchase. No waiting, no manual provisioning.</li>
+        <li><strong>Speed of deployment</strong> — automated provisioning designed to get your server ready without manual setup delays.</li>
         <li><strong>Enterprise-grade hardware</strong> — NVMe storage, isolated VM instances, and DDoS-protected infrastructure.</li>
         <li><strong>Transparent operations</strong> — live status page showing every production node, monitored 24/7.</li>
-        <li><strong>Support that answers</strong> — 24/7 technical assistance with an average response under 2 hours.</li>
+        <li><strong>Support that answers</strong> — 24/7 technical assistance through the support portal.</li>
         <li><strong>Flexible plans</strong> — USA and EU locations, monthly to biannual billing, and a build-your-own configurator.</li>
       </ul>
       <h2>Trusted at scale</h2>
-      <p>10,000+ orders and counting for remote work, web hosting, trading infrastructure, and always-on automation. Every new server is backed by our 99.9% uptime SLA and a 7-day money-back guarantee.</p>
+      <p>10,000+ orders and counting for remote work, web hosting, trading infrastructure, and always-on automation. Service availability is published on our live status page, and refund eligibility follows the current Payment Terms.</p>
       <div class="note">Questions about our infrastructure? <a href="https://dash.stealthrdp.com/submitticket.php" style="color:var(--accent)">Talk to our team</a> — we respond within 2 hours, 24/7.</div>
     </div>
   </section>`;

@@ -15,6 +15,9 @@ const changedFiles = changedOnly
 const isChanged = (file) => !changedFiles || changedFiles.has(rel(file));
 const vercelConfig = JSON.parse(fs.readFileSync(path.join(ROOT, "vercel.json"), "utf8"));
 const redirectSources = new Set((vercelConfig.redirects || []).map((item) => item.source));
+const nonSeoPreviewFiles = new Set([
+  "win11-sandbox.html",
+]);
 const allowedNoindexFiles = new Set([
   "404.html",
   "privacy.html",
@@ -68,6 +71,7 @@ const routes = new Set(files.map(rel));
 
 for (const file of files) {
   const name = rel(file);
+  if (nonSeoPreviewFiles.has(name)) continue;
   const html = read(file);
   const is404 = name === "404.html";
   const title = first(html, /<title[^>]*>([\s\S]*?)<\/title>/i).trim();

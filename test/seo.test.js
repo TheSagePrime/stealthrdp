@@ -173,6 +173,14 @@ test("AI-readable guide exists and source templates stay free of raw infrastruct
   }
 });
 
+test("unresolved commercial claims stay out of public source templates", () => {
+  const buildSource = HTML("build.mjs");
+  const faqSource = fs.readFileSync(path.join(ROOT, "data", "faqs.json"), "utf8");
+
+  assert.doesNotMatch(buildSource, /7-day money-back|99\.9% uptime SLA|Live in 60 seconds|ready in 60s|60-second setup/i);
+  assert.doesNotMatch(faqSource, /48-hour satisfaction guarantee|99\.99% uptime guarantee|Most services are activated within 5-10 minutes/i);
+});
+
 test("AI discovery gate covers every approved commercial page", () => {
   const llms = HTML("llms.txt");
   const robots = HTML("robots.txt");

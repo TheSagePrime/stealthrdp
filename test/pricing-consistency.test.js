@@ -66,7 +66,17 @@ test("catalog is the single verified source for current monthly prices", () => {
 
 test("the shared price helper renders exact monthly and cycle conditions", () => {
   for (const plan of catalog.plans) {
+    const unavailable = String(plan.source && plan.source.availability || "").toLowerCase() === "out-of-stock";
     const monthly = pricing.priceMarkup(plan, "monthly");
+
+    if (unavailable) {
+      assert.match(monthly, /Currently unavailable/, `${plan.name}: unavailable monthly state`);
+      for (const key of ["quarterly", "annual", "biannual"]) {
+        assert.match(pricing.priceMarkup(plan, key), /Currently unavailable/, `${plan.name}: unavailable ${key} state`);
+      }
+      continue;
+    }
+
     assert.match(monthly, new RegExp(`€${plan.pricing.monthly.amount.toFixed(2)}<small>\\/mo<\\/small>`), `${plan.name}: monthly display`);
     assert.match(monthly, /Monthly · EUR/);
     for (const key of ["quarterly", "annual", "biannual"]) {
