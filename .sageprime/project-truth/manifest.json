@@ -22,7 +22,7 @@
       "priority": 1,
       "allowed_fact_categories": [
         "pricing",
-        "billing_cycle",
+        "pricing_period",
         "plan_spec",
         "availability",
         "public_copy",
