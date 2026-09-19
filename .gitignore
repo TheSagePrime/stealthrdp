@@ -10,3 +10,9 @@ node_modules/
 !.env.example
 /public/
 /markdown/
+# Generated Project Truth Sync state (keep manifest.json committed)
+/.sageprime/project-truth/sources/
+/.sageprime/project-truth/current.json
+/.sageprime/project-truth/conflicts.json
+/.sageprime/project-truth/freshness.json
+/.sageprime/project-truth/history/
