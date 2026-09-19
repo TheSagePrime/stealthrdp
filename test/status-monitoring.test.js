@@ -279,7 +279,8 @@ test("status page documents detailed monitoring windows and privacy", () => {
   assert.doesNotMatch(build, /store-category-links/);
   assert.doesNotMatch(build, /class=\\"btn \$\{isPop \? \\"btn-primary\\" : \\"btn-ghost\\"\}/);
   assert.doesNotMatch(build, /class=\\"btn btn-sm \$\{p\.popular \? \\"btn-primary\\" : \\"btn-ghost\\"\}/);
-  assert.match(build, />Buy Now<\/a>/);
+  assert.match(build, /label = "Buy Now"/);
+  assert.match(build, /planActionHtml/);
   assert.doesNotMatch(build, />Deploy Now<\/a>/);
   assert.match(build, /pricing\.priceMarkup/);
   assert.doesNotMatch(build, /<span class="cur">\$/);
