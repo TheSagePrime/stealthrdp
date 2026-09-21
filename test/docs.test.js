@@ -38,6 +38,7 @@ test("every native article has breadcrumbs, readable content, and support", () =
     assert.doesNotMatch(html, /class="docs-source-meta"|Source date:|Migrated \d{4}-\d{2}-\d{2}|No public redactions recorded|Public examples redacted/);
     assert.match(html, /class="docs-content"/);
     assert.match(html, /https:\/\/dash\.stealthrdp\.com\/submitticket\.php/);
+    assert.match(html, /https:\/\/wa\.me\/447441426993/);
     assert.ok(!html.includes("docs.stealthrdp.com"), `${article.slug}: no legacy docs host`);
     assert.ok(!html.includes("Chatwoot"), `${article.slug}: no Chatwoot reference`);
   }

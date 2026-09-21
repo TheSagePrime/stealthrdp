@@ -197,6 +197,13 @@ const LOGO_LIGHT_URL = "https://cdn.stealthrdp.com/images/new/5.png";
 const LOGO_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>';
 const LOGO_IMAGE_HTML = `<span class="logo-image" aria-hidden="true"><img class="logo-image-dark" src="${LOGO_DARK_URL}" alt="StealthRDP dark logo" width="700" height="170" decoding="async"><img class="logo-image-light" src="${LOGO_LIGHT_URL}" alt="StealthRDP light logo" width="700" height="170" decoding="async"></span>`;
 const ARROW_SVG = '<svg class="inline-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>';
+const WHATSAPP_NUMBER = "+44 7441 426993";
+const WHATSAPP_URL = "https://wa.me/447441426993";
+const WHATSAPP_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 4h16v12H8l-4 4V4z"/></svg>';
+function whatsappLink(label, className = "") {
+  const cls = className ? ` class="${className}"` : "";
+  return `<a${cls} href="${WHATSAPP_URL}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+}
 const EXTERNAL_SVG = '<svg class="inline-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 5h5v5"/><path d="M19 5 11 13"/><path d="M19 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg>';
 const CHEVRON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
 function navHtml(active) {
@@ -231,12 +238,14 @@ function headerHtml(active, { showPalette = true } = {}) {
     <nav class="nav" aria-label="Main navigation">${navHtml(active)}</nav>
     <div class="header-actions">
       <button type="button" class="theme-toggle" id="themeToggle" aria-label="Use light theme" aria-pressed="false"><span class="theme-icon theme-icon-sun" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg></span><span class="theme-icon theme-icon-moon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"/></svg></span></button>
-${showPalette ? `      ${paletteLabHtml()}\n` : ""}      <a class="btn btn-sm btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login">Client Area</a>
+${showPalette ? `      ${paletteLabHtml()}\n` : ""}      ${whatsappLink("WhatsApp", "header-whatsapp")}
+      <a class="btn btn-sm btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login">Client Area</a>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     </div>
   </div>
-  <div class="mobile-nav" id="mobileNav">${navHtml(active)}<a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login">Client Area</a></div>
-  </header>`;
+  <div class="mobile-nav" id="mobileNav">${navHtml(active)}${whatsappLink("WhatsApp support")}<a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/login">Client Area</a></div>
+  </header>
+  ${whatsappLink(`${WHATSAPP_ICON}<span>WhatsApp<small>${WHATSAPP_NUMBER}</small></span>`, "whatsapp-support")}`;
 }
 
 function footerHtml() {
@@ -274,6 +283,7 @@ function footerHtml() {
       <div class="footer-col"><h2>Company</h2><ul>
         <li><a href="/about">About Us</a></li>
         <li><a href="https://dash.stealthrdp.com/submitticket.php">Contact Support</a></li>
+        <li>${whatsappLink("WhatsApp support")}</li>
         <li><a href="/privacy">Privacy Policy</a></li>
         <li><a href="${TERMS_URL}">Terms of Service</a></li>
         <li><a href="${WINDOWS_LICENSING_URL}">Windows licensing</a></li>
@@ -287,7 +297,7 @@ function footerHtml() {
         <li><a href="/docs">Documentation</a></li><li><a href="/blog">Tutorials</a></li><li><a href="/faq">FAQ</a></li><li><a href="/blog">Blog</a></li><li><a href="/status">Server Status</a></li>
       </ul></details>
       <details class="footer-mobile-group"><summary><span>Company</span><small>About · support · legal</small><b aria-hidden="true">+</b></summary><ul>
-        <li><a href="/about">About Us</a></li><li><a href="https://dash.stealthrdp.com/submitticket.php">Contact Support</a></li><li><a href="/privacy">Privacy Policy</a></li><li><a href="${TERMS_URL}">Terms of Service</a></li><li><a href="${WINDOWS_LICENSING_URL}">Windows licensing</a></li>
+        <li><a href="/about">About Us</a></li><li><a href="https://dash.stealthrdp.com/submitticket.php">Contact Support</a></li><li>${whatsappLink("WhatsApp support")}</li><li><a href="/privacy">Privacy Policy</a></li><li><a href="${TERMS_URL}">Terms of Service</a></li><li><a href="${WINDOWS_LICENSING_URL}">Windows licensing</a></li>
       </ul></details>
     </div>
     <div class="footer-bottom">
@@ -792,7 +802,7 @@ function buildDocArticle(article, index) {
   const relatedHtml = links.length ? `<nav class="docs-related" aria-label="Related guides"><div class="docs-related-head"><span class="sec-index">Continue exploring</span><h2>Related guides</h2></div><div class="docs-related-grid">${links.map((item) => `<a class="docs-related-link" href="/docs/${esc(docSlug(item))}"><span class="docs-category">${esc(item.category)}</span><strong>${esc(item.title)}</strong><span>Read guide →</span></a>`).join("")}</div></nav>` : "";
   const body = `<main class="docs-article-page docs-surface" data-docs-category="${esc(article.category)}" data-doc-slug="${esc(docSlug(article))}"><div class="container docs-article-layout"><div class="docs-article-column">
     <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/docs">Docs</a><span aria-hidden="true">/</span><span>${esc(article.category)}</span></nav>
-    <article class="docs-article"><header class="docs-article-header"><span class="docs-category">${esc(article.category)}</span><h1>${esc(article.title)}</h1>${docsWarning(article)}<p class="docs-summary">${esc(article.summary)}</p></header><div class="docs-content">${rendered.html}</div><div class="docs-support"><div><span class="sec-index">Need a hand?</span><h2>Need account or server support?</h2><p>For account or server-specific help, use the StealthRDP support portal.</p></div><a class="btn btn-primary" href="${DOC_SUPPORT_URL}">Contact support</a></div>${relatedHtml}</article>
+    <article class="docs-article"><header class="docs-article-header"><span class="docs-category">${esc(article.category)}</span><h1>${esc(article.title)}</h1>${docsWarning(article)}<p class="docs-summary">${esc(article.summary)}</p></header><div class="docs-content">${rendered.html}</div><div class="docs-support"><div><span class="sec-index">Need a hand?</span><h2>Need account or server support?</h2><p>For account or server-specific help, use the StealthRDP support portal or WhatsApp.</p></div><a class="btn btn-primary" href="${DOC_SUPPORT_URL}">Contact support</a>${whatsappLink("WhatsApp support", "btn btn-ghost")}</div>${relatedHtml}</article>
   </div>${contents}</div></main>`;
   const fullTitle = `${article.title} — StealthRDP Docs`;
   const useTitle = fullTitle.length <= SEO_TITLE_LIMIT ? fullTitle : seoTitle(article.title);
@@ -810,6 +820,13 @@ const ORG = {
   logo: LOGO_DARK_URL,
   description: "Windows and Linux remote desktop infrastructure and VPS hosting with full administrative access, live status monitoring, and a 99.9% uptime SLA.",
   sameAs: SOCIAL.map((s) => s.href),
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer support",
+    telephone: "+447441426993",
+    url: WHATSAPP_URL,
+    availableLanguage: ["English"],
+  },
 };
 
 function websiteLd() {
@@ -951,6 +968,7 @@ function buildIndex() {
           <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps">Deploy Your Server Now
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           <a class="btn btn-ghost" href="https://dash.stealthrdp.com/submitticket.php">Ask a Pre-Sales Question</a>
+          ${whatsappLink("WhatsApp support", "btn btn-ghost")}
         </div>
         <p class="hero-micro fade-up d3">Starting at only <b>€9.50/month</b> · No hidden fees · Cancel anytime · 7-day money-back</p>
         <div class="hero-stats fade-up d4">
@@ -1093,6 +1111,7 @@ function buildIndex() {
       <div class="cta-actions fade-up d3">
         <a class="btn btn-primary" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps">Deploy Your Server Now</a>
         <a class="btn btn-ghost" href="https://dash.stealthrdp.com/submitticket.php">Ask a Pre-Sales Question</a>
+          ${whatsappLink("WhatsApp support", "btn btn-ghost")}
       </div>
     </div>
   </section>`;
@@ -1263,7 +1282,7 @@ function buildOsVpsPage({
         {"@type": "Question", "name": "When will my Windows VPS be activated?", "acceptedAnswer": {"@type": "Answer", "text": "Standard installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation."}},
         {"@type": "Question", "name": "How will I receive my credentials?", "acceptedAnswer": {"@type": "Answer", "text": "StealthRDP sends service credentials by email after payment confirmation."}},
         {"@type": "Question", "name": "How do I choose CPU, RAM, and storage?", "acceptedAnswer": {"@type": "Answer", "text": "Use your software requirements, user count, processing needs, and data size. Then use the plan comparison to compare the available configurations."}},
-        {"@type": "Question", "name": "Where can I get support?", "acceptedAnswer": {"@type": "Answer", "text": "Use the client-area ticketing system or support email. The FAQ provides the current support details."}},
+        {"@type": "Question", "name": "Where can I get support?", "acceptedAnswer": {"@type": "Answer", "text": "Use WhatsApp support, the client-area ticketing system, or support email. The FAQ provides the current support details."}},
         {"@type": "Question", "name": "Can I run any workload?", "acceptedAnswer": {"@type": "Answer", "text": "No. Use must remain lawful and must follow the Use of Service terms."}}
       ]
     } : {
@@ -1429,8 +1448,9 @@ function windowsLandingHtml() {
       <div class="container">
         <div class="os-vps-guide-intro"><span class="included-label">Support and limits</span><h2>Support and limits</h2></div>
         <div class="os-content-card">
-          <p>Support is available through the client-area ticketing system and support email. Review the <a href="/faq">FAQ</a> for support information, the <a href="/docs/use-of-service">Use of Service terms</a>, and the <a href="${WINDOWS_LICENSING_URL}">Windows licensing</a> page before you order.</p>
+          <p>Support is available through WhatsApp, the client-area ticketing system, and support email. Review the <a href="/faq">FAQ</a> for support information, the <a href="/docs/use-of-service">Use of Service terms</a>, and the <a href="${WINDOWS_LICENSING_URL}">Windows licensing</a> page before you order.</p>
           <ul class="os-vps-check-list">
+            <li>${whatsappLink(`Message WhatsApp support at ${WHATSAPP_NUMBER}`)}</li>
             <li>Use the client-area ticket system for service support.</li>
             <li>Follow the published Use of Service terms.</li>
             <li>The terms require lawful use. They prohibit abuse, scanning, hacking, spam, botnets, and similar misuse.</li>
@@ -1461,7 +1481,7 @@ function windowsLandingHtml() {
           <details class="os-vps-faq-item"><summary>When will my Windows VPS be activated?</summary><p>Standard installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation.</p></details>
           <details class="os-vps-faq-item"><summary>How will I receive my credentials?</summary><p>StealthRDP sends service credentials by email after payment confirmation.</p></details>
           <details class="os-vps-faq-item"><summary>How do I choose CPU, RAM, and storage?</summary><p>Use your software requirements, user count, processing needs, and data size. Then use the <a href="/plans#comparison">plan comparison</a> to compare the available configurations.</p></details>
-          <details class="os-vps-faq-item"><summary>Where can I get support?</summary><p>Use the client-area ticketing system or support email. The <a href="/faq">FAQ</a> provides the current support details.</p></details>
+          <details class="os-vps-faq-item"><summary>Where can I get support?</summary><p>Use ${whatsappLink("WhatsApp support")}, the client-area ticketing system, or support email. The <a href="/faq">FAQ</a> provides the current support details.</p></details>
           <details class="os-vps-faq-item"><summary>Can I run any workload?</summary><p>No. Use must remain lawful and must follow the <a href="/docs/use-of-service">Use of Service terms</a>.</p></details>
         </div>
         <section class="os-vps-next"><span class="included-label">Choose another environment</span><h2>Need Linux instead?</h2><p>For websites, applications, databases, or development stacks, see <a href="/linux-vps/">Linux VPS hosting</a>.</p></section>
@@ -1611,8 +1631,9 @@ function linuxLandingHtml() {
       <div class="container">
         <div class="os-vps-guide-intro"><span class="included-label">Support and limits</span><h2>Support and limits</h2></div>
         <div class="os-content-card">
-          <p>Support is the client-area ticket system and support email. See the <a href="/faq">FAQ</a>.</p>
+          <p>Support is available through ${whatsappLink("WhatsApp")}, the client-area ticket system, and support email. See the <a href="/faq">FAQ</a>.</p>
           <ul class="os-vps-check-list">
+            <li>${whatsappLink(`Message WhatsApp support at ${WHATSAPP_NUMBER}`)}</li>
             <li>Use the client-area ticket system for service support.</li>
             <li>Follow the published Use of Service terms.</li>
             <li>Unlawful use, scanning, hacking, spam, and botnets are prohibited.</li>
@@ -1820,7 +1841,7 @@ function buildBlogPost(post) {
       <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/blog">Blog</a><span aria-hidden="true">/</span><span>${esc(post.category)}</span></nav>
       <header class="docs-article-header"><span class="docs-category">${esc(post.category)}</span><h1>${esc(post.h1 || post.title)}</h1><p class="docs-summary">${esc(post.excerpt || "")}</p><div class="article-meta"><span>${esc(post.author)}</span><span>${esc(post.date)}</span></div></header>
       <div class="docs-content blog-article-body">${rendered.html || `<p>${esc(post.excerpt || "")}</p>`}${articlePlanLinksHtml(post)}</div>
-      <footer class="blog-article-footer"><a href="/blog">← Back to all articles</a><span class="blog-article-actions"><a class="btn btn-ghost btn-sm" href="/plans">View plans</a><a class="btn btn-primary btn-sm" href="https://dash.stealthrdp.com/submitticket.php">Ask support</a></span></footer>
+      <footer class="blog-article-footer"><a href="/blog">← Back to all articles</a><span class="blog-article-actions"><a class="btn btn-ghost btn-sm" href="/plans">View plans</a><a class="btn btn-primary btn-sm" href="https://dash.stealthrdp.com/submitticket.php">Ask support</a>${whatsappLink("WhatsApp", "btn btn-ghost btn-sm")}</span></footer>
     </article>
     ${toc}
   </div></div></main>`;
@@ -1906,7 +1927,7 @@ function buildAbout() {
       </ul>
       <h2>Trusted at scale</h2>
       <p>10,000+ orders and counting for remote work, web hosting, trading infrastructure, and always-on automation. Every new server is backed by our 99.9% uptime SLA and a 7-day money-back guarantee.</p>
-      <div class="note">Questions about our infrastructure? <a href="https://dash.stealthrdp.com/submitticket.php" style="color:var(--accent)">Talk to our team</a> — we respond within 2 hours, 24/7.</div>
+      <div class="note">Questions about our infrastructure? <a href="https://dash.stealthrdp.com/submitticket.php" style="color:var(--accent)">Talk to our team</a> or ${whatsappLink("message WhatsApp support")} — we respond within 2 hours, 24/7.</div>
     </div>
   </section>`;
   const jsonLd = [{ "@context": "https://schema.org", "@graph": [
@@ -1953,7 +1974,7 @@ function buildPrivacy() {
       <h2>6. Your rights</h2>
       <p>You may request access to, correction of, or deletion of your personal data at any time by contacting our support team. We respond to all privacy requests promptly.</p>
       <h2>7. Contact</h2>
-      <p>For privacy questions, contact us at <a href="mailto:support@stealthrdp.com" style="color:var(--accent)">support@stealthrdp.com</a> or via our support portal. Our terms of service are available in our documentation center.</p>
+      <p>For privacy questions, contact us at <a href="mailto:support@stealthrdp.com" style="color:var(--accent)">support@stealthrdp.com</a>, ${whatsappLink("WhatsApp support")}, or via our support portal. Our terms of service are available in our documentation center.</p>
       <div class="note">This policy is a working document and may be updated as our services evolve. Significant changes will be communicated to account holders.</div>
     </div>
   </section>`;
