@@ -24,11 +24,11 @@ const EXPECTED_MONTHLY = {
   "Diamond EU": 55.59,
 };
 const EXPECTED_EU_CYCLES = {
-  "Bronze EU": { quarterly: 38.59, biannual: 72.59, annual: 134.59 },
-  "Silver EU": { quarterly: 69.59, biannual: 129.59, annual: 249.59 },
-  "GOLD EU": { quarterly: 124.59, biannual: 239.59, annual: 449.59 },
-  "Platinum EU": { quarterly: 139.59, biannual: 259.59, annual: 499.59 },
-  "Diamond EU": { quarterly: 159.59, biannual: 299.59, annual: 559.59 },
+  "Bronze EU": { quarterly: 38.59, semiannual: 72.59, annual: 134.59, biannual: 239.59 },
+  "Silver EU": { quarterly: 69.59, semiannual: 129.59, annual: 249.59, biannual: 399.59 },
+  "GOLD EU": { quarterly: 124.59, semiannual: 239.59, annual: 449.59, biannual: 769.59 },
+  "Platinum EU": { quarterly: 139.59, semiannual: 259.59, annual: 499.59, biannual: 869.59 },
+  "Diamond EU": { quarterly: 159.59, semiannual: 299.59, annual: 559.59, biannual: 999.59 },
 };
 
 function cardBlock(html, displayName, location = "") {
@@ -74,10 +74,10 @@ test("catalog is the single verified source for current monthly prices", () => {
 test("Bronze EU billing totals match the current WHMCS product page", () => {
   const plan = planFromName("Bronze EU");
   assert.deepEqual(
-    Object.fromEntries(["monthly", "quarterly", "biannual", "annual"].map((key) => [key, plan.pricing[key].amount])),
-    { monthly: 13.59, quarterly: 38.59, biannual: 72.59, annual: 134.59 },
+    Object.fromEntries(["monthly", "quarterly", "semiannual", "annual", "biannual"].map((key) => [key, plan.pricing[key].amount])),
+    { monthly: 13.59, quarterly: 38.59, semiannual: 72.59, annual: 134.59, biannual: 239.59 },
   );
-  for (const key of ["quarterly", "annual", "biannual"]) {
+  for (const key of ["quarterly", "semiannual", "annual", "biannual"]) {
     const markup = pricing.priceMarkup(plan, key);
     assert.match(markup, /Save/);
     assert.doesNotMatch(markup, /· ·/);
@@ -94,12 +94,15 @@ test("all EU billing totals match the supplied pricing schedule", () => {
   }
 });
 
-test("EU semi-annual entries use six-month display semantics", () => {
-  for (const name of Object.keys(EXPECTED_EU_CYCLES)) {
-    const plan = planFromName(name);
-    assert.equal(plan.pricing.biannual.suffix, "/6mo", `${name}: semi-annual suffix`);
-    assert.equal(plan.pricing.biannual.periodLabel, "every 6 months", `${name}: semi-annual period`);
-    assert.match(pricing.priceMarkup(plan, "biannual"), /<small>\/6mo<\/small>/, `${name}: semi-annual display`);
+test("every plan has a six-month price and a two-year price", () => {
+  for (const plan of catalog.plans) {
+    assert.equal(plan.pricing.semiannual.suffix, "/6mo", `${plan.name}: semi-annual suffix`);
+    assert.equal(plan.pricing.semiannual.periodLabel, "every 6 months", `${plan.name}: semi-annual period`);
+    assert.match(pricing.priceMarkup(plan, "semiannual"), /<small>\/6mo<\/small>/, `${plan.name}: semi-annual display`);
+    assert.equal(plan.pricing.biannual.suffix, "/2yr", `${plan.name}: two-year suffix`);
+    assert.equal(plan.pricing.biannual.periodLabel, "every 2 years", `${plan.name}: two-year period`);
+    assert.ok(plan.pricing.semiannual.amount > 0, `${plan.name}: semi-annual amount`);
+    assert.ok(plan.pricing.biannual.amount > plan.pricing.annual.amount, `${plan.name}: two-year total is above the annual total`);
   }
 });
 
@@ -108,7 +111,7 @@ test("the shared price helper renders exact monthly and cycle conditions", () =>
     const monthly = pricing.priceMarkup(plan, "monthly");
     assert.match(monthly, new RegExp(`€${plan.pricing.monthly.amount.toFixed(2)}<small>\\/mo<\\/small>`), `${plan.name}: monthly display`);
     assert.match(monthly, /Monthly · EUR/);
-    for (const key of ["quarterly", "annual", "biannual"]) {
+    for (const key of ["quarterly", "semiannual", "annual", "biannual"]) {
       const cycle = plan.pricing[key];
       const markup = pricing.priceMarkup(plan, key);
       if (cycle) {

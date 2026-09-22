@@ -6,7 +6,7 @@
       "https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps",
       "https://dash.stealthrdp.com/index.php?rp=/store/eu"
     ],
-    "verifiedAt": "2026-09-22T23:29:37Z"
+    "verifiedAt": "2026-09-22T23:40:00Z"
   },
   "billingCycles": {
     "monthly": {
@@ -15,18 +15,19 @@
     },
     "quarterly": {
       "label": "Quarterly",
-      "urlKey": "quarterly",
-      "discountLabel": "Save 5%"
+      "urlKey": "quarterly"
+    },
+    "semiannual": {
+      "label": "Semi-annual",
+      "urlKey": "semiannually"
     },
     "annual": {
       "label": "Annual",
-      "urlKey": "annually",
-      "discountLabel": "Save 15\u201316%"
+      "urlKey": "annually"
     },
     "biannual": {
       "label": "Biannual",
-      "urlKey": "biannually",
-      "discountLabel": "Save 26%"
+      "urlKey": "biennially"
     }
   },
   "plans": [
@@ -54,24 +55,31 @@
           "periodLabel": "every month"
         },
         "quarterly": {
-          "amount": 27.0,
-          "referenceAmount": 28.5,
+          "amount": 26.5,
           "suffix": "/3mo",
           "periodLabel": "every 3 months",
-          "discountLabel": "Save 5%"
+          "referenceAmount": 28.5,
+          "discountLabel": "Save 7%"
+        },
+        "semiannual": {
+          "amount": 51.5,
+          "suffix": "/6mo",
+          "periodLabel": "every 6 months",
+          "referenceAmount": 57.0,
+          "discountLabel": "Save 10%"
         },
         "annual": {
-          "amount": 96.0,
-          "referenceAmount": 114.0,
+          "amount": 96.5,
           "suffix": "/yr",
           "periodLabel": "every year",
-          "discountLabel": "Save 16%"
+          "referenceAmount": 114.0,
+          "discountLabel": "Save 15%"
         },
         "biannual": {
-          "amount": 168.0,
-          "referenceAmount": 228.0,
+          "amount": 169.5,
           "suffix": "/2yr",
           "periodLabel": "every 2 years",
+          "referenceAmount": 228.0,
           "discountLabel": "Save 26%"
         }
       }
@@ -101,23 +109,30 @@
         },
         "quarterly": {
           "amount": 51.3,
-          "referenceAmount": 54.12,
           "suffix": "/3mo",
           "periodLabel": "every 3 months",
+          "referenceAmount": 54.12,
           "discountLabel": "Save 5%"
+        },
+        "semiannual": {
+          "amount": 69.5,
+          "suffix": "/6mo",
+          "periodLabel": "every 6 months",
+          "referenceAmount": 108.24,
+          "discountLabel": "Save 36%"
         },
         "annual": {
           "amount": 182.88,
-          "referenceAmount": 216.48,
           "suffix": "/yr",
           "periodLabel": "every year",
+          "referenceAmount": 216.48,
           "discountLabel": "Save 16%"
         },
         "biannual": {
           "amount": 319.2,
-          "referenceAmount": 432.96,
           "suffix": "/2yr",
           "periodLabel": "every 2 years",
+          "referenceAmount": 432.96,
           "discountLabel": "Save 26%"
         }
       }
@@ -147,23 +162,30 @@
         },
         "quarterly": {
           "amount": 89.59,
-          "referenceAmount": 94.77,
           "suffix": "/3mo",
           "periodLabel": "every 3 months",
+          "referenceAmount": 94.77,
           "discountLabel": "Save 5%"
+        },
+        "semiannual": {
+          "amount": 169.59,
+          "suffix": "/6mo",
+          "periodLabel": "every 6 months",
+          "referenceAmount": 189.54,
+          "discountLabel": "Save 11%"
         },
         "annual": {
           "amount": 319.59,
-          "referenceAmount": 379.08,
           "suffix": "/yr",
           "periodLabel": "every year",
+          "referenceAmount": 379.08,
           "discountLabel": "Save 16%"
         },
         "biannual": {
           "amount": 558.59,
-          "referenceAmount": 758.16,
           "suffix": "/2yr",
           "periodLabel": "every 2 years",
+          "referenceAmount": 758.16,
           "discountLabel": "Save 26%"
         }
       }
@@ -193,23 +215,30 @@
         },
         "quarterly": {
           "amount": 103.59,
-          "referenceAmount": 109.77,
           "suffix": "/3mo",
           "periodLabel": "every 3 months",
+          "referenceAmount": 109.77,
           "discountLabel": "Save 6%"
+        },
+        "semiannual": {
+          "amount": 196.59,
+          "suffix": "/6mo",
+          "periodLabel": "every 6 months",
+          "referenceAmount": 219.54,
+          "discountLabel": "Save 10%"
         },
         "annual": {
           "amount": 369.59,
-          "referenceAmount": 439.08,
           "suffix": "/yr",
           "periodLabel": "every year",
+          "referenceAmount": 439.08,
           "discountLabel": "Save 16%"
         },
         "biannual": {
           "amount": 649.59,
-          "referenceAmount": 878.16,
           "suffix": "/2yr",
           "periodLabel": "every 2 years",
+          "referenceAmount": 878.16,
           "discountLabel": "Save 26%"
         }
       }
@@ -239,23 +268,30 @@
         },
         "quarterly": {
           "amount": 139.59,
-          "referenceAmount": 148.77,
           "suffix": "/3mo",
           "periodLabel": "every 3 months",
+          "referenceAmount": 148.77,
           "discountLabel": "Save 6%"
+        },
+        "semiannual": {
+          "amount": 264.59,
+          "suffix": "/6mo",
+          "periodLabel": "every 6 months",
+          "referenceAmount": 297.54,
+          "discountLabel": "Save 11%"
         },
         "annual": {
           "amount": 499.59,
-          "referenceAmount": 595.08,
           "suffix": "/yr",
           "periodLabel": "every year",
+          "referenceAmount": 595.08,
           "discountLabel": "Save 16%"
         },
         "biannual": {
           "amount": 869.59,
-          "referenceAmount": 1190.16,
           "suffix": "/2yr",
           "periodLabel": "every 2 years",
+          "referenceAmount": 1190.16,
           "discountLabel": "Save 27%"
         }
       }
@@ -285,23 +321,30 @@
         },
         "quarterly": {
           "amount": 169.59,
-          "referenceAmount": 178.77,
           "suffix": "/3mo",
           "periodLabel": "every 3 months",
+          "referenceAmount": 178.77,
           "discountLabel": "Save 5%"
+        },
+        "semiannual": {
+          "amount": 319.59,
+          "suffix": "/6mo",
+          "periodLabel": "every 6 months",
+          "referenceAmount": 357.54,
+          "discountLabel": "Save 11%"
         },
         "annual": {
           "amount": 599.59,
-          "referenceAmount": 715.08,
           "suffix": "/yr",
           "periodLabel": "every year",
+          "referenceAmount": 715.08,
           "discountLabel": "Save 16%"
         },
         "biannual": {
           "amount": 999.59,
-          "referenceAmount": 1430.16,
           "suffix": "/2yr",
           "periodLabel": "every 2 years",
+          "referenceAmount": 1430.16,
           "discountLabel": "Save 30%"
         }
       }
@@ -336,6 +379,13 @@
           "referenceAmount": 40.77,
           "discountLabel": "Save 5%"
         },
+        "semiannual": {
+          "amount": 72.59,
+          "suffix": "/6mo",
+          "periodLabel": "every 6 months",
+          "referenceAmount": 81.54,
+          "discountLabel": "Save 11%"
+        },
         "annual": {
           "amount": 134.59,
           "suffix": "/yr",
@@ -344,11 +394,11 @@
           "discountLabel": "Save 17%"
         },
         "biannual": {
-          "amount": 72.59,
-          "suffix": "/6mo",
-          "periodLabel": "every 6 months",
-          "referenceAmount": 81.54,
-          "discountLabel": "Save 11%"
+          "amount": 239.59,
+          "suffix": "/2yr",
+          "periodLabel": "every 2 years",
+          "referenceAmount": 326.16,
+          "discountLabel": "Save 27%"
         }
       }
     },
@@ -377,24 +427,31 @@
         },
         "quarterly": {
           "amount": 69.59,
-          "referenceAmount": 73.77,
           "suffix": "/3mo",
           "periodLabel": "every 3 months",
+          "referenceAmount": 73.77,
           "discountLabel": "Save 6%"
+        },
+        "semiannual": {
+          "amount": 129.59,
+          "suffix": "/6mo",
+          "periodLabel": "every 6 months",
+          "referenceAmount": 147.54,
+          "discountLabel": "Save 12%"
         },
         "annual": {
           "amount": 249.59,
-          "referenceAmount": 295.08,
           "suffix": "/yr",
           "periodLabel": "every year",
+          "referenceAmount": 295.08,
           "discountLabel": "Save 15%"
         },
         "biannual": {
-          "amount": 129.59,
-          "referenceAmount": 147.54,
-          "suffix": "/6mo",
-          "periodLabel": "every 6 months",
-          "discountLabel": "Save 12%"
+          "amount": 399.59,
+          "suffix": "/2yr",
+          "periodLabel": "every 2 years",
+          "referenceAmount": 590.16,
+          "discountLabel": "Save 32%"
         }
       }
     },
@@ -423,24 +480,31 @@
         },
         "quarterly": {
           "amount": 124.59,
-          "referenceAmount": 133.77,
           "suffix": "/3mo",
           "periodLabel": "every 3 months",
+          "referenceAmount": 133.77,
           "discountLabel": "Save 7%"
+        },
+        "semiannual": {
+          "amount": 239.59,
+          "suffix": "/6mo",
+          "periodLabel": "every 6 months",
+          "referenceAmount": 267.54,
+          "discountLabel": "Save 10%"
         },
         "annual": {
           "amount": 449.59,
-          "referenceAmount": 535.08,
           "suffix": "/yr",
           "periodLabel": "every year",
+          "referenceAmount": 535.08,
           "discountLabel": "Save 16%"
         },
         "biannual": {
-          "amount": 239.59,
-          "referenceAmount": 267.54,
-          "suffix": "/6mo",
-          "periodLabel": "every 6 months",
-          "discountLabel": "Save 10%"
+          "amount": 769.59,
+          "suffix": "/2yr",
+          "periodLabel": "every 2 years",
+          "referenceAmount": 1070.16,
+          "discountLabel": "Save 28%"
         }
       }
     },
@@ -469,24 +533,31 @@
         },
         "quarterly": {
           "amount": 139.59,
-          "referenceAmount": 148.77,
           "suffix": "/3mo",
           "periodLabel": "every 3 months",
+          "referenceAmount": 148.77,
           "discountLabel": "Save 6%"
+        },
+        "semiannual": {
+          "amount": 259.59,
+          "suffix": "/6mo",
+          "periodLabel": "every 6 months",
+          "referenceAmount": 297.54,
+          "discountLabel": "Save 13%"
         },
         "annual": {
           "amount": 499.59,
-          "referenceAmount": 595.08,
           "suffix": "/yr",
           "periodLabel": "every year",
+          "referenceAmount": 595.08,
           "discountLabel": "Save 16%"
         },
         "biannual": {
-          "amount": 259.59,
-          "referenceAmount": 297.54,
-          "suffix": "/6mo",
-          "periodLabel": "every 6 months",
-          "discountLabel": "Save 13%"
+          "amount": 869.59,
+          "suffix": "/2yr",
+          "periodLabel": "every 2 years",
+          "referenceAmount": 1190.16,
+          "discountLabel": "Save 27%"
         }
       }
     },
@@ -515,24 +586,31 @@
         },
         "quarterly": {
           "amount": 159.59,
-          "referenceAmount": 166.77,
           "suffix": "/3mo",
           "periodLabel": "every 3 months",
+          "referenceAmount": 166.77,
           "discountLabel": "Save 4%"
+        },
+        "semiannual": {
+          "amount": 299.59,
+          "suffix": "/6mo",
+          "periodLabel": "every 6 months",
+          "referenceAmount": 333.54,
+          "discountLabel": "Save 10%"
         },
         "annual": {
           "amount": 559.59,
-          "referenceAmount": 667.08,
           "suffix": "/yr",
           "periodLabel": "every year",
+          "referenceAmount": 667.08,
           "discountLabel": "Save 16%"
         },
         "biannual": {
-          "amount": 299.59,
-          "referenceAmount": 333.54,
-          "suffix": "/6mo",
-          "periodLabel": "every 6 months",
-          "discountLabel": "Save 10%"
+          "amount": 999.59,
+          "suffix": "/2yr",
+          "periodLabel": "every 2 years",
+          "referenceAmount": 1334.16,
+          "discountLabel": "Save 25%"
         }
       }
     }

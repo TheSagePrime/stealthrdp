@@ -8,8 +8,9 @@
   const CYCLES = {
     monthly: { label: "Monthly", urlKey: "monthly", fallbackSuffix: "/mo" },
     quarterly: { label: "Quarterly", urlKey: "quarterly", fallbackSuffix: "/3mo" },
+    semiannual: { label: "Semi-annual", urlKey: "semiannually", fallbackSuffix: "/6mo" },
     annual: { label: "Annual", urlKey: "annually", fallbackSuffix: "/yr" },
-    biannual: { label: "Biannual", urlKey: "biannually", fallbackSuffix: "/2yr" },
+    biannual: { label: "Biannual", urlKey: "biennially", fallbackSuffix: "/2yr" },
   };
 
   function escapeHtml(value) {
