@@ -1528,7 +1528,7 @@ function linuxLandingHtml() {
           <nav class="docs-breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/plans">VPS Plans</a><span aria-hidden="true">/</span><span>Linux VPS</span></nav>
           <img class="os-vps-logo" src="/assets/os-logos/linux-colored.svg" alt="Linux operating system logo" width="64" height="64" decoding="async">
           <span class="eyebrow">Linux VPS hosting</span>
-          <h1>Linux VPS hosting with Root access and a distro you can confirm</h1>
+          <h1>Linux VPS hosting with Root access</h1>
           <p class="sub">You need a Linux server you can administer as root. That can be Ubuntu, Debian, CentOS, or another listed image. You also need a price you can verify before you pay.</p>
           <p class="sub">StealthRDP sells Linux VPS plans in USA and EU regions. Compare the live catalog, then continue to the existing checkout.</p>
           <div class="hero-cta">
@@ -1549,7 +1549,7 @@ function linuxLandingHtml() {
               <div class="console-line"><span class="dim">region USA / EU</span></div>
               <div class="console-line"><span class="dim">image Ubuntu / Debian / CentOS</span></div>
               <div class="console-line"><span class="dim">storage NVMe</span></div>
-              <div class="console-line"><span class="ok">✓ confirm image during checkout</span></div>
+              <div class="console-line"><span class="ok">✓ 99.9% uptime SLA</span></div>
             </div>
             <div class="console-foot"><span class="chip">€9.50 <b>Bronze / mo</b></span><span class="chip">Root <b>included</b></span><span class="chip">5–10m <b>after payment</b></span></div>
           </div>
@@ -1557,14 +1557,6 @@ function linuxLandingHtml() {
       </div>
     </section>
     ${osVpsCatalogHtml({ slug: "linux-vps", label: "Linux", sectionId: "linux-plans" })}
-    <section class="section os-vps-checkout-note" aria-labelledby="linux-vps-checkout-heading">
-      <div class="container">
-        <div class="byo-panel">
-          <div><span class="included-label">Next step</span><h2 id="linux-vps-checkout-heading">Choose the plan first. Select Windows or Linux in checkout.</h2><p>The buyer chooses the resource plan and region on this page. The existing checkout then provides the operating-system selector before payment.</p></div>
-          <a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps">Configure this VPS</a>
-        </div>
-      </div>
-    </section>
     <section class="section os-vps-cheap" id="cheap-linux-vps">
       <div class="container">
         <div class="os-vps-guide-intro">
@@ -1583,7 +1575,7 @@ function linuxLandingHtml() {
         <div class="os-vps-guide-intro">
           <span class="included-label">Environment</span>
           <h2>Linux distributions you can run</h2>
-          <p>Choose the operating-system family your stack needs, then confirm the exact image and version during checkout.</p>
+          <p>The FAQ lists these images and versions.</p>
         </div>
         <div class="os-distro-wrap">
           <span class="os-distro-label" id="linux-distro-label">Linux distribution</span>
@@ -1622,14 +1614,14 @@ function linuxLandingHtml() {
         <div class="os-vps-guide-intro"><span class="included-label">Regions</span><h2>USA or EU</h2></div>
         <div class="os-two-col">
           <article class="os-content-card"><h3>USA</h3><p>Choose the region that matches your users and your own location. USA Linux plans appear in the public catalog.</p></article>
-          <article class="os-content-card"><h3>EU</h3><p>EU Linux plans also appear in the public catalog. Confirm the region and current configuration in checkout.</p></article>
+          <article class="os-content-card"><h3>EU</h3><p>EU Linux plans also appear in the public catalog. Choose the region closest to the users who will reach the server.</p></article>
         </div>
       </div>
     </section>
     <section class="section os-vps-activation" id="activation">
       <div class="container">
         <div class="os-vps-guide-intro"><span class="included-label">Before you order</span><h2>After payment</h2></div>
-        <div class="os-content-card"><p>Standard Linux installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation. Credentials arrive by email after payment confirmation.</p></div>
+        <div class="os-content-card"><p>Standard Linux installations are typically activated within 5 minutes. Most services are activated within 5–10 minutes after payment confirmation. Credentials arrive by email after payment confirmation. The service states a 99.9% uptime SLA.</p></div>
       </div>
     </section>
     <section class="section os-vps-support" id="support">
@@ -1653,7 +1645,7 @@ function linuxLandingHtml() {
           <li>Write down the listed Linux image you need, plus the services you will run.</li>
           <li>Open the <a href="/plans#linux-vps">Linux VPS catalog</a>.</li>
           <li>Compare CPU, RAM, disk, region, and the price on the page.</li>
-          <li>Continue to checkout. Select Linux there.</li>
+          <li>Continue after the price is visible.</li>
         </ol>
         <div class="os-vps-links"><a class="btn btn-primary" href="/plans#linux-vps">Compare Linux VPS plans</a></div>
       </div>
@@ -1676,7 +1668,7 @@ function linuxLandingHtml() {
     </section>
     <section class="cta-band">
       <div class="container cta-grid">
-        <div class="cta-copy"><span class="eyebrow">Linux VPS plans</span><h2>Compare Linux VPS plans</h2><p>Check the current plan, region, and displayed price, then confirm Linux and the exact image in checkout.</p></div>
+        <div class="cta-copy"><span class="eyebrow">Linux VPS plans</span><h2>Compare Linux VPS plans</h2><p>Check the current plan, region, and displayed price. The service states a 99.9% uptime SLA.</p></div>
         <div class="cta-actions"><a class="btn btn-primary" href="/plans#linux-vps">Compare Linux VPS plans</a><a class="btn btn-ghost" href="https://dash.stealthrdp.com/index.php?rp=/store/standard-usa-rdp-vps">Continue to checkout</a></div>
       </div>
     </section>
@@ -1693,7 +1685,7 @@ function buildLinuxVps() {
     serviceType: "Linux VPS hosting",
     logo: "/assets/os-logos/linux-colored.svg",
     logoAlt: "Linux operating system logo",
-    h1: "Linux VPS hosting with Root access and a distro you can confirm",
+    h1: "Linux VPS hosting with Root access",
     intro: "You need a Linux server you can administer as root. That can be Ubuntu, Debian, CentOS, or another listed image. You also need a price you can verify before you pay.",
     planHref: "/plans#linux-vps",
     planLabel: "Compare Linux VPS plans",

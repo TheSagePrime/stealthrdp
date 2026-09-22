@@ -338,7 +338,7 @@ test("OS landing pages have separate commercial intent, page schema, and checkou
   assert.match(windows, /canonical" href="__SRDP_BASE__\/windows-vps\//);
   assert.match(linux, /canonical" href="__SRDP_BASE__\/linux-vps\//);
   assert.match(windows, /<h1>Windows VPS hosting for work that belongs on Windows<\/h1>/);
-  assert.match(linux, /<h1>Linux VPS hosting with Root access and a distro you can confirm<\/h1>/);
+  assert.match(linux, /<h1>Linux VPS hosting with Root access<\/h1>/);
   assert.strictEqual((windows.match(/<h1[\s>]/g) || []).length, 1);
   assert.strictEqual((linux.match(/<h1[\s>]/g) || []).length, 1);
   assert.match(windows, /windows-vps\/.*Windows VPS|Windows VPS.*windows-vps\//s);
@@ -375,7 +375,6 @@ test("OS landing pages render the shared catalog cards without copied plan data"
     assert.match(html, /Region: USA/);
     assert.match(html, /Region: EU/);
     assert.strictEqual((html.match(/>Choose this plan<\/a>/g) || []).length, CATALOG.length, `${route}: plan CTAs`);
-    assert.match(html, /Choose the plan first\. Select Windows or Linux in checkout\./);
     assert.doesNotMatch(html, /Palette|Preview lab/);
     assert.doesNotMatch(html, /\bSSH\b|\bDocker\b|\bIIS\b|\.NET/i);
     for (const plan of CATALOG) {
@@ -385,6 +384,11 @@ test("OS landing pages render the shared catalog cards without copied plan data"
       for (const value of Object.values(plan.specs)) assert.match(html, new RegExp(`>${value}<\\/span>`), `${route}: ${value} for ${plan.name}`);
     }
   }
+  assert.match(windows, /Choose the plan first\. Select Windows or Linux in checkout\./);
+  assert.doesNotMatch(linux, /Select Windows or Linux in checkout/);
+  assert.doesNotMatch(linux, /operating-system selector/);
+  assert.doesNotMatch(linux, /confirm image during checkout/);
+  assert.match(linux, /99\.9% uptime SLA/);
 });
 
 test("OS landing catalog cards use one popular badge and title-case names", () => {
