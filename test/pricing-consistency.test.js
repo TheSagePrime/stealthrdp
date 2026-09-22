@@ -13,22 +13,22 @@ const PRICING_ROUTES = ["index.html", "plans.html", "windows-vps/index.html", "l
 const EXPECTED_MONTHLY = {
   "Bronze USA": 9.50,
   "Silver USA": 18.04,
-  "Gold USA": 26.59,
-  "Platinum USA": 33.24,
-  "Diamond USA": 42.75,
-  "Emerald USA": 51.30,
-  "Bronze EU": 11.97,
-  "Silver EU": 21.55,
-  "GOLD EU": 35.90,
-  "Platinum EU": 41.88,
-  "Diamond EU": 47.87,
+  "Gold USA": 31.59,
+  "Platinum USA": 36.59,
+  "Diamond USA": 49.59,
+  "Emerald USA": 59.59,
+  "Bronze EU": 13.59,
+  "Silver EU": 24.59,
+  "GOLD EU": 44.59,
+  "Platinum EU": 49.59,
+  "Diamond EU": 55.59,
 };
 const EXPECTED_EU_CYCLES = {
-  "Bronze EU": { quarterly: 35.91, biannual: 71.82, annual: 143.64 },
-  "Silver EU": { quarterly: 61.42, biannual: 95.68, annual: 217.22 },
-  "GOLD EU": { quarterly: 102.32, biannual: 159.40, annual: 361.87 },
-  "Platinum EU": { quarterly: 119.36, biannual: 185.95, annual: 422.15 },
-  "Diamond EU": { quarterly: 136.43, biannual: 212.54, annual: 482.53 },
+  "Bronze EU": { quarterly: 38.59, biannual: 72.59, annual: 134.59 },
+  "Silver EU": { quarterly: 69.59, biannual: 129.59, annual: 249.59 },
+  "GOLD EU": { quarterly: 124.59, biannual: 239.59, annual: 449.59 },
+  "Platinum EU": { quarterly: 139.59, biannual: 259.59, annual: 499.59 },
+  "Diamond EU": { quarterly: 159.59, biannual: 299.59, annual: 559.59 },
 };
 
 function cardBlock(html, displayName, location = "") {
@@ -75,11 +75,11 @@ test("Bronze EU billing totals match the current WHMCS product page", () => {
   const plan = planFromName("Bronze EU");
   assert.deepEqual(
     Object.fromEntries(["monthly", "quarterly", "biannual", "annual"].map((key) => [key, plan.pricing[key].amount])),
-    { monthly: 11.97, quarterly: 35.91, biannual: 71.82, annual: 143.64 },
+    { monthly: 13.59, quarterly: 38.59, biannual: 72.59, annual: 134.59 },
   );
   for (const key of ["quarterly", "annual", "biannual"]) {
     const markup = pricing.priceMarkup(plan, key);
-    assert.doesNotMatch(markup, /Save/);
+    assert.match(markup, /Save/);
     assert.doesNotMatch(markup, /· ·/);
   }
 });

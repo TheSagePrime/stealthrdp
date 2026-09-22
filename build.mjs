@@ -1572,7 +1572,7 @@ function linuxLandingHtml() {
           <h2>If you searched for cheap Linux VPS</h2>
         </div>
         <div class="os-content-card">
-          <p>If you searched for cheap Linux VPS: “Cheap” here means see the current catalog, including Bronze at <strong>€9.50/month</strong> on the live plans page (from a €10.00 base). It does not mean we are the cheapest provider on the internet. We do not claim that.</p>
+          <p>If you searched for cheap Linux VPS: “Cheap” here means see the current catalog, including Bronze at <strong>€9.50/month</strong> on the live plans page. It does not mean we are the cheapest provider on the internet. We do not claim that.</p>
           <p>Bronze USA lists 2 Core, 4 GB RAM, 60 GB NVMe, and Unlimited bandwidth. Bronze EU lists 2 Core, 4 GB RAM, 40 GB NVMe, and Unlimited bandwidth. Confirm the live row before you order. Prices and stock can change.</p>
           <div class="os-vps-links"><a class="btn btn-primary" href="/plans#linux-vps">Linux VPS catalog</a><a class="btn btn-ghost" href="/plans#comparison">Plan comparison</a></div>
         </div>
