@@ -38,6 +38,23 @@ jobs:
         run: npm test
       - name: Run strict SEO and AI-discovery gates
         run: npm run seo:check
+      - name: Validate SEO publish packages (publish gate)
+        run: |
+          # Publish gate per article-publishing-contract.md ("Headless publishing gate"):
+          # validate every staged *.seo-package.json BEFORE anything is published.
+          # Exit 1 from the validator means: publish NOTHING (fail closed).
+          # Zero packages found = nothing staged, gate passes cleanly.
+          set -u
+          rc=0
+          found=0
+          while IFS= read -r -d '' pkg; do
+            found=1
+            python3 /opt/data/workflows/seo/validate_publish_package.py --package "$pkg" --publish-root "$GITHUB_WORKSPACE" || rc=1
+          done < <(find . -name '*.seo-package.json' -not -path './node_modules/*' -print0)
+          if [ "$found" -eq 0 ]; then
+            echo "No *.seo-package.json packages found - gate passes (nothing staged)."
+          fi
+          exit "$rc"
       - name: Build site
         run: npm run build
 
