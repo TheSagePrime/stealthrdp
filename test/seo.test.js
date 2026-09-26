@@ -526,6 +526,14 @@ test("RDP VPS buyer guide is generated, indexable, and linked from OS routes", (
   assert.match(article, /<title>RDP VPS Hosting: How to Choose a Remote Desktop VPS<\/title>/);
   assert.match(article, /href="__SRDP_BASE__\/rdp-vps\/"/);
   assert.match(article, /<meta name="robots" content="index,follow"/);
+  const schema = [...article.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map(([, block]) => JSON.parse(block));
+  const posting = schema.find((item) => item["@type"] === "BlogPosting");
+  assert.ok(posting, "BlogPosting schema exists");
+  assert.equal(posting.headline, "RDP VPS hosting: choose a remote desktop VPS with confidence");
+  assert.equal(posting.datePublished, "2026-09-26");
+  assert.equal(posting.author.name, "Bhuvan");
+  assert.equal(posting.mainEntityOfPage["@id"], "__SRDP_BASE__/rdp-vps/");
+  assert.equal(posting.publisher["@type"], "Organization");
   assert.match(fs.readFileSync(path.join(ROOT, "sitemap.xml"), "utf8"), /<loc>__SRDP_BASE__\/rdp-vps\/<\/loc>/);
 });
 
