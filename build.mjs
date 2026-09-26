@@ -1489,7 +1489,7 @@ function windowsLandingHtml() {
           <details class="os-vps-faq-item"><summary>Where can I get support?</summary><p>Use ${whatsappLink("WhatsApp support")}, the client-area ticketing system, or support email. The <a href="/faq">FAQ</a> provides the current support details.</p></details>
           <details class="os-vps-faq-item"><summary>Can I run any workload?</summary><p>No. Use must remain lawful and must follow the <a href="/docs/use-of-service">Use of Service terms</a>.</p></details>
         </div>
-        <section class="os-vps-next"><span class="included-label">Choose another environment</span><h2>Need Linux instead?</h2><p>For websites, applications, databases, or development stacks, see <a href="/linux-vps/">Linux VPS hosting</a>.</p></section>
+        <section class="os-vps-next"><span class="included-label">Choose another environment</span><h2>Need Linux instead?</h2><p>For websites, applications, databases, or development stacks, see <a href="/linux-vps/">Linux VPS hosting</a>.</p><p>Choosing a Windows VPS for remote desktop? Use the <a href="/rdp-vps/">RDP VPS buying checklist</a> to compare access, resources, security, and provider terms.</p></section>
       </div>
     </section>
     <section class="cta-band">
@@ -1671,7 +1671,7 @@ function linuxLandingHtml() {
           <details class="os-vps-faq-item"><summary>How do I get credentials?</summary><p>By email after payment confirmation.</p></details>
           <details class="os-vps-faq-item"><summary>Need Windows instead?</summary><p>For familiar Windows software and remote Windows desktop or server access, see the <a href="/windows-vps/">Windows VPS hosting page</a>.</p></details>
         </div>
-        <section class="os-vps-next"><span class="included-label">Choose another environment</span><h2>Need Windows instead?</h2><p>For familiar Windows software and remote Windows desktop or server access, see <a href="/windows-vps/">Windows VPS hosting</a>.</p></section>
+        <section class="os-vps-next"><span class="included-label">Choose another environment</span><h2>Need Windows instead?</h2><p>For familiar Windows software and remote Windows desktop or server access, see <a href="/windows-vps/">Windows VPS hosting</a>.</p><p>Comparing remote desktop access? Start with the <a href="/rdp-vps/">remote desktop VPS decision guide</a> before you order.</p></section>
       </div>
     </section>
     <section class="cta-band">
@@ -2040,6 +2040,7 @@ function buildSitemap() {
     ["/plans", "2026-09-16"],
     ["/windows-vps/", "2026-09-16"],
     ["/linux-vps/", "2026-09-02"],
+    ["/rdp-vps/", "2026-09-26"],
     ["/status", "2026-08-31"],
     ["/blog", "2026-08-31"],
     ["/faq", "2026-09-16"],
@@ -2070,6 +2071,7 @@ const OUT = {
   "plans.html": buildPlans(),
   "windows-vps/index.html": buildWindowsVps(),
   "linux-vps/index.html": buildLinuxVps(),
+  "rdp-vps/index.html": fs.readFileSync(path.join(ROOT, "rdp-vps", "index.template"), "utf8"),
   "status.html": buildStatus(),
   "blog.html": buildBlog(),
   "faq.html": buildFaq(),

@@ -21,7 +21,7 @@ const files = [
   "favicon.ico",
   "favicon.svg",
 ];
-const dirs = ["css", "js", "fonts", "assets", "blog", "docs", "data", "windows-vps", "linux-vps", "vps-hosting-minecraft", ".well-known"];
+const dirs = ["css", "js", "fonts", "assets", "blog", "docs", "data", "windows-vps", "linux-vps", "vps-hosting-minecraft", "rdp-vps", ".well-known"];
 const TEXT_OUTPUT_EXTENSIONS = new Set([".html", ".xml", ".txt"]);
 
 function stagedTextFiles(dir) {

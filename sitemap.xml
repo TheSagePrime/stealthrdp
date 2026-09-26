@@ -21,6 +21,11 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>__SRDP_BASE__/rdp-vps/</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>__SRDP_BASE__/status</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>monthly</changefreq>

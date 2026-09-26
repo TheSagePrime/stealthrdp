@@ -33,6 +33,7 @@ const ROUTES = [
   "faq.html",
   "about.html",
   "privacy.html",
+  "rdp-vps/index.html",
   ...BLOG.map(articleFile),
   "docs.html",
   ...DOCS.map((p) => `docs/${cleanDocSlug(p.slug)}.html`),
@@ -508,11 +509,24 @@ test("OS landing pages are linked from the approved site context", () => {
     const html = HTML(route);
     assert.match(html, /href="\/windows-vps\/"/);
     if (route.includes("windows-vs-linux") || route.includes("8-signs")) assert.match(html, /href="\/linux-vps\/"/);
+    if (route.includes("5-ways-to-optimize-your-rdp-performance")) {
+      assert.match(html, /href="\/rdp-vps\/">RDP VPS buying checklist<\/a>/);
+    }
   }
   const windows = HTML("windows-vps/index.html");
   const linux = HTML("linux-vps/index.html");
   assert.match(windows, /Products<\/h2>[\s\S]*href="\/linux-vps\/"/);
   assert.match(linux, /Products<\/h2>[\s\S]*href="\/windows-vps\/"/);
+  assert.match(windows, /href="\/rdp-vps\/">RDP VPS buying checklist<\/a>/);
+  assert.match(linux, /href="\/rdp-vps\/">remote desktop VPS decision guide<\/a>/);
+});
+
+test("RDP VPS buyer guide is generated, indexable, and linked from OS routes", () => {
+  const article = HTML("rdp-vps/index.html");
+  assert.match(article, /<title>RDP VPS Hosting: How to Choose a Remote Desktop VPS<\/title>/);
+  assert.match(article, /href="__SRDP_BASE__\/rdp-vps\/"/);
+  assert.match(article, /<meta name="robots" content="index,follow"/);
+  assert.match(fs.readFileSync(path.join(ROOT, "sitemap.xml"), "utf8"), /<loc>__SRDP_BASE__\/rdp-vps\/<\/loc>/);
 });
 
 test("rss, security.txt, HowTo schema, and checkout events exist", () => {
