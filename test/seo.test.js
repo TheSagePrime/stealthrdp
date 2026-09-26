@@ -534,9 +534,12 @@ test("RDP VPS buyer guide is generated, indexable, and linked from OS routes", (
   assert.equal(posting.author.name, "Bhuvan");
   assert.equal(posting.mainEntityOfPage["@id"], "__SRDP_BASE__/rdp-vps/");
   assert.equal(posting.publisher["@type"], "Organization");
-  for (const sourceDate of ["updated 2025-10-30", "updated 2025-06-18", "2025-03-14"]) {
+  for (const sourceDate of ["updated 2025-10-30", "updated 2025-06-18", "2025-03-14", "checked 2026-09-26"]) {
     assert.equal(article.split(sourceDate).length - 1, 1, `${sourceDate} appears only in the source list`);
   }
+  const bodyCopy = article.match(/<div class="docs-content blog-article-body">([\s\S]*?)<\/div>/)?.[1] || "";
+  const prose = bodyCopy.split('<h2 id="sources">')[0];
+  assert.doesNotMatch(prose, /2025-10-30|2025-06-18|2025-03-14|2026-09-26/);
   assert.match(fs.readFileSync(path.join(ROOT, "sitemap.xml"), "utf8"), /<loc>__SRDP_BASE__\/rdp-vps\/<\/loc>/);
 });
 
